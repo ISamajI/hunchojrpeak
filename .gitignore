@@ -2,3 +2,4 @@ tools/mikonos-ad/*.mp4
 tools/mikonos-ad/*.wav
 tools/mikonos-ad/captions.ass
 tools/mikonos-ad/gfx/*.png
+__pycache__/
