@@ -1,0 +1,28 @@
+<!doctype html><html><head><meta charset="utf-8"><style>
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#0b2147}
+body{font-family:'Inter Display','Inter',sans-serif;color:#f7f3ea;position:relative;
+ background:radial-gradient(120% 70% at 50% 42%,#1b56a6 0%,#12336d 45%,#0b2147 100%)}
+.key{position:absolute;left:0;right:0;height:46px;background-repeat:repeat-x;background-size:92px 46px;background-position:center}
+.key.top{top:96px}.key.bot{bottom:96px;transform:scaleY(-1)}
+.wrap{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.eyebrow{font-weight:600;letter-spacing:.42em;font-size:34px;color:#f2c46d;text-transform:uppercase;margin-bottom:46px;padding-left:.42em}
+.word{font-family:'Caladea','DejaVu Serif',serif;font-size:168px;letter-spacing:.16em;padding-left:.16em;line-height:1;font-weight:400}
+.rule{width:420px;height:3px;background:linear-gradient(90deg,transparent,#f2c46d,transparent);margin:58px 0 54px}
+.tag{font-size:58px;font-weight:700;line-height:1.15;letter-spacing:-.01em}
+.tag em{font-style:normal;color:#ff8a1f}
+.cta{margin-top:120px;background:#f7f3ea;color:#0b2147;border-radius:999px;padding:34px 64px;font-weight:800;font-size:52px;letter-spacing:-.01em;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+.phone{margin-top:44px;font-size:54px;font-weight:800;color:#f7f3ea;letter-spacing:.04em}
+</style></head><body>
+<div class="key top"></div><div class="key bot"></div>
+<div class="wrap">
+ <div class="eyebrow">Authentic Greek Kitchen</div>
+ <div class="word">MIKONOS</div>
+ <div class="rule"></div>
+ <div class="tag">Come hungry.<br><em>Feel at home.</em></div>
+ <div class="cta">mikonosrestaurant.us</div>
+ <div class="phone">(609) 883-9333</div>
+</div>
+<script>
+const svg=`<svg xmlns='http://www.w3.org/2000/svg' width='92' height='46' viewBox='0 0 92 46'><path d='M0 40 H20 V6 H72 V30 H38 V18 H56' fill='none' stroke='#f2c46d' stroke-width='5'/><path d='M56 18 V30 M72 30 V40 H92' fill='none' stroke='#f2c46d' stroke-width='5'/></svg>`;
+document.querySelectorAll('.key').forEach(k=>k.style.backgroundImage=`url("data:image/svg+xml,${encodeURIComponent(svg)}")`);
+</script></body></html>
