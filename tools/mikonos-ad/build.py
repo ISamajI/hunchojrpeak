@@ -3,12 +3,13 @@
 optional website-scroll segment, end card, voice cleanup + soft music bed.
 
 usage: build.py SOURCE.mov WORDS.json OUT.mp4 [--scroll scroll.mp4]
+                [--scale 2 --upscaled A.mp4 B.mp4]   # 4K: AI-upscaled footage from upscale.py
+Graphics must be rendered at the same scale first: SCALE=2 node gfx/render.js && SCALE=2 node gfx/render2.js
 """
 import json, subprocess, sys, os, argparse
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 GFX = os.path.join(HERE, "gfx")
-W, H, FPS = 1080, 1920, 30
 CUT = 10.033            # interior -> exterior cut in the source
 END_CARD = 3.6          # seconds
 XF = 0.5                # crossfade into scroll / end card
@@ -16,7 +17,13 @@ XF = 0.5                # crossfade into scroll / end card
 ap = argparse.ArgumentParser()
 ap.add_argument("src"); ap.add_argument("words"); ap.add_argument("out")
 ap.add_argument("--scroll")
+ap.add_argument("--scale", type=int, default=1, choices=[1, 2])
+ap.add_argument("--upscaled", nargs=2, metavar=("INTERIOR", "EXTERIOR"),
+                help="pre-upscaled SDR segments from upscale.py (split at the scene cut)")
 a = ap.parse_args()
+SC = a.scale
+W, H, FPS = 1080 * SC, 1920 * SC, 30
+if SC > 1 and not a.upscaled: sys.exit("--scale 2 needs --upscaled (run upscale.py first)")
 
 words = json.load(open(a.words))
 body_end = min(round(words[-1]["end"] + 0.7, 3), 19.7)
@@ -46,7 +53,7 @@ def chunks(ws, max_words=3, max_chars=16, gap=0.45):
 
 WHITE, GOLD = "&H00FFFFFF", "&H006DC4F2"   # ASS is &HAABBGGRR
 ass = [
-    "[Script Info]", "ScriptType: v4.00+", f"PlayResX: {W}", f"PlayResY: {H}",
+    "[Script Info]", "ScriptType: v4.00+", "PlayResX: 1080", "PlayResY: 1920",
     "WrapStyle: 2", "ScaledBorderAndShadow: yes", "YCbCr Matrix: TV.709", "",
     "[V4+ Styles]",
     "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
@@ -79,6 +86,12 @@ for i, c in enumerate(cs):
 ass_path = os.path.join(HERE, "captions.ass")
 open(ass_path, "w").write("\n".join(ass) + "\n")
 
+# ---------- graphics must be rendered at this scale ----------
+from PIL import Image
+for g in ("bug.png", "endcard.png"):
+    sz = Image.open(os.path.join(GFX, g)).size
+    if sz != (W, H): sys.exit(f"gfx/{g} is {sz}, expected {(W, H)}: run SCALE={SC} node gfx/render.js")
+
 # ---------- body: grade + push-ins + captions + bug ----------
 TM = ("zscale=t=linear:npl=203,format=gbrpf32le,zscale=p=bt709,tonemap=hable:desat=0,"
       "zscale=t=bt709:m=bt709:r=tv,format=yuv420p")
@@ -86,21 +99,34 @@ GRADE = ("eq=contrast=1.03:brightness=0.01:saturation=1.10,scale=in_range=tv:out
          "vignette=angle=PI/5:mode=forward,scale=out_color_matrix=bt709:out_range=tv,format=yuv420p")
 GRADE_EXT = "eq=gamma=1.12:saturation=1.05,colorbalance=rm=0.05:bm=-0.05:rh=0.02:bh=-0.02"
 
-def push(dur, z):  # smooth push-in from 1.0 to 1+z over dur (2x supersample to avoid jitter)
-    return (f"scale=w='4*{W}*(1+{z}*t/{dur})':h='4*{H}*(1+{z}*t/{dur})':eval=frame:flags=bicubic,"
-            f"crop={4*W}:{4*H},scale={W}:{H}:flags=lanczos,setsar=1")
+SS = 4 // SC           # supersample so each zoom step is <= 1/4 px at 1080p-equivalent
+def push(dur, z):  # smooth push-in from 1.0 to 1+z over dur
+    return (f"scale=w='{SS}*{W}*(1+{z}*t/{dur})':h='{SS}*{H}*(1+{z}*t/{dur})':eval=frame:flags=bicubic,"
+            f"crop={SS*W}:{SS*H},scale={W}:{H}:flags=lanczos,setsar=1")
+# fine luma grain on upscaled footage so it reads as camera texture, not an AI "plastic" look
+GRAIN = ",noise=c0s=3:c0f=t" if a.upscaled else ""
 
 body = os.path.join(HERE, "body.mp4")
 dA, dB = CUT, body_end - CUT
+if a.upscaled:   # already tone-mapped and split at the cut
+    vin = ["-i", a.upscaled[0], "-i", a.upscaled[1]]
+    split = (f"[0:v]trim=0:{CUT},setpts=PTS-STARTPTS[g1];"
+             f"[1:v]trim=0:{body_end - CUT},setpts=PTS-STARTPTS[g2];")
+    bi = 2
+else:
+    vin = ["-i", a.src]
+    split = (f"[0:v]{TM},split=2[t1][t2];[t1]trim=0:{CUT},setpts=PTS-STARTPTS[g1];"
+             f"[t2]trim={CUT}:{body_end},setpts=PTS-STARTPTS[g2];")
+    bi = 1
 fc = (
-    f"[0:v]{TM},split=2[g1][g2];"
-    f"[g1]trim=0:{CUT},setpts=PTS-STARTPTS,{GRADE},{push(dA,0.045)}[a];"
-    f"[g2]trim={CUT}:{body_end},setpts=PTS-STARTPTS,{GRADE_EXT},{GRADE},{push(dB,0.035)}[b];"
+    split +
+    f"[g1]{GRADE},{push(dA,0.045)}{GRAIN}[a];"
+    f"[g2]{GRADE_EXT},{GRADE},{push(dB,0.035)}{GRAIN}[b];"
     f"[a][b]concat=n=2:v=1:a=0,fps={FPS},format=yuv420p[v0];"
-    f"[1:v]format=rgba,fade=in:st=0.3:d=0.6:alpha=1,fade=out:st={CUT-0.5}:d=0.45:alpha=1,scale=out_color_matrix=bt709:out_range=tv,format=yuva420p[bug];"
+    f"[{bi}:v]format=rgba,fade=in:st=0.3:d=0.6:alpha=1,fade=out:st={CUT-0.5}:d=0.45:alpha=1,scale=out_color_matrix=bt709:out_range=tv,format=yuva420p[bug];"
     f"[v0][bug]overlay=0:0:shortest=1,ass={ass_path}:fontsdir=/usr/share/fonts[v]"
 )
-run(["ffmpeg", "-v", "error", "-y", "-i", a.src,
+run(["ffmpeg", "-v", "error", "-y", *vin,
      "-loop", "1", "-framerate", str(FPS), "-t", str(body_end), "-i", os.path.join(GFX, "bug.png"),
      "-filter_complex", fc, "-map", "[v]", "-t", str(body_end),
      "-c:v", "libx264", "-preset", "slow", "-crf", "14", "-pix_fmt", "yuv420p", body])
@@ -118,9 +144,9 @@ if a.scroll:
          "-loop", "1", "-framerate", str(FPS), "-i", os.path.join(GFX, "mask.png"),
          "-loop", "1", "-framerate", str(FPS), "-i", os.path.join(GFX, "bezel.png"),
          "-filter_complex",
-         f"[1:v]fps={FPS},scale=780:1386:flags=lanczos,setsar=1,format=rgba[sc];"
+         f"[1:v]fps={FPS},scale={780*SC}:{1386*SC}:flags=lanczos,setsar=1,format=rgba[sc];"
          f"[2:v]format=gray[m];[sc][m]alphamerge[ph];"
-         f"[0:v]format=rgba[bg];[bg][ph]overlay=150:330:shortest=1[t];"
+         f"[0:v]format=rgba[bg];[bg][ph]overlay={150*SC}:{330*SC}:shortest=1[t];"
          f"[t][3:v]overlay=0:0:shortest=1,scale=out_color_matrix=bt709:out_range=tv,format=yuv420p[v]",
          "-map", "[v]", "-t", str(sdur), "-c:v", "libx264", "-preset", "slow", "-crf", "14", scroll_seg])
     segs.append((scroll_seg, sdur))
@@ -188,7 +214,8 @@ run(["ffmpeg", "-v", "error", "-y", "-i", a.src, "-filter_complex", fc, "-map", 
 
 run(["ffmpeg", "-v", "error", "-y", *inputs, "-i", audio, "-filter_complex", ";".join(fcv),
      "-map", f"[{last}]", "-map", f"{len(segs)}:a", "-t", f"{total:.3f}",
-     "-c:v", "libx264", "-preset", "slow", "-crf", "17", "-profile:v", "high", "-pix_fmt", "yuv420p",
+     "-c:v", "libx264", "-preset", "slow", "-crf", "17" if SC == 1 else "18", "-profile:v", "high",
+     "-pix_fmt", "yuv420p", *([] if SC == 1 else ["-level:v", "5.2", "-maxrate", "60M", "-bufsize", "120M"]),
      "-color_primaries", "bt709", "-color_trc", "bt709", "-colorspace", "bt709",
      "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-movflags", "+faststart", a.out])
 print(f"done: {a.out} ({total:.2f}s)")
