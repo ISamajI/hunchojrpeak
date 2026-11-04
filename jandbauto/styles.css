@@ -675,3 +675,4 @@ a.info-row:hover .info-row__ic { background: var(--red); color: #fff; }
   .marquee__track { animation: none; }
   html { scroll-behavior: auto; }
 }
+@media (prefers-reduced-motion: reduce) { .carousel__track { scroll-behavior: auto; } }

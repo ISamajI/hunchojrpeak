@@ -80,7 +80,7 @@
     var finished = false;
     var liftTimer, doneTimer;
 
-    function lift() {
+    var lift = function () {
       if (finished) return;
       finished = true;
       clearTimeout(liftTimer);
@@ -90,8 +90,17 @@
       setTimeout(startSite, 250);
       doneTimer = setTimeout(function () { intro.classList.add('is-done'); }, 1150);
       document.removeEventListener('keydown', onKey);
+    };
+    function onKey(e) {
+      if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ' || e.key === 'Tab') { e.preventDefault(); lift(); }
     }
-    function onKey(e) { if (e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') lift(); }
+    var behind = $$('.header, main, .footer, .actionbar, .skip-link');
+    behind.forEach(function (el) { el.setAttribute('inert', ''); });
+    var liftCore = lift;
+    lift = function () {
+      behind.forEach(function (el) { el.removeAttribute('inert'); });
+      liftCore();
+    };
 
     requestAnimationFrame(function () { intro.classList.add('is-running'); });
     liftTimer = setTimeout(lift, 2500);
@@ -99,6 +108,8 @@
     document.addEventListener('keydown', onKey);
     JB.skipIntro = lift;
   }
+
+  try { runIntro(); } catch (e) { root.classList.add('is-ready'); var intro0 = $('#intro'); if (intro0) intro0.classList.add('is-done'); }
 
   /* ------------------------------------------------------------
      Header: scrolled state, progress bar, active link, mobile menu
@@ -250,7 +261,8 @@
       $$('[name="service"]', form).forEach(function (cb) { if (cb.value === serviceValue) cb.checked = true; });
     }
     if (note && msg && msg.value.indexOf(note) === -1) {
-      msg.value = (msg.value ? msg.value.replace(/\s+$/, '') + '\n' : '') + note;
+      var next = (msg.value ? msg.value.replace(/\s+$/, '') + '\n' : '') + note;
+      msg.value = msg.maxLength > 0 ? next.slice(0, msg.maxLength) : next;
       msg.dispatchEvent(new Event('input'));
     }
   }
@@ -525,10 +537,12 @@
     cards.forEach(function (c, i) { var d = Math.abs(c.offsetLeft - cards[0].offsetLeft - x); if (d < bestD) { bestD = d; best = i; } });
     return best;
   }
+  var target = 0;
   function goTo(i) {
     var mi = maxIndex();
     if (i > mi) i = 0;
     if (i < 0) i = mi;
+    target = i;
     track.scrollTo({ left: cards[i].offsetLeft - cards[0].offsetLeft, behavior: reduceMotion ? 'auto' : 'smooth' });
     paintDots(i);
   }
@@ -543,10 +557,10 @@
   var scrollT;
   track.addEventListener('scroll', function () {
     clearTimeout(scrollT);
-    scrollT = setTimeout(function () { paintDots(currentIndex()); }, 80);
+    scrollT = setTimeout(function () { target = currentIndex(); paintDots(target); }, 120);
   }, { passive: true });
-  $('[data-prev]').addEventListener('click', function () { userTouched(); goTo(currentIndex() - 1); });
-  $('[data-next]').addEventListener('click', function () { userTouched(); goTo(currentIndex() + 1); });
+  $('[data-prev]').addEventListener('click', function () { userTouched(); goTo(target - 1); });
+  $('[data-next]').addEventListener('click', function () { userTouched(); goTo(target + 1); });
   window.addEventListener('resize', function () { paintDots(currentIndex()); });
   paintDots(0);
 
@@ -554,7 +568,7 @@
   function userTouched() { touched = true; stopAuto(); }
   function startAuto() {
     if (reduceMotion || touched || autoTimer) return;
-    autoTimer = setInterval(function () { if (!paused && inView) goTo(currentIndex() + 1); }, 6000);
+    autoTimer = setInterval(function () { if (!paused && inView) goTo(target + 1); }, 6000);
   }
   function stopAuto() { clearInterval(autoTimer); autoTimer = null; }
   var carousel = $('.carousel');
@@ -573,7 +587,7 @@
   $$('[data-copy]').forEach(function (b) {
     b.addEventListener('click', function () {
       var text = b.getAttribute('data-copy');
-      var done = function () { toast('Address copied ✓'); b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy'; }, 1800); };
+      var done = function () { toast('Address copied ✓'); b.textContent = 'Copied'; clearTimeout(b._t); b._t = setTimeout(function () { b.textContent = 'Copy'; }, 1800); };
       var fallback = function () {
         var ta = document.createElement('textarea');
         ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
@@ -597,18 +611,31 @@
     if (d.length === 11 && d.charAt(0) === '1') d = d.slice(1);
     return d;
   }
-  phone.addEventListener('input', function () {
-    var d = digits(phone.value);
-    var hasCountry = d.length === 11 && d.charAt(0) === '1';
-    if (hasCountry) d = d.slice(1);
-    d = d.slice(0, 10);
+  var lastPhoneDigits = '';
+  phone.addEventListener('input', function (e) {
+    var raw = phone.value;
+    var all = digits(raw);
+    var deleting = !!(e && e.inputType && e.inputType.indexOf('delete') === 0);
+    clearErr(phone);
+    // backspacing over "(", ")", " " or "-" removes no digit: leave the field alone
+    if (deleting && all === lastPhoneDigits) return;
+    lastPhoneDigits = all;
+    var d = (all.length === 11 && all.charAt(0) === '1') ? all.slice(1) : all;
+    // too many digits: show them raw so the mistake is visible and validation catches it
+    if (d.length > 10) { phone.value = all; return; }
     var f = d;
     if (d.length > 6) f = '(' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6);
     else if (d.length > 3) f = '(' + d.slice(0, 3) + ') ' + d.slice(3);
     else if (d.length > 0) f = '(' + d;
-    // don't fight the user while they backspace over formatting characters
-    if (!(phone.value.length < f.length && digits(phone.value).length === d.length)) phone.value = f;
-    clearErr(phone);
+    if (f === raw) return;
+    // keep the caret after the same digit it was after
+    var caret = phone.selectionStart == null ? raw.length : phone.selectionStart;
+    var before = digits(raw.slice(0, caret)).length - (all.length - d.length);
+    phone.value = f;
+    var pos = f.length;
+    if (before <= 0) pos = f.charAt(0) === '(' ? 1 : 0;
+    else for (var i = 0, n = 0; i < f.length; i++) { if (/\d/.test(f.charAt(i)) && ++n === before) { pos = i + 1; break; } }
+    if (document.activeElement === phone) { try { phone.setSelectionRange(pos, pos); } catch (err) { /* not focusable yet */ } }
   });
   msg.addEventListener('input', function () { counter.textContent = msg.value.length + ' / ' + msg.maxLength; });
   $('#f-name').addEventListener('input', function () { clearErr(this); });
@@ -706,5 +733,4 @@
   ------------------------------------------------------------ */
   $$('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
-  runIntro();
 })();

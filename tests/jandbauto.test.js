@@ -175,6 +175,29 @@ async function overflowX(page) {
     check('typing clears name error', !(await page.$eval('#f-name', e => e.closest('.field').classList.contains('invalid'))));
     await page.type('#f-phone', '16095550123');
     check('phone auto-formats', (await page.inputValue('#f-phone')) === '(609) 555-0123', await page.inputValue('#f-phone'));
+    // regression: plain 10-digit typing formats as you go
+    await page.fill('#f-phone', '');
+    await page.type('#f-phone', '6095550123');
+    check('phone formats 10 typed digits', (await page.inputValue('#f-phone')) === '(609) 555-0123', await page.inputValue('#f-phone'));
+    // regression: backspace keeps working through the formatting characters
+    for (let i = 0; i < 6; i++) await page.keyboard.press('Backspace');
+    const afterBs = await page.inputValue('#f-phone');
+    check('backspace removes digits through formatting', afterBs.replace(/\D/g, '') === '6095', afterBs);
+    // regression: caret stays put when editing mid-number
+    await page.fill('#f-phone', '');
+    await page.type('#f-phone', '609555012');
+    await page.$eval('#f-phone', el => el.setSelectionRange(1, 1));
+    await page.keyboard.type('7');
+    check('mid-number edit keeps caret after typed digit', (await page.$eval('#f-phone', el => el.selectionStart)) === 2, await page.$eval('#f-phone', el => [el.value, el.selectionStart]));
+    // regression: 11 digits not starting with 1 are rejected, not truncated
+    await page.fill('#f-phone', '');
+    await page.type('#f-phone', '26095550123');
+    await page.click('#form button[type="submit"]');
+    check('11-digit non-US number flagged invalid', await page.$eval('#f-phone', e => e.closest('.field').classList.contains('invalid')), await page.inputValue('#f-phone'));
+    check('invalid phone does not show success', !(await page.isVisible('.form__success')));
+    await page.fill('#f-phone', '');
+    await page.type('#f-phone', '+1 (609) 555-0123');
+    check('pasted +1 number normalizes', (await page.inputValue('#f-phone')) === '(609) 555-0123', await page.inputValue('#f-phone'));
     await page.fill('#f-vehicle', '2017 Honda Accord');
     await page.click('.pills label:has(input[value="Brakes"])');
     check('pill toggles on click', await page.isChecked('input[value="Brakes"]'));
@@ -268,6 +291,20 @@ async function overflowX(page) {
     await page.keyboard.press('Escape');
     await page.waitForTimeout(1400);
     check('Escape dismisses intro', await page.evaluate(() => document.getElementById('intro').classList.contains('is-done')));
+    // regression: Space skips the intro without scrolling the page
+    await page.evaluate(() => sessionStorage.clear());
+    await page.goto(URL + '?intro', { waitUntil: 'domcontentloaded' });
+    await page.waitForTimeout(300);
+    check('page behind intro is inert', await page.evaluate(() => document.querySelector('main').hasAttribute('inert')));
+    await page.keyboard.press('Space');
+    await page.waitForTimeout(1400);
+    check('Space skips intro', await page.evaluate(() => document.getElementById('intro').classList.contains('is-done')));
+    check('Space skip does not scroll page', (await page.evaluate(() => window.scrollY)) < 5, await page.evaluate(() => window.scrollY));
+    check('inert removed after intro', await page.evaluate(() => !document.querySelector('main').hasAttribute('inert')));
+    // regression: prefill respects the 1200-char limit
+    await page.evaluate(() => { const m = document.getElementById('f-msg'); m.value = 'x'.repeat(1195); m.dispatchEvent(new Event('input')); });
+    await page.evaluate(() => document.querySelector('[data-dec-cta]').click());
+    check('prefill never exceeds maxlength', (await page.$eval('#f-msg', m => m.value.length)) <= 1200, await page.$eval('#f-msg', m => m.value.length));
 
     check('desktop: no JS errors', errors.length === 0, errors);
     await ctx.close();
