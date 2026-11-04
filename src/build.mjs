@@ -1,6 +1,6 @@
 // Static site generator for Sean's Landscaping, Inc.
 // Usage: node src/build.mjs   → writes HTML into the repository root.
-import { writeFileSync, mkdirSync } from "node:fs";
+import { writeFileSync, mkdirSync, cpSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -8,7 +8,13 @@ import {
   licenses, certifications, unions, surety, clients, collaborators, suppliers, equipment,
 } from "./data.mjs";
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
+const REPO = join(dirname(fileURLToPath(import.meta.url)), "..");
+// Flags: --out <dir> writes a self-contained copy (HTML + assets) to <dir>;
+//        --demo marks the build as a concept preview (noindex + "concept by HunchoPeak" credit).
+const argv = process.argv.slice(2);
+const outIdx = argv.indexOf("--out");
+const ROOT = outIdx > -1 ? join(process.cwd(), argv[outIdx + 1]) : REPO;
+const DEMO = argv.includes("--demo");
 const SITE = C.url.replace(/\/$/, "");
 
 /* ---------------- helpers ---------------- */
@@ -142,7 +148,7 @@ function footer(base) {
     <p class="footer-big" aria-hidden="true">Sean's Landscaping</p>
     <div class="footer-bottom">
       <span>© <span data-year>${year}</span> ${esc(C.name)} All rights reserved.</span>
-      <span>Licensed in NJ, PA, DE &amp; Philadelphia · Union signatory</span>
+      <span>Licensed in NJ, PA, DE &amp; Philadelphia · Union signatory${DEMO ? ' · Concept redesign by <a href="https://hunchopeak.dev">HunchoPeak</a>' : ""}</span>
     </div>
   </div>
 </footer>
@@ -172,7 +178,7 @@ function page({ file, title, description, current, body, base = "", solidHeader 
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}">
 <link rel="canonical" href="${canonical}">
-<meta name="theme-color" content="#0f2a1d">
+<meta name="theme-color" content="#0f2a1d">${DEMO ? '\n<meta name="robots" content="noindex, nofollow">' : ""}
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="${esc(C.name)}">
 <meta property="og:title" content="${esc(title)}">
@@ -770,5 +776,6 @@ ${files.filter((f) => f !== "404.html").map((f) => `  <url><loc>${SITE}/${f.repl
 </urlset>
 `;
 writeFileSync(join(ROOT, "sitemap.xml"), sitemap);
-writeFileSync(join(ROOT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
+writeFileSync(join(ROOT, "robots.txt"), DEMO ? "User-agent: *\nDisallow: /\n" : `User-agent: *\nAllow: /\n\nSitemap: ${SITE}/sitemap.xml\n`);
+if (ROOT !== REPO) cpSync(join(REPO, "assets"), join(ROOT, "assets"), { recursive: true });
 console.log(`Built ${files.length} pages. Featured value: ${money(totalValue)}`);
