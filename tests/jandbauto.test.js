@@ -327,7 +327,7 @@ async function overflowX(page) {
     check('mobile: burger aria-expanded', await page.getAttribute('.burger', 'aria-expanded') === 'true');
     await page.screenshot({ path: `${OUT}/${label}-m-menu.png` });
     await page.tap('#nav a[href="#about"]');
-    await page.waitForTimeout(1200);
+    await page.waitForTimeout(2200);
     check('mobile: nav closes after link tap', await page.getAttribute('.burger', 'aria-expanded') === 'false');
     const aboutTop = await page.evaluate(() => document.getElementById('about').getBoundingClientRect().top);
     check('mobile: scrolled to About (below header)', aboutTop > 30 && aboutTop < 140, aboutTop);
