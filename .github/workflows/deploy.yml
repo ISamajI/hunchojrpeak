@@ -26,5 +26,6 @@ jobs:
         if: env.CLOUDFLARE_API_TOKEN != ''
         run: npx --yes wrangler@4.157.0 deploy
       - name: Deploy temporary preview (no Cloudflare token configured yet)
-        if: env.CLOUDFLARE_API_TOKEN == ''
+        # Each temporary deploy creates a new throwaway account, so only do it when asked: put [deploy] in the commit message.
+        if: env.CLOUDFLARE_API_TOKEN == '' && (github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[deploy]'))
         run: npx --yes wrangler@4.157.0 deploy --temporary --config wrangler.temporary.jsonc

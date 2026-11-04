@@ -1,0 +1,42 @@
+name: Upscale & optimize photos
+
+# Downloads every photo the site uses, AI-upscales the small ones (Real-ESRGAN x4plus, CPU),
+# writes WebP variants to assets/photos/ and commits them back to the branch.
+on:
+  push:
+    branches: [claude/brave-euler-d31dm2]
+    paths: [scripts/photos.py, .github/workflows/photos.yml]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: photos
+  cancel-in-progress: false
+
+jobs:
+  photos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install CPU PyTorch + Real-ESRGAN loader
+        run: |
+          pip install --index-url https://download.pytorch.org/whl/cpu torch
+          pip install spandrel pillow numpy
+      - name: Download, upscale and convert
+        run: python scripts/photos.py
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/photos
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -m "Add upscaled, optimized site photos (Real-ESRGAN x4plus)"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
