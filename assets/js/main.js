@@ -16,6 +16,26 @@
     img.addEventListener("error", function () { markBroken(img); }, { once: true });
   });
 
+  /* ---------- Opening animation: skippable, removed when done ---------- */
+  var intro = $(".intro");
+  if (intro && doc.classList.contains("has-intro")) {
+    var finishIntro = function () {
+      if (!intro.parentNode) return;
+      intro.parentNode.removeChild(intro);
+      document.removeEventListener("keydown", skipIntro);
+      doc.classList.remove("has-intro"); // lets the hero finish now if the intro was skipped
+    };
+    var skipIntro = function () { intro.classList.add("is-skipping"); };
+    intro.addEventListener("animationend", function (e) {
+      if (e.target === intro && e.animationName === "intro-out") finishIntro();
+    });
+    intro.addEventListener("click", skipIntro);
+    document.addEventListener("keydown", skipIntro);
+    setTimeout(finishIntro, 4500); // safety net if animation events never fire
+  } else if (intro) {
+    intro.parentNode.removeChild(intro);
+  }
+
   /* ---------- Footer year ---------- */
   $$("[data-year]").forEach(function (el) { el.textContent = String(new Date().getFullYear()); });
 

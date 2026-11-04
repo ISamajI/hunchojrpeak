@@ -26,6 +26,8 @@ const placeholder = (label) => {
 
 async function newPage(browser, vp, opts = {}) {
   const ctx = await browser.newContext({ viewport: vp, reducedMotion: opts.reducedMotion || "no-preference" });
+  // The opening animation plays once per session; most checks want the page itself.
+  if (!opts.intro) await ctx.addInitScript(() => { try { sessionStorage.setItem("sl-intro", "1"); } catch (e) {} });
   const page = await ctx.newPage();
   const errors = [];
   page.on("pageerror", (e) => errors.push("pageerror: " + e.message));
@@ -266,6 +268,42 @@ async function interactionChecks(browser) {
     ok(errors.length === 0, "contact errors: " + errors.join(" | "));
     await ctx.close();
   }
+  // Opening animation: plays on first visit, removes itself, never blocks for long
+  {
+    const { ctx, page, errors } = await newPage(browser, viewports.desktop, { intro: true });
+    await page.goto(`${BASE}/index.html`);
+    await page.waitForTimeout(600);
+    ok(await page.evaluate(() => document.documentElement.classList.contains("has-intro")), "intro plays on first visit");
+    ok(await page.$eval(".intro", (e) => getComputedStyle(e).display === "flex"), "intro overlay visible");
+    await page.waitForFunction(() => !document.querySelector(".intro"), null, { timeout: 5000 }).catch(() => {});
+    ok(!(await page.$(".intro")), "intro removes itself within 5s");
+    await page.waitForTimeout(1300);
+    ok(await page.$eval("h1", (h) => parseFloat(getComputedStyle(h).opacity) > 0.99), "hero headline visible after intro");
+    await page.click(".has-dropdown > button");
+    ok(await page.$eval(".has-dropdown > button", (b) => b.getAttribute("aria-expanded") === "true"), "page interactive after intro");
+    await page.reload(); await page.waitForTimeout(200);
+    ok(!(await page.evaluate(() => document.documentElement.classList.contains("has-intro"))), "intro does not replay in same session");
+    await page.goto(`${BASE}/about.html`);
+    ok(!(await page.$(".intro")), "intro only on home page");
+    ok(errors.length === 0, "intro errors: " + errors.join(" | "));
+    await ctx.close();
+  }
+  {
+    const { ctx, page } = await newPage(browser, viewports.mobile, { intro: true });
+    await page.goto(`${BASE}/index.html`);
+    await page.waitForTimeout(300);
+    await page.mouse.click(180, 400);
+    await page.waitForFunction(() => !document.querySelector(".intro"), null, { timeout: 2000 }).catch(() => {});
+    ok(!(await page.$(".intro")), "tapping skips the intro");
+    await ctx.close();
+  }
+  {
+    const { ctx, page } = await newPage(browser, viewports.desktop, { intro: true, reducedMotion: "reduce" });
+    await page.goto(`${BASE}/index.html`);
+    ok(!(await page.evaluate(() => document.documentElement.classList.contains("has-intro"))), "no intro with reduced motion");
+    await ctx.close();
+  }
+
   // Reduced motion: content visible immediately, slideshow static
   {
     const { ctx, page, errors } = await newPage(browser, viewports.desktop, { reducedMotion: "reduce" });

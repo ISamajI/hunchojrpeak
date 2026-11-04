@@ -1,6 +1,6 @@
 // Static site generator for Sean's Landscaping, Inc.
 // Usage: node src/build.mjs   → writes HTML into the repository root.
-import { writeFileSync, mkdirSync, cpSync } from "node:fs";
+import { writeFileSync, mkdirSync, cpSync, readFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -16,6 +16,28 @@ const outIdx = argv.indexOf("--out");
 const ROOT = outIdx > -1 ? join(process.cwd(), argv[outIdx + 1]) : REPO;
 const DEMO = argv.includes("--demo");
 const SITE = C.url.replace(/\/$/, "");
+
+/* ---------------- photos ---------------- */
+// assets/photos/manifest.json is produced by scripts/photos.py (AI-upscaled WebP copies).
+// Any photo listed there is served locally with a responsive srcset; others fall back to the
+// original upload on seanslandscaping.com.
+const PHOTO_MANIFEST = join(REPO, "assets", "photos", "manifest.json");
+const photos = existsSync(PHOTO_MANIFEST) ? JSON.parse(readFileSync(PHOTO_MANIFEST, "utf8")) : {};
+const U_RE = U.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+function localizePhotos(html, base) {
+  const pre = base + "assets/photos/";
+  html = html.replace(new RegExp(`<img([^>]*?) src="${U_RE}([^"]+)"([^>]*)>`, "g"), (m, a, path, b) => {
+    const ph = photos[path];
+    if (!ph) return m.replace(" data-full", "");
+    const attrs = (a + b);
+    const full = attrs.includes(" data-full");
+    const clean = (x) => x.replace(" data-full", "").replace(/ width="\d+"| height="\d+"/g, "");
+    return `<img${clean(a)} src="${pre}${ph.name}-1200.webp" srcset="${pre}${ph.name}-1200.webp 1200w, ${pre}${ph.name}-2400.webp 2400w" sizes="${full ? "100vw" : "(min-width: 1024px) 50vw, 100vw"}" width="${ph.w}" height="${ph.h}"${clean(b)}>`;
+  });
+  html = html.replace(new RegExp(`data-media="${U_RE}([^"]+\\.(?:jpe?g|png))"`, "gi"), (m, path) =>
+    photos[path] ? `data-media="${pre}${photos[path].name}-2400.webp"` : m);
+  return html;
+}
 
 /* ---------------- helpers ---------------- */
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -167,6 +189,16 @@ function footer(base) {
 <script src="${base}assets/js/main.js" defer></script>`;
 }
 
+// Opening animation (home page, once per browser session; skipped for reduced motion / no JS).
+const introMarkup = `<div class="intro" aria-hidden="true">
+  <div class="intro-inner">
+    <svg class="intro-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path pathLength="1" d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10Z"/><path pathLength="1" d="M2 21c0-3 1.9-5.4 5.1-6"/></svg>
+    <p class="intro-word"><span class="intro-mask"><span>Sean's</span></span> <span class="intro-mask"><span>Landscaping</span></span></p>
+    <span class="intro-line"></span>
+    <p class="intro-sub">Commercial landscape construction · Hamilton, NJ</p>
+  </div>
+</div>`;
+
 function page({ file, title, description, current, body, base = "", solidHeader = false, ogImage, jsonld }) {
   const canonical = SITE + "/" + file.replace(/index\.html$/, "");
   const og = ogImage || img("2018/10/SEANS0020_2560.jpg");
@@ -192,9 +224,11 @@ function page({ file, title, description, current, body, base = "", solidHeader 
 <link rel="preconnect" href="https://www.seanslandscaping.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="${base}assets/css/styles.css">
+${current === "home" ? `<script>(function(){try{if(!matchMedia("(prefers-reduced-motion: reduce)").matches&&!sessionStorage.getItem("sl-intro")){document.documentElement.classList.add("has-intro");sessionStorage.setItem("sl-intro","1")}}catch(e){}})();</script>` : ""}
 ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld)}</script>` : ""}
 </head>
 <body>
+${current === "home" ? introMarkup : ""}
 ${header(base, current, solidHeader)}
 <main id="main">
 ${body}
@@ -205,7 +239,7 @@ ${footer(base)}
 `;
   const out = join(ROOT, file);
   mkdirSync(dirname(out), { recursive: true });
-  writeFileSync(out, html);
+  writeFileSync(out, localizePhotos(html, base));
   return file;
 }
 
@@ -270,7 +304,7 @@ function home() {
   const body = `
 <section class="hero" aria-label="Introduction">
   <div class="hero-media">
-    ${heroSlides.map(([src, cap], i) => `<div class="hero-slide${i === 0 ? " is-active" : ""}" data-caption="${esc(cap)}"><img src="${img(src)}" alt="" ${i === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></div>`).join("")}
+    ${heroSlides.map(([src, cap], i) => `<div class="hero-slide${i === 0 ? " is-active" : ""}" data-caption="${esc(cap)}"><img data-full src="${img(src)}" alt="" ${i === 0 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"></div>`).join("")}
   </div>
   <p class="hero-caption" data-hero-caption aria-hidden="true">${esc(heroSlides[0][1])}</p>
   <div class="container hero-inner">
@@ -426,7 +460,7 @@ function servicesPage() {
 
   const body = `
 <section class="page-hero has-image">
-  <div class="page-hero-bg"><img src="${img("2018/10/SEANS0050_2560.jpg")}" alt="" fetchpriority="high"></div>
+  <div class="page-hero-bg"><img data-full src="${img("2018/10/SEANS0050_2560.jpg")}" alt="" fetchpriority="high"></div>
   <div class="container">
     <ol class="breadcrumb"><li><a href="index.html">Home</a></li><li aria-current="page">Services</li></ol>
     <p class="eyebrow" style="color:var(--moss-400)">Services</p>
@@ -453,7 +487,7 @@ ${blocks}`;
 function projectsPage() {
   const body = `
 <section class="page-hero has-image">
-  <div class="page-hero-bg"><img src="${img("2018/11/Buerger-plaza-6.1_2560.jpg")}" alt="" fetchpriority="high"></div>
+  <div class="page-hero-bg"><img data-full src="${img("2018/11/Buerger-plaza-6.1_2560.jpg")}" alt="" fetchpriority="high"></div>
   <div class="container">
     <ol class="breadcrumb"><li><a href="index.html">Home</a></li><li aria-current="page">Projects</li></ol>
     <p class="eyebrow" style="color:var(--moss-400)">Portfolio</p>
@@ -500,7 +534,7 @@ function projectDetail(p, i) {
   const hero = p.images[0];
   const body = `
 <section class="page-hero has-image">
-  <div class="page-hero-bg"><img src="${img(hero)}" alt="" fetchpriority="high"></div>
+  <div class="page-hero-bg"><img data-full src="${img(hero)}" alt="" fetchpriority="high"></div>
   <div class="container">
     <ol class="breadcrumb"><li><a href="${base}index.html">Home</a></li><li><a href="${base}projects.html">Projects</a></li><li aria-current="page">${esc(p.name)}</li></ol>
     <p class="eyebrow" style="color:var(--moss-400)">${esc(p.loc)}</p>
@@ -555,7 +589,7 @@ function about() {
   const initials = (n) => n.split(" ").map((w) => w[0]).join("");
   const body = `
 <section class="page-hero has-image">
-  <div class="page-hero-bg"><img src="${img("2018/10/128_2560.jpg")}" alt="" fetchpriority="high"></div>
+  <div class="page-hero-bg"><img data-full src="${img("2018/10/128_2560.jpg")}" alt="" fetchpriority="high"></div>
   <div class="container">
     <ol class="breadcrumb"><li><a href="index.html">Home</a></li><li aria-current="page">About</li></ol>
     <p class="eyebrow" style="color:var(--moss-400)">About us</p>
