@@ -56,7 +56,9 @@ jobs:
           path: assets/photos/
           merge-multiple: true
       - name: Merge manifests
-        run: python scripts/photos.py merge
+        run: |
+          pip install pillow numpy
+          python scripts/photos.py merge
       - name: Commit results
         run: |
           git config user.name "github-actions[bot]"
