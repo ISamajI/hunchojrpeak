@@ -644,11 +644,11 @@ ul { margin: 0; padding: 0; }
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(180deg, rgba(10, 31, 21, 0) 25%, rgba(10, 31, 21, 0.88) 100%);
+  background: linear-gradient(180deg, rgba(10, 31, 21, 0.15) 0%, rgba(10, 31, 21, 0) 22%, rgba(10, 31, 21, 0.35) 50%, rgba(10, 31, 21, 0.92) 100%);
   transition: background-color 0.4s;
 }
 .tile:hover img { transform: scale(1.06); }
-.tile-body { padding: 22px; width: 100%; }
+.tile-body { padding: 22px; width: 100%; text-shadow: 0 1px 12px rgba(5, 15, 10, 0.45); }
 .tile-num { position: absolute; top: 18px; left: 22px; font-size: 0.8rem; letter-spacing: 0.12em; opacity: 0.8; }
 .tile h3 { font-size: var(--step-1); margin: 0 0 6px; }
 .tile--lg h3 { font-size: var(--step-3); }
