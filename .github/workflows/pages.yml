@@ -1,0 +1,43 @@
+name: Deploy sites to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}jandbauto/
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assemble static site
+        run: |
+          mkdir -p _site
+          rsync -a --exclude tests --exclude README.md jandbauto/ _site/jandbauto/
+          if [ -d outputs ]; then cp -r outputs _site/outputs; fi
+          touch _site/.nojekyll
+          cat > _site/index.html <<'HTML'
+          <!doctype html><meta charset="utf-8"><title>Redirecting…</title>
+          <meta http-equiv="refresh" content="0; url=jandbauto/">
+          <a href="jandbauto/">J&amp;B Automotive</a>
+          HTML
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
