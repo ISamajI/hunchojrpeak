@@ -5,8 +5,12 @@ seanslandscaping.com. Output goes to assets/photos/:
   <name>-1200.webp, <name>-2400.webp   responsive variants
   manifest.json                         {source path: {name, w, h, src_w, src_h, upscaled}}
 
-Images whose long side is under MIN_LONG_SIDE are upscaled 4x with Real-ESRGAN (x4plus) and then
-resized down to the target, which recovers far more detail than plain resizing.
+Images whose long side is under MIN_LONG_SIDE are upscaled 4x with Real-ESRGAN (realesr-general-x4v3,
+a fast compact model) and then resized to the target, which recovers far more detail than plain
+resizing. Larger images get Lanczos resizing plus a light unsharp mask.
+
+Sharding: set SHARD and SHARDS to split the work across parallel CI jobs; each shard writes
+manifest-<SHARD>.json, and `python scripts/photos.py merge` combines them into manifest.json.
 """
 import json
 import re
@@ -16,16 +20,18 @@ import urllib.request
 from io import BytesIO
 from pathlib import Path
 
+import os
+
 import numpy as np
-from PIL import Image, ImageOps
+from PIL import Image, ImageFilter, ImageOps
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "assets" / "photos"
 BASE = "https://www.seanslandscaping.com/wp-content/uploads/"
 TARGET = 2400          # long side of the large variant
 SMALL = 1200           # long side of the small variant
-MIN_LONG_SIDE = 2000   # below this, upscale with AI first
-WEIGHTS = "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth"
+MIN_LONG_SIDE = 1200   # below this, upscale with AI first
+WEIGHTS = "https://github.com/xinntao/Real-ESRGAN/releases/download/v0.2.5.0/realesr-general-x4v3.pth"
 PATTERN = re.compile(r'"(20\d\d/\d\d/[^"]+\.(?:jpe?g|png))"', re.I)
 
 
@@ -62,7 +68,7 @@ def model():
         import torch
         from spandrel import ModelLoader
 
-        wpath = ROOT / ".cache" / "RealESRGAN_x4plus.pth"
+        wpath = ROOT / ".cache" / "realesr-general-x4v3.pth"
         wpath.parent.mkdir(exist_ok=True)
         if not wpath.exists():
             wpath.write_bytes(fetch(WEIGHTS))
@@ -71,7 +77,7 @@ def model():
     return _model
 
 
-def upscale4x(img, tile=256, pad=16):
+def upscale4x(img, tile=384, pad=16):
     """Tiled Real-ESRGAN x4 inference on CPU (keeps memory bounded)."""
     import torch
 
@@ -100,17 +106,28 @@ def fit(img, long_side):
     return img.resize((round(w * s), round(h * s)), Image.LANCZOS)
 
 
+def merge():
+    manifest = {}
+    for f in sorted(OUT.glob("manifest-*.json")):
+        manifest.update(json.loads(f.read_text()))
+        f.unlink()
+    missing = [p for p in sources() if p not in manifest]
+    (OUT / "manifest.json").write_text(json.dumps(manifest, indent=1, sort_keys=True))
+    print(f"merged {len(manifest)} photos; {len(missing)} missing", flush=True)
+    for p in missing:
+        print("  missing:", p)
+
+
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
-    mpath = OUT / "manifest.json"
-    manifest = json.loads(mpath.read_text()) if mpath.exists() else {}
-    paths = sources()
-    print(f"{len(paths)} source images", flush=True)
+    shard, shards = int(os.environ.get("SHARD", 0)), int(os.environ.get("SHARDS", 1))
+    paths = [p for i, p in enumerate(sources()) if i % shards == shard]
+    mpath = OUT / (f"manifest-{shard}.json" if shards > 1 else "manifest.json")
+    manifest = {}
+    print(f"shard {shard}/{shards}: {len(paths)} images", flush=True)
     failed = []
     for i, p in enumerate(paths, 1):
         name = slug(p)
-        if p in manifest and (OUT / f"{name}-2400.webp").exists():
-            continue
         t0 = time.time()
         try:
             img = Image.open(BytesIO(fetch(BASE + p)))
@@ -121,20 +138,25 @@ def main():
             continue
         sw, sh = img.size
         upscaled = max(sw, sh) < MIN_LONG_SIDE
-        big = upscale4x(img) if upscaled else img
-        large = fit(big, TARGET)
+        if upscaled:
+            large = fit(upscale4x(img), TARGET)
+        elif max(sw, sh) < TARGET:
+            s_ = TARGET / max(sw, sh)
+            large = img.resize((round(sw * s_), round(sh * s_)), Image.LANCZOS)
+            large = large.filter(ImageFilter.UnsharpMask(radius=1.2, percent=60, threshold=2))
+        else:
+            large = fit(img, TARGET)
         small = fit(large, SMALL)
-        large.save(OUT / f"{name}-2400.webp", "WEBP", quality=82, method=6)
-        small.save(OUT / f"{name}-1200.webp", "WEBP", quality=80, method=6)
+        large.save(OUT / f"{name}-2400.webp", "WEBP", quality=82, method=5)
+        small.save(OUT / f"{name}-1200.webp", "WEBP", quality=80, method=5)
         manifest[p] = {"name": name, "w": large.size[0], "h": large.size[1], "src_w": sw, "src_h": sh, "upscaled": upscaled}
         mpath.write_text(json.dumps(manifest, indent=1, sort_keys=True))
         print(f"[{i}/{len(paths)}] {p} {sw}x{sh} -> {large.size[0]}x{large.size[1]}"
               f"{' (AI x4)' if upscaled else ''} {time.time() - t0:.1f}s", flush=True)
-    print(f"done; {len(manifest)} in manifest, {len(failed)} failed", flush=True)
+    print(f"done; {len(manifest)} written, {len(failed)} failed", flush=True)
     for p in failed:
         print("  failed:", p)
-    sys.exit(0)
 
 
 if __name__ == "__main__":
-    main()
+    merge() if sys.argv[1:] == ["merge"] else main()
