@@ -383,6 +383,54 @@ async function overflowX(page) {
     await ctx.close();
   }
 
+  /* ---------------- Layout sweep (QA round 2) ---------------- */
+  for (const w of [320, 360, 390, 768, 900, 1024, 1280, 1920]) {
+    const { ctx, page, errors } = await newPage(browser, { viewport: { width: w, height: 900 } });
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() => window.JB.skipIntro && window.JB.skipIntro());
+    await page.waitForFunction(() => document.getElementById('intro').classList.contains('is-done'), null, { timeout: 6000 });
+    const head = await page.evaluate(() => {
+      const vw = document.documentElement.clientWidth;
+      return [...document.querySelectorAll('.header__inner > *, .header__actions > *')]
+        .filter(el => getComputedStyle(el).display !== 'none' && el.getBoundingClientRect().width)
+        .filter(el => !el.closest('.nav') || getComputedStyle(document.getElementById('nav')).position !== 'fixed')
+        .map(el => ({ c: el.className, r: Math.round(el.getBoundingClientRect().right) }))
+        .filter(x => x.r > vw + 1);
+    });
+    check(`${w}px: header fits`, head.length === 0, head);
+    await page.locator('#about').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1100);
+    const overlap = await page.evaluate(() => {
+      const b = document.querySelector('.ase-badge').getBoundingClientRect();
+      return [...document.querySelectorAll('.owner figcaption')].some(f => {
+        const r = f.getBoundingClientRect();
+        return !(r.bottom <= b.top || r.top >= b.bottom || r.right <= b.left || r.left >= b.right);
+      });
+    });
+    check(`${w}px: ASE badge clear of owner captions`, !overlap);
+    await page.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += 500) { window.scrollTo({ top: y, behavior: 'instant' }); await new Promise(r => setTimeout(r, 40)); } });
+    await page.waitForTimeout(900);
+    const ov = await overflowX(page);
+    check(`${w}px: no horizontal overflow`, ov.scrollW <= ov.w && ov.bad.length === 0, ov);
+    if (w <= 400) {
+      const todayLines = await page.evaluate(() => { const el = document.querySelector('.hours li.is-today span:last-child'); return el ? Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight || 20)) : 1; });
+      check(`${w}px: today's hours on one line`, todayLines <= 1, todayLines);
+    }
+    check(`${w}px: no JS errors`, errors.length === 0, errors);
+    await ctx.close();
+  }
+  {
+    // burger menu moves focus into the menu
+    const { ctx, page } = await newPage(browser, { viewport: { width: 390, height: 844 }, hasTouch: true });
+    await page.goto(URL, { waitUntil: 'domcontentloaded' });
+    await page.evaluate(() => window.JB.skipIntro && window.JB.skipIntro());
+    await page.waitForTimeout(1300);
+    await page.click('.burger');
+    await page.waitForTimeout(200);
+    check('menu open focuses first link', await page.evaluate(() => document.activeElement && document.activeElement.closest('#nav') !== null));
+    await ctx.close();
+  }
+
   /* ---------------- Reduced motion ---------------- */
   {
     const { ctx, page, errors } = await newPage(browser, { viewport: { width: 1280, height: 800 }, reducedMotion: 'reduce' });

@@ -123,6 +123,8 @@
     requestAnimationFrame(function () {
       var y = window.scrollY || window.pageYOffset;
       header.classList.toggle('is-scrolled', y > 20);
+      var firstSection = document.getElementById('services');
+      if (firstSection && y + window.innerHeight * 0.5 < firstSection.offsetTop) $$('#nav a.is-active').forEach(function (a) { a.classList.remove('is-active'); });
       var max = document.documentElement.scrollHeight - window.innerHeight;
       if (bar) bar.style.transform = 'scaleX(' + (max > 0 ? Math.min(1, y / max) : 0) + ')';
       ticking = false;
@@ -135,6 +137,7 @@
   var burger = $('.burger');
   function setMenu(open) {
     nav.classList.toggle('is-open', open);
+    if (open) { var first = $('a', nav); if (first) setTimeout(function () { first.focus(); }, 50); }
     burger.setAttribute('aria-expanded', String(open));
     burger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
   }
@@ -144,7 +147,7 @@
   document.addEventListener('click', function (e) {
     if (nav.classList.contains('is-open') && !nav.contains(e.target) && !burger.contains(e.target)) setMenu(false);
   });
-  window.addEventListener('resize', function () { if (window.innerWidth > 860) setMenu(false); });
+  window.addEventListener('resize', function () { if (window.innerWidth > 980) setMenu(false); });
 
   if ('IntersectionObserver' in window) {
     var links = {};
@@ -519,9 +522,8 @@
   var dots = cards.map(function (c, i) {
     var d = document.createElement('button');
     d.type = 'button';
-    d.setAttribute('role', 'tab');
     d.setAttribute('aria-label', 'Review ' + (i + 1));
-    d.setAttribute('aria-selected', i === 0 ? 'true' : 'false');
+    if (i === 0) d.setAttribute('aria-current', 'true');
     d.addEventListener('click', function () { userTouched(); goTo(i); });
     dotsWrap.appendChild(d);
     return d;
@@ -549,7 +551,7 @@
   function paintDots(i) {
     var mi = maxIndex();
     dots.forEach(function (d, k) {
-      d.setAttribute('aria-selected', String(k === i));
+      if (k === i) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
       d.hidden = k > mi;
     });
   }
