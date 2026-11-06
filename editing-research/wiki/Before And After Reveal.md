@@ -1,6 +1,7 @@
 ---
 type: technique
 aliases:
+  - Black and White to Color Reveal
   - Before and After
   - Transformation Reveal
 platforms: [TikTok, Instagram Reels]

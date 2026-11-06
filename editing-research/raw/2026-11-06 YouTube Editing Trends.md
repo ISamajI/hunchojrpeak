@@ -131,7 +131,7 @@ Scope: editing styles and techniques getting traction on YouTube Shorts and long
 - **Status:** Peak.
 - **Sources:** AIR Media-Tech (2026-09-14); Pixflow (2026-07-19).
 
-### 15. [[Hook A/B Testing]] (new YouTube Studio capability)
+### 15. [[Hook AB Testing|Hook A/B Testing]] (new YouTube Studio capability)
 - **What it looks like:** Uploading up to **three different cuts** of a video so YouTube can test which one holds attention best. This turns the opening edit into something you can measure.
 - **How to do it:** YouTube Studio > video A/B testing (announced "coming soon" on 2026-09-23). Edit 2–3 versions that differ only in the first 30s (cold open vs. value statement vs. highlights teaser).
 - **Status:** Rising. Availability and rollout are **unconfirmed**; it was announced as coming soon.
@@ -182,7 +182,7 @@ Scope: editing styles and techniques getting traction on YouTube Shorts and long
 
 | Rising | Peak | Fading / at risk |
 |---|---|---|
-| [[Variable Pacing]] patterns, [[Documentary Realism]], [[Talking-Head Static]], [[Hook A/B Testing]], [[Conversational AI Editing]], [[Serialized Shorts]], [[Transformative Editing]] | [[Retention Editing]], [[Kinetic Captions]], [[SFX Layering]], [[J-Cut]]/[[L-Cut]], [[Rehook]], [[Video Essay Style]], [[Greenscreen Explain]], [[Brainrot Stack]] | Ultra-fast, uniform "overstim" cutting on long-form (MrBeast 2024 and AIR 2026); a zoom and whoosh on every sentence; long branded intros and "hey guys" openers; aggregator re-uploads on Shorts (algorithm, 2026-10-01); [[Kinetic Captions]] as a *differentiator* (my inference, not from a source) |
+| [[Variable Pacing]] patterns, [[Documentary Realism]], [[Talking-Head Static]], [[Hook AB Testing|Hook A/B Testing]], [[Conversational AI Editing]], [[Serialized Shorts]], [[Transformative Editing]] | [[Retention Editing]], [[Kinetic Captions]], [[SFX Layering]], [[J-Cut]]/[[L-Cut]], [[Rehook]], [[Video Essay Style]], [[Greenscreen Explain]], [[Brainrot Stack]] | Ultra-fast, uniform "overstim" cutting on long-form (MrBeast 2024 and AIR 2026); a zoom and whoosh on every sentence; long branded intros and "hey guys" openers; aggregator re-uploads on Shorts (algorithm, 2026-10-01); [[Kinetic Captions]] as a *differentiator* (my inference, not from a source) |
 
 ---
 

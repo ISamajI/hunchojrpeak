@@ -45,7 +45,7 @@ Peak (established; saturating in fan-edit culture). Status is the research agent
 [[Beat Sync]] · [[Fan Edits]] · [[Cinematic Slow Motion]] · [[CapCut]] · [[Template Remix]] · [[Over-Editing Backlash]]
 
 ## Sources
-- CapCut Guide (third-party tutorial, 2026-06-24, mod. 2026-10-22): https://capcutguide.com/capcut-velocity-edit/
+- CapCut Guide (⚠️ unofficial third-party tutorial, 2026-06-24, mod. 2026-10-22): https://capcutguide.com/capcut-velocity-edit/
 - CapCut official "AI Velocity" page (undated, vendor): https://www.capcut.com/explore/ai-velocity
 - Reddit r/VideoEditors (Apr 2026, snippet only, unverified): https://www.reddit.com/r/VideoEditors/comments/1se5aaw/i_tracked_11_video_editing_trends_across_tiktok/
 - TikTok "velocity edit" discover page (~Nov 2026, social, unverified): https://www.tiktok.com/discover/velocity-edit?lang=en
