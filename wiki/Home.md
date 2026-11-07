@@ -19,7 +19,7 @@ Everything built with Claude (Cowork, Claude Code, claude.ai) gathered in one va
 
 ## Business — LTGPEAK
 - [[LTGPEAK]] — the studio: site, pricing, ops dashboards, sales tools.
-- Clients: [[J&B Automotive]] · [[Chris Mormando]] · [[Mikonos]] · [[Timbí]] · [[Brothers Barbershop]] · [[JMC Repair]] · [[Time Out On Pine]] · [[Sinsatty]] · [[JMB Lash]]
+- Clients: [[J&B Automotive]] · [[Sean's Landscaping]] · [[Chris Mormando]] · [[Mikonos]] · [[Timbí]] · [[Brothers Barbershop]] · [[JMC Repair]] · [[Time Out On Pine]] · [[Sinsatty]] · [[JMB Lash]]
 - Pitches: [[Concept Demos]]
 
 ## Systems
