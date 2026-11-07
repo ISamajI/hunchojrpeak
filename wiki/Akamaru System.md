@@ -13,6 +13,14 @@ Akamaru is Henry's multi-agent assistant system (also built as "Jarvis"): 8 Naru
 - Lean Grind Flow is the operating playbook: intake → route to cheapest tier that can win → run → quality gate → ship.
 - Visuals: Akamaru Command Deck (voice "Hey [agent]"), Rooftop Council HQ (3D roof), Rooftop Council Live + Trap House Council (live simulated shifts), Crew Lineup, Huncho Flow (live workflow feed).
 
+## How a new agent gets created
+1. `~/.claude/agents/<name>.md` with identity / soul / user sections.
+2. Note in `~/Documents/HunchoBrain/Agents/` and update the `Brain.md` index.
+3. Memory file in `~/.claude/projects/-Volumes-Claude/memory/`.
+4. `/name` command, either a skill with `context: fork` + `agent:` or a file in `~/.claude/commands/`.
+- Rules: check `HunchoBrain/Projects/` first and never invent business facts. Act without asking. New named agents default to orchestrator.
+- Malcomtolo was the first agent and is the template the others copy. Itachi was renamed from Etachi.
+
 ## Artifacts
 
 | Updated | Artifact | Live | Local |
