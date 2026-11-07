@@ -10,7 +10,7 @@ JMB Lash Extensions & Esthetics (Philadelphia) — booking site.
 
 | Updated | Artifact | Live | Local |
 |---|---|---|---|
-| 2026-11-04 | JMB Lash Extensions & Esthetics — Booking | [open](https://claude.ai/artifact/XKVXXTttMsgdCpddVft7ej) | [snapshot](../outputs/jmb-lash-booking/index.html) |
+| 2026-11-04 | JMB Lash Extensions & Esthetics — Booking | [open](https://claude.ai/artifact/XKVXXTttMsgdCpddVft7ej) | [snapshot](../revamps/artifacts/jmb-lash-booking/index.html) |
 
 ## Related
 

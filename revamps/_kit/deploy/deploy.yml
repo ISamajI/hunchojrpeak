@@ -1,0 +1,36 @@
+# Copy to .github/workflows/deploy-CLIENT.yml at the REPO ROOT (workflows only run from there).
+# Replace CLIENT and the build step. Based on the Sean's Landscaping and J&B deploys.
+name: Deploy CLIENT preview to Cloudflare
+
+on:
+  push:
+    branches: [main]
+    paths: ['revamps/projects/CLIENT/**', '.github/workflows/deploy-CLIENT.yml']
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-deploy-CLIENT
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: revamps/projects/CLIENT
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build
+        run: mkdir -p dist && cp -r *.html assets dist/ 2>/dev/null || true   # or: node src/build.mjs --out dist
+      - name: Deploy to CLIENT.hunchopeak.dev
+        if: env.CLOUDFLARE_API_TOKEN != ''
+        run: npx --yes wrangler@4.157.0 deploy
+      - name: Deploy temporary preview (no token yet; only when the commit message has [deploy])
+        if: env.CLOUDFLARE_API_TOKEN == '' && (github.event_name == 'workflow_dispatch' || contains(github.event.head_commit.message, '[deploy]'))
+        run: npx --yes wrangler@4.157.0 deploy --temporary --config wrangler.temporary.jsonc

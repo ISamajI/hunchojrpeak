@@ -1,0 +1,19 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Casa 3D</title>
+<meta name="description" content="Diseña tu casa en 3D: escoge el terreno, el estilo y los colores.">
+<meta name="theme-color" content="#F3F1EC">
+<script>
+  // The app's tokens live on <html data-brand="casa">; the theme follows its own sun / Más setting.
+  (function () { var r = document.documentElement; r.lang = 'es'; r.dataset.brand = 'casa'; if (!r.dataset.theme) r.dataset.theme = 'light'; })();
+</script>
+<script type="importmap">{"imports":{"three":"./three/build/three.module.js","three/examples/jsm/":"./three/examples/jsm/"}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./src/styles.css">
+<style>html, body { height: 100%; background: #F3F1EC; } html[data-theme="dark"], html[data-theme="dark"] body { background: #12181A; }</style>
+<div id="stage"></div>
+<noscript>Casa 3D necesita JavaScript. / Casa 3D needs JavaScript.</noscript>
+<script type="module" src="./src/main.js"></script>
+
+</body></html>

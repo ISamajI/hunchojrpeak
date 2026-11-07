@@ -25,13 +25,13 @@ Akamaru is Henry's multi-agent assistant system (also built as "Jarvis"): 8 Naru
 
 | Updated | Artifact | Live | Local |
 |---|---|---|---|
-| 2026-10-31 | Trap House Council | [open](https://claude.ai/artifact/1AEhZm9Mwuae3Eha9t8hBC) | [snapshot](../outputs/trap-house-council/index.html) |
-| 2026-10-25 | Rooftop Council Live | [open](https://claude.ai/artifact/X9H8W5aqKmR761cAr4tYyB) | [snapshot](../outputs/rooftop-council-live/index.html) |
-| 2026-10-18 | Crew Lineup | [open](https://claude.ai/artifact/8f4KpiDw8AA2VyNQ7vJBf6) | [snapshot](../outputs/crew-lineup/index.html) |
-| 2026-10-07 | Huncho Flow | [open](https://claude.ai/artifact/BwKthCc4RPWkuhb3a5FJbq) | [snapshot](../outputs/huncho-flow/index.html) |
-| 2026-09-17 | Lean Grind Flow | [open](https://claude.ai/artifact/KRhdjoKUUS1n7XsvkohVnM) | [snapshot](../outputs/lean-grind-flow/index.html) |
-| 2026-08-31 | Akamaru Command Deck | [open](https://claude.ai/artifact/KSbQrjBkUjH6L8ZU27i6vP) | [snapshot](../outputs/akamaru-command-deck/index.html) |
-| 2026-08-29 | Rooftop Council HQ | [open](https://claude.ai/artifact/LQvE5kwPizLT7TT86sQX8t) | [snapshot](../outputs/rooftop-council-hq/index.html) |
+| 2026-10-31 | Trap House Council | [open](https://claude.ai/artifact/1AEhZm9Mwuae3Eha9t8hBC) | [snapshot](../revamps/cowork/trap-house-council/index.html) |
+| 2026-10-25 | Rooftop Council Live | [open](https://claude.ai/artifact/X9H8W5aqKmR761cAr4tYyB) | [snapshot](../revamps/cowork/rooftop-council-live/index.html) |
+| 2026-10-18 | Crew Lineup | [open](https://claude.ai/artifact/8f4KpiDw8AA2VyNQ7vJBf6) | [snapshot](../revamps/cowork/crew-lineup/index.html) |
+| 2026-10-07 | Huncho Flow | [open](https://claude.ai/artifact/BwKthCc4RPWkuhb3a5FJbq) | [snapshot](../revamps/cowork/huncho-flow/index.html) |
+| 2026-09-17 | Lean Grind Flow | [open](https://claude.ai/artifact/KRhdjoKUUS1n7XsvkohVnM) | [snapshot](../revamps/cowork/lean-grind-flow/index.html) |
+| 2026-08-31 | Akamaru Command Deck | [open](https://claude.ai/artifact/KSbQrjBkUjH6L8ZU27i6vP) | [snapshot](../revamps/cowork/akamaru-command-deck/index.html) |
+| 2026-08-29 | Rooftop Council HQ | [open](https://claude.ai/artifact/LQvE5kwPizLT7TT86sQX8t) | [snapshot](../revamps/cowork/rooftop-council-hq/index.html) |
 
 ## Related
 

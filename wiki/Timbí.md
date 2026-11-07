@@ -16,9 +16,9 @@ Timbí Latin Experience — Trenton/Hamilton NJ Latin street food ("Oven roasted
 | Updated | Artifact | Live | Local |
 |---|---|---|---|
 | 2026-09-27 | Hunchopeak Deploy Relay | [open](https://claude.ai/artifact/8MBSTMgy7f4HRx154B7PZi) | deploy helper — not copied |
-| 2026-09-26 | Timbí Device Preview | [open](https://claude.ai/artifact/PvXhA3ShV4XPBWbxfDvHwr) | [snapshot](../outputs/timbi-device-preview/index.html) (page shell only — styles/images live on the artifact) |
-| 2026-09-26 | Timbí Latin Experience | [open](https://claude.ai/artifact/U7PJuyBiwg61WbmEVAPRCy) | [snapshot](../outputs/timbi-site/index.html) |
-| 2026-09-26 | Timbí on BRAG Template | [open](https://claude.ai/artifact/3YLdWQjn5UTij2JYuDfmc2) | [snapshot](../outputs/timbi-brag-template/index.html) (page shell only — styles/images live on the artifact) |
+| 2026-09-26 | Timbí Device Preview | [open](https://claude.ai/artifact/PvXhA3ShV4XPBWbxfDvHwr) | [snapshot](../revamps/artifacts/timbi-device-preview/index.html) (page shell only — styles/images live on the artifact) |
+| 2026-09-26 | Timbí Latin Experience | [open](https://claude.ai/artifact/U7PJuyBiwg61WbmEVAPRCy) | [snapshot](../revamps/artifacts/timbi-site/index.html) |
+| 2026-09-26 | Timbí on BRAG Template | [open](https://claude.ai/artifact/3YLdWQjn5UTij2JYuDfmc2) | [snapshot](../revamps/artifacts/timbi-brag-template/index.html) (page shell only — styles/images live on the artifact) |
 
 ## Related
 

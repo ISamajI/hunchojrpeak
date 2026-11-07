@@ -1,0 +1,31 @@
+name: Deploy J&B preview to Cloudflare
+
+on:
+  push:
+    branches: [main, claude/laughing-feynman-kkbasz]
+    paths: ['jandbauto/**', 'preview/**', 'tools/build_preview.py', 'wrangler*.jsonc', '.github/workflows/deploy-jandbauto.yml']
+  workflow_dispatch:
+
+concurrency:
+  group: cloudflare-deploy-jandbauto
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build site + proposal
+        run: python3 tools/build_preview.py dist
+      - name: Deploy to jandbauto.hunchopeak.dev
+        if: env.CLOUDFLARE_API_TOKEN != ''
+        run: npx --yes wrangler@4.157.0 deploy
+      - name: Deploy temporary preview (no Cloudflare token configured yet)
+        if: env.CLOUDFLARE_API_TOKEN == ''
+        run: npx --yes wrangler@4.157.0 deploy --temporary --config wrangler.temporary.jsonc

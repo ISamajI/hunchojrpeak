@@ -1,0 +1,7 @@
+// Used only when no Cloudflare token is configured: deploys to a throwaway account on a
+// workers.dev URL. The claim link wrangler prints expires in ~60 minutes.
+{
+  "name": "CLIENT-preview",
+  "compatibility_date": "2026-10-01",
+  "assets": { "directory": "./dist", "not_found_handling": "404-page" }
+}

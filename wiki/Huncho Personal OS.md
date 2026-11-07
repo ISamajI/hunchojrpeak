@@ -10,9 +10,9 @@ Henry's personal dashboards: HunchoStrat (film/mind/stats/train for baseball), H
 
 | Updated | Artifact | Live | Local |
 |---|---|---|---|
-| 2026-09-24 | Ace HQ | [open](https://claude.ai/artifact/2jGcxCsqD3caxFQv4QJsDT) | [snapshot](../outputs/ace-hq/index.html) |
-| 2026-09-16 | HunchoStrat | [open](https://claude.ai/artifact/PggGXfCKhGbR7MC5qiRLHr) | [snapshot](../outputs/hunchostrat/index.html) (page shell only — styles/images live on the artifact) |
-| 2026-09-15 | Huncho JR Dugout | [open](https://claude.ai/artifact/BjZJWtaWmugJR6gFKGdxyB) | [snapshot](../outputs/huncho-jr-dugout/index.html) |
+| 2026-09-24 | Ace HQ | [open](https://claude.ai/artifact/2jGcxCsqD3caxFQv4QJsDT) | [snapshot](../revamps/cowork/ace-hq/index.html) |
+| 2026-09-16 | HunchoStrat | [open](https://claude.ai/artifact/PggGXfCKhGbR7MC5qiRLHr) | [snapshot](../revamps/cowork/hunchostrat/index.html) (page shell only — styles/images live on the artifact) |
+| 2026-09-15 | Huncho JR Dugout | [open](https://claude.ai/artifact/BjZJWtaWmugJR6gFKGdxyB) | [snapshot](../revamps/cowork/huncho-jr-dugout/index.html) |
 
 ## Related
 

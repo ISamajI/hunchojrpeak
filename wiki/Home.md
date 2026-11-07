@@ -8,12 +8,13 @@ Everything built with Claude (Cowork, Claude Code, claude.ai) gathered in one va
 
 ## Vault layout
 - `/wiki` — reference notes: one project or workflow per note (this folder).
-- `/outputs` — snapshots of every published artifact + [the full index](../outputs/README.md).
+- `/revamps` — every revamp + Cowork build, the starter kit, and [the full artifact index](../revamps/ARTIFACT-INDEX.md). See [[Revamp Library]].
 - `/raw` — daily notes and per-session logs (`/raw/sessions`).
 
 ## Workflows (how the work gets done)
 - [[Lean Grind Playbook]] — intake → route to a tier → run → quality gate → ship.
 - [[Client Website Build Workflow]] — demo → proposal → deploy for local businesses.
+- [[Revamp Library]] — all past revamps in one folder; every new revamp builds off them.
 - [[Cold Call Outreach Workflow]] — lead list + 60-second call script.
 - [[Content & Social Workflow]] — captions, daily posts, ad edits.
 

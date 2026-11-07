@@ -1,0 +1,118 @@
+// Lucide-style inline icons: 24 viewBox, 2px stroke, round caps, currentColor.
+// Always decorative (aria-hidden); every control also shows a visible word.
+
+const wave = (y) => `<path d="M2 ${y}c2.5 0 2.5-2 5-2s2.5 2 5 2 2.5-2 5-2 2.5 2 5 2"/>`;
+
+const P = {
+  map: '<path d="M3 6l6-3 6 3 6-3v15l-6 3-6-3-6 3z"/><path d="M9 3v15M15 6v15"/>',
+  home: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
+  ruler: '<rect x="2" y="8" width="20" height="8" rx="1.5"/><path d="M6 8v3M10 8v4M14 8v3M18 8v4"/>',
+  paintbrush: '<path d="M18 3l3 3-9 9-3-3z"/><path d="M9 12c-3 0-5 2-5 5 0 2-1 3-2 4 5 1 10 0 10-5"/>',
+  trees: '<circle cx="12" cy="9" r="6"/><path d="M12 15v7M9 22h6"/>',
+  'undo-2': '<path d="M9 14L4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/>',
+  'redo-2': '<path d="M15 14l5-5-5-5"/><path d="M20 9H9.5a5.5 5.5 0 0 0 0 11H13"/>',
+  save: '<path d="M5 3h11l4 4v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M8 3v5h7V3"/><path d="M7 21v-8h10v8"/>',
+  'folder-open': '<path d="M3 19V6a1 1 0 0 1 1-1h5l2 2h8a1 1 0 0 1 1 1v2"/><path d="M3 19l3-9h16l-3 9z"/>',
+  languages: '<path d="M4 5h9M8.5 3v2"/><path d="M6 5c0 4 3 7 7 8"/><path d="M12 5c-1 4-4 7-8 8.5"/><path d="M12 21l4.5-10L21 21M13.5 18h6"/>',
+  pencil: '<path d="M17 3l4 4L8 20l-5 1 1-5z"/><path d="M14 6l4 4"/>',
+  menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
+  box: '<path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',
+  'layout-grid': '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>',
+  footprints: '<ellipse cx="8" cy="8" rx="3" ry="5"/><path d="M5.5 16h5v1.5a2.5 2.5 0 0 1-5 0z"/><ellipse cx="16" cy="6" rx="3" ry="4"/><path d="M13.5 13h5v1.5a2.5 2.5 0 0 1-5 0z"/>',
+  layers: '<path d="M12 3l9 5-9 5-9-5z"/><path d="M3 13l9 5 9-5"/>',
+  sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+  sunrise: '<path d="M12 8V2M8.5 5.5L12 2l3.5 3.5"/><path d="M5 18a7 7 0 0 1 14 0M2 18h2M20 18h2M3 22h18"/>',
+  sunset: '<path d="M12 2v6M8.5 4.5L12 8l3.5-3.5"/><path d="M5 18a7 7 0 0 1 14 0M2 18h2M20 18h2M3 22h18"/>',
+  'locate-fixed': '<circle cx="12" cy="12" r="3" fill="currentColor"/><circle cx="12" cy="12" r="7"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>',
+  camera: '<path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="4"/>',
+  ellipsis: '<circle cx="5" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="19" cy="12" r="1.3"/>',
+  minus: '<path d="M5 12h14"/>',
+  plus: '<path d="M5 12h14M12 5v14"/>',
+  check: '<path d="M4 12.5l5 5L20 6.5"/>',
+  x: '<path d="M6 6l12 12M18 6L6 18"/>',
+  upload: '<path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/>',
+  image: '<rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-8 9"/>',
+  dices: '<rect x="3" y="3" width="12" height="12" rx="2"/><circle cx="7" cy="7" r=".9"/><circle cx="11" cy="11" r=".9"/><path d="M15 9h4a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2v-4"/><circle cx="17" cy="15" r=".9"/>',
+  mountain: '<path d="M2 20L9 7l4 7 3-4 6 10z"/>',
+  waves: `${wave(8)}${wave(13)}${wave(18)}`,
+  wheat: '<path d="M12 22V8"/><path d="M12 8c-3 0-4-2-4-4 3 0 4 2 4 4zM12 8c3 0 4-2 4-4-3 0-4 2-4 4zM12 14c-3 0-4-2-4-4 3 0 4 2 4 4zM12 14c3 0 4-2 4-4-3 0-4 2-4 4zM12 20c-3 0-4-2-4-4 3 0 4 2 4 4zM12 20c3 0 4-2 4-4-3 0-4 2-4 4z"/>',
+  'arrow-up': '<path d="M12 20V5M6 11l6-6 6 6"/>',
+  'arrow-down': '<path d="M12 4v15M6 13l6 6 6-6"/>',
+  'arrow-left': '<path d="M20 12H5M11 6l-6 6 6 6"/>',
+  'arrow-right': '<path d="M4 12h15M13 6l6 6-6 6"/>',
+  'rotate-cw': '<path d="M20 12a8 8 0 1 1-2.5-5.8"/><path d="M20 4v5h-5"/>',
+  'trash-2': '<path d="M4 7h16M10 11v6M14 11v6"/><path d="M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13"/><path d="M9 7V4h6v3"/>',
+  'chevron-right': '<path d="M9 5l7 7-7 7"/>',
+  'columns-3': '<rect x="3" y="4" width="18" height="16" rx="1"/><path d="M9 4v16M15 4v16"/>',
+  'door-open': '<path d="M4 21h16"/><path d="M6 21V4l9-1.5V21"/><path d="M15 7h3v14"/><circle cx="12" cy="12" r=".9"/>',
+  car: '<path d="M4 17v-4l2-5h12l2 5v4z"/><path d="M4 12h16"/><circle cx="8" cy="17" r="2"/><circle cx="16" cy="17" r="2"/>',
+  'building-2': '<rect x="5" y="3" width="10" height="18" rx="1"/><path d="M15 9h4a1 1 0 0 1 1 1v11h-5"/><path d="M8 7h4M8 11h4M8 15h4"/>',
+  container: '<ellipse cx="12" cy="6" rx="7" ry="2.5"/><path d="M5 6v12c0 1.4 3 2.5 7 2.5s7-1.1 7-2.5V6"/>',
+  solar: '<path d="M4 8h16l-2 10H6z"/><path d="M9.5 8L9 18M14.5 8l.5 10M5 13h14"/>',
+  'grid-3x3': '<rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/>',
+  droplets: '<path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/>',
+  route: '<circle cx="6" cy="19" r="2.5"/><circle cx="18" cy="5" r="2.5"/><path d="M8.5 19H15a3.5 3.5 0 0 0 0-7H9a3.5 3.5 0 0 1 0-7h6.5"/>',
+  'flower-2': '<circle cx="12" cy="9" r="2"/><circle cx="12" cy="4.5" r="2"/><circle cx="16.5" cy="9" r="2"/><circle cx="7.5" cy="9" r="2"/><path d="M12 11v11M12 17c-3 0-4-1-5-3M12 19c2 0 3-1 4-2"/>',
+  'brick-wall': '<rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M3 15h18M12 3v6M7 9v6M17 9v6M12 15v6"/>',
+  'tree-palm': '<path d="M12 22V11"/><path d="M12 11C9 5 5 6 3 9c3-1 6 0 9 2z"/><path d="M12 11c3-6 7-5 9-2-3-1-6 0-9 2z"/><path d="M12 11c-1-4 0-7 0-8 2 2 2 5 0 8z"/>',
+  tent: '<path d="M3 20L12 4l9 16z"/><path d="M10 20l2-5 2 5"/>',
+  armchair: '<path d="M5 11V8a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v3"/><path d="M3 12a2 2 0 0 1 4 0v3h10v-3a2 2 0 0 1 4 0v6H3z"/><path d="M6 18v2M18 18v2"/>',
+  sofa: '<path d="M4 11V8a3 3 0 0 1 3-3h10a3 3 0 0 1 3 3v3"/><path d="M2 14a2 2 0 0 1 4 0v1h12v-1a2 2 0 0 1 4 0v4H2z"/><path d="M5 18v2M19 18v2"/>',
+  tv: '<rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4"/>',
+  lamp: '<path d="M8 3h8l3 9H5z"/><path d="M12 12v8M8 21h8"/>',
+  bed: '<path d="M3 19V6M3 15h18v4M21 15v-3a3 3 0 0 0-3-3h-7v6"/><circle cx="7" cy="11.5" r="2"/>',
+  sprout: '<path d="M12 21v-9"/><path d="M12 12c0-4-3-6-7-6 0 4 3 6 7 6zM12 15c0-3 2-5 6-5 0 3-2 5-6 5z"/><path d="M8 21h8"/>',
+  'rocking-chair': '<path d="M7 3l2 10h8l-1-6"/><path d="M9 13l-1 4M17 13l1 4"/><path d="M3 19c3 2 15 2 18 0"/>',
+  bookshelf: '<rect x="4" y="3" width="16" height="18" rx="1"/><path d="M4 9h16M4 15h16M8 3v6M12 9v6M16 15v6"/>',
+  table: '<path d="M4 9h16"/><path d="M6 9v11M18 9v11"/><path d="M3 9l1-3h16l1 3"/>',
+  'chevron-down': '<path d="M5 9l7 7 7-7"/>',
+  eye: '<path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
+  window: '<path d="M3 11l9-7 9 7"/><rect x="6" y="11" width="12" height="9" rx="1"/><path d="M12 11v9M6 15.5h12"/>',
+  'zoom-in': '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M11 8v6M8 11h6"/>',
+  'zoom-out': '<circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4M8 11h6"/>',
+  'help-circle': '<circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7M12 17h.01"/>',
+  type: '<path d="M4 7V4h16v3M9 20h6M12 4v16"/>',
+  'chevron-left': '<path d="M15 5l-7 7 7 7"/>',
+  bath: '<path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M6 12V6a2 2 0 0 1 4 0"/><path d="M7 19l-1 2M17 19l1 2"/>',
+  'cooking-pot': '<path d="M4 10h16v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M2 10h2M20 10h2M9 6c0-1 1-1 1-2M14 6c0-1 1-1 1-2"/>',
+  utensils: '<path d="M7 3v8M4 3v5a3 3 0 0 0 6 0V3M7 11v10"/><path d="M17 21V3c-3 2-4 6-4 9h4"/>',
+  'washing-machine': '<rect x="4" y="3" width="16" height="18" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M8 6.5h1M11 6.5h1"/>',
+  hanger: '<path d="M12 7a2 2 0 1 1 2 2c-1 .5-2 1-2 2v1"/><path d="M12 12L3 18h18z"/>',
+  laptop: '<rect x="5" y="5" width="14" height="10" rx="1"/><path d="M3 19h18"/>',
+  stairs: '<path d="M4 20h5v-5h5v-5h6"/><path d="M4 20V10"/>',
+  'pat-recto': '<rect x="3" y="3" width="18" height="18"/><path d="M12 3v18M3 12h18"/>',
+  'pat-diagonal': '<rect x="3" y="3" width="18" height="18"/><path d="M12 3l9 9-9 9-9-9z" fill="none"/><path d="M7.5 7.5l9 9M16.5 7.5l-9 9"/>',
+  'pat-escalonado': '<rect x="3" y="3" width="18" height="18"/><path d="M3 9.5h18M3 15.5h18M12 3v6.5M7 9.5v6M17 9.5v6M12 15.5V21"/>',
+  'pat-espiga': '<rect x="3" y="3" width="18" height="18"/><path d="M3 9l6-6M3 15l12-12M3 21L21 3M9 21L21 9M15 21l6-6"/>',
+  sparkles: '<path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/>',
+  hammer: '<path d="M14 4l6 6-3 3-6-6z"/><path d="M12 8L4 16l4 4 8-8"/><path d="M17 3l4 4"/>',
+  'win-pane': '<rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M12 3v18M4 12h16"/>',
+  slab: '<path d="M3 15l5-9h13l-5 9z"/><path d="M3 15v3h13v-3M16 15l5-9v3l-5 9"/><path d="M11 6l-4 9M16 6l-4 9"/>',
+  fence: '<path d="M4 21V8l2-3 2 3v13M10 21V8l2-3 2 3v13M16 21V8l2-3 2 3v13"/><path d="M3 12h18M3 17h18"/>',
+  gate: '<path d="M3 21V5M21 21V5"/><path d="M3 8h8M3 14h8M13 8h8M13 14h8"/><path d="M11 5v16M13 5v16"/>',
+  move: '<path d="M12 3v18M3 12h18"/><path d="M9 6l3-3 3 3M9 18l3 3 3-3M6 9l-3 3 3 3M18 9l3 3-3 3"/>',
+  'rotate-ccw': '<path d="M4 12a8 8 0 1 0 2.5-5.8"/><path d="M4 4v5h5"/>',
+  'wall-draw': '<path d="M3 20h18"/><path d="M5 16V6h14v10"/><path d="M5 11h14M12 6v5M8 11v5M16 11v5"/>',
+  remodel: '<path d="M3 21V10l6-5 6 5v11"/><path d="M3 21h18"/><path d="M15 13h6v8"/><path d="M7 21v-5h4v5"/><path d="M18 3l3 3-3 3"/><path d="M21 6h-5"/>',
+  'share-2': '<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/>',
+  flame: '<path d="M12 22c4 0 7-3 7-7 0-3-2-5-3-7-1 2-2 3-3 3 0-4-1-7-4-9 0 5-4 7-4 12 0 4 3 8 7 8z"/>',
+  'layout-dashboard': '<rect x="3" y="3" width="8" height="10" rx="1"/><rect x="13" y="3" width="8" height="6" rx="1"/><rect x="13" y="11" width="8" height="10" rx="1"/><rect x="3" y="15" width="8" height="6" rx="1"/>',
+  'sun-moon': '<circle cx="9" cy="10" r="3.5"/><path d="M9 2.5v1.5M9 16v1.5M2.5 10H4M14 10h1.5M4.4 5.4l1 1M12.6 13.6l1 1M4.4 14.6l1-1M12.6 6.4l1-1"/><path d="M21 15.5A6 6 0 0 1 14.5 9a5 5 0 1 0 6.5 6.5z" transform="translate(0 3)"/>',
+  'panel-left': '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/>',
+  'chevrons-left': '<path d="M11 6l-6 6 6 6M18 6l-6 6 6 6"/>',
+};
+
+export const hasIcon = (name) => !!name && name in P;
+
+export function icon(name, size = 24) {
+  const span = document.createElement('span');
+  span.className = 'ico';
+  span.innerHTML = `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${P[name] ?? ''}</svg>`;
+  return span;
+}
+
+export const ROOM_ICONS = { sala: 'sofa', comedor: 'utensils', cocina: 'cooking-pot', dormitorio: 'bed', principal: 'bed', bano: 'bath', escalera: 'stairs', estudio: 'laptop', lavado: 'washing-machine', closet: 'hanger' };
+
+export const INDOOR_ICONS = { mecedora: 'rocking-chair', butaca: 'armchair', planta: 'sprout', tv: 'tv', lampara: 'lamp', estante: 'bookshelf', mesa: 'table', cama: 'bed' };
+
+export const ITEM_ICONS = { palm: 'tree-palm', mango: 'trees', flowers: 'flower-2', car: 'car', gazebo: 'tent', bench: 'armchair', bbq: 'flame' };
