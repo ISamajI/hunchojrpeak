@@ -1,0 +1,1156 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Crew Lineup</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* Layout: a phone-first app. Gate screens (code → who → PIN) center one card; workers get a 600px column with a bottom tab bar; managers get a wide workspace with pill tabs. */
+:root{
+  --bg:#F5F6FA; --surface:#FFFFFF; --surface2:#EEF0F6; --ink:#0E1022; --muted:#686D8A; --line:#E2E5EF;
+  --accent:#3B5BFD; --accent-2:#6C47FF; --accent-soft:#E8ECFF; --accent-ink:#FFFFFF;
+  --ok:#14B583; --ok-soft:#D9F6EB; --warn:#F5A100; --warn-soft:#FFF2D4; --no:#F0466A; --no-soft:#FFE2E8; --unset:#D9DCE8;
+  --hero:#0E1022; --hero-ink:#FFFFFF; --hero-muted:#A9AECB;
+  --shadow:0 1px 2px rgba(14,16,34,.05),0 10px 30px rgba(14,16,34,.06);
+  --shadow-lg:0 30px 80px rgba(14,16,34,.18);
+  --f-display:"Sora","Manrope",system-ui,sans-serif;
+  --f-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r:18px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0A0B14; --surface:#131527; --surface2:#1B1E35; --ink:#F1F2FF; --muted:#9BA0C2; --line:#262944;
+  --accent:#7D93FF; --accent-2:#9C84FF; --accent-soft:#1D2350; --accent-ink:#0A0B14;
+  --ok:#35D6A2; --ok-soft:#0F3529; --warn:#FFC04A; --warn-soft:#382D12; --no:#FF6F8C; --no-soft:#41202B; --unset:#33375A;
+  --hero:#1B1E38; --hero-ink:#FFFFFF; --hero-muted:#A9AECB;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25); --shadow-lg:0 30px 80px rgba(0,0,0,.5); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A0B14; --surface:#131527; --surface2:#1B1E35; --ink:#F1F2FF; --muted:#9BA0C2; --line:#262944;
+  --accent:#7D93FF; --accent-2:#9C84FF; --accent-soft:#1D2350; --accent-ink:#0A0B14;
+  --ok:#35D6A2; --ok-soft:#0F3529; --warn:#FFC04A; --warn-soft:#382D12; --no:#FF6F8C; --no-soft:#41202B; --unset:#33375A;
+  --hero:#1B1E38; --hero-ink:#FFFFFF; --hero-muted:#A9AECB;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 30px rgba(0,0,0,.25); --shadow-lg:0 30px 80px rgba(0,0,0,.5); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--f-display);margin:0;text-wrap:balance;letter-spacing:-.02em}
+h1{font-size:clamp(28px,6vw,40px);font-weight:700;line-height:1.08}
+h2{font-size:22px;font-weight:700}
+h3{font-size:16px;font-weight:600;letter-spacing:-.01em}
+p{margin:0}
+.muted{color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+
+/* buttons & inputs */
+.btn{border:1px solid var(--line);background:var(--surface);padding:10px 16px;border-radius:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:14px;white-space:nowrap;transition:transform .12s,background .12s,box-shadow .12s}
+.btn:hover{background:var(--surface2)}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:var(--accent);border-color:transparent;color:var(--accent-ink);box-shadow:0 8px 20px color-mix(in srgb,var(--accent) 30%,transparent)}
+.btn.primary:hover{filter:brightness(1.07);background:var(--accent)}
+.btn.soft{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+.btn.ok{background:var(--ok);border-color:transparent;color:#04261A}
+.btn.danger{color:var(--no)}
+.btn.ghost{background:none;border-color:transparent;color:var(--muted)}
+.btn.ghost:hover{color:var(--ink);background:var(--surface2)}
+.btn.sm{padding:7px 12px;font-size:13px;border-radius:10px}
+.btn.lg{padding:15px 22px;font-size:16px;border-radius:15px}
+.btn.block{width:100%}
+.btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+.icon{width:18px;height:18px;flex:none}
+.input{width:100%;background:var(--surface);border:1.5px solid var(--line);border-radius:13px;padding:12px 14px;font-size:15px;font-weight:600;transition:border-color .15s}
+.input:focus{border-color:var(--accent);outline:none;box-shadow:0 0 0 4px var(--accent-soft)}
+.input.big{font-size:20px;padding:16px 18px;border-radius:16px;text-align:center;letter-spacing:.02em}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700;color:var(--muted)}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px}
+.eyebrow{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:var(--muted)}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.spread{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.stack{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--shadow);min-width:0}
+.av{width:36px;height:36px;border-radius:50%;background:var(--c);color:#fff;display:inline-grid;place-items:center;font-weight:800;font-size:13px;flex:none;letter-spacing:.02em}
+.av.lg{width:56px;height:56px;font-size:19px}
+.av.xl{width:76px;height:76px;font-size:26px}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:99px;padding:3px 10px;font-size:12.5px;font-weight:700;white-space:nowrap}
+.pill.ok{background:var(--ok-soft)} .pill.warn{background:var(--warn-soft)} .pill.no{background:var(--no-soft)} .pill.unset{background:var(--surface2);color:var(--muted)} .pill.acc{background:var(--accent-soft);color:var(--accent)}
+.pill.ok::before,.pill.warn::before,.pill.no::before{content:"";width:7px;height:7px;border-radius:50%}
+.pill.ok::before{background:var(--ok)} .pill.warn::before{background:var(--warn)} .pill.no::before{background:var(--no)}
+.dotc{width:9px;height:9px;border-radius:50%;display:inline-block;flex:none}
+.badge{background:var(--no);color:#fff;border-radius:99px;font-size:11px;padding:1px 7px;font-weight:800;min-width:19px;text-align:center}
+.strip{display:flex;height:8px;border-radius:99px;overflow:hidden;gap:2px}
+.strip i{flex:1;border-radius:2px}
+.cA{background:var(--ok)} .cM{background:var(--warn)} .cN{background:var(--no-soft)} .cU{background:var(--surface2)}
+.demo{background:var(--warn-soft);border-radius:12px;padding:8px 14px;font-weight:700;font-size:13px;display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+
+/* GATE */
+.gate{min-height:100%;display:grid;place-items:center;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px}
+.gate-card{width:min(460px,100%);display:flex;flex-direction:column;gap:18px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--f-display);font-weight:700;font-size:17px;letter-spacing:-.01em}
+.mark{width:34px;height:34px;border-radius:11px;background:linear-gradient(140deg,var(--accent),var(--accent-2));display:grid;place-items:center;flex:none;box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 35%,transparent)}
+.mark svg{width:18px;height:18px}
+.showcase{background:var(--hero);color:var(--hero-ink);border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow-lg);overflow:hidden;position:relative}
+.showcase .sr{display:grid;grid-template-columns:62px 1fr;gap:10px;align-items:center;font-size:12.5px;font-weight:700;color:var(--hero-muted)}
+.showcase .bar{height:22px;border-radius:8px;background:rgba(255,255,255,.07);position:relative;overflow:hidden}
+.showcase .bar i{position:absolute;top:0;bottom:0;border-radius:8px;transform-origin:left;animation:grow .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes grow{from{transform:scaleX(.05)}to{transform:scaleX(1)}}
+.showcase .cap{display:flex;justify-content:space-between;font-size:12px;color:var(--hero-muted);font-weight:600}
+.who-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:12px}
+.who-tile{border:1.5px solid var(--line);background:var(--surface);border-radius:20px;padding:18px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:transform .15s,border-color .15s,box-shadow .15s;text-align:center}
+.who-tile:hover{transform:translateY(-3px);border-color:var(--accent);box-shadow:var(--shadow)}
+.who-tile b{font-size:14.5px;line-height:1.2}
+.who-tile small{color:var(--muted);font-size:12px;font-weight:600}
+.who-tile.mgr{background:var(--hero);color:var(--hero-ink);border-color:var(--hero)}
+.who-tile.mgr small{color:var(--hero-muted)}
+.pin-dots{display:flex;gap:16px;justify-content:center;padding:6px 0}
+.pin-dots i{width:16px;height:16px;border-radius:50%;border:2px solid var(--muted);transition:all .15s}
+.pin-dots i.on{background:var(--accent);border-color:var(--accent);transform:scale(1.1)}
+.pin-dots.shake{animation:shake .35s}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;max-width:300px;margin:0 auto;width:100%}
+.keypad button{height:62px;border-radius:20px;border:0;background:var(--surface);box-shadow:var(--shadow);font-family:var(--f-display);font-size:24px;font-weight:600;cursor:pointer;transition:transform .08s,background .1s}
+.keypad button:active{transform:scale(.93);background:var(--accent-soft)}
+.keypad button.k-blank{background:none;box-shadow:none;cursor:default}
+.keypad button.k-del{background:none;box-shadow:none;font-size:15px;font-family:var(--f-body);font-weight:700;color:var(--muted)}
+.center{text-align:center;align-items:center}
+
+/* APP CHROME */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px}
+.top-in{display:flex;align-items:center;gap:10px;margin:0 auto}
+.top-in .brand{margin-right:auto;min-width:0}
+.top-in .brand small{display:block;font-family:var(--f-body);font-weight:600;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:44vw}
+.iconbtn{position:relative;width:40px;height:40px;border-radius:12px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;cursor:pointer;flex:none}
+.iconbtn:hover{background:var(--surface2)}
+.iconbtn .badge{position:absolute;top:-6px;right:-6px}
+.mtabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:10px auto 0;padding-bottom:2px}
+.mtabs::-webkit-scrollbar{display:none}
+.mtab{border:0;background:none;padding:8px 14px;border-radius:99px;font-weight:700;color:var(--muted);cursor:pointer;white-space:nowrap;display:flex;align-items:center;gap:7px;font-size:14px}
+.mtab:hover{color:var(--ink);background:var(--surface2)}
+.mtab.on{background:var(--ink);color:var(--bg)}
+.wrap{margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:22px 110px;display:flex;flex-direction:column;gap:18px}
+.w-wide{max-width:1360px} .w-narrow{max-width:600px}
+.bnav{position:fixed;left:0;right:0;bottom:0;z-index:25;background:color-mix(in srgb,var(--surface) 88%,transparent);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--line);
+  padding-left:max(10px,env(safe-area-inset-left,0px));padding-right:max(10px,env(safe-area-inset-right,0px));padding-top:6px;padding-bottom:max(8px,env(safe-area-inset-bottom,0px))}
+.bnav-in{max-width:600px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.bnav button{border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;font-size:11.5px;font-weight:700;color:var(--muted);cursor:pointer;border-radius:12px;position:relative}
+.bnav button.on{color:var(--accent)}
+.bnav .badge{position:absolute;top:0;left:calc(50% + 6px)}
+
+/* HERO CARDS */
+.hero{background:var(--hero);color:var(--hero-ink);border-radius:24px;padding:22px;position:relative;overflow:hidden;box-shadow:var(--shadow-lg)}
+.hero::after{content:"";position:absolute;width:260px;height:260px;right:-80px;top:-110px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--accent) 55%,transparent),transparent 70%);opacity:.7;pointer-events:none}
+.hero .muted{color:var(--hero-muted)}
+.hero .big{font-family:var(--f-display);font-size:30px;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.hero .btn{position:relative;z-index:1;color:var(--ink)}
+.notice{border-radius:22px;padding:20px;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;display:flex;flex-direction:column;gap:10px;box-shadow:0 18px 40px color-mix(in srgb,var(--accent) 35%,transparent);animation:pop .5s cubic-bezier(.2,.9,.3,1.2) both}
+.notice .btn{background:#fff;color:#1A1F55;border:0}
+@keyframes pop{from{transform:translateY(10px) scale(.97)}to{transform:none}}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));gap:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow)}
+.stat b{font-family:var(--f-display);font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1}
+.stat span{font-size:13px;color:var(--muted);font-weight:600}
+.stat .ic{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;color:var(--ink)}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:18px;align-items:start}
+.cols2{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:900px){.cols2{grid-template-columns:1fr}}
+
+/* LIST ITEMS */
+.list{display:flex;flex-direction:column;gap:8px}
+.item{display:flex;gap:12px;align-items:center;padding:12px;border-radius:15px;background:var(--surface);border:1px solid var(--line);flex-wrap:wrap}
+.item.flat{border:0;background:var(--surface2)}
+.item .grow{flex:1;min-width:150px}
+.item.tap{cursor:pointer;transition:background .12s}
+.item.tap:hover{background:var(--surface2)}
+.datebox{width:52px;border-radius:14px;background:var(--accent-soft);color:var(--accent);text-align:center;padding:7px 0;flex:none}
+.datebox small{display:block;font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:.08em}
+.datebox b{font-family:var(--f-display);font-size:21px;font-weight:700;line-height:1;color:var(--ink)}
+.rolechip{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:800;padding:3px 10px;border-radius:99px;background:color-mix(in srgb,var(--rc) 16%,var(--surface));color:var(--ink)}
+.rolechip::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--rc)}
+.empty{text-align:center;padding:30px 16px;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:10px}
+.empty b{color:var(--ink);font-family:var(--f-display);font-size:17px}
+
+/* AVAILABILITY EDITOR */
+.daycard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:11px}
+.daycard.today{border-color:var(--accent)}
+.dc-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.dc-head b{font-family:var(--f-display);font-size:16px;font-weight:600}
+.dc-sum{font-size:13px;font-weight:700;color:var(--muted)}
+.dc-sum.on{color:var(--ok)}
+.chips{display:flex;gap:7px;flex-wrap:wrap}
+.chip{border:1.5px solid var(--line);background:var(--surface);border-radius:99px;padding:7px 13px;font-weight:700;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:all .12s}
+.chip small{font-weight:600;color:var(--muted);font-size:11.5px}
+.chip:hover{border-color:var(--accent)}
+.chip.on{background:var(--ok);border-color:var(--ok);color:#04261A}
+.chip.on small{color:#0A3A28}
+.chip.off.on{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.chip.cust.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.chip.sel{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.chip.sel small{color:inherit;opacity:.75}
+.sendbar{position:sticky;bottom:calc(76px + env(safe-area-inset-bottom,0px));z-index:5;background:var(--hero);color:var(--hero-ink);border-radius:20px;padding:12px 12px 12px 18px;display:flex;align-items:center;gap:12px;justify-content:space-between;box-shadow:var(--shadow-lg)}
+.sendbar.mgr{bottom:16px}
+.sendbar small{color:var(--hero-muted);display:block;font-size:12px}
+
+/* GRIDS */
+.gscroll{overflow-x:auto;border:1px solid var(--line);border-radius:20px;background:var(--surface);box-shadow:var(--shadow)}
+table.g{border-collapse:separate;border-spacing:0;width:100%;min-width:max-content}
+table.g th,table.g td{border-bottom:1px solid var(--line);vertical-align:top}
+table.g thead th{padding:12px 10px 10px;text-align:left;font-weight:700;background:var(--surface)}
+table.g .who{position:sticky;left:0;z-index:3;background:var(--surface);min-width:180px;max-width:210px;padding:12px 14px;text-align:left;border-right:1px solid var(--line)}
+.whoin{display:flex;gap:10px;align-items:center;min-width:0}
+.whoin div{min-width:0}
+.whoin b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}
+.whoin small{display:block;color:var(--muted);font-size:12px;white-space:nowrap;font-weight:600}
+@media (max-width:600px){table.g .who{min-width:124px;max-width:136px;padding:10px} table.g .who .av{display:none}}
+.dh{min-width:118px;cursor:pointer}
+.dh:hover{background:var(--surface2)!important}
+.dh .d1{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:800}
+.dh .d2{font-family:var(--f-display);font-size:19px;font-weight:700;line-height:1.15}
+.dh.today .d2,.dh.today .d1{color:var(--accent)}
+td.cell{padding:10px;cursor:pointer;min-width:118px;transition:background .12s}
+td.cell:hover{background:var(--surface2)}
+td.cell .rng{display:block;font-size:12.5px;margin-top:6px;font-weight:700;white-space:nowrap}
+td.cell .unset{font-size:12px;color:var(--muted);font-weight:600}
+.offtag{display:inline-block;background:var(--no);color:#fff;font-size:11px;font-weight:800;border-radius:7px;padding:2px 8px}
+.offnote{display:block;font-size:11.5px;color:var(--muted);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:120px;font-weight:600}
+.mini{display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:11px;font-weight:800;border-radius:7px;padding:2px 7px;background:color-mix(in srgb,var(--rc) 16%,var(--surface))}
+.mini::before{content:"";width:6px;height:6px;border-radius:2px;background:var(--rc)}
+tr.cov td,tr.cov th{background:var(--surface2)}
+.covc{padding:8px 10px;font-size:12.5px;font-weight:600}
+.covbar{height:5px;border-radius:3px;background:var(--line);overflow:hidden;margin-top:5px}
+.covbar i{display:block;height:100%;background:var(--ok)}
+td.bcell{padding:7px;min-width:126px}
+td.bcell .strip{height:5px;margin-bottom:3px}
+.shift{display:flex;flex-direction:column;gap:1px;border-radius:12px;padding:7px 9px;background:color-mix(in srgb,var(--rc) 15%,var(--surface));border:1.5px solid color-mix(in srgb,var(--rc) 55%,transparent);font-size:12.5px;font-weight:800;cursor:pointer;margin-top:5px;text-align:left;width:100%;position:relative;transition:transform .1s}
+.shift:hover{transform:translateY(-1px)}
+.shift small{font-weight:600;color:var(--muted);font-size:11px}
+.shift.draft{border-style:dashed;background:transparent}
+.shift.bad{border-color:var(--no);border-style:solid}
+.shift .flag{position:absolute;top:-7px;right:-6px;background:var(--no);color:#fff;border-radius:99px;width:18px;height:18px;display:grid;place-items:center;font-size:11px;font-weight:800;border:2px solid var(--surface)}
+.shift.maybe .flag{background:var(--warn);color:#2a2000}
+.shift .tagx{position:absolute;top:-8px;left:8px;background:var(--accent);color:var(--accent-ink);border-radius:99px;font-size:9.5px;padding:0 7px;font-weight:800;border:2px solid var(--surface)}
+.addbtn{display:flex;align-items:center;justify-content:center;width:100%;margin-top:5px;border:1.5px dashed var(--line);background:none;border-radius:12px;color:var(--muted);cursor:pointer;padding:4px;font-weight:700;font-size:16px;opacity:.5;transition:all .12s}
+td.bcell:hover .addbtn,.addbtn:focus-visible{opacity:1;border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+tr.openrow td,tr.openrow th{background:color-mix(in srgb,var(--accent-soft) 55%,var(--surface))}
+.hrs{padding:12px;min-width:100px}
+.hbar{height:6px;border-radius:3px;background:var(--surface2);overflow:hidden;margin-top:6px}
+.hbar i{display:block;height:100%;background:var(--accent)}
+.hbar.over i{background:var(--no)}
+.legend{display:flex;gap:6px;flex-wrap:wrap}
+.seg{display:inline-flex;background:var(--surface2);border-radius:13px;padding:4px;gap:2px;flex-wrap:wrap}
+.seg button{border:0;background:none;padding:7px 13px;border-radius:10px;font-weight:700;cursor:pointer;color:var(--muted);font-size:13.5px}
+.seg button.on{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+
+/* SHEETS */
+.scrim{position:fixed;inset:0;background:rgba(8,9,20,.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);z-index:50;display:flex;align-items:flex-end;justify-content:center;animation:fade .2s both}
+@keyframes fade{from{opacity:.4}}
+.sheet{background:var(--surface);border-radius:26px 26px 0 0;width:min(620px,100%);max-height:92%;overflow:auto;padding:22px max(18px,env(safe-area-inset-right,0px)) max(22px,calc(env(safe-area-inset-bottom,0px) + 14px)) max(18px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:16px;box-shadow:var(--shadow-lg);animation:up .28s cubic-bezier(.2,.9,.3,1) both}
+.sheet.wide{width:min(980px,100%)}
+@keyframes up{from{transform:translateY(40px)}}
+@media (min-width:720px){.scrim{align-items:center;padding:20px}.sheet{border-radius:26px;max-height:calc(100% - 40px)}}
+.grab{width:42px;height:5px;border-radius:3px;background:var(--line);margin:-8px auto 0;flex:none}
+.shead{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.x{border:0;background:var(--surface2);border-radius:12px;width:36px;height:36px;cursor:pointer;font-size:20px;flex:none;line-height:1}
+.pick{display:flex;flex-direction:column;gap:6px;max-height:300px;overflow:auto}
+.prow{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:13px;border:1.5px solid var(--line);cursor:pointer;background:var(--surface);text-align:left;width:100%}
+.prow:hover{border-color:var(--accent)}
+.prow.on{border-color:var(--accent);background:var(--accent-soft)}
+.prow .grow{flex:1;min-width:0}
+.prow small{display:block;font-size:12px;font-weight:600;color:var(--muted)}
+.fit{border-radius:13px;padding:10px 13px;font-weight:700;display:flex;gap:8px;align-items:center;font-size:13.5px}
+.fit-ok{background:var(--ok-soft)} .fit-maybe{background:var(--warn-soft)} .fit-bad{background:var(--no-soft)} .fit-unknown{background:var(--surface2)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:max(96px,calc(env(safe-area-inset-bottom,0px) + 90px));background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:14px;font-weight:700;z-index:60;box-shadow:var(--shadow-lg);max-width:calc(100% - 32px);width:max-content}
+.gantt{display:grid;gap:6px;min-width:max-content;align-items:center}
+.gl{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;padding-right:10px;white-space:nowrap}
+.gtrack{position:relative;height:26px}
+.gtrack .strip{height:26px;border-radius:8px}
+.gshift{position:absolute;top:3px;bottom:3px;border-radius:7px;color:#fff;font-size:11px;font-weight:800;padding:0 6px;display:flex;align-items:center;overflow:hidden;white-space:nowrap;box-shadow:0 0 0 2px var(--surface)}
+.hourbars{display:flex;align-items:flex-end;gap:3px;height:90px}
+.hourbars div{flex:1;background:var(--ok);border-radius:6px 6px 2px 2px;min-height:3px;position:relative}
+.hourbars div span{position:absolute;top:-18px;left:0;right:0;text-align:center;font-size:10.5px;font-weight:800;color:var(--muted)}
+.toggle{position:relative;width:46px;height:28px;flex:none;display:inline-block}
+.toggle input{opacity:0;width:0;height:0;position:absolute}
+.toggle span{position:absolute;inset:0;background:var(--unset);border-radius:99px;cursor:pointer;transition:.2s}
+.toggle span::before{content:"";position:absolute;width:22px;height:22px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.toggle input:checked+span{background:var(--ok)}
+.toggle input:checked+span::before{transform:translateX(18px)}
+.toggle input:focus-visible+span{outline:2.5px solid var(--accent);outline-offset:2px}
+.swatches{display:flex;gap:6px;flex-wrap:wrap}
+.sw{width:26px;height:26px;border-radius:9px;border:2.5px solid transparent;cursor:pointer;padding:0}
+.sw.on{border-color:var(--ink)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+<div id="app"></div>
+
+<script>
+/* ============ helpers ============ */
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const pad = n => String(n).padStart(2,'0');
+const ds = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const pd = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d, 12); };
+const addDays = (s,n) => { const d = pd(s); d.setDate(d.getDate()+n); return ds(d); };
+const dow = s => pd(s).getDay();
+const TODAY = ds(new Date());
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+const DAYL = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const fmtMD = s => `${MON[pd(s).getMonth()]} ${pd(s).getDate()}`;
+const fmtLong = s => `${DAYL[dow(s)]}, ${MON[pd(s).getMonth()]} ${pd(s).getDate()}`;
+function fmtH(h){ const hh = Math.floor(h), mm = Math.round((h-hh)*60); const ap = (hh % 24) < 12 ? 'am' : 'pm'; let h12 = hh % 12; if (!h12) h12 = 12; return h12 + (mm ? ':' + pad(mm) : '') + ap; }
+const fmtHs = h => fmtH(h).replace('am','a').replace('pm','p');
+const fmtR = (a,b) => fmtHs(a) + '–' + fmtHs(b);
+const uid = () => Date.now().toString(36).slice(-4) + Math.random().toString(36).slice(2,8);
+const BLANK = '.'.repeat(24);
+const clone = o => JSON.parse(JSON.stringify(o));
+const PALETTE = ['#3B5BFD','#6C47FF','#14B583','#F0466A','#F5A100','#0EA5C6','#E85D04','#B5179E','#2B9348','#7A5C3E'];
+const rc = hex => `--rc:${hex}`;
+const initials = n => (n || '?').trim().split(/\s+/).map(w => w[0]).slice(0,2).join('').toUpperCase();
+const greet = () => { const h = new Date().getHours(); return h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening'; };
+function ago(t){ if (!t) return ''; const m = Math.floor((Date.now() - t) / 60000); if (m < 1) return 'just now'; if (m < 60) return m + 'm ago'; const h = Math.floor(m/60); if (h < 24) return h + 'h ago'; const d = Math.floor(h/24); return d === 1 ? 'yesterday' : d + 'd ago'; }
+async function sha(txt){ try { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(txt)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2,'0')).join(''); } catch(e){ let h = 0; for (const c of txt) h = (h*31 + c.charCodeAt(0)) | 0; return 'x' + h; } }
+const I = p => `<svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const ICON = {
+  home: I('<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'),
+  avail: I('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+  cal: I('<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/>'),
+  swap: I('<path d="M7 4 3 8l4 4M3 8h14M17 20l4-4-4-4M21 16H7"/>'),
+  team: I('<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><circle cx="17.5" cy="9" r="2.5"/><path d="M17 14.5c2.3.2 4 1.8 4.6 4.5"/>'),
+  gear: I('<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/>'),
+  grid: I('<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>'),
+  bell: I('<path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>'),
+  out: I('<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>'),
+  send: I('<path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/>'),
+  spark: I('<path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4z"/>'),
+  copy: I('<rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/>'),
+  plane: I('<path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>'),
+  check: I('<path d="M20 6 9 17l-5-5"/>'),
+  arrow: I('<path d="M5 12h14M13 6l6 6-6 6"/>'),
+  left: I('<path d="M15 18l-6-6 6-6"/>'),
+  right: I('<path d="M9 18l6-6-6-6"/>'),
+  lock: I('<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>'),
+  plus: I('<path d="M12 5v14M5 12h14"/>'),
+  inbox: I('<path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.5 5h13L22 12v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6z"/>')
+};
+const bigIcon = (k, px) => ICON[k].replace('class="icon"', `class="icon" style="width:${px}px;height:${px}px"`);
+const markSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><path d="M5 7h9M5 12h14M5 17h6"/></svg>';
+
+/* ============ state ============ */
+const DEFAULT_SETTINGS = () => ({ bizName:'', code:'', salt:uid(), mgrPin:'', open:9, close:23, weekStart:1, approval:true,
+  roles:[{id:'r1',name:'Front of house',color:'#3B5BFD'},{id:'r2',name:'Kitchen',color:'#F0466A'},{id:'r3',name:'Shift lead',color:'#14B583'}],
+  templates:[{id:'t1',label:'Opening',start:9,end:17},{id:'t2',label:'Mid',start:12,end:20},{id:'t3',label:'Closing',start:16,end:23}] });
+const S = {
+  phase:'loading', demo:false, db:null, isOwner:false, restored:false,
+  settings:null, team:{}, avail:{}, shifts:{}, notices:{}, got:{},
+  who:null, gate:'code', codeDraft:'', pinFor:null, pinMode:'enter', pinBuf:'', pinFirst:'', pinErr:'',
+  tab:'home', boardStart:null, boardRange:2, buildStart:null, schedWeek:null, schedMode:'mine', roleFilter:'all', showAvail:true,
+  editFor:null, draft:null, draftDirty:false, customOpen:{}, modal:null, toast:null
+};
+const ST = () => S.settings || DEFAULT_SETTINGS();
+const isMgr = () => S.who === 'mgr';
+const weekStartOf = s => { const diff = (dow(s) - (ST().weekStart ?? 1) + 7) % 7; return addDays(s, -diff); };
+const roleIdx = id => { const i = ST().roles.findIndex(r => r.id === id); return i < 0 ? 99 : i; };
+const members = () => Object.entries(S.team).map(([id,v]) => ({id, ...v})).sort((a,b) => roleIdx(a.roleId) - roleIdx(b.roleId) || (a.name||'').localeCompare(b.name||''));
+const roleOf = id => ST().roles.find(r => r.id === id) || {id:'', name:'Crew', color:'#8A8FB0'};
+const colorOf = m => (m && (m.color || roleOf(m.roleId).color)) || '#8A8FB0';
+const nameOf = id => (S.team[id] && S.team[id].name) || 'Someone';
+const firstName = id => nameOf(id).split(' ')[0];
+const avatar = (m, cls='') => `<span class="av ${cls}" style="--c:${colorOf(m)}">${esc(initials(m && m.name))}</span>`;
+const me = () => S.team[S.who];
+
+/* ============ availability logic ============ */
+function availFor(id, date){
+  const a = S.avail[id];
+  const ov = a && a.overrides && a.overrides[date];
+  if (ov) return { s: ov.s || 'N'.repeat(24), off: !!ov.off, note: ov.note || '', src:'date' };
+  const w = a && a.weekly && a.weekly[dow(date)];
+  if (w && /[AMN]/.test(w)) return { s:w, off:false, note:'', src:'weekly' };
+  return { s:BLANK, off:false, note:'', src:'none' };
+}
+const hasSubmitted = id => { const a = S.avail[id]; return !!(a && a.weekly && Object.values(a.weekly).some(w => /[AMN]/.test(w||''))); };
+const cc = ch => ch === 'A' ? 'A' : ch === 'M' ? 'M' : ch === 'N' ? 'N' : 'U';
+function runs(s, ch){ const {open:o, close:c} = ST(); const r = []; let st = null;
+  for (let h = o; h <= c; h++){ const on = h < c && s[h] === ch; if (on && st === null) st = h; if (!on && st !== null){ r.push([st,h]); st = null; } } return r; }
+function summary(s){ const r = runs(s,'A'); if (r.length) return r.slice(0,2).map(x => fmtR(x[0],x[1])).join(', ') + (r.length > 2 ? ' +' : ''); const m = runs(s,'M'); return m.length ? 'Maybe ' + fmtR(m[0][0], m[0][1]) : null; }
+function strip(s){ const {open:o, close:c} = ST(); let h = ''; for (let i = o; i < c; i++) h += `<i class="c${cc(s[i])}"></i>`; return `<div class="strip">${h}</div>`; }
+const countA = s => { const {open:o, close:c} = ST(); let n = 0; for (let i = o; i < c; i++) if (s[i] === 'A') n++; return n; };
+function fit(id, date, start, end){
+  if (!id) return {level:'unknown', msg:'Open shift — anyone can pick it up'};
+  const a = availFor(id, date);
+  if (a.off) return {level:'bad', msg:'Off that day' + (a.note ? ' — ' + a.note : '')};
+  if (a.src === 'none') return {level:'unknown', msg:"Hasn't sent availability"};
+  const bad = []; let maybe = false;
+  for (let h = Math.floor(start); h < Math.ceil(end); h++){ const ch = a.s[h]; if (ch === 'A') continue; if (ch === 'M') maybe = true; else bad.push(h); }
+  if (bad.length) return {level:'bad', msg:`Not free ${fmtR(bad[0], bad[bad.length-1]+1)}`};
+  if (maybe) return {level:'maybe', msg:'Some "maybe" hours'};
+  return {level:'ok', msg:'Free the whole shift'};
+}
+function blocks(){ const {open:o, close:c} = ST();
+  return [{k:'m',label:'Morning',s:o,e:Math.min(12,c)},{k:'a',label:'Afternoon',s:Math.max(o,12),e:Math.min(17,c)},{k:'e',label:'Evening',s:Math.max(o,17),e:c}].filter(b => b.e > b.s); }
+
+/* ============ shift logic ============ */
+const shiftList = () => Object.entries(S.shifts).map(([id,v]) => ({id, ...v}));
+const hrs = sh => sh.end - sh.start;
+const inRange = (start, n=7) => { const end = addDays(start, n); return shiftList().filter(s => s.date >= start && s.date < end); };
+const hoursFor = (id, start) => inRange(start).filter(s => s.worker === id).reduce((t,s) => t + hrs(s), 0);
+const overlap = (id, date, start, end, except) => shiftList().some(s => s.id !== except && s.worker === id && s.date === date && s.start < end && start < s.end);
+const sortSh = (a,b) => a.date.localeCompare(b.date) || a.start - b.start;
+const pendingCount = () => shiftList().filter(s => s.date >= TODAY && (s.claimBy || s.status === 'drop')).length;
+const noticeList = () => Object.entries(S.notices).map(([id,v]) => ({id, ...v})).sort((a,b) => b.createdAt - a.createdAt);
+const unread = () => { const m = me(); if (!m) return []; return noticeList().filter(n => n.createdAt > (m.seenAt || 0)); };
+const openShifts = () => shiftList().filter(s => s.published && s.date >= TODAY && s.worker !== S.who && (!s.worker || s.status === 'drop')).sort(sortSh);
+
+/* ============ persistence ============ */
+const writeQ = {};
+function applyLocal(path, data){ const [c, id] = path.split('/'); if (c === 'settings') S.settings = data; else if (data === null) delete S[c][id]; else S[c][id] = data; }
+function writeErr(e){
+  const code = e && e.code;
+  if (code === 'invalid_argument') toast("Couldn't save. Ask the owner to give you Editor access to this page.");
+  else if (code === 'quota_exceeded') toast('Storage is full. Delete some old shifts and try again.');
+  else toast("Couldn't save. Check your connection and try again.");
+}
+function remote(path, data){
+  if (S.demo || !S.db) return Promise.resolve();
+  writeQ[path] = (writeQ[path] || Promise.resolve()).then(() => data === null ? S.db.doc(path).delete() : S.db.doc(path).set(data)).catch(writeErr);
+  return writeQ[path];
+}
+function putMany(list){ list.forEach(([p,d]) => applyLocal(p, d)); render(); return Promise.all(list.map(([p,d]) => remote(p, d))); }
+const put = (p, d) => putMany([[p, d]]);
+let toastT;
+function toast(msg){ S.toast = msg; clearTimeout(toastT); toastT = setTimeout(() => { S.toast = null; render(); }, 3400); render(); }
+const SESSION_KEY = 'crewlineup.session.v2';
+function saveSession(){ try { localStorage.setItem(SESSION_KEY, JSON.stringify({code: S.demo ? 'demo' : (ST().code||'').toLowerCase(), who: S.who})); } catch(e){} }
+function readSession(){ try { return JSON.parse(localStorage.getItem(SESSION_KEY) || 'null'); } catch(e){ return null; } }
+function clearSession(){ try { localStorage.removeItem(SESSION_KEY); } catch(e){} }
+async function copyText(txt, okMsg){ try { await navigator.clipboard.writeText(txt); toast(okMsg || 'Copied'); } catch(e){ const el = $('#copysrc'); if (el){ el.focus(); el.select(); } toast('Select the text and copy it'); } }
+
+/* ============ RENDER ============ */
+function render(){
+  const ae = document.activeElement, fid = ae && ae.id; let sel = null;
+  try { if (fid && ae.selectionStart != null) sel = [ae.selectionStart, ae.selectionEnd]; } catch(e){}
+  const scr = {}; document.querySelectorAll('[data-keep]').forEach(el => scr[el.dataset.keep] = [el.scrollLeft, el.scrollTop]);
+  $('#app').innerHTML = view();
+  document.querySelectorAll('[data-keep]').forEach(el => { const v = scr[el.dataset.keep]; if (v){ el.scrollLeft = v[0]; el.scrollTop = v[1]; } });
+  if (fid){ const el = document.getElementById(fid); if (el){ el.focus({preventScroll:true}); if (sel) try { el.setSelectionRange(sel[0], sel[1]); } catch(e){} } }
+}
+function view(){
+  switch (S.phase){
+    case 'loading': return `<div class="gate"><div class="gate-card center"><div class="brand"><span class="mark">${markSvg}</span>Crew Lineup</div><p class="muted">Loading your crew…</p></div></div>`;
+    case 'setup': return setupV() + toastV();
+    case 'notready': return gateShell(`<div class="brand"><span class="mark">${markSvg}</span>Crew Lineup</div><h1>Almost there</h1><p class="muted">Your manager is still setting up Crew Lineup. Check back soon, or look around the demo.</p><button class="btn lg block" data-act="demo">Try the demo</button>`);
+    case 'gate': return gateV() + toastV();
+  }
+  return (isMgr() ? mgrApp() : crewApp()) + sheetV() + toastV();
+}
+const toastV = () => S.toast ? `<div class="toast" role="status">${esc(S.toast)}</div>` : '';
+const demoBar = () => S.demo ? `<div class="demo"><span>Demo crew — made-up people, nothing is saved.</span><button class="btn sm" data-act="exitDemo">Exit demo</button></div>` : '';
+
+/* ============ GATE: code → who → PIN ============ */
+function showcase(){
+  const rows = [['Ana','#3B5BFD',[[8,52]]],['Marcus','#F0466A',[[30,98]]],['Kim','#14B583',[[0,40],[62,100]]],['Jay','#F5A100',[[18,70]]],['Sofia','#9C84FF',[[44,100]]]];
+  return `<div class="showcase" aria-hidden="true"><div class="cap"><span>This week's availability</span><span>Mon–Sun</span></div>
+    ${rows.map(([n,c,segs],i) => `<div class="sr"><span>${n}</span><div class="bar">${segs.map(([a,b]) => `<i style="left:${a}%;width:${b-a}%;background:${c};animation-delay:${.15+i*.09}s"></i>`).join('')}</div></div>`).join('')}
+    <div class="cap"><span>5 people · 4 free tonight</span><span style="color:#fff">Schedule ready →</span></div></div>`;
+}
+const gateShell = inner => `<div class="gate"><div class="gate-card">${inner}</div></div>`;
+function gateV(){
+  if (S.gate === 'code') return gateShell(`
+    <div class="brand"><span class="mark">${markSvg}</span>Crew Lineup</div>
+    ${showcase()}
+    <div class="stack" style="gap:8px"><h1>Your team's week, lined up.</h1><p class="muted">Enter your company code to set your availability or see your schedule.</p></div>
+    <input class="input big" id="codeIn" placeholder="Company code" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Company code" value="${esc(S.codeDraft)}">
+    ${S.pinErr ? `<p style="color:var(--no);font-weight:700;margin-top:-8px">${esc(S.pinErr)}</p>` : ''}
+    <button class="btn primary lg block" data-act="enterCode">Continue ${ICON.arrow}</button>
+    <p class="muted" style="font-size:13.5px;text-align:center">Just looking? Type <b style="color:var(--ink)">DEMO</b> to explore a sample crew.</p>
+    ${S.isOwner && S.settings ? `<button class="btn ghost block" data-act="ownerIn">${ICON.lock}Owner shortcut — open manager view</button>` : ''}`);
+  if (S.gate === 'pick'){
+    const mem = members();
+    return `<div class="gate"><div class="gate-card" style="width:min(720px,100%)">
+      <div class="spread"><div class="brand"><span class="mark">${markSvg}</span>${esc(ST().bizName || 'Crew Lineup')}</div><button class="btn ghost sm" data-act="${S.demo?'exitDemo':'signout'}">Change code</button></div>
+      ${demoBar()}
+      <div class="stack" style="gap:6px"><h1>Who's this?</h1><p class="muted">Tap your name to set your availability and see your shifts.</p></div>
+      <div class="who-grid">
+        ${mem.map(m => `<button class="who-tile" data-act="pickWho" data-id="${m.id}">${avatar(m,'lg')}<b>${esc(m.name)}</b><small>${esc(roleOf(m.roleId).name)}</small></button>`).join('')}
+        <button class="who-tile mgr" data-act="pickWho" data-id="mgr"><span class="av lg" style="--c:var(--accent)">${bigIcon('lock',24)}</span><b>Manager</b><small>Build the schedule</small></button>
+      </div>
+      ${!mem.length ? `<p class="muted">No one's on the crew yet — your manager adds people first.</p>` : ''}
+    </div></div>`;
+  }
+  const isM = S.pinFor === 'mgr'; const m = S.team[S.pinFor];
+  const title = S.pinMode === 'create' ? 'Create your 4-digit PIN' : S.pinMode === 'confirm' ? 'Type it once more' : isM ? 'Manager PIN' : `Hi ${esc(firstName(S.pinFor))}, enter your PIN`;
+  const sub = S.pinMode === 'create' ? "So only you can change your availability. You'll use it each time you sign in." : S.pinMode === 'confirm' ? 'Just to make sure.' : isM ? 'Only managers can build and publish schedules.' : 'Forgot it? Ask your manager to reset it.';
+  return gateShell(`<div class="stack center" style="gap:10px">
+      ${isM ? `<span class="av xl" style="--c:var(--accent)">${bigIcon('lock',30)}</span>` : avatar(m,'xl')}
+      <h2>${title}</h2><p class="muted" style="max-width:34ch">${sub}</p></div>
+    <div class="pin-dots ${S.pinErr?'shake':''}" aria-live="polite">${[0,1,2,3].map(i => `<i class="${i < S.pinBuf.length ? 'on' : ''}"></i>`).join('')}</div>
+    ${S.pinErr ? `<p style="color:var(--no);font-weight:700;text-align:center">${esc(S.pinErr)}</p>` : ''}
+    <div class="keypad">${[1,2,3,4,5,6,7,8,9].map(n => `<button data-act="key" data-k="${n}">${n}</button>`).join('')}<button class="k-blank" tabindex="-1" aria-hidden="true"></button><button data-act="key" data-k="0">0</button><button class="k-del" data-act="key" data-k="del" aria-label="Delete">Delete</button></div>
+    <button class="btn ghost block" data-act="gateBack">${ICON.left}Not ${isM ? 'a manager' : 'you'}? Go back</button>`);
+}
+function setupV(){
+  return `<div class="gate"><div class="gate-card" style="width:min(560px,100%)">
+    <div class="brand"><span class="mark">${markSvg}</span>Crew Lineup</div>
+    <div class="stack" style="gap:6px"><h1>Set up your crew</h1><p class="muted">About a minute. You can change all of this later in Settings.</p></div>
+    <div class="card stack">
+      <label class="f">Business name<input class="input" id="suBiz" placeholder="e.g. Mykonos" maxlength="50"></label>
+      <label class="f">Company code — your crew types this to get in<input class="input" id="suCode" placeholder="e.g. Mykonos04" maxlength="30" autocapitalize="off" spellcheck="false"></label>
+      <label class="f">Manager PIN (4 digits)<input class="input" id="suPin" inputmode="numeric" maxlength="4" placeholder="••••" autocomplete="off"></label>
+      <div class="fgrid"><label class="f">Opens<select class="input" id="suOpen">${hourOpts(0,23,9)}</select></label><label class="f">Closes<select class="input" id="suClose">${hourOpts(1,24,23)}</select></label><label class="f">Week starts<select class="input" id="suWs"><option value="1">Monday</option><option value="0">Sunday</option></select></label></div>
+    </div>
+    <button class="btn primary lg block" data-act="createCrew">Create crew ${ICON.arrow}</button>
+    <button class="btn ghost block" data-act="demo">Explore the demo first</button>
+  </div></div>`;
+}
+const hourOpts = (a, b, sel) => { let o = ''; for (let h = a; h <= b; h++) o += `<option value="${h}" ${h==sel?'selected':''}>${h===24?'Midnight':fmtH(h)}</option>`; return o; };
+function halfOpts(a, b, sel, step=.5){ let o = ''; for (let h = a; h <= b; h += step) o += `<option value="${h}" ${h==sel?'selected':''}>${fmtH(h)}</option>`; return o; }
+
+/* ============ CREW APP ============ */
+function crewApp(){
+  const un = unread().length; const op = openShifts().length;
+  const tabs = [['home','Home',ICON.home],['avail','Availability',ICON.avail],['sched','Schedule',ICON.cal, un],['open','Open shifts',ICON.swap, op]];
+  if (!tabs.some(t => t[0] === S.tab)) S.tab = 'home';
+  const body = {home:crewHome, avail:() => availEditor(S.who, false), sched:crewSched, open:openV}[S.tab]();
+  return `<header class="top"><div class="top-in w-narrow"><div class="brand"><span class="mark">${markSvg}</span><div>Crew Lineup<small>${esc(ST().bizName)}</small></div></div>
+      <button class="iconbtn" data-act="tab" data-k="sched" aria-label="Notifications">${ICON.bell}${un?`<span class="badge">${un}</span>`:''}</button>
+      <button class="iconbtn" data-act="signout" aria-label="Sign out" title="Sign out">${ICON.out}</button></div></header>
+    <main class="wrap w-narrow">${demoBar()}${body}</main>
+    <nav class="bnav"><div class="bnav-in">${tabs.map(([k,l,ic,b]) => `<button class="${S.tab===k?'on':''}" data-act="tab" data-k="${k}">${ic}${l}${b?`<span class="badge">${b}</span>`:''}</button>`).join('')}</div></nav>`;
+}
+function noticeCard(n){
+  const mine = shiftList().filter(s => s.worker === S.who && s.published && s.date >= n.from && s.date <= n.to);
+  const h = mine.reduce((t,s) => t + hrs(s), 0);
+  const weeks = Math.round((pd(n.to) - pd(n.from)) / 86400000 / 7);
+  return `<div class="notice"><div class="row" style="gap:8px">${ICON.bell}<span class="eyebrow" style="color:rgba(255,255,255,.85)">New · ${ago(n.createdAt)}</span></div>
+    <h2 style="color:#fff">Your schedule is posted for ${weeks <= 1 ? 'the week' : weeks >= 4 ? 'the month' : 'the next ' + weeks + ' weeks'}</h2>
+    <p style="opacity:.92;font-weight:600">${fmtMD(n.from)} – ${fmtMD(n.to)} · ${mine.length ? `You have ${mine.length} shift${mine.length===1?'':'s'} (${h}h)` : "You're not on this one — check open shifts"}</p>
+    <div><button class="btn" data-act="seeNotice" data-from="${n.from}">Check it out ${ICON.arrow}</button></div></div>`;
+}
+function crewHome(){
+  const m = me(); const un = unread();
+  const mine = shiftList().filter(s => s.worker === S.who && s.published && s.date >= TODAY).sort(sortSh);
+  const next = mine[0]; const wk = weekStartOf(TODAY);
+  const wkH = inRange(wk).filter(s => s.worker === S.who && s.published).reduce((t,s) => t + hrs(s), 0);
+  const a = S.avail[S.who]; const sent = a && a.submittedAt;
+  const co = next ? shiftList().filter(x => x.date === next.date && x.published && x.worker && x.worker !== S.who && x.start < next.end && next.start < x.end) : [];
+  const op = openShifts().length;
+  return `<div class="stack" style="gap:2px"><p class="muted" style="font-weight:700">${greet()},</p><h1>${esc(m.name.split(' ')[0])}</h1></div>
+  ${un.length ? noticeCard(un[0]) : ''}
+  ${next ? `<div class="hero stack" style="gap:8px"><span class="eyebrow" style="color:var(--hero-muted)">Your next shift</span>
+      <div class="big">${next.date===TODAY?'Today':next.date===addDays(TODAY,1)?'Tomorrow':fmtLong(next.date)}</div>
+      <div style="font-size:20px;font-weight:700">${fmtH(next.start)} – ${fmtH(next.end)} <span class="muted" style="font-size:15px">· ${hrs(next)}h</span></div>
+      <div class="row"><span class="rolechip" style="${rc(roleOf(next.roleId).color)};background:rgba(255,255,255,.12);color:#fff">${esc(roleOf(next.roleId).name)}</span>${co.length?`<span class="muted" style="font-size:13px;font-weight:600">with ${co.map(x => esc(firstName(x.worker))).join(', ')}</span>`:''}</div></div>`
+    : `<div class="card empty"><b>No shifts posted yet</b><span>When your manager publishes the schedule, you'll get an alert right here.</span></div>`}
+  <div class="stats" style="grid-template-columns:1fr 1fr">
+    <div class="stat"><b class="num">${wkH}h</b><span>scheduled this week</span></div>
+    <div class="stat"><b class="num">${mine.length}</b><span>upcoming shifts</span></div></div>
+  <div class="card stack" style="gap:12px">
+    <div class="spread"><div><h3>My availability</h3><p class="muted" style="font-size:13.5px">${sent ? `Sent to your manager ${ago(sent)}` : "Your manager doesn't have it yet"}</p></div>${sent ? '<span class="pill ok">Sent</span>' : '<span class="pill no">Not sent</span>'}</div>
+    ${sent ? weekPreview(S.who) : ''}
+    <button class="btn ${sent?'':'primary'} block" data-act="tab" data-k="avail">${sent ? 'Update my availability' : 'Set my availability'} ${ICON.arrow}</button></div>
+  ${op ? `<button class="item tap" data-act="tab" data-k="open" style="text-align:left;width:100%"><span style="background:var(--warn-soft);width:44px;height:44px;border-radius:13px;display:grid;place-items:center;flex:none">${ICON.swap}</span><span class="grow"><b>${op} open shift${op===1?'':'s'}</b><br><small class="muted" style="font-weight:600">Want extra hours? Pick one up.</small></span>${ICON.right}</button>` : ''}`;
+}
+function weekPreview(id){
+  const order = Array.from({length:7}, (_, i) => (ST().weekStart + i) % 7); const a = S.avail[id] || {}; const span = ST().close - ST().open;
+  return `<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">${order.map(k => { const n = countA((a.weekly||{})[k] || BLANK); return `<div style="text-align:center"><div style="height:44px;border-radius:9px;background:var(--surface2);display:flex;align-items:flex-end;overflow:hidden"><i style="display:block;width:100%;height:${Math.round(n/span*100)}%;background:var(--ok);border-radius:6px"></i></div><small class="muted" style="font-weight:700;font-size:11px">${DAYS[k][0]}</small></div>`; }).join('')}</div>`;
+}
+
+/* availability editor — per-day chips */
+function ensureDraft(id){
+  if (S.editFor !== id || !S.draft || !S.draftDirty){
+    const src = S.avail[id] ? clone(S.avail[id]) : {};
+    S.draft = { weekly: src.weekly || {}, overrides: src.overrides || {}, note: src.note || '' };
+    if (S.editFor !== id) S.customOpen = {};
+    S.editFor = id;
+  }
+  return S.draft;
+}
+function setRange(k, s, e, ch){ const arr = (S.draft.weekly[k] || BLANK).split(''); const {open:o, close:c} = ST();
+  for (let h = o; h < c; h++) if (arr[h] === '.') arr[h] = 'N';
+  for (let h = s; h < e; h++) arr[h] = ch; S.draft.weekly[k] = arr.join(''); S.draftDirty = true; }
+function availEditor(id, asMgr){
+  const m = S.team[id]; if (!m) return '';
+  const d = ensureDraft(id); const {open:o, close:c} = ST(); const bl = blocks();
+  const order = Array.from({length:7}, (_, i) => (ST().weekStart + i) % 7);
+  const total = order.reduce((t,k) => t + countA(d.weekly[k] || BLANK), 0);
+  const cards = order.map(k => {
+    const w = d.weekly[k] || BLANK; const set = /[AMN]/.test(w); const n = countA(w);
+    const allOn = set && n === c - o; const none = set && n === 0;
+    const bOn = b => { for (let h = b.s; h < b.e; h++) if (w[h] !== 'A') return false; return true; };
+    const blockOnly = (() => { for (let h = o; h < c; h++){ const inB = bl.some(b => bOn(b) && h >= b.s && h < b.e); if ((w[h] === 'A') !== inB) return false; } return true; })();
+    const custom = set && !allOn && !none && !blockOnly;
+    const showCustom = custom || S.customOpen[k];
+    const r = runs(w,'A')[0] || [Math.max(o,10), Math.min(c,16)];
+    return `<div class="daycard ${dow(TODAY) === k ? 'today' : ''}">
+      <div class="dc-head"><b>${DAYL[k]}</b><span class="dc-sum ${n?'on':''}">${!set ? 'Not set' : none ? "Can't work" : esc(summary(w))}</span></div>
+      <div class="chips">
+        <button class="chip ${allOn?'on':''}" data-act="dayAll" data-k="${k}">All day</button>
+        ${bl.map(b => `<button class="chip ${bOn(b) && !allOn && !custom?'on':''}" data-act="dayBlock" data-k="${k}" data-b="${b.k}">${b.label} <small>${fmtR(b.s,b.e)}</small></button>`).join('')}
+        <button class="chip cust ${showCustom?'on':''}" data-act="dayCustom" data-k="${k}">Custom</button>
+        <button class="chip off ${none?'on':''}" data-act="dayOff" data-k="${k}">Off</button>
+      </div>
+      ${showCustom ? `<div class="row" style="gap:8px;flex-wrap:nowrap"><label class="f" style="flex:1">From<select class="input" id="cf-${k}" data-cust="${k}">${halfOpts(o, c-1, r[0], 1)}</select></label><label class="f" style="flex:1">Until<select class="input" id="ct-${k}" data-cust="${k}">${halfOpts(o+1, c, r[1], 1)}</select></label></div>` : ''}
+      ${set ? strip(w) : ''}
+    </div>`;
+  }).join('');
+  const ov = Object.entries(d.overrides).filter(([x,v]) => x >= TODAY && v.off).sort();
+  const sentAt = S.avail[id] && S.avail[id].submittedAt;
+  return `${asMgr ? `<button class="btn ghost sm" data-act="tab" data-k="team" style="align-self:flex-start">${ICON.left}Back to team</button>` : ''}
+  <div class="stack" style="gap:6px"><h1 style="font-size:30px">${asMgr ? esc(m.name) + "'s availability" : 'When can you work?'}</h1>
+  <p class="muted">Tap the times ${asMgr ? 'they\'re' : 'you\'re'} free in a normal week. ${asMgr ? '' : 'Then hit Send — your manager sees it right away.'}</p></div>
+  <div class="row"><button class="btn sm" data-act="copyMon">${ICON.copy}Use Monday for Tue–Fri</button><span class="pill ok">${total}h free a week</span></div>
+  <div class="stack" style="gap:10px">${cards}</div>
+  <div class="card stack" style="gap:12px"><div class="spread"><div><h3>Time off</h3><p class="muted" style="font-size:13.5px">Days off completely — vacations, games, appointments.</p></div><button class="btn sm soft" data-act="timeOff">${ICON.plane}Add</button></div>
+    ${ov.length ? `<div class="list">${ov.map(([x,v]) => `<div class="item flat" style="padding:9px 12px"><div class="datebox" style="width:46px;background:var(--no-soft);color:var(--no)"><small>${DAYS[dow(x)]}</small><b style="font-size:18px">${pd(x).getDate()}</b></div><div class="grow" style="min-width:100px"><b>${fmtLong(x)}</b>${v.note?`<br><small class="muted" style="font-weight:600">${esc(v.note)}</small>`:''}</div><button class="btn sm ghost" data-act="rmOv" data-date="${x}" aria-label="Remove">✕</button></div>`).join('')}</div>` : ''}</div>
+  <label class="f">Anything your manager should know? (optional)<textarea class="input" id="avnote" data-avnote="1" maxlength="300" rows="3" placeholder="e.g. Practice Tue/Thu until 6. Can close on weekends.">${esc(d.note)}</textarea></label>
+  <div class="sendbar ${asMgr?'mgr':''}"><div><b>${S.draftDirty ? 'Ready to send' : sentAt ? 'Sent ✓' : 'Not sent yet'}</b><small>${S.draftDirty ? (asMgr ? 'Save to update the board' : 'Your manager sees it the moment you send') : sentAt ? 'Last sent ' + ago(sentAt) : 'Pick your times above'}</small></div>
+    <button class="btn primary" data-act="sendAvail" ${S.draftDirty ? '' : 'disabled'}>${ICON.send}${asMgr ? 'Save' : 'Send to manager'}</button></div>`;
+}
+
+function crewSched(){
+  const st = S.schedWeek; const end = addDays(st, 6);
+  const nav = `<div class="spread"><h2>Schedule</h2><div class="row" style="gap:6px"><button class="iconbtn" data-act="schedNav" data-d="-1" aria-label="Previous week">${ICON.left}</button><button class="btn sm" data-act="schedNav" data-d="0">${fmtMD(st)} – ${fmtMD(end)}</button><button class="iconbtn" data-act="schedNav" data-d="1" aria-label="Next week">${ICON.right}</button></div></div>
+    <div class="seg" style="align-self:flex-start"><button class="${S.schedMode==='mine'?'on':''}" data-act="schedMode" data-v="mine">My shifts</button><button class="${S.schedMode==='team'?'on':''}" data-act="schedMode" data-v="team">Whole team</button></div>`;
+  const un = unread(); const banner = un.length ? noticeCard(un[0]) : '';
+  const days = Array.from({length:7}, (_, i) => addDays(st, i));
+  const pub = inRange(st).filter(s => s.published);
+  if (S.schedMode === 'mine'){
+    const mine = pub.filter(s => s.worker === S.who).sort(sortSh);
+    const h = mine.reduce((t,s) => t + hrs(s), 0);
+    return banner + nav + `<div class="hero" style="padding:18px"><div class="spread"><div><span class="eyebrow" style="color:var(--hero-muted)">This week</span><div class="big">${h} hours</div></div><div class="big" style="font-size:22px">${mine.length} shift${mine.length===1?'':'s'}</div></div></div>
+    <div class="list">${days.map(d => { const list = mine.filter(s => s.date === d); const a = availFor(S.who, d);
+      return list.length ? list.map(s => shiftItem(s)).join('') : `<div class="item flat" style="opacity:.7"><div class="datebox" style="background:var(--surface);color:var(--muted)"><small>${DAYS[dow(d)]}</small><b style="color:var(--muted)">${pd(d).getDate()}</b></div><div class="grow"><span class="muted" style="font-weight:700">${a.off ? 'Time off' : 'Not working'}</span></div></div>`; }).join('')}</div>`;
+  }
+  return banner + nav + `<div class="list">${days.map(d => { const list = pub.filter(s => s.date === d && s.worker).sort(sortSh);
+    return `<div class="card" style="padding:14px"><div class="spread" style="margin-bottom:8px"><h3>${fmtLong(d)}</h3><span class="muted" style="font-size:13px;font-weight:700">${list.length} working</span></div>
+      ${list.length ? `<div class="list" style="gap:6px">${list.map(s => `<div class="row" style="gap:10px;flex-wrap:nowrap;${s.worker===S.who?'background:var(--accent-soft);border-radius:12px;padding:6px 8px;margin:0 -8px':''}">${avatar(S.team[s.worker])}<b style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(nameOf(s.worker))}${s.worker===S.who?' (you)':''}</b><span class="num" style="font-weight:700;white-space:nowrap">${fmtR(s.start,s.end)}</span></div>`).join('')}</div>` : '<p class="muted">Nothing posted.</p>'}</div>`; }).join('')}</div>`;
+}
+function shiftItem(s){
+  const dropped = s.status === 'drop';
+  return `<div class="item"><div class="datebox"><small>${DAYS[dow(s.date)]}</small><b>${pd(s.date).getDate()}</b></div>
+    <div class="grow"><b class="num" style="font-size:16px">${fmtH(s.start)} – ${fmtH(s.end)}</b> <span class="muted" style="font-weight:600">· ${hrs(s)}h</span><br><span class="rolechip" style="${rc(roleOf(s.roleId).color)};margin-top:4px">${esc(roleOf(s.roleId).name)}</span>${s.note?` <small class="muted" style="font-weight:600">${esc(s.note)}</small>`:''}
+    ${dropped ? `<br><span class="pill warn" style="margin-top:6px">${s.claimBy ? esc(firstName(s.claimBy)) + ' wants it — waiting on manager' : 'Posted for pickup — still yours for now'}</span>` : ''}</div>
+    ${s.date >= TODAY ? (dropped ? `<button class="btn sm" data-act="undoDrop" data-sid="${s.id}">Keep it</button>` : `<button class="btn sm ghost" data-act="drop" data-sid="${s.id}">Can't make it</button>`) : ''}</div>`;
+}
+function openV(){
+  const list = openShifts();
+  return `<div class="stack" style="gap:6px"><h1 style="font-size:30px">Open shifts</h1><p class="muted">Extra hours up for grabs. ${ST().approval ? 'Your manager approves pickups.' : "Pick one and it's yours."}</p></div>
+  ${list.length ? `<div class="list">${list.map(s => { const f = fit(S.who, s.date, s.start, s.end); const clash = overlap(S.who, s.date, s.start, s.end, s.id);
+    return `<div class="item"><div class="datebox"><small>${DAYS[dow(s.date)]}</small><b>${pd(s.date).getDate()}</b></div><div class="grow"><b class="num" style="font-size:16px">${fmtH(s.start)} – ${fmtH(s.end)}</b><br><small class="muted" style="font-weight:600">${fmtLong(s.date)} · ${s.worker ? 'from ' + esc(firstName(s.worker)) : 'open shift'}</small><div class="row" style="gap:6px;margin-top:6px"><span class="rolechip" style="${rc(roleOf(s.roleId).color)}">${esc(roleOf(s.roleId).name)}</span>${clash ? '<span class="pill no">You already work then</span>' : `<span class="pill ${({ok:'ok',maybe:'warn',bad:'no',unknown:'unset'})[f.level]}">${f.level==='ok'?'Fits your availability':esc(f.msg)}</span>`}</div></div>
+      ${s.claimBy === S.who ? `<button class="btn sm" data-act="unclaim" data-sid="${s.id}">Cancel request</button>` : s.claimBy ? `<span class="pill unset">Requested</span>` : `<button class="btn sm primary" data-act="claim" data-sid="${s.id}" ${clash?'disabled':''}>Pick up</button>`}</div>`; }).join('')}</div>` : `<div class="card empty"><b>Nothing open right now</b><span>When someone drops a shift or your manager posts an open one, it shows up here.</span></div>`}`;
+}
+
+/* ============ MANAGER APP ============ */
+function mgrApp(){
+  const tabs = [['home','Home',ICON.home],['board','Availability',ICON.grid],['build','Schedule',ICON.cal],['requests','Requests',ICON.inbox, pendingCount()],['team','Team',ICON.team],['settings','Settings',ICON.gear]];
+  if (S.tab !== 'editAvail' && !tabs.some(t => t[0] === S.tab)) S.tab = 'home';
+  const body = S.tab === 'editAvail' ? `<div class="stack" style="width:100%;max-width:600px;margin:0 auto">${availEditor(S.editFor, true)}</div>` : {home:mgrHome, board:boardV, build:buildV, requests:requestsV, team:teamV, settings:settingsV}[S.tab]();
+  return `<header class="top"><div class="top-in w-wide"><div class="brand"><span class="mark">${markSvg}</span><div>Crew Lineup<small>${esc(ST().bizName)} · Manager</small></div></div>
+    <button class="btn sm primary" data-act="openPublish">${ICON.send}Publish</button>
+    <button class="iconbtn" data-act="signout" aria-label="Sign out" title="Sign out">${ICON.out}</button></div>
+    <nav class="mtabs w-wide">${tabs.map(([k,l,ic,b]) => `<button class="mtab ${S.tab===k?'on':''}" data-act="tab" data-k="${k}">${ic}${l}${b?`<span class="badge">${b}</span>`:''}</button>`).join('')}</nav></header>
+  <main class="wrap w-wide">${demoBar()}${body}</main>`;
+}
+const stat = (ic, bg, n, l) => `<div class="stat"><span class="ic" style="background:${bg}">${ic}</span><b class="num">${n}</b><span>${l}</span></div>`;
+function mgrHome(){
+  const mem = members(); const sent = mem.filter(m => hasSubmitted(m.id));
+  const wk = weekStartOf(TODAY); const nextWk = addDays(wk, 7);
+  const thisSh = inRange(wk); const nextSh = inRange(nextWk);
+  const drafts = shiftList().filter(s => !s.published && s.date >= TODAY).length;
+  const feed = mem.filter(m => S.avail[m.id] && S.avail[m.id].submittedAt).sort((a,b) => S.avail[b.id].submittedAt - S.avail[a.id].submittedAt);
+  const waiting = mem.filter(m => !hasSubmitted(m.id));
+  const last = noticeList()[0];
+  return `<div class="spread"><div class="stack" style="gap:2px"><p class="muted" style="font-weight:700">${greet()}</p><h1>${esc(ST().bizName || 'Your crew')}</h1></div>
+    <div class="row"><button class="btn" data-act="gotoBuild" data-date="${nextWk}">${ICON.cal}Build next week</button><button class="btn primary" data-act="openPublish">${ICON.send}Publish & notify</button></div></div>
+  <div class="stats">
+    ${stat(ICON.avail,'var(--ok-soft)', `${sent.length}/${mem.length}`, 'sent their availability')}
+    ${stat(ICON.cal,'var(--accent-soft)', thisSh.length, `shifts this week · ${thisSh.reduce((t,s)=>t+hrs(s),0)}h`)}
+    ${stat(ICON.spark,'var(--warn-soft)', drafts, 'draft shifts not published')}
+    ${stat(ICON.inbox,'var(--no-soft)', pendingCount(), 'swap requests to review')}
+  </div>
+  <div class="cols2">
+    <div class="card stack"><div class="spread"><h3>Availability inbox</h3><button class="btn sm ghost" data-act="tab" data-k="board">See the board ${ICON.right}</button></div>
+      ${feed.length ? `<div class="list">${feed.slice(0,8).map(m => `<div class="item tap" data-act="tab" data-k="board">${avatar(m)}<div class="grow"><b>${esc(m.name)}</b> <span class="muted" style="font-weight:600">sent availability · ${ago(S.avail[m.id].submittedAt)}</span>${S.avail[m.id].note?`<br><small class="muted" style="font-weight:600">“${esc(S.avail[m.id].note)}”</small>`:''}</div><div style="width:140px">${weekPreview(m.id)}</div></div>`).join('')}</div>` : `<div class="empty"><b>Nothing in yet</b><span>Share your company code so the crew can send their availability.</span></div>`}
+      ${waiting.length ? `<div class="item flat"><div class="grow"><b>Still waiting on ${waiting.length}</b><br><small class="muted" style="font-weight:600">${waiting.map(m => esc(m.name)).join(', ')}</small></div><button class="btn sm" data-act="copyInvite">${ICON.copy}Copy reminder</button></div>` : ''}
+    </div>
+    <div class="stack">
+      <div class="hero stack" style="gap:10px"><span class="eyebrow" style="color:var(--hero-muted)">Crew sign-in code</span><div class="big">${esc(ST().code || '—')}</div><p class="muted" style="font-size:13.5px">Workers open Crew Lineup, type this code, then tap their name.</p><div><button class="btn sm" data-act="copyInvite">${ICON.copy}Copy invite message</button></div></div>
+      <div class="card stack" style="gap:8px"><h3>Last schedule posted</h3>${last ? `<p><b>${fmtMD(last.from)} – ${fmtMD(last.to)}</b></p><p class="muted" style="font-size:13.5px">${last.count} shifts · crew notified ${ago(last.createdAt)}</p>` : "<p class=\"muted\">You haven't published a schedule yet.</p>"}
+        <p class="muted" style="font-size:13.5px">Next week so far: <b style="color:var(--ink)">${nextSh.length} shifts</b>${nextSh.some(s=>!s.published)?' (drafts)':''}</p></div>
+    </div>
+  </div>`;
+}
+function inviteText(){ return `Hey team! Please set your availability in Crew Lineup for ${ST().bizName || 'work'}.\n1) Open the Crew Lineup link\n2) Type the company code: ${ST().code}\n3) Tap your name, make a PIN, and pick the times you can work\nYou'll get an alert there when the schedule is posted.`; }
+
+function boardDays(){
+  if (S.boardRange === 'month'){
+    const d = pd(S.boardStart); const first = ds(new Date(d.getFullYear(), d.getMonth(), 1, 12)); const last = ds(new Date(d.getFullYear(), d.getMonth()+1, 0, 12));
+    const st = weekStartOf(first); const out = []; for (let x = st; x <= last || out.length % 7; x = addDays(x,1)) out.push(x); return out;
+  }
+  return Array.from({length: S.boardRange * 7}, (_, i) => addDays(S.boardStart, i));
+}
+function boardV(){
+  const days = boardDays(); const all = members();
+  const mem = all.filter(m => S.roleFilter === 'all' || m.roleId === S.roleFilter);
+  const head = `<div class="spread"><div><h2>Who's available</h2><p class="muted">${fmtMD(days[0])} – ${fmtMD(days[days.length-1])} · tap a day for the hourly view, tap a box to schedule that person</p></div>
+    <div class="row"><div class="seg">${[[1,'Week'],[2,'2 weeks'],[3,'3 weeks'],['month','Month']].map(([v,l]) => `<button class="${S.boardRange==v?'on':''}" data-act="range" data-v="${v}">${l}</button>`).join('')}</div>
+    <div class="row" style="gap:6px"><button class="iconbtn" data-act="boardNav" data-d="-1" aria-label="Earlier">${ICON.left}</button><button class="btn sm" data-act="boardNav" data-d="0">Today</button><button class="iconbtn" data-act="boardNav" data-d="1" aria-label="Later">${ICON.right}</button></div></div></div>
+  <div class="spread"><div class="row" style="gap:6px"><button class="chip ${S.roleFilter==='all'?'sel':''}" data-act="roleF" data-r="all">Everyone</button>${ST().roles.map(r => `<button class="chip ${S.roleFilter===r.id?'sel':''}" data-act="roleF" data-r="${r.id}"><span class="dotc" style="background:${r.color}"></span>${esc(r.name)}</button>`).join('')}</div>
+  <div class="legend"><span class="pill ok">Free</span><span class="pill warn">Maybe</span><span class="pill no">Off</span><span class="pill unset">Not sent</span></div></div>`;
+  if (!all.length) return head + teamEmpty();
+  const cov = days.map(d => { const n = mem.filter(m => { const a = availFor(m.id,d); return !a.off && countA(a.s) > 0; }).length; const sc = shiftList().filter(s => s.date === d && s.worker && mem.some(m => m.id === s.worker)).length; return {n, sc}; });
+  const thead = `<thead><tr><th class="who"><span class="eyebrow">Crew · ${mem.length}</span></th>${days.map(d => `<th class="dh ${d===TODAY?'today':''}" data-act="day" data-date="${d}"><div class="d1">${d===TODAY?'Today':DAYS[dow(d)]}</div><div class="d2">${pd(d).getDate()} <small class="muted" style="font-size:11px;font-weight:600;font-family:var(--f-body)">${MON[pd(d).getMonth()]}</small></div></th>`).join('')}</tr>
+    <tr class="cov"><th class="who"><small class="muted" style="font-weight:700">Free that day</small></th>${cov.map(c => `<td class="covc"><b>${c.n}</b> <span class="muted">free · ${c.sc} on</span><div class="covbar"><i style="width:${mem.length?Math.round(c.n/mem.length*100):0}%"></i></div></td>`).join('')}</tr></thead>`;
+  const rows = mem.map(m => { const sub = hasSubmitted(m.id); const at = S.avail[m.id] && S.avail[m.id].submittedAt;
+    return `<tr><th class="who"><div class="whoin">${avatar(m)}<div><b>${esc(m.name)}</b><small>${sub ? (at ? 'sent ' + ago(at) : esc(roleOf(m.roleId).name)) : '<span style="color:var(--no)">not sent yet</span>'}</small></div></div></th>${days.map(d => {
+      const a = availFor(m.id, d); const sh = shiftList().filter(s => s.worker === m.id && s.date === d).sort(sortSh);
+      const inner = a.off ? `<span class="offtag">Time off</span>${a.note?`<span class="offnote">${esc(a.note)}</span>`:''}` : a.src === 'none' ? `<span class="unset">—</span>` : `${strip(a.s)}<span class="rng">${esc(summary(a.s) || "Can't work")}</span>`;
+      return `<td class="cell" data-act="cellAdd" data-id="${m.id}" data-date="${d}">${inner}${sh.map(s => `<span class="mini" style="${rc(roleOf(s.roleId).color)}">${fmtR(s.start,s.end)}</span>`).join(' ')}</td>`; }).join('')}</tr>`; }).join('');
+  return head + `<div class="gscroll" data-keep="board"><table class="g">${thead}<tbody>${rows}</tbody></table></div>`;
+}
+const teamEmpty = () => `<div class="card empty"><b>Add your crew first</b><span>Add everyone who works shifts. Then share the company code so they can send their availability.</span><button class="btn primary" data-act="tab" data-k="team">${ICON.plus}Add people</button></div>`;
+
+function buildV(){
+  const start = S.buildStart; const sh = inRange(start);
+  const drafts = sh.filter(s => !s.published).length; const open = sh.filter(s => !s.worker).length;
+  const conflicts = sh.filter(s => s.worker && fit(s.worker, s.date, s.start, s.end).level === 'bad').length;
+  const head = `<div class="spread"><div><h2>Schedule</h2><p class="muted">Tap <b>+</b> to add a shift. Dashed shifts are drafts — your crew can't see them until you publish.</p></div>
+    <div class="row" style="gap:6px"><button class="iconbtn" data-act="buildNav" data-d="-1" aria-label="Previous week">${ICON.left}</button><button class="btn sm" data-act="buildNav" data-d="0">${fmtMD(start)} – ${fmtMD(addDays(start,6))}</button><button class="iconbtn" data-act="buildNav" data-d="1" aria-label="Next week">${ICON.right}</button></div></div>
+  <div class="spread"><div class="row">
+    <button class="btn primary" data-act="openPublish">${ICON.send}Publish & notify${drafts?` · ${drafts}`:''}</button>
+    <button class="btn" data-act="smartFill" ${open?'':'disabled'}>${ICON.spark}Auto-fill open shifts</button>
+    <button class="btn" data-act="copyPrev">${ICON.copy}Copy last week</button>
+    <button class="btn" data-act="copyFwd" ${sh.length?'':'disabled'}>${ICON.copy}Repeat ahead…</button>
+    ${drafts?`<button class="btn ghost danger" data-act="clearDrafts">Clear drafts</button>`:''}</div>
+    <div class="row" style="gap:14px"><span class="muted" style="font-weight:700;font-size:13.5px">${sh.reduce((t,s)=>t+hrs(s),0)}h · ${sh.length} shifts${conflicts?` · <span style="color:var(--no)">${conflicts} conflict${conflicts>1?'s':''}</span>`:''}</span>
+    <label class="row" style="gap:8px;font-weight:700;font-size:13.5px;cursor:pointer"><span class="toggle"><input type="checkbox" id="showAvail" data-act="toggleAvail" ${S.showAvail?'checked':''}><span></span></span>Show availability</label></div></div>`;
+  return head + (members().length ? weekGrid(start) : teamEmpty());
+}
+function weekGrid(start){
+  const days = Array.from({length:7}, (_, i) => addDays(start, i)); const sh = inRange(start); const mem = members();
+  const chip = s => { const f = s.worker ? fit(s.worker, s.date, s.start, s.end) : {level:'unknown'}; const role = roleOf(s.roleId);
+    const flag = (f.level === 'bad' || f.level === 'maybe') ? `<span class="flag" title="${esc(f.msg)}">!</span>` : '';
+    const tag = s.claimBy ? '<span class="tagx">pickup</span>' : s.status === 'drop' ? '<span class="tagx">dropped</span>' : '';
+    return `<button class="shift ${s.published?'':'draft'} ${f.level}" style="${rc(role.color)}" data-act="editShift" data-sid="${s.id}" title="${esc(role.name)}${f.msg?' · '+esc(f.msg):''}">${flag}${tag}<span class="num">${fmtR(s.start,s.end)}</span><small>${esc(role.name)}</small></button>`; };
+  const cellFor = (wid, d) => { const list = sh.filter(s => (wid ? s.worker === wid : !s.worker) && s.date === d).sort(sortSh);
+    const av = wid && S.showAvail ? (() => { const a = availFor(wid, d); return a.off ? `<span class="offtag" style="font-size:10px">Off</span>` : a.src === 'none' ? '' : strip(a.s); })() : '';
+    return `<td class="bcell">${av}${list.map(chip).join('')}<button class="addbtn" data-act="newShift" data-id="${wid||''}" data-date="${d}" aria-label="Add shift">+</button></td>`; };
+  const thead = `<thead><tr><th class="who"><span class="eyebrow">Week of ${fmtMD(start)}</span></th>${days.map(d => `<th class="dh ${d===TODAY?'today':''}" data-act="day" data-date="${d}"><div class="d1">${d===TODAY?'Today':DAYS[dow(d)]}</div><div class="d2">${pd(d).getDate()}</div></th>`).join('')}<th class="hrs"><span class="eyebrow">Hours</span></th></tr></thead>`;
+  const openRow = `<tr class="openrow"><th class="who"><div class="whoin"><span class="av" style="--c:var(--accent)">+</span><div><b>Open shifts</b><small>Anyone can pick up</small></div></div></th>${days.map(d => cellFor(null, d)).join('')}<td class="hrs"><b class="num">${sh.filter(s=>!s.worker).reduce((t,s)=>t+hrs(s),0)}h</b></td></tr>`;
+  const rows = mem.map(m => { const h = sh.filter(s => s.worker === m.id).reduce((t,s) => t + hrs(s), 0); const max = +m.maxHours || 40;
+    return `<tr><th class="who"><div class="whoin">${avatar(m)}<div><b>${esc(m.name)}</b><small>${esc(roleOf(m.roleId).name)}</small></div></div></th>${days.map(d => cellFor(m.id, d)).join('')}<td class="hrs"><b class="num">${h}h</b> <span class="muted num" style="font-size:12px">/ ${max}</span><div class="hbar ${h>max?'over':''}"><i style="width:${Math.min(100,h/max*100)}%"></i></div></td></tr>`; }).join('');
+  const foot = `<tr class="cov"><th class="who"><small class="muted" style="font-weight:700">Daily total</small></th>${days.map(d => { const x = sh.filter(s => s.date === d); return `<td class="covc"><b class="num">${x.reduce((t,s)=>t+hrs(s),0)}h</b> <span class="muted">· ${x.filter(s=>s.worker).length} on</span></td>`; }).join('')}<td class="hrs"><b class="num">${sh.reduce((t,s)=>t+hrs(s),0)}h</b></td></tr>`;
+  return `<div class="gscroll" data-keep="wk"><table class="g">${thead}<tbody>${openRow}${rows}${foot}</tbody></table></div>`;
+}
+
+function requestsV(){
+  const up = shiftList().filter(s => s.date >= TODAY).sort(sortSh);
+  const claims = up.filter(s => s.claimBy); const drops = up.filter(s => s.status === 'drop' && !s.claimBy);
+  const offs = []; members().forEach(m => { const ov = (S.avail[m.id] && S.avail[m.id].overrides) || {}; Object.entries(ov).forEach(([d,v]) => { if (v.off && d >= TODAY) offs.push({m, d, note:v.note}); }); });
+  offs.sort((a,b) => a.d.localeCompare(b.d));
+  const db = s => `<div class="datebox"><small>${DAYS[dow(s.date)]}</small><b>${pd(s.date).getDate()}</b></div>`;
+  const fp = f => `<span class="pill ${({ok:'ok',maybe:'warn',bad:'no',unknown:'unset'})[f.level]}">${esc(f.msg)}</span>`;
+  return `<div><h2>Requests</h2><p class="muted">Shift pickups, dropped shifts and time off, all in one place.</p></div>
+  <div class="cols">
+    <div class="card stack"><h3>Pickup requests ${claims.length?`<span class="badge">${claims.length}</span>`:''}</h3>
+      ${claims.length ? `<div class="list">${claims.map(s => `<div class="item">${db(s)}<div class="grow"><b>${esc(nameOf(s.claimBy))}</b> wants ${s.worker?`${esc(firstName(s.worker))}'s`:'an open'} shift<br><span class="num" style="font-weight:700">${fmtR(s.start,s.end)}</span> <span class="rolechip" style="${rc(roleOf(s.roleId).color)}">${esc(roleOf(s.roleId).name)}</span><div style="margin-top:6px">${fp(fit(s.claimBy, s.date, s.start, s.end))}</div></div><div class="row"><button class="btn sm ok" data-act="approve" data-sid="${s.id}">${ICON.check}Approve</button><button class="btn sm" data-act="decline" data-sid="${s.id}">Decline</button></div></div>`).join('')}</div>` : `<p class="muted">No pickup requests.</p>`}</div>
+    <div class="card stack"><h3>Dropped shifts</h3>
+      ${drops.length ? `<div class="list">${drops.map(s => `<div class="item">${db(s)}<div class="grow"><b>${esc(nameOf(s.worker))}</b> can't make it<br><span class="num" style="font-weight:700">${fmtR(s.start,s.end)}</span> <span class="rolechip" style="${rc(roleOf(s.roleId).color)}">${esc(roleOf(s.roleId).name)}</span><br><small class="muted" style="font-weight:600">Posted to open shifts — no taker yet</small></div><div class="row"><button class="btn sm" data-act="editShift" data-sid="${s.id}">Reassign</button><button class="btn sm ghost" data-act="denyDrop" data-sid="${s.id}">Keep on them</button></div></div>`).join('')}</div>` : `<p class="muted">No dropped shifts.</p>`}</div>
+    <div class="card stack"><h3>Upcoming time off</h3>
+      ${offs.length ? `<div class="list">${offs.slice(0,30).map(o => { const clash = shiftList().filter(s => s.worker === o.m.id && s.date === o.d); return `<div class="item">${avatar(o.m)}<div class="grow"><b>${esc(o.m.name)}</b> · ${fmtLong(o.d)}${o.note?`<br><small class="muted" style="font-weight:600">${esc(o.note)}</small>`:''}${clash.length?`<br><span class="pill no" style="margin-top:4px">Scheduled ${clash.map(s=>fmtR(s.start,s.end)).join(', ')} — needs cover</span>`:''}</div>${clash.length?`<button class="btn sm" data-act="editShift" data-sid="${clash[0].id}">Fix</button>`:''}</div>`; }).join('')}</div>` : `<p class="muted">No time off requested.</p>`}</div>
+  </div>`;
+}
+
+function teamV(){
+  const mem = members();
+  return `<div><h2>Team</h2><p class="muted">${mem.length} people. Tap someone to edit their role, hours or PIN.</p></div>
+  <div class="cols2">
+    <div class="card stack" style="gap:8px">${mem.length ? mem.map(m => `<button class="item tap" style="text-align:left;width:100%" data-act="editMember" data-id="${m.id}">${avatar(m)}<span class="grow"><b>${esc(m.name)}</b><br><small class="muted" style="font-weight:600">${esc(roleOf(m.roleId).name)} · max ${m.maxHours||40}h/week</small></span>${hasSubmitted(m.id)?'<span class="pill ok">Availability in</span>':'<span class="pill no">No availability</span>'}${m.pinHash?'':'<span class="pill unset">No PIN yet</span>'}${ICON.right}</button>`).join('') : `<div class="empty"><b>No one yet</b><span>Add your first crew member.</span></div>`}</div>
+    <div class="stack">
+      <div class="card stack" style="gap:12px"><h3>Add a person</h3>
+        <label class="f">Name<input class="input" id="newName" maxlength="40" placeholder="e.g. Ana Ruiz"></label>
+        <label class="f">Role<select class="input" id="newRole">${ST().roles.map(r => `<option value="${r.id}">${esc(r.name)}</option>`).join('')}</select></label>
+        <button class="btn primary" data-act="addMember">${ICON.plus}Add to crew</button></div>
+      <div class="hero stack" style="gap:10px"><span class="eyebrow" style="color:var(--hero-muted)">How your crew gets in</span>
+        <ol style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-weight:600;position:relative;z-index:1"><li>Open the Crew Lineup link</li><li>Type the code <b>${esc(ST().code)}</b></li><li>Tap their name and make a PIN</li><li>Pick their times and hit Send</li></ol>
+        <div><button class="btn sm" data-act="copyInvite">${ICON.copy}Copy invite message</button></div></div>
+    </div>
+  </div>`;
+}
+
+function settingsV(){
+  const s = ST();
+  return `<div><h2>Settings</h2><p class="muted">Changes save as you go.</p></div>
+  <div class="cols">
+    <div class="card stack"><h3>Sign-in</h3>
+      <label class="f">Business name<input class="input" id="set-biz" data-set="bizName" value="${esc(s.bizName)}" maxlength="50"></label>
+      <label class="f">Company code<input class="input" id="set-code" data-set="code" value="${esc(s.code)}" maxlength="30" autocapitalize="off" spellcheck="false"></label>
+      <label class="f">New manager PIN (4 digits)<input class="input" id="set-pin" data-set="mgrPin" inputmode="numeric" maxlength="4" placeholder="Type to change" autocomplete="off"></label>
+      <p class="muted" style="font-size:13px">Changing the code signs everyone out on their next visit.</p></div>
+    <div class="card stack"><h3>Hours & rules</h3>
+      <div class="fgrid"><label class="f">Opens<select class="input" id="set-open" data-set="open">${hourOpts(0,23,s.open)}</select></label><label class="f">Closes<select class="input" id="set-close" data-set="close">${hourOpts(1,24,s.close)}</select></label><label class="f">Week starts<select class="input" id="set-ws" data-set="weekStart"><option value="1" ${s.weekStart==1?'selected':''}>Monday</option><option value="0" ${s.weekStart==0?'selected':''}>Sunday</option></select></label></div>
+      <label class="spread" style="cursor:pointer"><span><b>Approve shift pickups</b><br><small class="muted" style="font-weight:600">Off = pickups are instant</small></span><span class="toggle"><input type="checkbox" id="set-appr" data-set="approval" ${s.approval?'checked':''}><span></span></span></label></div>
+    <div class="card stack"><h3>Roles</h3>
+      ${s.roles.map(r => `<div class="row"><input class="input" id="rn-${r.id}" data-role="${r.id}" value="${esc(r.name)}" style="flex:1;min-width:120px" aria-label="Role name"><div class="swatches">${PALETTE.slice(0,6).map(c => `<button class="sw ${r.color===c?'on':''}" style="background:${c}" data-act="roleColor" data-r="${r.id}" data-c="${c}" aria-label="Color"></button>`).join('')}</div>${s.roles.length>1?`<button class="btn sm ghost" data-act="delRole" data-r="${r.id}" aria-label="Delete role">✕</button>`:''}</div>`).join('')}
+      <div><button class="btn sm soft" data-act="addRole">${ICON.plus}Add role</button></div></div>
+    <div class="card stack"><h3>Shift presets</h3><p class="muted" style="font-size:13px;margin-top:-6px">One tap to fill the times when you add a shift.</p>
+      ${(s.templates||[]).map(t => `<div class="row" style="gap:8px"><input class="input" id="tl-${t.id}" data-tpl="${t.id}" data-tf="label" value="${esc(t.label)}" style="flex:1;min-width:100px" aria-label="Preset name"><select class="input" id="ts-${t.id}" data-tpl="${t.id}" data-tf="start" style="width:auto" aria-label="Start">${halfOpts(s.open, s.close-.5, t.start)}</select><select class="input" id="te-${t.id}" data-tpl="${t.id}" data-tf="end" style="width:auto" aria-label="End">${halfOpts(s.open+.5, s.close, t.end)}</select><button class="btn sm ghost" data-act="delTpl" data-t="${t.id}" aria-label="Delete preset">✕</button></div>`).join('')}
+      <div><button class="btn sm soft" data-act="addTpl">${ICON.plus}Add preset</button></div></div>
+  </div>`;
+}
+
+/* ============ SHEETS ============ */
+function sheetV(){
+  const M = S.modal; if (!M) return '';
+  const close = `<button class="x" data-act="close" aria-label="Close">×</button>`;
+  let inner = '', wide = false;
+  if (M.type === 'shift') inner = shiftSheet(M, close);
+  else if (M.type === 'day'){ inner = daySheet(M, close); wide = true; }
+  else if (M.type === 'publish') inner = publishSheet(M, close);
+  else if (M.type === 'copyFwd') inner = `<div class="shead"><div><h2>Repeat this week</h2><p class="muted">Copies every shift from ${fmtMD(S.buildStart)} – ${fmtMD(addDays(S.buildStart,6))} as drafts.</p></div>${close}</div>
+    <div class="seg">${[1,2,3,4].map(n => `<button class="${M.n==n?'on':''}" data-act="mset" data-k="n" data-v="${n}">${n} week${n>1?'s':''}</button>`).join('')}</div>
+    <p class="muted">Fills through <b style="color:var(--ink)">${fmtMD(addDays(S.buildStart, 7*M.n + 6))}</b>. Anyone with time off on a copied day gets a red flag so you can swap them.</p>
+    <button class="btn primary lg block" data-act="doCopyFwd">Copy ${inRange(S.buildStart).length * M.n} shifts</button>`;
+  else if (M.type === 'timeOff') inner = `<div class="shead"><div><h2>Add time off</h2><p class="muted">Your manager sees these days as off.</p></div>${close}</div>
+    <div class="fgrid"><label class="f">From<input class="input" type="date" id="to-from" data-bind="from" value="${M.from}" min="${TODAY}"></label><label class="f">To<input class="input" type="date" id="to-to" data-bind="to" value="${M.to}" min="${TODAY}"></label></div>
+    <label class="f">Reason (optional)<input class="input" id="to-note" data-bind="note" value="${esc(M.note)}" maxlength="80" placeholder="e.g. Away tournament"></label>
+    <button class="btn primary lg block" data-act="saveTimeOff">Add time off</button>`;
+  else if (M.type === 'member') inner = memberSheet(M, close);
+  return `<div class="scrim" data-act="scrim"><div class="sheet ${wide?'wide':''}" role="dialog" aria-modal="true"><div class="grab"></div>${inner}</div></div>`;
+}
+function shiftSheet(M, close){
+  const {open:o, close:c} = ST();
+  const ws = weekStartOf(M.date); const wd = Array.from({length:7}, (_, i) => addDays(ws, i));
+  const rank = {ok:0,maybe:1,unknown:2,bad:3};
+  const people = members().map(m => ({m, f:fit(m.id, M.date, +M.start, +M.end), busy:overlap(m.id, M.date, +M.start, +M.end, M.sid), a:availFor(m.id, M.date)}))
+    .sort((x,y) => (x.busy - y.busy) || rank[x.f.level] - rank[y.f.level] || (y.m.roleId === M.roleId) - (x.m.roleId === M.roleId));
+  const dot = p => p.busy ? 'var(--no)' : ({ok:'var(--ok)',maybe:'var(--warn)',bad:'var(--no)',unknown:'var(--unset)'})[p.f.level];
+  return `<div class="shead"><div><h2>${M.sid?'Edit shift':'New shift'}</h2><p class="muted">${fmtLong(M.date)}</p></div>${close}</div>
+  ${(ST().templates||[]).length ? `<div class="chips">${ST().templates.map(t => `<button class="chip ${+M.start===t.start && +M.end===t.end?'sel':''}" data-act="useTpl" data-s="${t.start}" data-e="${t.end}">${esc(t.label)} <small>${fmtR(t.start,t.end)}</small></button>`).join('')}</div>` : ''}
+  <div class="fgrid"><label class="f">Starts<select class="input" id="sm-start" data-bind="start" data-live="1">${halfOpts(o, c-.5, M.start)}</select></label><label class="f">Ends<select class="input" id="sm-end" data-bind="end" data-live="1">${halfOpts(o+.5, c, M.end)}</select></label><label class="f">Date<input class="input" type="date" id="sm-date" data-bind="date" data-live="1" value="${M.date}"></label></div>
+  <div class="chips">${ST().roles.map(r => `<button class="chip ${M.roleId===r.id?'sel':''}" data-act="mset" data-k="roleId" data-v="${r.id}"><span class="dotc" style="background:${r.color}"></span>${esc(r.name)}</button>`).join('')}</div>
+  <div class="stack" style="gap:8px"><div class="eyebrow">Who works it? Best fits first</div>
+    <div class="pick" data-keep="pick"><button class="prow ${!M.worker?'on':''}" data-act="mset" data-k="worker" data-v=""><span class="av" style="--c:var(--accent)">+</span><span class="grow"><b>Leave it open</b><small>Anyone can pick it up</small></span></button>
+    ${people.map(p => `<button class="prow ${M.worker===p.m.id?'on':''}" data-act="mset" data-k="worker" data-v="${p.m.id}">${avatar(p.m)}<span class="grow"><b>${esc(p.m.name)}</b><small>${p.busy ? 'Already working then' : p.a.off ? 'Time off' + (p.a.note?' — '+esc(p.a.note):'') : p.a.src==='none' ? "Hasn't sent availability" : (summary(p.a.s) ? 'Free ' + esc(summary(p.a.s)) : 'Not free this day')}</small></span><span class="dotc" style="background:${dot(p)};width:11px;height:11px"></span></button>`).join('')}</div></div>
+  ${M.worker ? (() => { const f = fit(M.worker, M.date, +M.start, +M.end); const busy = overlap(M.worker, M.date, +M.start, +M.end, M.sid); return `<div class="fit fit-${busy?'bad':f.level}">${busy?'Already scheduled during these hours':esc(f.msg)}</div>`; })() : ''}
+  <label class="f">Note (optional)<input class="input" id="sm-note" data-bind="note" value="${esc(M.note||'')}" maxlength="80" placeholder="e.g. Bring keys"></label>
+  ${!M.sid ? `<div class="stack" style="gap:8px"><div class="eyebrow">Repeat on</div><div class="chips">${wd.filter(x => x !== M.date).map(x => `<button class="chip ${(M.also||[]).includes(x)?'sel':''}" data-act="also" data-date="${x}">${DAYS[dow(x)]} ${pd(x).getDate()}</button>`).join('')}</div></div>` : ''}
+  ${+M.end <= +M.start ? '<div class="fit fit-bad">End time has to be after start time.</div>' : ''}
+  <div class="row"><button class="btn primary lg" style="flex:1" data-act="saveShift" ${+M.end<=+M.start?'disabled':''}>${M.sid?'Save':'Add shift'}${M.also&&M.also.length?` ×${M.also.length+1}`:''}</button>${M.sid?`<button class="btn lg ghost danger" data-act="delShift">Delete</button>`:''}</div>`;
+}
+function ganttTrack(s, shifts){ const {open:o, close:c} = ST(); const span = c - o;
+  return `<div class="gtrack">${strip(s)}${shifts.map(x => `<div class="gshift" style="left:${(x.start-o)/span*100}%;width:${(x.end-x.start)/span*100}%;background:${roleOf(x.roleId).color}">${fmtR(x.start,x.end)}</div>`).join('')}</div>`; }
+function daySheet(M, close){
+  const {open:o, close:c} = ST(); const d = M.date;
+  const mem = members().map(m => ({m, a:availFor(m.id, d)})).sort((x,y) => countA(y.a.s) - countA(x.a.s));
+  const counts = [], sched = []; for (let h = o; h < c; h++){ counts.push(mem.filter(x => !x.a.off && x.a.s[h] === 'A').length); sched.push(shiftList().filter(s => s.date === d && s.worker && s.start <= h && s.end > h).length); }
+  const max = Math.max(1, ...counts);
+  return `<div class="shead"><div><h2>${fmtLong(d)}</h2><p class="muted">Green bars show how many people are free each hour (free / scheduled).</p></div>${close}</div>
+  <div class="gscroll" style="padding:26px 14px 10px;box-shadow:none"><div style="min-width:${(c-o)*36}px"><div class="hourbars">${counts.map((n,i) => `<div style="height:${n/max*100}%"><span>${n}/${sched[i]}</span></div>`).join('')}</div>
+    <div style="display:grid;grid-template-columns:repeat(${c-o},1fr);margin-top:6px">${counts.map((_,i) => `<div style="font-size:10.5px;color:var(--muted);text-align:center;font-weight:700">${i%2===0?fmtHs(o+i):''}</div>`).join('')}</div></div></div>
+  <div class="gscroll" style="padding:14px;box-shadow:none"><div class="gantt" style="grid-template-columns:170px minmax(${(c-o)*30}px,1fr)">${mem.map(({m,a}) => `<div class="gl">${avatar(m)}${esc(m.name)}</div><div>${a.off?`<span class="offtag">Time off</span> <small class="muted">${esc(a.note)}</small>`:a.src==='none'?'<span class="muted" style="font-size:12.5px;font-weight:600">Not sent</span>':ganttTrack(a.s, shiftList().filter(s => s.worker === m.id && s.date === d))}</div>`).join('')}</div></div>
+  <div class="row"><button class="btn primary" data-act="newShift" data-id="" data-date="${d}">${ICON.plus}Add a shift</button><button class="btn" data-act="gotoBuild" data-date="${d}">Open this week</button></div>`;
+}
+function publishSheet(M, close){
+  const from = M.from; const to = addDays(from, 7*M.n - 1);
+  const list = shiftList().filter(s => s.date >= from && s.date <= to);
+  const drafts = list.filter(s => !s.published); const people = new Set(list.filter(s => s.worker).map(s => s.worker));
+  const label = M.n === 1 ? 'the week' : M.n === 4 ? 'the month' : `the next ${M.n} weeks`;
+  return `<div class="shead"><div><h2>Publish & notify</h2><p class="muted">Your crew gets a "schedule posted" alert in Crew Lineup.</p></div>${close}</div>
+  <div class="row" style="gap:8px"><span class="eyebrow">Starting</span><button class="iconbtn" data-act="pubNav" data-d="-1" aria-label="Earlier">${ICON.left}</button><b>${fmtLong(from)}</b><button class="iconbtn" data-act="pubNav" data-d="1" aria-label="Later">${ICON.right}</button></div>
+  <div class="seg">${[[1,'1 week'],[2,'2 weeks'],[3,'3 weeks'],[4,'Month']].map(([n,l]) => `<button class="${M.n==n?'on':''}" data-act="mset" data-k="n" data-v="${n}">${l}</button>`).join('')}</div>
+  <div class="hero stack" style="gap:6px"><span class="eyebrow" style="color:var(--hero-muted)">${fmtMD(from)} – ${fmtMD(to)}</span><div class="big">${drafts.length} draft shift${drafts.length===1?'':'s'} go live</div><p class="muted">${list.length} shifts in total · ${people.size} ${people.size===1?'person gets':'people get'} the alert</p></div>
+  <label class="f">Message for your group chat (optional)<textarea class="input" id="copysrc" rows="3" readonly>Your schedule for ${label} (${fmtMD(from)} – ${fmtMD(to)}) is posted! Open Crew Lineup with code ${ST().code} to see your shifts.</textarea></label>
+  <div class="row"><button class="btn primary lg" style="flex:1" data-act="doPublish" ${list.length?'':'disabled'}>${ICON.send}Publish & notify crew</button><button class="btn lg" data-act="copyPubMsg">${ICON.copy}Copy</button></div>
+  ${!list.length ? '<p class="muted">No shifts in this range yet. Build them in the Schedule tab first.</p>' : ''}`;
+}
+function memberSheet(M, close){
+  const m = S.team[M.id]; if (!m) return '';
+  return `<div class="shead"><div class="row">${avatar(m,'lg')}<div><h2>${esc(m.name)}</h2><p class="muted">${hasSubmitted(M.id) ? 'Availability sent ' + ago(S.avail[M.id] && S.avail[M.id].submittedAt) : 'No availability yet'}</p></div></div>${close}</div>
+  <label class="f">Name<input class="input" id="mm-name" data-team="${M.id}" data-f="name" value="${esc(m.name)}" maxlength="40"></label>
+  <div class="fgrid"><label class="f">Role<select class="input" id="mm-role" data-team="${M.id}" data-f="roleId">${ST().roles.map(r => `<option value="${r.id}" ${r.id===m.roleId?'selected':''}>${esc(r.name)}</option>`).join('')}</select></label><label class="f">Max hours / week<input class="input" type="number" id="mm-max" min="0" max="80" data-team="${M.id}" data-f="maxHours" value="${m.maxHours||40}"></label></div>
+  <div class="stack" style="gap:6px"><div class="eyebrow">Color</div><div class="swatches">${PALETTE.map(c => `<button class="sw ${colorOf(m)===c?'on':''}" style="background:${c}" data-act="color" data-id="${M.id}" data-c="${c}" aria-label="Color"></button>`).join('')}</div></div>
+  <div class="row"><button class="btn" data-act="editAvailFor" data-id="${M.id}">${ICON.avail}Edit their availability</button><button class="btn" data-act="resetPin" data-id="${M.id}" ${m.pinHash?'':'disabled'}>${ICON.lock}Reset PIN</button></div>
+  ${M.confirm ? `<div class="fit fit-bad" style="justify-content:space-between;flex-wrap:wrap">Remove ${esc(m.name)}? Their future shifts become open.<span class="row"><button class="btn sm" style="background:var(--no);color:#fff;border:0" data-act="doRemove" data-id="${M.id}">Remove</button><button class="btn sm" data-act="mset" data-k="confirm" data-v="">Cancel</button></span></div>` : `<button class="btn ghost danger" data-act="mset" data-k="confirm" data-v="1" style="align-self:flex-start">Remove from crew</button>`}`;
+}
+
+/* ============ ACTIONS ============ */
+const A = {
+  tab: d => { S.tab = d.k; S.modal = null; if (d.k === 'avail') ensureDraft(S.who); render(); scrollTo(0,0); },
+  demo: () => startDemo(),
+  exitDemo: () => { clearSession(); S.demo = false; S.team = {}; S.avail = {}; S.shifts = {}; S.notices = {}; S.settings = null; S.who = null; S.gate = 'code'; S.modal = null; S.phase = 'loading'; render(); subscribe(); },
+  enterCode: () => {
+    const v = (($('#codeIn') || {}).value || '').trim(); S.codeDraft = v; S.pinErr = '';
+    if (!v){ S.pinErr = 'Type your company code'; return render(); }
+    if (v.toLowerCase() === 'demo') return startDemo();
+    if (!S.db){ S.pinErr = "Sign in to claude.ai to use your crew's code. Type DEMO to look around."; return render(); }
+    if (!S.settings){ S.pinErr = "This crew isn't set up yet."; return render(); }
+    if (v.toLowerCase() !== (S.settings.code || '').toLowerCase()){ S.pinErr = "That code doesn't match. Check with your manager."; return render(); }
+    S.gate = 'pick'; S.codeDraft = ''; try { localStorage.setItem(SESSION_KEY, JSON.stringify({code:v.toLowerCase(), who:null})); } catch(e){} render(); scrollTo(0,0);
+  },
+  ownerIn: () => finishSignIn('mgr'),
+  pickWho: d => { S.pinFor = d.id; S.pinBuf = ''; S.pinErr = ''; S.pinFirst = '';
+    if (S.demo) return finishSignIn(d.id);
+    if (d.id === 'mgr'){ if (!ST().mgrPin) return finishSignIn('mgr'); S.pinMode = 'enter'; }
+    else S.pinMode = S.team[d.id].pinHash ? 'enter' : 'create';
+    S.gate = 'pin'; render(); scrollTo(0,0); },
+  gateBack: () => { S.gate = 'pick'; S.pinErr = ''; S.pinBuf = ''; render(); },
+  key: d => { if (d.k === 'del'){ S.pinBuf = S.pinBuf.slice(0,-1); S.pinErr = ''; return render(); } if (S.pinBuf.length >= 4) return; S.pinBuf += d.k; S.pinErr = ''; render(); if (S.pinBuf.length === 4) setTimeout(pinDone, 140); },
+  signout: () => { if (S.demo) return A.exitDemo();
+    const code = (ST().code||'').toLowerCase(); try { localStorage.setItem(SESSION_KEY, JSON.stringify({code, who:null})); } catch(e){}
+    S.who = null; S.gate = 'pick'; S.phase = 'gate'; S.modal = null; S.draft = null; S.draftDirty = false; S.tab = 'home'; render(); scrollTo(0,0); },
+  createCrew: async () => { const s = DEFAULT_SETTINGS(); s.bizName = $('#suBiz').value.trim(); s.code = $('#suCode').value.trim(); const pin = $('#suPin').value.trim();
+    s.open = +$('#suOpen').value; s.close = +$('#suClose').value; s.weekStart = +$('#suWs').value;
+    if (!s.bizName || !s.code) return toast('Add a business name and a company code');
+    if (!/^\d{4}$/.test(pin)) return toast('The manager PIN has to be 4 digits');
+    if (s.close <= s.open) return toast('Closing time has to be after opening time');
+    s.templates = [{id:'t1',label:'Opening',start:s.open,end:Math.min(s.close,s.open+8)},{id:'t2',label:'Closing',start:Math.max(s.open,s.close-7),end:s.close}];
+    s.mgrPin = await sha(s.salt + ':' + pin);
+    put('settings/main', s); finishSignIn('mgr'); S.tab = 'team'; render(); toast('Crew created! Add your people next.'); },
+  // crew availability
+  dayAll: d => { const {open:o, close:c} = ST(); setRange(d.k, o, c, 'A'); delete S.customOpen[d.k]; render(); },
+  dayOff: d => { const {open:o, close:c} = ST(); setRange(d.k, o, c, 'N'); delete S.customOpen[d.k]; render(); },
+  dayBlock: d => { const {open:o, close:c} = ST(); const b = blocks().find(x => x.k === d.b); const w = S.draft.weekly[d.k] || BLANK;
+    const all = countA(w) === c - o; let on = true; for (let h = b.s; h < b.e; h++) if (w[h] !== 'A') on = false;
+    if (all || S.customOpen[d.k]){ setRange(d.k, o, c, 'N'); setRange(d.k, b.s, b.e, 'A'); }
+    else setRange(d.k, b.s, b.e, on ? 'N' : 'A');
+    delete S.customOpen[d.k]; render(); },
+  dayCustom: d => { const k = d.k; const {open:o, close:c} = ST(); S.customOpen[k] = !S.customOpen[k];
+    if (S.customOpen[k] && !countA(S.draft.weekly[k] || BLANK)){ setRange(k, o, c, 'N'); setRange(k, Math.max(o,10), Math.min(c,16), 'A'); } render(); },
+  copyMon: () => { ensureDraft(S.editFor); const src = S.draft.weekly[1] || BLANK; [2,3,4,5].forEach(k => S.draft.weekly[k] = src); S.draftDirty = true; render(); toast('Copied Monday to Tuesday–Friday'); },
+  sendAvail: () => { const id = S.editFor; const d = S.draft; const ov = {}; Object.entries(d.overrides).forEach(([x,v]) => { if (x >= addDays(TODAY,-14)) ov[x] = v; });
+    const {open:o, close:c} = ST(); const weekly = {}; for (let k = 0; k < 7; k++){ const w = d.weekly[k]; if (w && /[AMN]/.test(w)){ const arr = w.split(''); for (let h = o; h < c; h++) if (arr[h] === '.') arr[h] = 'N'; weekly[k] = arr.join(''); } }
+    const doc = {weekly, overrides:ov, note:(d.note||'').trim(), updatedAt:Date.now(), submittedAt:Date.now()};
+    S.draftDirty = false; S.customOpen = {}; put('avail/' + id, doc); toast(isMgr() ? 'Availability saved' : 'Sent! Your manager can see it now.'); },
+  timeOff: () => { S.modal = {type:'timeOff', from:addDays(TODAY,1), to:addDays(TODAY,1), note:''}; render(); },
+  saveTimeOff: () => { const M = S.modal; if (!M.from || !M.to || M.to < M.from) return toast('Pick a start date and an end date after it'); let n = 0;
+    for (let x = M.from; x <= M.to && n < 62; x = addDays(x,1), n++) S.draft.overrides[x] = {s:'N'.repeat(24), off:true, note:(M.note||'').trim()};
+    S.draftDirty = true; S.modal = null; render(); toast(`${n} day${n===1?'':'s'} added — hit Send to share it`); },
+  rmOv: d => { delete S.draft.overrides[d.date]; S.draftDirty = true; render(); },
+  seeNotice: d => { const m = me(); if (m) put('team/' + S.who, {...m, seenAt:Date.now()}); S.tab = 'sched'; S.schedMode = 'mine'; S.schedWeek = weekStartOf(d.from); render(); scrollTo(0,0); },
+  schedNav: d => { S.schedWeek = +d.d ? addDays(S.schedWeek, 7 * d.d) : weekStartOf(TODAY); render(); },
+  schedMode: d => { S.schedMode = d.v; render(); },
+  drop: d => { const s = S.shifts[d.sid]; put('shifts/' + d.sid, {...s, status:'drop', updatedAt:Date.now()}); toast("Posted for pickup. It stays yours until someone takes it."); },
+  undoDrop: d => { const s = S.shifts[d.sid]; put('shifts/' + d.sid, {...s, status:'assigned', claimBy:null, updatedAt:Date.now()}); toast('Kept on your schedule'); },
+  claim: d => { const s = S.shifts[d.sid];
+    if (ST().approval){ put('shifts/' + d.sid, {...s, claimBy:S.who, updatedAt:Date.now()}); toast('Requested — your manager will approve it'); }
+    else { put('shifts/' + d.sid, {...s, worker:S.who, claimBy:null, status:'assigned', updatedAt:Date.now()}); toast("It's yours! It's on your schedule."); } },
+  unclaim: d => { const s = S.shifts[d.sid]; put('shifts/' + d.sid, {...s, claimBy:null, updatedAt:Date.now()}); },
+  // manager
+  range: d => { S.boardRange = d.v === 'month' ? 'month' : +d.v; render(); },
+  boardNav: d => { const n = +d.d; if (!n) S.boardStart = weekStartOf(TODAY); else if (S.boardRange === 'month'){ const x = pd(S.boardStart); S.boardStart = ds(new Date(x.getFullYear(), x.getMonth() + n, 1, 12)); } else S.boardStart = addDays(S.boardStart, n * 7 * S.boardRange); render(); },
+  roleF: d => { S.roleFilter = d.r; render(); },
+  buildNav: d => { S.buildStart = +d.d ? addDays(S.buildStart, 7 * d.d) : weekStartOf(TODAY); render(); },
+  gotoBuild: d => { S.buildStart = weekStartOf(d.date); S.tab = 'build'; S.modal = null; render(); scrollTo(0,0); },
+  toggleAvail: (d, el) => { S.showAvail = el.checked; render(); },
+  day: d => { S.modal = {type:'day', date:d.date}; render(); },
+  cellAdd: d => openNewShift(d.id, d.date),
+  newShift: d => openNewShift(d.id || null, d.date),
+  editShift: d => { const s = S.shifts[d.sid]; if (!s) return; S.modal = {type:'shift', sid:d.sid, date:s.date, start:s.start, end:s.end, worker:s.worker||'', roleId:s.roleId, note:s.note||''}; render(); },
+  mset: d => { S.modal[d.k] = d.k === 'n' ? +d.v : d.v; if (d.k === 'worker' && d.v && S.team[d.v] && !S.modal.sid) S.modal.roleId = S.team[d.v].roleId; render(); },
+  useTpl: d => { S.modal.start = +d.s; S.modal.end = +d.e; render(); },
+  also: d => { const a = S.modal.also = S.modal.also || []; const i = a.indexOf(d.date); i < 0 ? a.push(d.date) : a.splice(i,1); render(); },
+  saveShift: () => { const M = S.modal; const base = {date:M.date, start:+M.start, end:+M.end, worker:M.worker||null, roleId:M.roleId, note:(M.note||'').trim()};
+    S.modal = null;
+    if (M.sid){ const old = S.shifts[M.sid]; const changed = old.worker !== base.worker; put('shifts/' + M.sid, {...old, ...base, status: changed ? 'assigned' : old.status, claimBy: changed ? null : old.claimBy || null, updatedAt:Date.now()}); }
+    else putMany([M.date, ...(M.also||[])].map(dt => ['shifts/' + uid(), {...base, date:dt, published:false, status:'assigned', claimBy:null, updatedAt:Date.now()}]));
+    toast(M.sid ? 'Shift updated' : 'Added as a draft — publish when the week looks good'); },
+  delShift: () => { const id = S.modal.sid; S.modal = null; put('shifts/' + id, null); toast('Shift deleted'); },
+  openPublish: () => { const wk = weekStartOf(TODAY); S.modal = {type:'publish', from: S.tab === 'build' ? S.buildStart : (inRange(wk).some(s => !s.published) ? wk : addDays(wk, 7)), n:1}; render(); },
+  pubNav: d => { S.modal.from = addDays(S.modal.from, 7 * d.d); render(); },
+  doPublish: () => { const M = S.modal; const to = addDays(M.from, 7*M.n - 1);
+    const list = shiftList().filter(s => s.date >= M.from && s.date <= to);
+    const writes = list.filter(s => !s.published).map(s => { const {id, ...r} = s; return ['shifts/' + id, {...r, published:true, updatedAt:Date.now()}]; });
+    writes.push(['notices/' + uid(), {from:M.from, to, count:list.length, createdAt:Date.now()}]);
+    S.modal = null; putMany(writes); toast(`Published ${fmtMD(M.from)} – ${fmtMD(to)}. Your crew gets the alert.`); },
+  copyPubMsg: () => copyText($('#copysrc').value, 'Copied — paste it in your group chat'),
+  copyInvite: () => copyText(inviteText(), 'Invite copied — paste it in your group chat'),
+  clearDrafts: () => { putMany(inRange(S.buildStart).filter(s => !s.published).map(s => ['shifts/' + s.id, null])); toast('Drafts cleared'); },
+  smartFill: () => smartFill(),
+  copyPrev: () => { const n = copyWeek(addDays(S.buildStart, -7), S.buildStart); toast(n ? `Copied ${n} shifts from last week as drafts` : 'Nothing new to copy from last week'); },
+  copyFwd: () => { S.modal = {type:'copyFwd', n:2}; render(); },
+  doCopyFwd: () => { const w = +S.modal.n; S.modal = null; let n = 0; for (let i = 1; i <= w; i++) n += copyWeek(S.buildStart, addDays(S.buildStart, 7*i)); toast(`Copied ${n} shifts into the next ${w} week${w>1?'s':''} as drafts`); },
+  approve: d => { const s = S.shifts[d.sid]; put('shifts/' + d.sid, {...s, worker:s.claimBy, claimBy:null, status:'assigned', updatedAt:Date.now()}); toast(`${firstName(s.claimBy)} has the shift now`); },
+  decline: d => { const s = S.shifts[d.sid]; put('shifts/' + d.sid, {...s, claimBy:null, updatedAt:Date.now()}); toast('Pickup declined'); },
+  denyDrop: d => { const s = S.shifts[d.sid]; put('shifts/' + d.sid, {...s, status:'assigned', claimBy:null, updatedAt:Date.now()}); toast('Kept on their schedule'); },
+  editMember: d => { S.modal = {type:'member', id:d.id}; render(); },
+  editAvailFor: d => { S.draft = null; S.draftDirty = false; ensureDraft(d.id); S.modal = null; S.tab = 'editAvail'; render(); scrollTo(0,0); },
+  resetPin: d => { const n = {...S.team[d.id]}; delete n.pinHash; put('team/' + d.id, n); toast(`PIN reset — ${firstName(d.id)} makes a new one at next sign-in`); },
+  color: d => put('team/' + d.id, {...S.team[d.id], color:d.c}),
+  doRemove: d => { const id = d.id; S.modal = null; const list = [['team/' + id, null], ['avail/' + id, null]];
+    shiftList().filter(s => s.worker === id && s.date >= TODAY).forEach(s => { const {id:sid, ...r} = s; list.push(['shifts/' + sid, {...r, worker:null, status:'assigned', claimBy:null}]); });
+    putMany(list); toast('Removed from the crew'); },
+  addMember: () => { const name = $('#newName').value.trim(); if (!name) return toast('Type a name first'); put('team/m-' + uid(), {name, roleId:$('#newRole').value, maxHours:40, seenAt:Date.now()}); toast(`${name} added`); },
+  roleColor: d => { const s = clone(ST()); s.roles.find(r => r.id === d.r).color = d.c; put('settings/main', s); },
+  addRole: () => { const s = clone(ST()); s.roles.push({id:'r' + uid(), name:'New role', color:PALETTE[s.roles.length % 6]}); put('settings/main', s); },
+  delRole: d => { const s = clone(ST()); s.roles = s.roles.filter(r => r.id !== d.r); put('settings/main', s); },
+  addTpl: () => { const s = clone(ST()); s.templates = s.templates || []; s.templates.push({id:'t' + uid(), label:'New preset', start:s.open, end:Math.min(s.close, s.open + 8)}); put('settings/main', s); },
+  delTpl: d => { const s = clone(ST()); s.templates = (s.templates||[]).filter(t => t.id !== d.t); put('settings/main', s); },
+  close: () => { S.modal = null; render(); },
+  scrim: (d, el, e) => { if (e.target === el){ S.modal = null; render(); } }
+};
+function finishSignIn(who){
+  S.who = who; S.phase = 'app'; S.tab = 'home'; S.gate = 'pick'; S.pinBuf = ''; S.pinErr = ''; S.draft = null; S.draftDirty = false; S.customOpen = {};
+  if (who !== 'mgr') ensureDraft(who);
+  saveSession(); render(); scrollTo(0,0);
+}
+async function pinDone(){
+  const pin = S.pinBuf; const salt = ST().salt || '';
+  if (S.pinMode === 'create'){ S.pinFirst = pin; S.pinBuf = ''; S.pinMode = 'confirm'; return render(); }
+  if (S.pinMode === 'confirm'){
+    if (pin !== S.pinFirst){ S.pinErr = "Those didn't match. Start again."; S.pinMode = 'create'; S.pinBuf = ''; S.pinFirst = ''; return render(); }
+    const h = await sha(salt + ':' + pin); put('team/' + S.pinFor, {...S.team[S.pinFor], pinHash:h}); return finishSignIn(S.pinFor);
+  }
+  const h = await sha(salt + ':' + pin);
+  const target = S.pinFor === 'mgr' ? ST().mgrPin : (S.team[S.pinFor] || {}).pinHash;
+  if (h === target) return finishSignIn(S.pinFor);
+  S.pinErr = 'Wrong PIN. Try again.'; S.pinBuf = ''; render();
+}
+function openNewShift(wid, date){
+  const {open:o, close:c} = ST(); const t = (ST().templates||[])[0]; let start = t ? t.start : o, end = t ? t.end : Math.min(c, o + 8);
+  if (wid){ const a = availFor(wid, date); const r = runs(a.s, 'A')[0]; if (r && !a.off){ start = r[0]; end = Math.min(r[1], r[0] + 8); } }
+  const roleId = wid && S.team[wid] ? S.team[wid].roleId : ST().roles[0].id;
+  S.modal = {type:'shift', sid:null, date, start, end, worker:wid||'', roleId, note:'', also:[]}; render();
+}
+function copyWeek(from, to){
+  const diff = Math.round((pd(to) - pd(from)) / 86400000); const existing = inRange(to);
+  const list = inRange(from).filter(s => !existing.some(e => e.date === addDays(s.date, diff) && e.start === s.start && e.end === s.end && e.worker === s.worker && e.roleId === s.roleId))
+    .map(s => ['shifts/' + uid(), {date:addDays(s.date, diff), start:s.start, end:s.end, worker:s.worker||null, roleId:s.roleId, note:s.note||'', published:false, status:'assigned', claimBy:null, updatedAt:Date.now()}]);
+  if (list.length) putMany(list); return list.length;
+}
+function smartFill(){
+  const start = S.buildStart; const open = inRange(start).filter(s => !s.worker).sort(sortSh);
+  const temp = clone(S.shifts); const hours = {}; members().forEach(m => hours[m.id] = hoursFor(m.id, start));
+  const busy = (id, sh) => Object.entries(temp).some(([k,s]) => k !== sh.id && s.worker === id && s.date === sh.date && s.start < sh.end && sh.start < s.end);
+  const list = [];
+  open.forEach(sh => { const c = members().filter(m => fit(m.id, sh.date, sh.start, sh.end).level === 'ok' && !busy(m.id, sh) && hours[m.id] + hrs(sh) <= (+m.maxHours || 40))
+      .sort((a,b) => (b.roleId === sh.roleId) - (a.roleId === sh.roleId) || hours[a.id] - hours[b.id])[0];
+    if (c){ const {id, ...rest} = sh; temp[id] = {...rest, worker:c.id}; hours[c.id] += hrs(sh); list.push(['shifts/' + id, {...rest, worker:c.id, status:'assigned', published:false, updatedAt:Date.now()}]); } });
+  if (list.length) putMany(list);
+  toast(list.length ? `Filled ${list.length} of ${open.length} open shifts with people who are free` : 'No one free fits the open shifts — try different times');
+}
+
+/* ============ EVENTS ============ */
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-act]'); if (!t) return;
+  if (t.dataset.act === 'scrim' && e.target !== t) return;
+  if (t.tagName === 'INPUT') return;
+  const fn = A[t.dataset.act]; if (fn) fn(t.dataset, t, e);
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.id === 'codeIn'){ e.preventDefault(); A.enterCode(); return; }
+  if (e.key === 'Escape' && S.modal){ S.modal = null; render(); return; }
+  if (S.phase === 'gate' && S.gate === 'pin' && !/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)){ if (/^\d$/.test(e.key)) A.key({k:e.key}); else if (e.key === 'Backspace') A.key({k:'del'}); }
+});
+document.addEventListener('change', async e => {
+  const el = e.target;
+  if (el.dataset.act === 'toggleAvail') return A.toggleAvail(el.dataset, el);
+  if (el.dataset.bind && S.modal){ S.modal[el.dataset.bind] = el.value; if (el.dataset.live) render(); return; }
+  if (el.dataset.cust){ const k = el.dataset.cust; const s = +$('#cf-' + k).value, en = +$('#ct-' + k).value; if (en <= s) return toast('"Until" has to be after "From"');
+    const {open:o, close:c} = ST(); setRange(k, o, c, 'N'); setRange(k, s, en, 'A'); S.customOpen[k] = true; render(); return; }
+  if (el.dataset.team){ const m = S.team[el.dataset.team]; if (!m) return; let v = el.value; if (el.dataset.f === 'maxHours') v = Math.max(0, Math.min(80, +v || 0)); if (el.dataset.f === 'name'){ v = v.trim(); if (!v) return render(); } put('team/' + el.dataset.team, {...m, [el.dataset.f]: v}); return; }
+  if (el.dataset.role){ const s = clone(ST()); const r = s.roles.find(x => x.id === el.dataset.role); if (r && el.value.trim()){ r.name = el.value.trim(); put('settings/main', s); } return; }
+  if (el.dataset.tpl){ const s = clone(ST()); const t = (s.templates||[]).find(x => x.id === el.dataset.tpl); if (!t) return; t[el.dataset.tf] = el.dataset.tf === 'label' ? (el.value.trim() || t.label) : +el.value; if (t.end <= t.start){ toast('A preset has to end after it starts'); return render(); } put('settings/main', s); return; }
+  if (el.dataset.set){ const s = clone(ST()); const k = el.dataset.set; let v = el.type === 'checkbox' ? el.checked : el.value;
+    if (k === 'mgrPin'){ if (!/^\d{4}$/.test(v)) return toast('The manager PIN has to be 4 digits'); s.mgrPin = await sha(s.salt + ':' + v); el.value = ''; put('settings/main', s); return toast('Manager PIN changed'); }
+    if (['open','close','weekStart'].includes(k)) v = +v;
+    if (k === 'bizName' || k === 'code'){ v = String(v).trim(); if (k === 'code' && !v){ toast("The company code can't be empty"); return render(); } }
+    const nx = {...s, [k]: v}; if (nx.close <= nx.open){ toast('Closing time has to be after opening time'); return render(); }
+    put('settings/main', nx); if (k === 'code') saveSession();
+    if (k === 'weekStart'){ S.boardStart = weekStartOf(S.boardStart); S.buildStart = weekStartOf(S.buildStart); S.schedWeek = weekStartOf(S.schedWeek); render(); } }
+});
+document.addEventListener('input', e => {
+  const el = e.target;
+  if (el.dataset.bind && S.modal && !el.dataset.live) S.modal[el.dataset.bind] = el.value;
+  if (el.dataset.avnote && S.draft){ S.draft.note = el.value; if (!S.draftDirty){ S.draftDirty = true; const sb = $('.sendbar'); if (sb){ sb.querySelector('button').disabled = false; sb.querySelector('b').textContent = 'Ready to send'; } } }
+  if (el.id === 'codeIn') S.codeDraft = el.value;
+});
+
+/* ============ DATA ============ */
+let unsubs = [];
+function decide(){
+  if (S.demo) return;
+  if (!S.got.settings || !S.got.team){ if (S.phase !== 'app') S.phase = 'loading'; return; }
+  if (!S.settings){ S.phase = S.isOwner ? 'setup' : 'notready'; return; }
+  const ses = readSession(); const code = (S.settings.code || '').toLowerCase();
+  if (!S.restored){
+    S.restored = true;
+    if (ses && ses.code === code){
+      if (ses.who && (ses.who === 'mgr' || S.team[ses.who])){ S.who = ses.who; S.phase = 'app'; if (S.who !== 'mgr') ensureDraft(S.who); return; }
+      S.gate = 'pick';
+    } else S.gate = 'code';
+    if (S.phase !== 'app') S.phase = 'gate';
+    return;
+  }
+  if (S.phase === 'setup' || S.phase === 'notready' || S.phase === 'loading') S.phase = S.who ? 'app' : 'gate';
+  if (S.phase === 'app'){
+    const gone = S.who && S.who !== 'mgr' && !S.team[S.who];
+    const codeChanged = ses && ses.code && ses.code !== code && !(S.isOwner && S.who === 'mgr');
+    if (gone || codeChanged){ S.who = null; S.phase = 'gate'; S.gate = 'code'; clearSession(); }
+  }
+}
+function subscribe(){
+  unsubs.forEach(u => { try { u(); } catch(e){} }); unsubs = []; S.restored = false;
+  if (!S.db){ S.phase = 'gate'; S.gate = 'code'; render(); return; }
+  S.got = {}; S.phase = 'loading';
+  const err = e => { if (e && e.code === 'revoked') toast('Access to this page changed. Reload to continue.'); };
+  unsubs.push(S.db.doc('settings/main').onSnapshot(snap => { if (S.demo) return; const first = !S.got.settings; S.settings = snap.exists ? snap.data() : null; S.got.settings = true;
+    if (first && S.settings){ S.boardStart = weekStartOf(TODAY); S.buildStart = S.boardStart; S.schedWeek = S.boardStart; } decide(); render(); }, err));
+  ['team','avail','shifts','notices'].forEach(c => unsubs.push(S.db.collection(c).onSnapshot(snap => {
+    if (S.demo) return; const o = {}; snap.docs.forEach(d => o[d.id] = d.data()); S[c] = o; S.got[c] = true; decide(); render(); }, err)));
+}
+
+/* ============ DEMO ============ */
+function startDemo(){
+  S.demo = true; S.phase = 'gate'; S.gate = 'pick'; S.who = null; S.pinErr = ''; S.codeDraft = '';
+  const st = DEFAULT_SETTINGS(); st.bizName = 'Harbor Street Café'; st.code = 'DEMO'; S.settings = st;
+  const av = parts => { const a = BLANK.split(''); for (let h = st.open; h < st.close; h++) a[h] = 'N'; parts.forEach(([s,e,ch]) => { for (let h = s; h < e; h++) a[h] = ch; }); return a.join(''); };
+  const ppl = [
+    ['sofia','Sofia Marte','r3',40,{1:[[9,18,'A']],2:[[9,18,'A']],3:[[9,18,'A']],4:[[9,18,'A']],5:[[9,18,'A'],[18,21,'M']],6:[],0:[]}],
+    ['ana','Ana Ruiz','r1',32,{1:[[15,23,'A']],2:[[15,23,'A']],3:[[9,12,'M']],4:[[15,23,'A']],5:[[15,23,'A']],6:[[9,23,'A']],0:[[9,16,'A']]}],
+    ['jay','Jay Patel','r1',25,{1:[[9,15,'A']],2:[[9,15,'A']],3:[[9,15,'A']],4:[],5:[[9,13,'A']],6:[[10,18,'M']],0:[]}],
+    ['kim','Kim Nguyen','r1',30,{0:[[9,23,'A']],6:[[9,23,'A']],5:[[17,23,'A']],3:[[17,23,'A']],1:[],2:[],4:[[17,22,'M']]}],
+    ['marcus','Marcus Lee','r2',40,{1:[[10,23,'A']],2:[[10,23,'A']],3:[[10,23,'A']],4:[[10,23,'A']],5:[[10,23,'A']],6:[],0:[[12,20,'M']]}],
+    ['dre','Dre Wilson','r2',28,{0:[[9,16,'A']],6:[[9,16,'A']],5:[[16,23,'A']],4:[[16,23,'A']],3:[[9,12,'A']],1:[],2:[[16,23,'M']]}],
+    ['luis','Luis Ortega','r2',20,null]
+  ];
+  S.team = {}; S.avail = {}; S.shifts = {}; S.notices = {};
+  ppl.forEach(([id,name,roleId,maxHours,w], i) => { S.team[id] = {name, roleId, maxHours, seenAt: id === 'ana' ? 0 : Date.now()}; if (w){ const weekly = {}; Object.entries(w).forEach(([k,p]) => weekly[k] = av(p)); S.avail[id] = {weekly, overrides:{}, note:'', updatedAt:Date.now(), submittedAt:Date.now() - (i*7+2)*3600000}; } });
+  S.avail.ana.note = 'Classes until 2 on weekdays.';
+  const ws = weekStartOf(TODAY);
+  [addDays(ws,9), addDays(ws,10)].forEach(x => S.avail.kim.overrides[x] = {s:'N'.repeat(24), off:true, note:'Family trip'});
+  S.avail.marcus.overrides[addDays(ws,3)] = {s:'N'.repeat(24), off:true, note:'Dentist'};
+  const plan = [
+    [0,9,17,'sofia','r3'],[0,15,23,'ana','r1'],[0,9,15,'jay','r1'],[0,10,18,'marcus','r2'],[0,16,23,null,'r2'],
+    [1,9,17,'sofia','r3'],[1,15,23,'ana','r1'],[1,9,15,'jay','r1'],[1,11,19,'marcus','r2'],[1,17,23,'dre','r2'],
+    [2,9,17,'sofia','r3'],[2,9,15,'jay','r1'],[2,17,23,'kim','r1'],[2,12,20,'marcus','r2'],[2,9,12,'dre','r2'],
+    [3,9,17,'sofia','r3'],[3,15,23,'ana','r1'],[3,10,18,'marcus','r2'],[3,17,23,'dre','r2'],[3,9,15,null,'r1'],
+    [4,9,17,'sofia','r3'],[4,15,23,'ana','r1'],[4,17,23,'kim','r1'],[4,10,18,'marcus','r2'],[4,16,23,'dre','r2'],
+    [5,9,16,'kim','r1'],[5,15,23,'ana','r1'],[5,9,16,'dre','r2'],[5,16,23,null,'r2'],
+    [6,9,16,'kim','r1'],[6,9,16,'ana','r1'],[6,9,16,'dre','r2'],[6,13,20,'marcus','r2']
+  ];
+  plan.forEach(([o,s,e,w,r], i) => S.shifts['d' + i] = {date:addDays(ws,o), start:s, end:e, worker:w, roleId:r, note:'', published:true, status:'assigned', claimBy:null});
+  plan.forEach(([o,s,e,w,r], i) => { if (i % 3) S.shifts['n' + i] = {date:addDays(ws,o+7), start:s, end:e, worker:w, roleId:r, note:'', published:false, status:'assigned', claimBy:null}; });
+  S.shifts.d15 = {...S.shifts.d15, status:'drop', claimBy:'kim'};
+  S.shifts.d26 = {...S.shifts.d26, status:'drop'};
+  ['d15','d26','d4','d19','d28'].forEach(k => { if (S.shifts[k].date < TODAY) S.shifts[k].date = addDays(S.shifts[k].date, 7); });
+  S.notices.demo1 = {from:ws, to:addDays(ws,6), count:33, createdAt:Date.now() - 3*3600000};
+  S.boardStart = ws; S.buildStart = ws; S.schedWeek = ws;
+  try { localStorage.setItem(SESSION_KEY, JSON.stringify({code:'demo', who:null})); } catch(e){}
+  render(); scrollTo(0,0);
+}
+
+async function init(){
+  S.boardStart = weekStartOf(TODAY); S.buildStart = S.boardStart; S.schedWeek = S.boardStart;
+  render();
+  let db = null, user = null;
+  try { if (window.claude && window.claude.use){ [db, user] = await Promise.all([window.claude.use('db'), window.claude.use('user')]); } } catch(e){}
+  S.db = db;
+  if (user){ try { S.isOwner = !!(await user.isOwner()); } catch(e){} }
+  const ses = readSession();
+  if (ses && ses.code === 'demo'){ startDemo(); if (ses.who && (ses.who === 'mgr' || S.team[ses.who])) finishSignIn(ses.who); return; }
+  subscribe();
+}
+init();
+</script>
+
+</body></html>

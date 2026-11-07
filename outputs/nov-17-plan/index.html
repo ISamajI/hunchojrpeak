@@ -1,0 +1,360 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Our Nov 17 Plan</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;1,6..96,500;1,6..96,700&family=Outfit:wght@300;400;600&display=swap">
+<style>
+  /* Layout: one centered column, a letter at the top, then a vertical timeline of the day like a ticket stub. Same deep-red world as the invite. */
+  :root {
+    --bg: #6e0a14;
+    --bg-deep: #3d0309;
+    --red: #d7192f;
+    --blush: #ffd9de;
+    --cream: #fff4ee;
+    --muted: #e9a9b2;
+    --line: rgba(255,217,222,.28);
+    --display: "Bodoni Moda", "Didot", Georgia, serif;
+    --body: "Outfit", system-ui, -apple-system, sans-serif;
+    color-scheme: dark;
+  }
+  html { background: var(--bg-deep); }
+  body {
+    background: var(--bg-deep); color: var(--cream); font-family: var(--body);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    overflow-x: hidden;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background: radial-gradient(120% 80% at 50% 0%, var(--red) 0%, var(--bg) 42%, var(--bg-deep) 100%);
+  }
+  canvas#hearts { position: fixed; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+
+  /* Intro: a folded note */
+  #intro {
+    position: fixed; inset: 0; z-index: 5; display: grid; place-items: center; cursor: pointer;
+    background: radial-gradient(120% 90% at 50% 0%, var(--red) 0%, var(--bg) 45%, var(--bg-deep) 100%);
+    background-color: var(--bg-deep); transition: opacity .7s ease;
+  }
+  #intro.done { opacity: 0; pointer-events: none; }
+  .note {
+    width: min(70vw, 260px); aspect-ratio: .78; position: relative; perspective: 900px;
+    animation: drop .9s cubic-bezier(.2,.9,.3,1.15) both;
+  }
+  .note-base, .note-top {
+    position: absolute; left: 0; right: 0; background: var(--cream); border-radius: 8px;
+    box-shadow: 0 30px 60px -24px rgba(0,0,0,.75);
+  }
+  .note-base { top: 50%; bottom: 0; border-radius: 0 0 8px 8px; display: grid; place-items: center; }
+  .note-top {
+    top: 0; height: 50%; transform-origin: 50% 100%; border-radius: 8px 8px 0 0;
+    display: grid; place-items: center; transition: transform .8s cubic-bezier(.5,0,.3,1);
+    background: linear-gradient(180deg, #fff, var(--cream));
+    backface-visibility: hidden;
+  }
+  .note-top b { font-family: var(--display); font-style: italic; font-weight: 500; color: var(--red); font-size: 1.6rem; }
+  .note-base small { font-size: .62rem; letter-spacing: .3em; padding-left: .3em; text-transform: uppercase; color: #a35a63; }
+  #intro:not(.open) .note { animation: drop .9s cubic-bezier(.2,.9,.3,1.15) both, bob 2.6s ease-in-out .9s infinite; }
+  #intro.open .note-top { transform: rotateX(-180deg); }
+  .intro-hint {
+    position: absolute; bottom: calc(44px + env(safe-area-inset-bottom, 0px)); left: 0; right: 0; text-align: center;
+    font-size: .78rem; letter-spacing: .28em; padding-left: .28em; text-transform: uppercase; color: var(--blush);
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes drop { from { opacity: 0; transform: translateY(-50px) scale(.92); } to { opacity: 1; transform: none; } }
+  @keyframes bob { 0%,100% { transform: translateY(0) rotate(0); } 50% { transform: translateY(-6px) rotate(-1deg); } }
+  @keyframes pulse { 0%,100% { opacity: .45; } 50% { opacity: 1; } }
+
+  .music {
+    position: fixed; z-index: 3; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+    display: flex; align-items: center; gap: 10px; cursor: pointer;
+    font: 600 .85rem var(--body); color: var(--cream); padding: 10px 16px; border-radius: 999px;
+    border: 1.5px solid rgba(255,217,222,.5); background: rgba(61,3,9,.7); backdrop-filter: blur(6px);
+  }
+  .music:focus-visible { outline: 3px solid var(--blush); outline-offset: 3px; }
+  .bars { display: flex; align-items: flex-end; gap: 3px; height: 14px; }
+  .bars i { width: 3px; height: 4px; background: var(--blush); border-radius: 1px; }
+  .music.on .bars i { animation: eq .9s ease-in-out infinite; }
+  .music.on .bars i:nth-child(2) { animation-delay: .2s; } .music.on .bars i:nth-child(3) { animation-delay: .4s; }
+  @keyframes eq { 0%,100% { height: 4px; } 50% { height: 14px; } }
+  @media (prefers-reduced-motion: reduce) { .music.on .bars i { animation: none; height: 10px; } }
+  .cal-row {
+    position: fixed; z-index: 2; left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px));
+    top: calc(14px + env(safe-area-inset-top, 0px)); display: flex; flex-wrap: wrap; gap: 8px; pointer-events: none;
+  }
+  .cal {
+    pointer-events: auto;
+    font: 600 .85rem var(--body); color: var(--cream); text-decoration: none;
+    padding: 9px 16px; border-radius: 999px; border: 1.5px solid rgba(255,217,222,.5);
+    background: rgba(61,3,9,.55); backdrop-filter: blur(6px);
+  }
+  .cal:hover { background: var(--cream); color: var(--red); }
+  .cal:focus-visible { outline: 3px solid var(--blush); outline-offset: 3px; }
+
+  main {
+    position: relative; z-index: 1; max-width: 520px; margin: 0 auto;
+    padding-block: 84px 56px; display: grid; gap: 40px;
+  }
+  header { text-align: center; display: grid; gap: 14px; justify-items: center; }
+  .eyebrow { font-size: .78rem; letter-spacing: .28em; padding-left: .28em; text-transform: uppercase; color: var(--blush); opacity: .85; }
+  h1 {
+    font-family: var(--display); font-style: italic; font-weight: 500; margin: 0;
+    font-size: clamp(2.5rem, 10vw, 3.7rem); line-height: 1.02; text-wrap: balance;
+  }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .chip { font-size: .8rem; color: var(--blush); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; }
+
+  /* Letter */
+  .letter {
+    background: var(--cream); color: #3a0a10; border-radius: 6px; padding: 28px 24px 24px;
+    box-shadow: 0 24px 50px -20px rgba(0,0,0,.7); transform: rotate(-1.2deg); position: relative;
+  }
+  .letter::before {
+    content: ""; position: absolute; top: -10px; left: 50%; width: 84px; height: 22px; margin-left: -42px;
+    background: rgba(255,217,222,.75); transform: rotate(2deg); border-radius: 2px;
+  }
+  .letter p { margin: 0 0 12px; font-size: 1.02rem; line-height: 1.6; font-weight: 400; }
+  .letter .hi { font-family: var(--display); font-style: italic; font-size: 1.35rem; color: var(--red); margin-bottom: 10px; }
+  .letter .sig { font-family: var(--display); font-style: italic; font-size: 1.2rem; color: var(--red); text-align: right; margin: 6px 0 0; }
+
+  /* Timeline */
+  .section-title { font-family: var(--display); font-style: italic; font-weight: 500; font-size: 1.7rem; margin: 0 0 4px; text-align: center; }
+  .section-sub { text-align: center; color: var(--muted); font-size: .9rem; margin: 0 0 22px; }
+  ol.day { list-style: none; margin: 0; padding: 0; position: relative; display: grid; gap: 14px; }
+  ol.day::before {
+    content: ""; position: absolute; left: 27px; top: 28px; bottom: 28px; width: 2px;
+    background: repeating-linear-gradient(180deg, var(--blush) 0 6px, transparent 6px 12px); opacity: .45;
+  }
+  .stop {
+    display: grid; grid-template-columns: 56px 1fr; gap: 14px; align-items: start;
+    animation: rise .7s cubic-bezier(.2,.8,.3,1) both;
+  }
+  .stop:nth-child(2) { animation-delay: .12s; } .stop:nth-child(3) { animation-delay: .24s; } .stop:nth-child(4) { animation-delay: .36s; }
+  .badge {
+    width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; position: relative; z-index: 1;
+    background: var(--cream); color: var(--red); box-shadow: 0 8px 20px -8px rgba(0,0,0,.6);
+  }
+  .badge svg { width: 28px; height: 28px; }
+  .stop-card {
+    min-width: 0; border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px;
+    background: rgba(61,3,9,.45); backdrop-filter: blur(4px); display: grid; gap: 4px;
+    transition: transform .25s ease, border-color .25s ease;
+  }
+  .stop:hover .stop-card { transform: translateX(4px); border-color: rgba(255,217,222,.6); }
+  .time { font-size: .74rem; letter-spacing: .22em; text-transform: uppercase; color: var(--blush); font-variant-numeric: tabular-nums; }
+  .stop h3 { margin: 0; font-family: var(--display); font-style: italic; font-weight: 500; font-size: 1.45rem; line-height: 1.15; }
+  .stop p { margin: 0; color: var(--muted); font-size: .95rem; line-height: 1.5; }
+  .stop.finale .badge { background: var(--red); color: var(--cream); box-shadow: 0 0 0 4px rgba(255,217,222,.25), 0 8px 20px -8px rgba(0,0,0,.6); }
+  .stop.finale .stop-card { border-color: rgba(255,217,222,.55); }
+
+  /* Attire */
+  .attire {
+    border: 1.5px solid var(--blush); border-radius: 18px; padding: 22px 20px; text-align: center;
+    display: grid; gap: 10px; justify-items: center; position: relative; overflow: hidden;
+  }
+  .hanger { width: 64px; height: 44px; color: var(--blush); }
+  .attire .label { font-size: .74rem; letter-spacing: .28em; padding-left: .28em; text-transform: uppercase; color: var(--blush); }
+  .attire h2 { margin: 0; font-family: var(--display); font-style: italic; font-weight: 700; font-size: clamp(1.8rem, 7vw, 2.3rem); line-height: 1.1; text-wrap: balance; }
+  .attire p { margin: 0; color: var(--blush); font-weight: 300; font-size: 1rem; line-height: 1.55; max-width: 34ch; text-wrap: balance; }
+  .rules { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 4px; }
+  .rule { font-size: .82rem; border-radius: 999px; padding: 6px 12px; background: rgba(255,244,238,.1); color: var(--cream); }
+  .rule s { color: var(--muted); }
+
+  .closing { text-align: center; display: grid; gap: 10px; justify-items: center; }
+  .closing p { margin: 0; font-family: var(--display); font-style: italic; font-size: 1.35rem; line-height: 1.35; text-wrap: balance; max-width: 26ch; }
+  .closing .sig { font-size: 1.1rem; color: var(--blush); }
+  .heart-btn {
+    font: 600 1rem var(--body); cursor: pointer; border: 0; border-radius: 999px; padding: 14px 26px;
+    background: var(--cream); color: var(--red); box-shadow: 0 10px 30px -8px rgba(0,0,0,.5);
+    transition: transform .2s ease;
+  }
+  .heart-btn:hover { transform: scale(1.05); }
+  .heart-btn:focus-visible { outline: 3px solid var(--blush); outline-offset: 3px; }
+  .cal-bottom {
+    font: 600 .95rem var(--body); color: var(--cream); text-decoration: none;
+    padding: 12px 22px; border-radius: 999px; border: 1.5px solid rgba(255,217,222,.5);
+    transition: background .2s ease, color .2s ease;
+  }
+  .cal-bottom:hover { background: var(--cream); color: var(--red); }
+  .cal-bottom:focus-visible { outline: 3px solid var(--blush); outline-offset: 3px; }
+  #heartMsg { min-height: 1.4em; color: var(--blush); font-size: .95rem; }
+
+  @keyframes rise { from { opacity: .001; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    #intro { display: none; }
+    .stop, .note { animation: none !important; }
+    .stop-card, .heart-btn { transition: none; }
+  }
+</style>
+
+<canvas id="hearts" aria-hidden="true"></canvas>
+
+<div id="intro" role="button" tabindex="0" aria-label="Open the plan">
+  <div class="note">
+    <div class="note-base"><small>Tuesday · Nov 17</small></div>
+    <div class="note-top"><b>the plan ♥</b></div>
+  </div>
+  <span class="intro-hint">Tap to open</span>
+</div>
+
+<div class="cal-row">
+  <a class="cal" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=Our%20Day%20%E2%99%A5&amp;dates=20261117T123000/20261117T220000&amp;ctz=America/New_York&amp;details=Lunch%20%E2%86%92%20Aquarium%20%E2%86%92%20Pottery%20class%20%E2%86%92%20Dinner.%20Dress%20code%3A%20your%20favorite%20outfit." target="_blank" rel="noopener">＋ Add to calendar again</a>
+</div>
+
+<main>
+  <header>
+    <span class="eyebrow">Tuesday · November 17</span>
+    <h1>Here's the plan.</h1>
+    <div class="chips" aria-label="Four stops">
+      <span class="chip">Lunch</span><span class="chip">Aquarium</span><span class="chip">Pottery</span><span class="chip">Dinner</span>
+    </div>
+  </header>
+
+  <article class="letter">
+    <p class="hi">Hey you,</p>
+    <p>You said yes, so now you get to see what I've been planning. I wanted a whole day with you, start to finish. No rushing, no phones out every five minutes. Just us.</p>
+    <p>All you have to do is show up looking as gorgeous as you always do. I've got everything else.</p>
+    <p class="sig">— Hitolini</p>
+  </article>
+
+  <section aria-labelledby="dayTitle">
+    <h2 class="section-title" id="dayTitle">The day</h2>
+    <p class="section-sub">Four stops. Each one is for us.</p>
+    <ol class="day">
+      <li class="stop">
+        <div class="badge" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10 4v9a3 3 0 0 1-3 3v0M10 4v24M6 4v8M14 4v8a4 4 0 0 1-4 4"/><path d="M22 28V4c3 1 5 5 5 10s-2 6-5 6"/></svg>
+        </div>
+        <div class="stop-card">
+          <span class="time">12:30 PM · Stop 1</span>
+          <h3>Lunch</h3>
+          <p>We start easy. Good food, catching up, and you telling me everything I already know but still want to hear.</p>
+        </div>
+      </li>
+      <li class="stop">
+        <div class="badge" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 22c2-7 9-11 16-10 4 .5 6 3 7 6l2 1-2 1c-3 1-7 0-10-1-4-1-9 0-13 4"/><path d="M5 22l-3 2 4 1 1 3 1-4"/><path d="M14 12.6l1.5-4 3 3.6"/><path d="M17 19l-1.5 3.5"/><circle cx="24" cy="16" r="1.1" fill="currentColor"/></svg>
+        </div>
+        <div class="stop-card">
+          <span class="time">2:00 PM · Stop 2</span>
+          <h3>The Aquarium</h3>
+          <p>Sharks, jellyfish, the big tank glow, and most importantly, dolphins.</p>
+        </div>
+      </li>
+      <li class="stop">
+        <div class="badge" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5h8M13 5c0 3-6 5-6 12 0 6 4 10 9 10s9-4 9-10c0-7-6-9-6-12"/><path d="M8.5 18h15"/></svg>
+        </div>
+        <div class="stop-card">
+          <span class="time">4:30 PM · Stop 3</span>
+          <h3>Pottery Class</h3>
+          <p>We're making something together. Sleeves up, it gets a little messy, and that's half the fun.</p>
+        </div>
+      </li>
+      <li class="stop finale">
+        <div class="badge" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 4c-2 3-2 5 0 7 2-2 2-4 0-7z"/><rect x="12" y="13" width="8" height="15" rx="1.5"/><path d="M16 11v2"/></svg>
+        </div>
+        <div class="stop-card">
+          <span class="time">7:30 PM · Final stop</span>
+          <h3>Dinner</h3>
+          <p>We end the night slow. Candlelight, good food, and the best company I know.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="attire" aria-labelledby="attireTitle">
+    <svg class="hanger" viewBox="0 0 64 44" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M32 14a5 5 0 1 1 5-5"/><path d="M32 14v4L5 36a3 3 0 0 0 2 5h50a3 3 0 0 0 2-5L32 18"/></svg>
+    <span class="label">Dress code</span>
+    <h2 id="attireTitle">Your favorite outfit.</h2>
+    <p>Nothing fancy. Put on the one you love most and feel best in. That's the whole dress code.</p>
+    <div class="rules">
+      <span class="rule"><s>Fancy</s></span>
+      <span class="rule">Comfy shoes</span>
+      <span class="rule">Just you</span>
+    </div>
+  </section>
+
+  <section class="closing">
+    <p>I can't wait to spend the whole day with you.</p>
+    <span class="sig">— Hitolini</span>
+    <button class="heart-btn" id="heartBtn" type="button">I'm ready ♥</button>
+    <small class="ready-note">Tap it and I'll get your answer.</small>
+    <span id="heartMsg" aria-live="polite"></span>
+  </section>
+</main>
+
+<audio id="song" loop preload="auto" playsinline></audio>
+<button class="music" id="music" type="button" aria-label="Play our song" aria-pressed="false"><span class="bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="mlabel">Play our song</span></button>
+
+<script>
+(() => {
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const intro = document.getElementById('intro');
+  function openIntro() {
+    if (intro.classList.contains('open')) return;
+    intro.classList.add('open');
+    playSong();
+    setTimeout(() => { intro.classList.add('done'); burst(26); }, 900);
+  }
+
+  // Song: last 15 seconds of The Birds Pt. 1, on repeat
+  const song = document.getElementById('song');
+  const musicBtn = document.getElementById('music');
+  const mlabel = musicBtn.querySelector('.mlabel');
+  song.volume = 0.85;
+  fetch('song.mp3').then(r => { if (!r.ok) throw new Error(r.status); return r.blob(); })
+    .then(b => { if (song.paused) { song.src = URL.createObjectURL(b); song.load(); } })
+    .catch(() => {});
+  function setUI(on) {
+    musicBtn.classList.toggle('on', on);
+    musicBtn.setAttribute('aria-pressed', on);
+    musicBtn.setAttribute('aria-label', on ? 'Pause our song' : 'Play our song');
+    mlabel.textContent = on ? 'The Birds Pt. 1' : 'Play our song';
+  }
+  function playSong() {
+    if (!song.src) song.src = 'song.mp3';
+    const p = song.play();
+    if (p) p.catch(() => setUI(false));
+  }
+  musicBtn.addEventListener('click', () => { if (song.paused) playSong(); else song.pause(); });
+  song.addEventListener('pause', () => setUI(false));
+  song.addEventListener('play', () => setUI(true));
+  intro.addEventListener('click', openIntro);
+  intro.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openIntro(); } });
+
+  // Floating hearts
+  const c = document.getElementById('hearts'), ctx = c.getContext('2d');
+  let W, H, hearts = [];
+  function size() { const d = devicePixelRatio || 1; W = innerWidth; H = innerHeight; c.width = W * d; c.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0); }
+  size(); addEventListener('resize', size);
+  function spawn(fromBottom) {
+    return { x: Math.random() * W, y: fromBottom ? H + 20 : Math.random() * H, s: 6 + Math.random() * 10,
+             v: .25 + Math.random() * .5, a: .12 + Math.random() * .25, w: Math.random() * 6.28 };
+  }
+  function burst(n) { for (let i = 0; i < n; i++) { const h = spawn(true); h.y = H * .6 + Math.random() * H * .4; h.v *= 3; h.a = .5; hearts.push(h); } }
+  for (let i = 0; i < 18; i++) hearts.push(spawn(false));
+  function heart(x, y, s, a) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(s / 16, s / 16); ctx.globalAlpha = a; ctx.fillStyle = '#ffd9de';
+    ctx.beginPath(); ctx.moveTo(0, 5); ctx.bezierCurveTo(-8, -1, -6, -9, 0, -4); ctx.bezierCurveTo(6, -9, 8, -1, 0, 5); ctx.fill(); ctx.restore();
+  }
+  function tick() {
+    ctx.clearRect(0, 0, W, H);
+    hearts.forEach(h => { h.y -= h.v; h.w += .02; heart(h.x + Math.sin(h.w) * 8, h.y, h.s, h.a); });
+    hearts = hearts.filter(h => h.y > -30);
+    while (hearts.length < 18) hearts.push(spawn(true));
+    requestAnimationFrame(tick);
+  }
+  if (!reduce) tick(); else hearts.forEach(h => heart(h.x, h.y, h.s, h.a));
+
+  const lines = ["See you Tuesday ♥", "Can't wait.", "Wear the favorite one ;)", "It's a date."];
+  let i = 0;
+  document.getElementById('heartBtn').addEventListener('click', () => {
+    document.getElementById('heartMsg').textContent = lines[i++ % lines.length];
+    if (!reduce) burst(18);
+  });
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,393 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>LTGPEAK Pricing Calculator</title>
+<style>
+  :root{
+    --paper:#f6f3ee;
+    --panel:#ffffff;
+    --ink:#1b2235;
+    --ink-soft:#5b6478;
+    --line:#e2ddd2;
+    --navy:#1c2c52;
+    --navy-soft:#33456f;
+    --red:#ab2328;
+    --red-tint:#f7e6e6;
+    --green:#1f7a4d;
+    --green-tint:#e4f2ea;
+    --amber:#9a6b0a;
+    --amber-tint:#f7edd9;
+    --critical:#c9500c;
+    --critical-tint:#fbe6d8;
+    --focus:#1c2c52;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#10182a;
+      --panel:#182238;
+      --ink:#e9ecf2;
+      --ink-soft:#9aa3b8;
+      --line:#2a3552;
+      --navy:#c7d2ee;
+      --navy-soft:#8fa0cc;
+      --red:#e2585c;
+      --red-tint:#3a2226;
+      --green:#4fae7c;
+      --green-tint:#173325;
+      --amber:#e0ab3e;
+      --amber-tint:#372c14;
+      --critical:#e8792f;
+      --critical-tint:#3a2413;
+      --focus:#c7d2ee;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#10182a;
+    --panel:#182238;
+    --ink:#e9ecf2;
+    --ink-soft:#9aa3b8;
+    --line:#2a3552;
+    --navy:#c7d2ee;
+    --navy-soft:#8fa0cc;
+    --red:#e2585c;
+    --red-tint:#3a2226;
+    --green:#4fae7c;
+    --green-tint:#173325;
+    --amber:#e0ab3e;
+    --amber-tint:#372c14;
+    --critical:#e8792f;
+    --critical-tint:#3a2413;
+    --focus:#c7d2ee;
+  }
+
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'Manrope',system-ui,-apple-system,sans-serif;
+    padding:28px 20px 60px;
+  }
+  h1,h2,h3,.num{ font-family:'Space Grotesk',system-ui,sans-serif; }
+  .num{ font-variant-numeric: tabular-nums; }
+
+  .wrap{ max-width:1100px; margin:0 auto; }
+
+  header{ display:flex; align-items:center; gap:14px; margin-bottom:6px; }
+  .logo{ display:flex; align-items:center; gap:8px; color:var(--navy); font-weight:700; font-size:15px; letter-spacing:0.04em; }
+  header h1{ font-size:clamp(22px,3.2vw,30px); margin:14px 0 4px; color:var(--navy); font-weight:700; text-wrap:balance; }
+  header p{ margin:0 0 28px; color:var(--ink-soft); font-size:15px; max-width:62ch; line-height:1.5; }
+
+  section{ margin-bottom:28px; }
+  .section-label{ font-size:12.5px; font-weight:700; letter-spacing:0.09em; text-transform:uppercase; color:var(--ink-soft); margin:0 0 12px; }
+
+  .panel{ background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:22px 24px; }
+
+  .assump-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:18px 22px; }
+  .field label{ display:block; font-size:13px; font-weight:700; color:var(--ink-soft); margin-bottom:6px; }
+  .field .hint{ display:block; font-size:11.5px; font-weight:500; color:var(--ink-soft); opacity:0.8; margin-top:4px; }
+  .field .inputbox{ display:flex; align-items:center; border:1.5px solid var(--line); border-radius:7px; background:var(--paper); overflow:hidden; }
+  .field .inputbox .prefix{ padding:9px 4px 9px 12px; color:var(--ink-soft); font-weight:700; font-size:14px; }
+  .field .inputbox .suffix{ padding:9px 12px 9px 4px; color:var(--ink-soft); font-weight:700; font-size:13px; }
+  .field input{
+    width:100%; border:none; background:transparent; outline:none; padding:9px 6px;
+    font-family:'Space Grotesk',sans-serif; font-size:16px; font-weight:700; color:var(--ink);
+  }
+  .field .inputbox:focus-within{ border-color:var(--focus); }
+
+  .summary-row{ display:flex; gap:16px; margin-top:20px; flex-wrap:wrap; }
+  .stat{ flex:1; min-width:200px; background:var(--navy); color:var(--paper); border-radius:10px; padding:18px 22px; }
+  .stat .label{ font-size:12px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; opacity:0.75; }
+  .stat .value{ font-size:32px; font-weight:700; margin-top:6px; }
+  .stat .sub{ font-size:12.5px; opacity:0.7; margin-top:4px; }
+  .stat .value input{
+    width:90px; border:none; border-bottom:2px solid rgba(255,255,255,0.4); background:transparent; outline:none;
+    font-family:'Space Grotesk',sans-serif; font-size:32px; font-weight:700; color:inherit; padding:0 0 2px;
+  }
+  .stat .value input:focus{ border-bottom-color:#fff; }
+
+  .cards{ display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:16px; }
+  .card{ background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:20px 22px; display:flex; flex-direction:column; gap:12px; }
+  .card h3{ margin:0; font-size:19px; color:var(--navy); }
+  .row{ display:flex; justify-content:space-between; align-items:baseline; font-size:14px; }
+  .row .k{ color:var(--ink-soft); font-weight:600; }
+  .row .v{ font-weight:700; }
+  .row.total{ border-top:1px dashed var(--line); padding-top:8px; margin-top:2px; font-size:15px; }
+  .row.total .v{ font-size:17px; }
+
+  .mini-fields{ display:flex; gap:10px; }
+  .mini-fields .field{ flex:1; }
+  .mini-fields .field label{ font-size:11.5px; }
+  .mini-fields input{ font-size:14px; padding:7px 6px; }
+  .mini-fields .inputbox .prefix,.mini-fields .inputbox .suffix{ padding-top:7px; padding-bottom:7px; font-size:12.5px; }
+
+  .meter{ position:relative; height:10px; border-radius:5px; background:var(--green-tint); overflow:visible; margin-top:2px; }
+  .meter .fill{ position:absolute; left:0; top:0; height:100%; border-radius:5px 0 0 5px; background:var(--green); }
+  .meter .fill.thin{ background:var(--amber); }
+  .meter .fill.critical{ background:var(--critical); }
+  .meter .target{ position:absolute; top:-4px; bottom:-4px; width:2px; background:var(--ink); opacity:0.55; }
+  .meter-caption{ display:flex; justify-content:space-between; font-size:11px; color:var(--ink-soft); margin-top:5px; }
+
+  .chip{ display:inline-flex; align-items:center; gap:6px; font-size:12px; font-weight:700; letter-spacing:0.03em; padding:5px 10px; border-radius:20px; width:fit-content; }
+  .chip.healthy{ background:var(--green-tint); color:var(--green); }
+  .chip.thin{ background:var(--amber-tint); color:var(--amber); }
+  .chip.critical{ background:var(--critical-tint); color:var(--critical); }
+  .chip::before{ content:''; width:7px; height:7px; border-radius:50%; background:currentColor; }
+
+  footer{ margin-top:32px; font-size:12.5px; color:var(--ink-soft); line-height:1.6; max-width:70ch; }
+  footer strong{ color:var(--ink); }
+
+  @media (max-width:520px){
+    body{ padding:20px 14px 48px; }
+    .panel{ padding:18px; }
+  }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+<div class="wrap">
+  <header>
+  </header>
+  <div class="logo">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M3 16 L9 6 L13 13 L16 8 L21 16" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 19 H21" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/></svg>
+    LTGPEAK
+  </div>
+  <h1>Pricing &amp; profit calculator</h1>
+  <p>Plug in what the business actually spends each month, what your time is worth, and how many sites you build — this shows what each package really needs to charge to hit your margin, and whether the mockup's prices hold up.</p>
+
+  <section>
+    <div class="section-label">Monthly overhead</div>
+    <div class="panel">
+      <div class="assump-grid">
+        <div class="field">
+          <label for="basePlan">Claude base plan</label>
+          <div class="inputbox"><span class="prefix">$</span><input type="number" id="basePlan" value="20" min="0" step="1"><span class="suffix">/mo</span></div>
+        </div>
+        <div class="field">
+          <label for="maxPlan">Claude Max plan</label>
+          <div class="inputbox"><span class="prefix">$</span><input type="number" id="maxPlan" value="100" min="0" step="1"><span class="suffix">/mo</span></div>
+        </div>
+        <div class="field">
+          <label for="devCost">Devs / contractors</label>
+          <div class="inputbox"><span class="prefix">$</span><input type="number" id="devCost" value="150" min="0" step="10"><span class="suffix">/mo</span></div>
+        </div>
+        <div class="field">
+          <label for="serverCost">Servers &amp; hosting</label>
+          <div class="inputbox"><span class="prefix">$</span><input type="number" id="serverCost" value="25" min="0" step="5"><span class="suffix">/mo</span></div>
+        </div>
+        <div class="field">
+          <label for="otherCost">Other tools</label>
+          <div class="inputbox"><span class="prefix">$</span><input type="number" id="otherCost" value="0" min="0" step="5"><span class="suffix">/mo</span></div>
+          <span class="hint">Canva, domains, Calendly, etc.</span>
+        </div>
+        <div class="field">
+          <label for="sitesPerMonth">Sites you'll build</label>
+          <div class="inputbox"><input type="number" id="sitesPerMonth" value="6" min="1" step="1"><span class="suffix">/mo</span></div>
+          <span class="hint">Spreads overhead across this many jobs</span>
+        </div>
+      </div>
+
+      <div class="summary-row">
+        <div class="stat">
+          <div class="label">Total overhead</div>
+          <div class="value num" id="outTotalOverhead">$0</div>
+          <div class="sub">per month, before anyone gets paid</div>
+        </div>
+        <div class="stat">
+          <div class="label">Overhead per site</div>
+          <div class="value num" id="outOverheadPerSite">$0</div>
+          <div class="sub" id="outOverheadNote">split across sites/month</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">Your time</div>
+    <div class="panel">
+      <div class="assump-grid" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
+        <div class="field">
+          <label for="hourlyRate">Target hourly pay</label>
+          <div class="inputbox"><span class="prefix">$</span><input type="number" id="hourlyRate" value="35" min="0" step="1"><span class="suffix">/hr</span></div>
+          <span class="hint">What an hour of building is worth to you</span>
+        </div>
+        <div class="field">
+          <label for="marginTarget">Target profit margin</label>
+          <div class="inputbox"><input type="number" id="marginTarget" value="45" min="0" max="90" step="1"><span class="suffix">%</span></div>
+          <span class="hint">On top of cost, before tax</span>
+        </div>
+      </div>
+      <div class="summary-row">
+        <div class="stat" style="background:var(--red);">
+          <div class="label">Out-of-scope rate</div>
+          <div class="value num">$<input type="number" id="outOfScopeRate" value="45" min="0" step="1">/hr</div>
+          <div class="sub">for edits or features beyond a package — bill this instead of re-quoting</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-label">Website packages</div>
+    <div class="cards" id="cardsWrapSite"></div>
+  </section>
+
+  <section>
+    <div class="section-label">Add-on &amp; standalone services</div>
+    <div class="panel" style="margin-bottom:16px; padding:14px 20px; display:flex; align-items:center; gap:10px;">
+      <span class="chip healthy" style="position:static;">note</span>
+      <span style="font-size:13.5px; color:var(--ink-soft);">Ad spend itself always goes straight from the client to Meta/Google — the price below is your management fee only.</span>
+    </div>
+    <div class="cards" id="cardsWrapAddon"></div>
+  </section>
+
+  <footer>
+    <strong>How this works:</strong> overhead per site = total monthly overhead ÷ sites/month. Break-even cost = overhead per site + (hours × your hourly rate). Break-even price = cost ÷ (1 − target margin), so that margin is what's left once a site sells at that price. The bar under each card shows how much of your current price covers cost (colored) versus profit (empty) — the tick mark is where your target-margin price falls. Monthly items (like ad management) use the same per-unit overhead share as a one-time site — each is "one job" for the month.
+  </footer>
+</div>
+
+<script>
+(function(){
+  var TYPES = [
+    {key:'landing',   name:'Landing Page',       hours:2,  price:325,  group:'site'},
+    {key:'starter',   name:'Starter / Portfolio',hours:3,  price:450,  group:'site'},
+    {key:'showcase',  name:'Showcase',           hours:5,  price:850,  group:'site'},
+    {key:'booking',   name:'Booking + Backend',  hours:10, price:1500, group:'site'},
+    {key:'ecommerce', name:'E-commerce',         hours:14, price:2250, group:'site'},
+    {key:'premium',   name:'Premium / Custom',   hours:20, price:2500, group:'site'},
+
+    {key:'adsetup',   name:'Social Ads — Setup',        hours:2, price:225, group:'addon'},
+    {key:'adsmgmt',   name:'Social Ads — Management /mo',hours:3, price:300, group:'addon'},
+    {key:'addbooking',name:'Add Booking (existing site)',hours:6, price:600, group:'addon'},
+    {key:'addbackend',name:'Add Backend/Dashboard (existing site)',hours:5, price:500, group:'addon'},
+    {key:'seosetup',  name:'SEO Setup',                 hours:2, price:250, group:'addon'},
+  ];
+
+  var STORE_KEY = 'ltgpeak_pricing_calc_v1';
+
+  function loadStored(){
+    try{
+      var raw = localStorage.getItem(STORE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    }catch(e){ return null; }
+  }
+  function saveStored(state){
+    try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
+  }
+
+  var stored = loadStored();
+  if(stored){
+    ['basePlan','maxPlan','devCost','serverCost','otherCost','sitesPerMonth','hourlyRate','marginTarget','outOfScopeRate'].forEach(function(id){
+      if(stored[id] !== undefined) document.getElementById(id).value = stored[id];
+    });
+    if(stored.types){
+      TYPES.forEach(function(t){
+        if(stored.types[t.key]){
+          t.hours = stored.types[t.key].hours;
+          t.price = stored.types[t.key].price;
+        }
+      });
+    }
+  }
+
+  var cardsWrapSite = document.getElementById('cardsWrapSite');
+  var cardsWrapAddon = document.getElementById('cardsWrapAddon');
+
+  function fmt(n){
+    n = Math.round(n);
+    return '$' + n.toLocaleString('en-US');
+  }
+
+  function buildCard(t){
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML =
+      '<h3>'+t.name+'</h3>' +
+      '<div class="mini-fields">' +
+        '<div class="field"><label>Hours</label><div class="inputbox"><input type="number" class="hoursInput" min="0" step="0.5" value="'+t.hours+'"><span class="suffix">hr</span></div></div>' +
+        '<div class="field"><label>Your price</label><div class="inputbox"><span class="prefix">$</span><input type="number" class="priceInput" min="0" step="25" value="'+t.price+'"></div></div>' +
+      '</div>' +
+      '<div class="row"><span class="k">Labor cost</span><span class="v num laborOut">$0</span></div>' +
+      '<div class="row"><span class="k">+ Overhead share</span><span class="v num overheadOut">$0</span></div>' +
+      '<div class="row total"><span class="k">Break-even cost</span><span class="v num costOut">$0</span></div>' +
+      '<div class="row"><span class="k">Target price ('+ '<span class="marginLabel">45</span>% margin)</span><span class="v num targetOut">$0</span></div>' +
+      '<div class="meter"><div class="fill" style="width:0%"></div><div class="target" style="left:0%"></div></div>' +
+      '<div class="meter-caption"><span>cost covered</span><span>profit</span></div>' +
+      '<div class="chip healthy" style="margin-top:2px;"><span class="chipText">healthy margin</span></div>';
+    card.dataset.key = t.key;
+    (t.group === 'addon' ? cardsWrapAddon : cardsWrapSite).appendChild(card);
+    return card;
+  }
+
+  var cardEls = {};
+  TYPES.forEach(function(t){ cardEls[t.key] = buildCard(t); });
+
+  function recalc(){
+    var base = parseFloat(document.getElementById('basePlan').value)||0;
+    var max = parseFloat(document.getElementById('maxPlan').value)||0;
+    var dev = parseFloat(document.getElementById('devCost').value)||0;
+    var server = parseFloat(document.getElementById('serverCost').value)||0;
+    var other = parseFloat(document.getElementById('otherCost').value)||0;
+    var sites = Math.max(parseFloat(document.getElementById('sitesPerMonth').value)||1, 1);
+    var rate = parseFloat(document.getElementById('hourlyRate').value)||0;
+    var margin = Math.min(Math.max(parseFloat(document.getElementById('marginTarget').value)||0, 0), 95);
+    var outOfScope = parseFloat(document.getElementById('outOfScopeRate').value)||0;
+
+    var totalOverhead = base+max+dev+server+other;
+    var overheadPerSite = totalOverhead/sites;
+
+    document.getElementById('outTotalOverhead').textContent = fmt(totalOverhead);
+    document.getElementById('outOverheadPerSite').textContent = fmt(overheadPerSite);
+    document.getElementById('outOverheadNote').textContent = 'split across '+sites+' site'+(sites==1?'':'s')+'/month';
+
+    var stateToSave = {basePlan:base,maxPlan:max,devCost:dev,serverCost:server,otherCost:other,sitesPerMonth:sites,hourlyRate:rate,marginTarget:margin,outOfScopeRate:outOfScope,types:{}};
+
+    TYPES.forEach(function(t){
+      var card = cardEls[t.key];
+      var hours = parseFloat(card.querySelector('.hoursInput').value)||0;
+      var price = parseFloat(card.querySelector('.priceInput').value)||0;
+      t.hours = hours; t.price = price;
+      stateToSave.types[t.key] = {hours:hours, price:price};
+
+      var labor = hours*rate;
+      var cost = labor+overheadPerSite;
+      var targetPrice = margin < 100 ? cost/(1-margin/100) : cost;
+
+      card.querySelector('.laborOut').textContent = fmt(labor);
+      card.querySelector('.overheadOut').textContent = fmt(overheadPerSite);
+      card.querySelector('.costOut').textContent = fmt(cost);
+      card.querySelector('.targetOut').textContent = fmt(targetPrice);
+      card.querySelector('.marginLabel').textContent = margin;
+
+      var status, currentMargin = price>0 ? (price-cost)/price*100 : -999;
+      if(price < cost) status = 'critical';
+      else if(currentMargin < margin) status = 'thin';
+      else status = 'healthy';
+
+      var fill = card.querySelector('.fill');
+      var targetTick = card.querySelector('.target');
+      var scaleMax = Math.max(price, targetPrice, cost, 1) * 1.05;
+      var costPct = Math.min(cost/scaleMax*100, 100);
+      var targetPct = Math.min(targetPrice/scaleMax*100, 100);
+      fill.style.width = costPct+'%';
+      fill.className = 'fill' + (status==='critical'?' critical':status==='thin'?' thin':'');
+      targetTick.style.left = targetPct+'%';
+
+      var chip = card.querySelector('.chip');
+      var chipText = card.querySelector('.chipText');
+      chip.className = 'chip '+status;
+      if(status==='critical'){ chipText.textContent = 'losing money at this price'; }
+      else if(status==='thin'){ chipText.textContent = 'below target margin'; }
+      else{ chipText.textContent = 'healthy margin ('+Math.round(currentMargin)+'%)'; }
+    });
+
+    saveStored(stateToSave);
+  }
+
+  document.querySelectorAll('input').forEach(function(inp){
+    inp.addEventListener('input', recalc);
+  });
+
+  recalc();
+})();
+</script>
+
+</body></html>

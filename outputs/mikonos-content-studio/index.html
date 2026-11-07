@@ -1,0 +1,469 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Mikonos Content Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,600;6..96,800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: a broadcast-control-room feel — today's drop as the big lit screen, the queue and archive as a contact sheet below. Aegean night + flame gold. */
+:root{
+  --bg:#f3f1ec; --panel:#ffffff; --ink:#0d1b33; --muted:#5b6578; --line:#dcd8cf;
+  --aegean:#1b4f9c; --flame:#c2620f; --gold:#8a611a; --ok:#1f8a5b; --warn:#b5651d;
+  --glow:rgba(217,116,28,.18);
+  --display:'Bodoni Moda','Didot','Noto Serif',Georgia,serif;
+  --body:'Manrope','Inter',system-ui,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#071226; --panel:#0e1d38; --ink:#eef2f8; --muted:#9aa7bf; --line:#1f3254;
+  --aegean:#6ea2ff; --flame:#ff9a3d; --gold:#f2c46d; --ok:#4fd197; --warn:#ffb15c;
+  --glow:rgba(255,140,40,.22); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#071226; --panel:#0e1d38; --ink:#eef2f8; --muted:#9aa7bf; --line:#1f3254;
+  --aegean:#6ea2ff; --flame:#ff9a3d; --gold:#f2c46d; --ok:#4fd197; --warn:#ffb15c;
+  --glow:rgba(255,140,40,.22); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:clamp(16px,4vw,40px);padding-block:28px 64px}
+h1,h2,h3{text-wrap:balance;margin:0}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--flame);outline-offset:2px}
+
+/* header */
+.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;padding-bottom:22px;border-bottom:1px solid var(--line)}
+.brand .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.18em;color:var(--gold);text-transform:uppercase}
+.brand h1{font-family:var(--display);font-weight:800;font-size:clamp(34px,6vw,58px);letter-spacing:.06em;line-height:1}
+.brand h1 span{color:var(--flame)}
+.stats{display:flex;gap:10px;flex-wrap:wrap}
+.stat{border:1px solid var(--line);background:var(--panel);border-radius:12px;padding:10px 14px;min-width:108px}
+.stat b{display:block;font-family:var(--display);font-size:28px;line-height:1;font-variant-numeric:tabular-nums}
+.stat small{color:var(--muted);font-size:12px;letter-spacing:.04em}
+.stat.fire b{color:var(--flame)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:clamp(20px,4vw,48px);margin-top:30px;align-items:start}
+@media (max-width:820px){.hero{grid-template-columns:1fr}}
+.screen{position:relative;border-radius:18px;overflow:hidden;aspect-ratio:4/5;max-width:100%;background:linear-gradient(160deg,#0b2147,#050f24);box-shadow:0 0 0 1px var(--line),0 30px 80px -30px var(--glow)}
+.screen::after{content:"";position:absolute;inset:-30%;background:radial-gradient(circle at 50% 60%,var(--glow),transparent 60%);animation:flicker 3.2s ease-in-out infinite;pointer-events:none;mix-blend-mode:screen}
+@keyframes flicker{0%,100%{opacity:.55}45%{opacity:.9}70%{opacity:.65}}
+@media (prefers-reduced-motion:reduce){.screen::after{animation:none}}
+.screen img{width:100%;height:100%;object-fit:cover;display:block;position:relative;z-index:1}
+.screen .noimg{position:absolute;inset:0;z-index:1;display:grid;place-items:center;text-align:center;color:#eef2f8;padding:30px}
+.screen .noimg strong{font-family:var(--display);font-size:30px;display:block;margin-bottom:8px}
+.screen .noimg p{color:#b9c4da;margin:0}
+.live{position:absolute;top:14px;left:14px;z-index:2;background:rgba(5,15,36,.75);color:#fff;font-family:var(--mono);font-size:11px;letter-spacing:.14em;padding:6px 10px;border-radius:999px;display:flex;gap:7px;align-items:center}
+.live i{width:7px;height:7px;border-radius:50%;background:#ff7a1a;box-shadow:0 0 10px #ff7a1a}
+
+.meta{min-width:0;display:flex;flex-direction:column;gap:18px}
+.kicker{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pill{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:5px 10px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.pill.ready{color:var(--warn);border-color:currentColor}
+.pill.posted{color:var(--ok);border-color:currentColor}
+.pill.idea{color:var(--aegean);border-color:currentColor}
+.meta h2{font-family:var(--display);font-size:clamp(30px,4.4vw,46px);line-height:1.05;font-weight:800}
+.why{color:var(--muted);max-width:60ch;margin:0}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.box .lbl{display:flex;justify-content:space-between;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.box p{margin:0;white-space:pre-wrap;overflow-wrap:anywhere}
+.tags{color:var(--aegean);font-weight:600}
+.copy{background:none;border:1px solid var(--line);color:var(--ink);border-radius:8px;padding:4px 10px;font-size:12px;letter-spacing:0;text-transform:none;font-family:var(--body)}
+.copy:hover{border-color:var(--flame);color:var(--flame)}
+.duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.actions{display:flex;flex-wrap:wrap;gap:10px}
+.btn{border:0;border-radius:12px;padding:12px 18px;font-weight:700;letter-spacing:.01em;display:inline-flex;align-items:center;gap:8px;transition:transform .15s ease,box-shadow .15s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:var(--flame);color:#1a0b00;box-shadow:0 10px 30px -10px var(--flame)}
+.btn.ghost{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.btn.done{background:var(--ok);color:#03150c}
+.btn[disabled]{opacity:.5;cursor:not-allowed;transform:none}
+.note{font-size:13px;color:var(--muted);min-height:1.2em}
+
+/* sections */
+section{margin-top:56px}
+.sechead{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:16px}
+.sechead h3{font-family:var(--display);font-size:28px;font-weight:800}
+.sechead p{margin:0;color:var(--muted);max-width:60ch}
+
+/* brainstorm */
+.lab{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;gap:14px}
+.labrow{display:flex;flex-wrap:wrap;gap:10px}
+.labrow input{flex:1 1 260px;min-width:0;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:12px 14px;font:inherit}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(150px,100%),1fr));gap:12px}
+.ph{position:relative;border-radius:14px;overflow:hidden;background:var(--bg);border:1px solid var(--line)}
+.ph img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}
+.ph .cap{padding:8px 10px;font-size:13px;font-weight:700;display:flex;justify-content:space-between;gap:8px}
+.ph .cap small{font-family:var(--mono);font-size:11px;color:var(--muted);font-weight:500}
+.drop{border:2px dashed var(--line);border-radius:16px;padding:18px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.drop.over{border-color:var(--flame);background:var(--glow)}
+.drop input[type=file]{flex:1 1 220px;min-width:0;font:inherit;color:var(--muted)}
+.btn.now{background:var(--aegean);color:#fff}
+.ideas{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr));gap:12px}
+.idea{border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px;background:var(--bg);animation:rise .35s ease both}
+@keyframes rise{from{transform:translateY(6px);opacity:.4}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.idea{animation:none}}
+.idea b{font-size:16px}
+.idea .fmt{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--flame);text-transform:uppercase}
+.idea p{margin:0;color:var(--muted);font-size:14px}
+.idea .hook{color:var(--ink);font-style:italic}
+.idea button{align-self:flex-start;margin-top:auto}
+
+/* calendar strip */
+.strip{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory}
+.day{flex:0 0 220px;scroll-snap-align:start;border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--panel)}
+.day .d{font-family:var(--mono);font-size:12px;color:var(--gold);letter-spacing:.08em}
+.day b{display:block;margin:6px 0 4px}
+.day p{margin:0;font-size:13px;color:var(--muted)}
+.day .unv{font-size:11px;color:var(--warn);margin-top:6px}
+
+/* archive */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-align:left;padding:0;color:var(--ink);display:flex;flex-direction:column}
+.card:hover{border-color:var(--flame)}
+.card .th{aspect-ratio:4/5;background:linear-gradient(160deg,#1b4f9c,#0b2147);display:grid;place-items:center;color:#fff;font-family:var(--display);font-size:20px;padding:12px;text-align:center}
+.card .th img{width:100%;height:100%;object-fit:cover}
+.card .cb{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.card .cb small{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.card .cb span{font-weight:700;font-size:14px;line-height:1.3}
+.empty{border:1px dashed var(--line);border-radius:14px;padding:28px;color:var(--muted);text-align:center}
+footer{margin-top:60px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:18px}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="eyebrow">Ewing, NJ · since 2011 · daily drop</div>
+      <h1>MIKONOS <span>STUDIO</span></h1>
+    </div>
+    <div class="stats" aria-live="polite">
+      <div class="stat fire"><b id="sStreak">0</b><small>day streak</small></div>
+      <div class="stat"><b id="sPosted">0</b><small>posted</small></div>
+      <div class="stat"><b id="sReady">0</b><small>ready to post</small></div>
+      <div class="stat"><b id="sIdeas">0</b><small>ideas queued</small></div>
+    </div>
+  </header>
+
+  <div class="hero" id="hero">
+    <div class="screen" id="screen">
+      <div class="live"><i></i><span id="liveLabel">TODAY'S DROP</span></div>
+      <div class="noimg" id="noimg"><div><strong>Today's flyer lands here</strong><p>The daily bot designs a new post every morning at 7:56 am. Loading the studio…</p></div></div>
+    </div>
+    <div class="meta">
+      <div class="kicker"><span class="pill" id="fDate">—</span><span class="pill" id="fKind">—</span><span class="pill" id="fStatus">—</span><span class="pill" id="fTime">—</span></div>
+      <h2 id="fTitle">Waiting for the first drop</h2>
+      <p class="why" id="fWhy">Each post comes with the flyer, a caption, hashtags, the best time to post, and a Story and Reel idea to go with it.</p>
+      <div class="box"><div class="lbl">Caption <button class="copy" data-copy="fCaption">Copy</button></div><p id="fCaption">—</p></div>
+      <div class="box"><div class="lbl">Hashtags <button class="copy" data-copy="fTags">Copy</button></div><p class="tags" id="fTags">—</p></div>
+      <div class="duo">
+        <div class="box"><div class="lbl">Story to pair it with</div><p id="fStory">—</p></div>
+        <div class="box"><div class="lbl">Reel to film (optional)</div><p id="fReel">—</p></div>
+      </div>
+      <div class="actions">
+        <button class="btn primary" id="bDownload" disabled>Download flyer</button>
+        <button class="btn ghost" id="bPosted" disabled>Mark as posted</button>
+        <button class="btn now" id="bNow" type="button">✦ Make a new post now</button>
+      </div>
+      <div class="note" id="note"></div>
+    </div>
+  </div>
+
+  <section id="library">
+    <div class="sechead"><h3>Photo library</h3><p>Add real photos of the food, the dining room and the outside. The bot builds every post from these first and never blurs, filters or edits the photo itself.</p></div>
+    <div class="lab">
+      <div class="drop" id="drop">
+        <label for="pFile" style="position:absolute;left:-9999px">Choose photos</label>
+        <input type="file" id="pFile" accept="image/jpeg,image/png,image/webp" multiple>
+        <label for="pLabel" style="position:absolute;left:-9999px">What's in the photos</label>
+        <input id="pLabel" placeholder="What is it? e.g. Lamb chops, baklava, dining room" autocomplete="off" style="flex:1 1 220px;min-width:0;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:12px 14px;font:inherit">
+        <button class="btn primary" id="bUpload" type="button">Add photos</button>
+      </div>
+      <div class="note" id="libNote">Tip: shoot in daylight, phone held straight, the dish filling the frame.</div>
+      <div class="pgrid" id="pgrid"><div class="empty">No photos yet.</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead"><h3>Idea lab</h3><p>Need something right now? Get five fresh ideas, then queue the ones you like. The daily bot turns queued ideas into flyers first.</p></div>
+    <div class="lab">
+      <div class="labrow">
+        <label for="theme" style="position:absolute;left:-9999px">Theme for ideas</label>
+        <input id="theme" placeholder="Optional twist: rainy day, game day, date night, finals week…" autocomplete="off">
+        <button class="btn primary" id="bIdeas">Give me 5 ideas</button>
+      </div>
+      <div class="note" id="labNote"></div>
+      <div class="ideas" id="ideas"></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead"><h3>Coming up</h3><p>Dates the bot builds posts around. Items marked unconfirmed need a quick check before you promote them.</p></div>
+    <div class="strip" id="strip"><div class="empty">Upcoming dates will appear here.</div></div>
+  </section>
+
+  <section>
+    <div class="sechead"><h3>Every drop</h3><p>Tap any post to load it into the big screen.</p></div>
+    <div class="grid" id="grid"><div class="empty">No posts yet. The first drop arrives tomorrow morning, or queue an idea above.</div></div>
+  </section>
+
+  <footer>Mikonos · Ewing, NJ · (609) 883-9333 · mikonosrestaurant.us — Studio run by Huncho JR</footer>
+</div>
+
+<script>
+(async () => {
+  const $ = id => document.getElementById(id);
+  const ymd = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  const today = () => ymd(new Date());
+  const fmtDate = d => { const [y,m,dd] = d.split('-').map(Number); return new Date(y, m-1, dd).toLocaleDateString('en-US', {weekday:'short', month:'short', day:'numeric'}); };
+  let posts = [], cal = [], featuredId = null, db = null, downloads = null, sample = null, loaded = false, lastHeroId = null;
+
+  function statusPill(el, s){ el.className = 'pill ' + (s||''); el.textContent = s === 'posted' ? 'Posted' : s === 'idea' ? 'Idea' : s === 'ready' ? 'Ready to post' : (s||'—'); }
+
+  function pickFeatured(){
+    const t = today();
+    if (featuredId && posts.find(p => p.id === featuredId)) return posts.find(p => p.id === featuredId);
+    const withImg = posts.filter(p => p.image && p.date);
+    return withImg.find(p => p.date === t)
+      || withImg.filter(p => p.date > t && p.status !== 'posted').sort((a,b)=>a.date.localeCompare(b.date))[0]
+      || withImg.filter(p => p.date < t).sort((a,b)=>b.date.localeCompare(a.date))[0]
+      || posts.find(p => p.status === 'idea');
+  }
+
+  function showNoImg(title, text){
+    const n = $('noimg'); n.hidden = false;
+    n.innerHTML = '<div><strong></strong><p></p></div>';
+    n.querySelector('strong').textContent = title; n.querySelector('p').textContent = text;
+  }
+
+  function renderHero(){
+    const t = today();
+    const p = pickFeatured();
+    const screen = $('screen');
+    screen.querySelector('img')?.remove();
+    if (!p){
+      showNoImg("Today's flyer lands here", loaded ? 'No posts yet. The daily bot designs a new one every morning at 7:56 am.' : 'Loading the studio…');
+      ['fDate','fKind','fStatus','fTime'].forEach(id => { $(id).className = 'pill'; $(id).textContent = '—'; });
+      $('fTitle').textContent = 'Waiting for the first drop';
+      ['fCaption','fTags','fStory','fReel'].forEach(id => $(id).textContent = '—');
+      $('bDownload').disabled = true; $('bPosted').disabled = true; lastHeroId = null; return;
+    }
+    $('liveLabel').textContent = !p.date ? 'QUEUED IDEA' : p.date === t ? "TODAY'S DROP" : p.date > t ? 'UP NEXT' : 'FROM THE ARCHIVE';
+    if (p.image){
+      const img = document.createElement('img'); img.src = '/_blob/' + p.image; img.alt = p.title || 'Mikonos flyer';
+      img.onerror = () => { img.remove(); showNoImg(p.title || 'Flyer', 'The image didn’t load. Reload the studio to try again.'); };
+      screen.appendChild(img); $('noimg').hidden = true;
+    } else {
+      showNoImg(p.title || 'Idea', 'Queued idea. The daily bot will design this flyer.');
+    }
+    $('fDate').textContent = p.date ? fmtDate(p.date) : 'Unscheduled';
+    $('fKind').textContent = p.kind || 'Flyer';
+    statusPill($('fStatus'), p.status);
+    $('fTime').textContent = p.bestTime ? 'Post ' + p.bestTime : 'Any time';
+    $('fTitle').textContent = p.title || 'Untitled';
+    $('fWhy').textContent = p.why || '';
+    $('fCaption').textContent = p.caption || '—';
+    $('fTags').textContent = p.hashtags || '—';
+    $('fStory').textContent = p.story || '—';
+    $('fReel').textContent = p.reel || '—';
+    $('bDownload').disabled = !(p.image && downloads);
+    $('bPosted').disabled = !db || p.status === 'posted' || !p.image;
+    $('bPosted').textContent = p.status === 'posted' ? 'Posted' : 'Mark as posted';
+    $('bPosted').className = 'btn ' + (p.status === 'posted' ? 'done' : 'ghost');
+    if (p.id !== lastHeroId) $('note').textContent = '';
+    lastHeroId = p.id;
+  }
+
+  function renderStats(){
+    const t = today();
+    const posted = new Set(posts.filter(p => p.status === 'posted').map(p => p.postedAt ? ymd(new Date(p.postedAt)) : p.date));
+    let streak = 0; const d = new Date();
+    if (!posted.has(t)) d.setDate(d.getDate() - 1);
+    while (posted.has(ymd(d))) { streak++; d.setDate(d.getDate() - 1); }
+    $('sStreak').textContent = streak;
+    $('sPosted').textContent = posts.filter(p => p.status === 'posted').length;
+    $('sReady').textContent = posts.filter(p => p.status === 'ready').length;
+    $('sIdeas').textContent = posts.filter(p => p.status === 'idea').length;
+  }
+
+  function renderGrid(){
+    const g = $('grid');
+    if (!posts.length){ g.innerHTML = '<div class="empty">No posts yet. The next drop arrives tomorrow morning, or queue an idea above.</div>'; return; }
+    g.innerHTML = '';
+    [...posts].sort((a,b) => (b.date||'9').localeCompare(a.date||'9')).forEach(p => {
+      const c = document.createElement('button'); c.className = 'card'; c.type = 'button';
+      const th = document.createElement('div'); th.className = 'th';
+      if (p.image){ const i = document.createElement('img'); i.src = '/_blob/' + p.image; i.alt = ''; i.loading = 'lazy'; i.onerror = () => { i.remove(); th.textContent = p.title || 'Flyer'; }; th.appendChild(i); } else th.textContent = p.title || 'Idea';
+      const cb = document.createElement('div'); cb.className = 'cb';
+      const s = document.createElement('small'); s.textContent = (p.date ? fmtDate(p.date) : 'Unscheduled') + ' · ' + (p.status === 'posted' ? 'Posted' : p.status === 'idea' ? 'Idea' : 'Ready');
+      const t = document.createElement('span'); t.textContent = p.title || 'Untitled';
+      cb.append(s, t); c.append(th, cb);
+      c.onclick = () => { featuredId = p.id; renderHero(); window.scrollTo({top:0, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'}); };
+      g.appendChild(c);
+    });
+  }
+
+  function renderCal(){
+    const t = today();
+    const s = $('strip'); const up = cal.filter(c => c.date >= t).sort((a,b)=>a.date.localeCompare(b.date)).slice(0, 14);
+    if (!up.length){ s.innerHTML = '<div class="empty">Upcoming dates will appear here.</div>'; return; }
+    s.innerHTML = '';
+    up.forEach(c => {
+      const d = document.createElement('div'); d.className = 'day';
+      const a = document.createElement('div'); a.className = 'd'; a.textContent = fmtDate(c.date).toUpperCase();
+      const b = document.createElement('b'); b.textContent = c.hook;
+      const p = document.createElement('p'); p.textContent = c.idea || '';
+      d.append(a, b, p);
+      if (c.verified === false){ const u = document.createElement('div'); u.className = 'unv'; u.textContent = 'Date unconfirmed'; d.appendChild(u); }
+      s.appendChild(d);
+    });
+  }
+
+  const renderAll = () => { renderStats(); renderHero(); renderGrid(); };
+  let shownDay = today();
+  const dayCheck = () => { if (today() !== shownDay){ shownDay = today(); featuredId = null; renderAll(); renderCal(); } };
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) dayCheck(); });
+  setInterval(dayCheck, 60000);
+
+  // copy buttons
+  document.querySelectorAll('[data-copy]').forEach(b => b.addEventListener('click', async () => {
+    const el = $(b.dataset.copy);
+    try { await navigator.clipboard.writeText(el.textContent); b.textContent = 'Copied'; }
+    catch { const r = document.createRange(); r.selectNodeContents(el); const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); b.textContent = 'Selected — copy it'; }
+    setTimeout(() => b.textContent = 'Copy', 1600);
+  }));
+
+  // capabilities
+  const use = n => window.claude?.use ? window.claude.use(n).catch(() => null) : Promise.resolve(null);
+  let assets = null, mcp = null, photos = [];
+  [db, downloads, sample, assets, mcp] = await Promise.all([use('db'), use('downloads'), use('sample'), use('assets'), use('mcp')]);
+  if (!assets){ $('bUpload').disabled = true; $('libNote').textContent = 'Open the studio in Claude to add photos.'; }
+  if (!mcp){ $('bNow').hidden = true; }
+
+  function renderPhotos(){
+    const g = $('pgrid');
+    if (!photos.length){ g.innerHTML = '<div class="empty">No photos yet. Add your first one above.</div>'; return; }
+    g.innerHTML = '';
+    [...photos].sort((a,b)=>(b.uploadedAt||'').localeCompare(a.uploadedAt||'')).forEach(p => {
+      const d = document.createElement('div'); d.className = 'ph';
+      const i = document.createElement('img'); i.src = '/_blob/' + p.asset; i.alt = p.label || 'Mikonos photo'; i.loading = 'lazy';
+      const c = document.createElement('div'); c.className = 'cap';
+      const t = document.createElement('span'); t.textContent = p.label || 'Photo';
+      const u = document.createElement('small'); u.textContent = (p.usedCount||0) ? 'used ' + p.usedCount + '×' : 'new';
+      c.append(t, u); d.append(i, c); g.appendChild(d);
+    });
+  }
+
+  async function uploadFiles(files){
+    if (!assets || !db || !files.length) return;
+    const label = $('pLabel').value.trim();
+    const btn = $('bUpload'); btn.disabled = true;
+    let ok = 0;
+    for (const f of files){
+      if (!/^image\/(jpeg|png|webp)$/.test(f.type)){ $('libNote').textContent = f.name + ' isn’t a JPG, PNG or WebP photo.'; continue; }
+      if (f.size > 20*1024*1024){ $('libNote').textContent = f.name + ' is over 20 MB. Send a smaller copy.'; continue; }
+      $('libNote').textContent = 'Uploading ' + f.name + '…';
+      try {
+        const res = await assets.upload(f);
+        await db.collection('photos').add({ asset: res.id, label: label || f.name.replace(/\.[^.]+$/,''), dish: label, kind: '', notes: '', uploadedAt: new Date().toISOString(), usedCount: 0, source: 'henry' });
+        ok++;
+      } catch (e) {
+        $('libNote').textContent = e?.code === 'quota_or_state' ? 'The photo library is full. Ask Claude to clear old photos.' : e?.code === 'rate_limited' ? 'Too many uploads at once. Wait a minute and try again.' : 'Couldn’t upload ' + f.name + '. Try again.';
+      }
+    }
+    if (ok) $('libNote').textContent = ok + ' photo' + (ok>1?'s':'') + ' added. The bot will use ' + (ok>1?'them':'it') + ' in upcoming posts.';
+    $('pFile').value = ''; $('pLabel').value = ''; btn.disabled = !assets;
+  }
+  $('bUpload').onclick = () => uploadFiles([...$('pFile').files]);
+  const drop = $('drop');
+  drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('over'); });
+  drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+  drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('over'); uploadFiles([...e.dataTransfer.files]); });
+
+  $('bNow').onclick = async () => {
+    if (!mcp) return;
+    const btn = $('bNow'); btn.disabled = true; btn.textContent = 'Starting the bots…';
+    try {
+      await mcp.callTool('Claude Code Remote', 'fire_trigger', { trigger_id: 'trig_01A4Jh7XYtYQfcHkDoreesGk', text: 'Henry pressed "Make a new post now" in the studio at ' + new Date().toLocaleString() + '. Make the next post now, built on a real photo from the photos library.' });
+      $('note').textContent = 'The bots are on it. Your new post shows up here in about 5–10 minutes.';
+      btn.textContent = '✦ Started';
+    } catch (e) {
+      const msg = { server_not_connected: 'Connect “Claude Code Remote” in claude.ai Settings → Connectors to use this button.', needs_reauth: 'Reconnect “Claude Code Remote” in claude.ai Settings → Connectors.', not_in_manifest: 'This button isn’t allowed in this view. Ask Claude in chat: “make a Mikonos post now.”', approval_required: 'Approve the request to start the bots, then tap again.', tool_error: 'The bot couldn’t start right now. Try again in a minute.' }[e?.code] || 'Couldn’t start the bots. Ask Claude in chat: “make a Mikonos post now.”';
+      $('note').textContent = msg; btn.textContent = '✦ Make a new post now';
+    } finally { setTimeout(() => { btn.disabled = false; btn.textContent = '✦ Make a new post now'; }, 8000); }
+  };
+  if (!sample){ $('bIdeas').disabled = true; $('labNote').textContent = 'The idea lab works when the studio is opened in Claude.'; }
+
+  if (db){
+    db.collection('posts').onSnapshot(snap => {
+      posts = snap.docs.map(d => ({ ...d.data(), id: d.id }));
+      loaded = true; renderAll();
+    }, () => { loaded = true; renderAll(); $('note').textContent = 'The studio lost its connection. Reload to reconnect.'; });
+    db.collection('photos').onSnapshot(snap => { photos = snap.docs.map(d => ({ ...d.data(), id: d.id })); renderPhotos(); }, () => {});
+    db.collection('calendar').onSnapshot(snap => { cal = snap.docs.map(d => ({ ...d.data(), id: d.id })); renderCal(); }, () => {});
+  } else {
+    showNoImg("Today's flyer lands here", 'Open the studio in Claude to see your posts.');
+  }
+
+  $('bDownload').onclick = async () => {
+    const p = pickFeatured(); if (!p?.image || !downloads) return;
+    const btn = $('bDownload'); btn.disabled = true;
+    $('note').textContent = 'Preparing the file…';
+    try {
+      const r = await fetch('/_blob/' + p.image); if (!r.ok) throw { code: 'missing' };
+      const blob = await r.blob();
+      const ext = ({ 'image/jpeg':'jpg', 'image/webp':'webp', 'image/gif':'gif' })[blob.type] || 'png';
+      await downloads.save({ filename: `mikonos-${p.date || 'post'}.${ext}`, data: blob });
+      $('note').textContent = 'Saved. Post it, then mark it as posted.';
+    } catch (e) {
+      $('note').textContent = e?.code === 'declined' ? 'Download cancelled.' : 'Couldn’t download here. Long-press or right-click the flyer to save it.';
+    } finally { btn.disabled = false; }
+  };
+
+  $('bPosted').onclick = async () => {
+    const p = pickFeatured(); if (!p || !db) return;
+    $('bPosted').disabled = true;
+    try { await db.doc('posts/' + p.id).update({ status: 'posted', postedAt: new Date().toISOString() }); $('note').textContent = 'Nice. Streak updated.'; }
+    catch { $('note').textContent = 'Couldn’t save that. Only the studio owner can mark posts.'; $('bPosted').disabled = false; }
+  };
+
+  // idea lab
+  let ctl;
+  $('bIdeas').onclick = async () => {
+    if (!sample) return;
+    ctl?.abort(); ctl = new AbortController();
+    const btn = $('bIdeas'); btn.disabled = true; $('labNote').textContent = 'Thinking up ideas…'; $('ideas').innerHTML = '';
+    const recent = [...posts].sort((a,b)=>(b.date||b.createdAt||'').localeCompare(a.date||a.createdAt||'')).slice(0, 25).map(p => '- ' + p.title).join('\n') || '(none yet)';
+    const upcoming = cal.filter(c => c.date >= today()).sort((a,b)=>a.date.localeCompare(b.date)).slice(0, 8).map(c => `- ${c.date}: ${c.hook}`).join('\n') || '(none)';
+    const twist = $('theme').value.trim();
+    const prompt = `You are the creative director for Mikonos, a Greek restaurant in Ewing, NJ (open since 2011, near TCNJ and Rider; never print a street address). Signature: saganaki flambé lit at the table ("OPA!"), souvlaki off the charcoal grill, lamb chops, spanakopita, gyros, moussaka, baklava. Voice: warm, bold, playful, local. Goal: maximum attention on Instagram and TikTok.
+Rules: never promise discounts, deals or events (the owner hasn't approved any); never invent reviews or quotes; no real people's names.
+Today is ${today()}.${twist ? ' Twist to work in: ' + twist + '.' : ''}
+Upcoming dates:\n${upcoming}
+Already posted or queued (do not repeat):\n${recent}
+Give 5 fresh, scroll-stopping post ideas, each a different format (flyer, carousel, poll, meme-style graphic, Reel concept, Story game…). Reply with only a JSON array of 5 objects: {"title": short name, "format": one or two words, "hook": the on-screen text, "caption": ready-to-post caption under 220 characters, "why": one sentence on why it grabs attention}.`;
+    try {
+      const ideas = await sample.json(prompt, { signal: ctl.signal, cache: false });
+      $('labNote').textContent = Array.isArray(ideas) ? 'Queue the ones you like. The daily bot designs queued ideas first.' : 'That came back in a strange shape. Try again.';
+      (Array.isArray(ideas) ? ideas : []).filter(it => it && typeof it === 'object').slice(0, 5).forEach((it, i) => {
+        const c = document.createElement('div'); c.className = 'idea'; c.style.animationDelay = (i * 70) + 'ms';
+        const f = document.createElement('div'); f.className = 'fmt'; f.textContent = String(it.format || 'Post');
+        const t = document.createElement('b'); t.textContent = String(it.title || 'Idea');
+        const h = document.createElement('p'); h.className = 'hook'; h.textContent = '“' + String(it.hook || '') + '”';
+        const w = document.createElement('p'); w.textContent = String(it.why || '');
+        const q = document.createElement('button'); q.className = 'copy'; q.type = 'button'; q.textContent = db ? 'Queue for the bot' : 'Open in Claude to queue';
+        q.disabled = !db;
+        q.onclick = async () => {
+          q.disabled = true; q.textContent = 'Queuing…';
+          try {
+            await db.collection('posts').add({ title: String(it.title||'Idea'), kind: String(it.format||'Flyer'), hook: String(it.hook||''), caption: String(it.caption||''), why: String(it.why||''), status: 'idea', date: '', createdAt: new Date().toISOString(), source: 'idea-lab' });
+            q.textContent = 'Queued';
+          } catch { q.textContent = 'Couldn’t queue'; q.disabled = false; }
+        };
+        c.append(f, t, h, w, q); $('ideas').appendChild(c);
+      });
+    } catch (e) {
+      if (e?.code === 'not_granted' || e?.code === 'sampling_disabled'){ $('labNote').textContent = 'The idea lab is off for this view.'; return; }
+      if (e?.code !== 'cancelled') $('labNote').textContent = e?.code === 'rate_limited' ? 'Too many requests. Try again in a minute.' : 'Something went wrong. Try again.';
+    } finally { btn.disabled = !sample; }
+  };
+})();
+</script>
+
+</body></html>

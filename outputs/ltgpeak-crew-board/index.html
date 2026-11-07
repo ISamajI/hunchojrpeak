@@ -1,0 +1,473 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>LTGPEAK Crew Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800;900&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#F2F4FA; --surface:#FFFFFF; --surface-2:#E8ECF6; --ink:#0E1733; --ink-2:#4B5677; --ink-3:#7A84A3;
+  --line:#D6DCEB; --accent:#1F49E0; --accent-soft:#E3E9FD; --on-accent:#FFFFFF;
+  --amber:#8A5100; --amber-bg:#FCEFD9; --red:#C4262E; --red-bg:#FBE3E4; --green:#1B7547; --green-bg:#DFF2E6;
+  --band:#0B1638; --band-ink:#FFFFFF; --band-ink-2:#A9B6DD; --shadow:0 10px 30px rgba(14,23,51,.14);
+  --display:"Archivo","Arial Narrow",Arial,sans-serif; --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#090F21; --surface:#111932; --surface-2:#18223F; --ink:#E7EBF7; --ink-2:#A1ABC8; --ink-3:#6F7A9A;
+    --line:#26314F; --accent:#6384FF; --accent-soft:#1B2855; --on-accent:#08102A;
+    --amber:#F2B45C; --amber-bg:#35270F; --red:#FF6B71; --red-bg:#3A1619; --green:#55C98C; --green-bg:#0E2C1D;
+    --band:#050A18; --band-ink:#FFFFFF; --band-ink-2:#8E9BC4; --shadow:0 10px 30px rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#090F21; --surface:#111932; --surface-2:#18223F; --ink:#E7EBF7; --ink-2:#A1ABC8; --ink-3:#6F7A9A;
+  --line:#26314F; --accent:#6384FF; --accent-soft:#1B2855; --on-accent:#08102A;
+  --amber:#F2B45C; --amber-bg:#35270F; --red:#FF6B71; --red-bg:#3A1619; --green:#55C98C; --green-bg:#0E2C1D;
+  --band:#050A18; --band-ink:#FFFFFF; --band-ink-2:#8E9BC4; --shadow:0 10px 30px rgba(0,0,0,.5);
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* band */
+.band{background:var(--band);color:var(--band-ink);padding-inline:16px;padding-block:18px 0}
+.wrap{max-width:1320px;margin-inline:auto}
+.band-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px}
+.brand{display:flex;align-items:baseline;gap:10px}
+.brand h1{font-family:var(--display);font-weight:900;font-size:26px;letter-spacing:-.01em;margin:0;text-transform:uppercase}
+.brand h1 b{color:#FF4B52;font-weight:900}
+.brand span{font-family:var(--mono);font-size:12px;color:var(--band-ink-2);letter-spacing:.06em;text-transform:uppercase}
+.me{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--band-ink-2)}
+.me select{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.2);color:var(--band-ink);border-radius:8px;padding:6px 8px}
+.me select option{color:#0E1733}
+.btn-new{background:#FF4B52;color:#fff;border:0;border-radius:10px;padding:10px 16px;font-weight:600;display:inline-flex;align-items:center;gap:6px}
+.btn-new:hover{background:#ff6269}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;margin-top:18px;border-top:1px solid rgba(255,255,255,.12)}
+.stat{padding:12px 4px 14px;text-align:left;background:none;border:0;color:inherit;border-bottom:3px solid transparent}
+.stat[aria-pressed="true"]{border-bottom-color:#FF4B52}
+.stat .n{font-family:var(--display);font-weight:800;font-size:28px;line-height:1}
+.stat .l{font-size:12px;color:var(--band-ink-2);letter-spacing:.04em;text-transform:uppercase;margin-top:4px}
+.stat.hot .n{color:#FFC06B}
+@media (max-width:560px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.brand h1{font-size:22px}}
+
+main{padding-inline:16px;padding-block:18px 60px}
+.notice{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:14px;color:var(--ink-2);margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.notice[hidden]{display:none}
+.linkbtn{background:none;border:0;color:var(--accent);font-weight:600;padding:0}
+
+.board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;align-items:start}
+@media (max-width:1100px){.board{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:760px){.board{grid-template-columns:minmax(0,1fr)}}
+.col h2{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 8px;display:flex;align-items:center;gap:8px;color:var(--ink-2)}
+.col h2 .dot{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.col h2 .ct{font-family:var(--mono);font-weight:500;color:var(--ink-3)}
+.col .hint{font-size:12px;color:var(--ink-3);margin:-4px 0 8px}
+.stack{display:flex;flex-direction:column;gap:8px}
+.empty{border:1px dashed var(--line);border-radius:10px;padding:14px;color:var(--ink-3);font-size:13px;text-align:center}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 12px;text-align:left;width:100%;display:flex;flex-direction:column;gap:6px;position:relative}
+.card:hover{border-color:var(--accent)}
+.card .top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.card .client{font-weight:600;font-size:15px;line-height:1.25;overflow-wrap:anywhere}
+.card .what{font-size:13px;color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card .meta{display:flex;flex-wrap:wrap;gap:5px;align-items:center;font-size:12px;color:var(--ink-3)}
+.pill{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:2px 8px;font-size:11.5px;font-weight:600;white-space:nowrap;background:var(--surface-2);color:var(--ink-2)}
+.pill.rush{background:var(--red-bg);color:var(--red)}
+.pill.amber{background:var(--amber-bg);color:var(--amber)}
+.pill.green{background:var(--green-bg);color:var(--green)}
+.pill.blue{background:var(--accent-soft);color:var(--accent)}
+.pill.ex{background:transparent;border:1px dashed var(--ink-3);color:var(--ink-3)}
+.pill.unclaimed{background:transparent;border:1px solid var(--line);color:var(--ink-3)}
+.spin{width:10px;height:10px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:sp 0.8s linear infinite;display:inline-block}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(5,10,24,.45);z-index:20}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(620px,100%);background:var(--bg);z-index:21;box-shadow:var(--shadow);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.dhead{padding:16px 18px 12px;border-bottom:1px solid var(--line);background:var(--surface);display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.dhead h3{font-family:var(--display);font-weight:800;font-size:22px;margin:0;line-height:1.15;text-wrap:balance;overflow-wrap:anywhere}
+.dhead .sub{font-size:13px;color:var(--ink-2);margin-top:4px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.x{background:var(--surface-2);border:0;border-radius:8px;width:34px;height:34px;flex:none;font-size:18px;line-height:1}
+.dbody{overflow-y:auto;padding:16px 18px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px}
+.sec{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px}
+.sec h4{font-family:var(--display);font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin:0 0 10px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.kv{display:grid;grid-template-columns:110px minmax(0,1fr);gap:6px 12px;font-size:14px}
+.kv dt{color:var(--ink-3)}
+.kv dd{margin:0;overflow-wrap:anywhere}
+.details{white-space:pre-wrap;font-size:14px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);overflow-wrap:anywhere}
+
+.stagebar{display:flex;gap:4px;flex-wrap:wrap}
+.stagebar button{flex:1 1 90px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 6px;font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.stagebar button[aria-current="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:9px 14px;font-weight:600;font-size:14px}
+.btn:hover{border-color:var(--ink-3)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.go{background:var(--green);border-color:var(--green);color:#fff}
+.btn.danger{color:var(--red)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+
+.approve{border:2px solid var(--amber);background:var(--amber-bg);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.approve p{margin:0;font-size:14px;color:var(--ink)}
+.approved-note{border-radius:12px;padding:12px 14px;background:var(--green-bg);color:var(--green);font-weight:600;font-size:14px}
+
+.draft .summary{font-size:15px;font-weight:500;margin:0 0 10px}
+.tasks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+.tasks li{display:flex;justify-content:space-between;gap:10px;font-size:14px;padding:7px 0;border-bottom:1px solid var(--line)}
+.tasks li:last-child{border-bottom:0}
+.tasks .who{font-size:12px;color:var(--ink-3);white-space:nowrap}
+.est{width:100%;border-collapse:collapse;font-size:14px}
+.est td{padding:6px 0;border-bottom:1px solid var(--line)}
+.est td:last-child{text-align:right;font-family:var(--mono)}
+.est tr.total td{font-weight:700;border-bottom:0;border-top:2px solid var(--ink)}
+.reply{background:var(--surface-2);border-radius:10px;padding:12px;white-space:pre-wrap;font-size:14px;overflow-wrap:anywhere}
+.qs{margin:0;padding-left:18px;font-size:14px;display:flex;flex-direction:column;gap:4px}
+.muted{color:var(--ink-3);font-size:13px}
+.log{list-style:none;margin:0;padding:0;font-size:13px;display:flex;flex-direction:column;gap:6px}
+.log li{display:grid;grid-template-columns:92px minmax(0,1fr);gap:10px;color:var(--ink-2)}
+.log time{font-family:var(--mono);font-size:11.5px;color:var(--ink-3)}
+
+label.f{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:600;color:var(--ink-2)}
+.f input,.f select,.f textarea{background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:9px 10px;font-weight:400;font-size:15px;width:100%}
+.f textarea{min-height:110px;resize:vertical}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:520px){.grid2{grid-template-columns:minmax(0,1fr)}}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips input{position:absolute;opacity:0;pointer-events:none}
+.chips label{border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;background:var(--surface);color:var(--ink-2);cursor:pointer}
+.chips input:checked + label{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chips input:focus-visible + label{outline:2px solid var(--accent);outline-offset:2px}
+.err{color:var(--red);font-size:13px;font-weight:600}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;font-size:14px;z-index:40;box-shadow:var(--shadow)}
+</style>
+
+<header class="band">
+  <div class="wrap">
+    <div class="band-top">
+      <div class="brand"><h1>LTG<b>PEAK</b> Crew Board</h1><span>Client requests</span></div>
+      <div class="row">
+        <label class="me" for="meSel">I'm <select id="meSel"></select></label>
+        <button class="btn" id="settingsBtn" style="background:transparent;color:var(--band-ink);border-color:rgba(255,255,255,.25)">Crew &amp; prices</button>
+        <button class="btn-new" id="newBtn">+ New request</button>
+      </div>
+    </div>
+    <div class="stats" id="stats"></div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="notice" id="notice" hidden></div>
+    <div class="board" id="board"></div>
+  </div>
+</main>
+
+<div id="layer"></div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+"use strict";
+var STAGES=[
+  {id:"incoming",label:"Incoming",hint:"Just came in — needs a draft",c:"var(--ink-3)"},
+  {id:"review",label:"Needs approval",hint:"Claude drafted it — someone approve",c:"var(--amber)"},
+  {id:"approved",label:"Approved",hint:"Reply to client, then start",c:"var(--accent)"},
+  {id:"building",label:"Building",hint:"Someone's on it",c:"var(--accent)"},
+  {id:"done",label:"Done",hint:"Delivered",c:"var(--green)"}
+];
+var TYPES=["New website","Change to a site","Quote","Booking / backend","Ad or video","Bug / site down","Other"];
+var SOURCES=["Instagram DM","Text","Call","Website form","Email","In person"];
+var PRIORITY=[{id:"rush",label:"Rush"},{id:"normal",label:"Normal"},{id:"low",label:"Whenever"}];
+
+var db=null, sample=null;
+var requests=[]; var config={crew:[],prices:"",notes:""};
+var filter="all"; var openId=null; var dbReady=false;
+var noteDraft="";
+
+function $(s,r){return (r||document).querySelector(s)}
+function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function me(){return lsGet("crew-me")||""}
+function toast(msg){var t=$("#toast");t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(function(){t.hidden=true},2600)}
+function ago(ms){if(!ms)return"";var d=(Date.now()-ms)/1000;if(d<60)return"just now";if(d<3600)return Math.floor(d/60)+"m ago";if(d<86400)return Math.floor(d/3600)+"h ago";return Math.floor(d/86400)+"d ago"}
+function stamp(ms){var d=new Date(ms);return d.toLocaleDateString(undefined,{month:"short",day:"numeric"})+" "+d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"})}
+function dueLabel(due){if(!due)return"";var d=new Date(due+"T12:00:00");var days=Math.round((d-new Date().setHours(12,0,0,0))/86400000);if(days<0)return{t:"Overdue "+(-days)+"d",cls:"rush"};if(days===0)return{t:"Due today",cls:"rush"};if(days===1)return{t:"Due tomorrow",cls:"amber"};return{t:"Due "+d.toLocaleDateString(undefined,{month:"short",day:"numeric"}),cls:""}}
+function isStuck(r){return r.draftStatus==="generating"&&(Date.now()-(r.draftStartedAt||0))>180000}
+
+/* ---------- header ---------- */
+function renderMe(){
+  var sel=$("#meSel"); var cur=me();
+  var names=config.crew.map(function(c){return c.name}).filter(Boolean);
+  var opts='<option value="">Pick your name</option>'+names.map(function(n){return '<option'+(n===cur?' selected':'')+'>'+esc(n)+'</option>'}).join("");
+  sel.innerHTML=opts;
+}
+$("#meSel").addEventListener("change",function(e){lsSet("crew-me",e.target.value);render()});
+
+function renderStats(){
+  var mine=me();
+  var s=[
+    {id:"review",n:requests.filter(function(r){return r.stage==="review"}).length,l:"Need approval",hot:true},
+    {id:"unclaimed",n:requests.filter(function(r){return !r.owner&&r.stage!=="done"}).length,l:"Nobody's on it"},
+    {id:"mine",n:requests.filter(function(r){return mine&&r.owner===mine&&r.stage!=="done"}).length,l:mine?"On "+mine:"Mine"},
+    {id:"rush",n:requests.filter(function(r){return r.priority==="rush"&&r.stage!=="done"}).length,l:"Rush jobs"}
+  ];
+  $("#stats").innerHTML=s.map(function(x){return '<button class="stat'+(x.hot&&x.n?' hot':'')+'" data-f="'+x.id+'" aria-pressed="'+(filter===x.id)+'"><div class="n mono">'+x.n+'</div><div class="l">'+esc(x.l)+'</div></button>'}).join("");
+}
+$("#stats").addEventListener("click",function(e){var b=e.target.closest("[data-f]");if(!b)return;filter=filter===b.dataset.f?"all":b.dataset.f;render()});
+
+/* ---------- board ---------- */
+function passes(r){
+  if(filter==="all")return true;
+  if(filter==="review")return r.stage==="review";
+  if(filter==="unclaimed")return !r.owner&&r.stage!=="done";
+  if(filter==="mine")return me()&&r.owner===me()&&r.stage!=="done";
+  if(filter==="rush")return r.priority==="rush"&&r.stage!=="done";
+  return true;
+}
+function cardHTML(r){
+  var pills=[];
+  if(r.example)pills.push('<span class="pill ex">Example</span>');
+  if(r.priority==="rush")pills.push('<span class="pill rush">Rush</span>');
+  var du=dueLabel(r.due); if(du)pills.push('<span class="pill '+du.cls+'">'+esc(du.t)+'</span>');
+  if(r.draftStatus==="generating"&&!isStuck(r))pills.push('<span class="pill blue"><span class="spin"></span>Drafting</span>');
+  if(r.draftStatus==="failed"||isStuck(r))pills.push('<span class="pill rush">Draft failed</span>');
+  pills.push(r.owner?'<span class="pill">'+esc(r.owner)+'</span>':'<span class="pill unclaimed">Unclaimed</span>');
+  var what=(r.draft&&r.draft.summary)||r.details||"";
+  return '<button class="card" data-open="'+esc(r.id)+'"><div class="top"><div class="client">'+esc(r.client||"Unnamed client")+'</div><span class="muted mono" style="font-size:11px;white-space:nowrap">'+esc(ago(r.createdAt))+'</span></div>'+
+    '<div class="what">'+esc(r.type?r.type+" · ":"")+esc(what)+'</div><div class="meta">'+pills.join("")+'</div></button>';
+}
+function renderBoard(){
+  var pr={rush:0,normal:1,low:2};
+  var list=requests.filter(passes).slice().sort(function(a,b){return (pr[a.priority]??1)-(pr[b.priority]??1)||(a.createdAt||0)-(b.createdAt||0)});
+  $("#board").innerHTML=STAGES.map(function(s){
+    var items=list.filter(function(r){return (r.stage||"incoming")===s.id});
+    if(s.id==="done")items=items.sort(function(a,b){return (b.doneAt||0)-(a.doneAt||0)}).slice(0,12);
+    return '<section class="col" style="--c:'+s.c+'"><h2><span class="dot"></span>'+esc(s.label)+' <span class="ct">'+items.length+'</span></h2><p class="hint">'+esc(s.hint)+'</p><div class="stack">'+
+      (items.length?items.map(cardHTML).join(""):'<div class="empty">'+(dbReady?"Nothing here":"Loading…")+'</div>')+'</div></section>';
+  }).join("");
+}
+$("#board").addEventListener("click",function(e){var b=e.target.closest("[data-open]");if(b)openDetail(b.dataset.open)});
+
+function renderNotice(){
+  var n=$("#notice"); var parts=[];
+  if(dbReady&&!me()&&config.crew.length)parts.push('<span>Pick your name at the top so approvals and claims show who did it.</span>');
+  if(dbReady&&!config.crew.length)parts.push('<span>Add your crew and price list first — Claude uses them to draft plans.</span><button class="linkbtn" data-act="settings">Set up crew</button>');
+  var ex=requests.filter(function(r){return r.example}).length;
+  if(ex)parts.push('<span>'+ex+' example request'+(ex>1?'s are':' is')+' showing how the board works.</span><button class="linkbtn" data-act="clear-ex">Clear examples</button>');
+  if(!sample&&dbReady)parts.push('<span>Claude drafting isn’t available in this view — you can still log and track requests.</span>');
+  n.innerHTML=parts.join('<span aria-hidden="true">·</span>'); n.hidden=!parts.length;
+}
+$("#notice").addEventListener("click",async function(e){
+  var b=e.target.closest("[data-act]");if(!b)return;
+  if(b.dataset.act==="settings")openSettings();
+  if(b.dataset.act==="clear-ex"){for(var r of requests.filter(function(x){return x.example})){try{await db.collection("requests").doc(r.id).delete()}catch(err){}}toast("Examples cleared")}
+});
+
+function render(){renderMe();renderStats();renderBoard();renderNotice();if(openId)renderDetail()}
+
+/* ---------- writes ---------- */
+async function patch(r,fields,logText){
+  if(!db)return;
+  var body=Object.assign({},fields);
+  if(logText){var log=(r.log||[]).slice(-29);log.push({at:Date.now(),by:me()||"Someone",text:logText});body.log=log}
+  try{await db.collection("requests").doc(r.id).update(body)}
+  catch(err){toast(err&&err.code==="invalid_argument"?"You don’t have edit access to this board":"Couldn’t save — try again")}
+}
+
+/* ---------- Claude draft ---------- */
+function buildPrompt(r,revision){
+  var crew=config.crew.length?config.crew.map(function(c){return "- "+c.name+(c.role?" — "+c.role:"")}).join("\n"):"(no crew listed — use \"Anyone\")";
+  var p="You are the project coordinator for LTGPEAK, a small website design business run by a crew of cousins. A client request just came in. Draft a work plan the crew will review and approve before anyone replies to the client or starts work.\n\n"+
+  "CREW (name — role):\n"+crew+"\n\n"+
+  "PRICE LIST (use these exact prices; if nothing fits, say it needs a custom quote):\n"+(config.prices||"(none given — mark the estimate as needing a quote)")+"\n\n"+
+  (config.notes?"HOUSE NOTES:\n"+config.notes+"\n\n":"")+
+  "CLIENT PROCESS: Lead → Discovery Call → Quote → Deposit → Client Questionnaire → Design → Client Review → Revisions → Final Payment → Launch → Monthly Maintenance.\n\n"+
+  "REQUEST:\nClient: "+r.client+"\nContact: "+(r.contact||"not given")+"\nCame in via: "+r.source+"\nType: "+r.type+"\nPriority: "+r.priority+"\nDue: "+(r.due||"not given")+"\nWhat they said:\n"+r.details.slice(0,4000)+"\n\n";
+  if(revision){p+="THE CREW REVIEWED YOUR LAST DRAFT AND WANTS CHANGES:\n"+revision.slice(0,1500)+"\n\nLast draft for reference:\n"+JSON.stringify(r.draft||{}).slice(0,5000)+"\n\n"}
+  p+="Reply with ONLY a JSON object in this shape:\n"+
+  '{"summary":"one plain sentence of what the client wants","processStep":"which client-process step this job is at now","tasks":[{"task":"short action","owner":"crew name best suited, or Anyone"}],"estimate":{"items":[{"item":"line item","price":"$450"}],"total":"$450","note":"deposit or assumptions, one sentence"},"hours":3,"clientReply":"short friendly text message to send the client, signed — LTGPEAK","questions":["things to confirm with the client"],"risk":"low","riskWhy":"one sentence"}'+
+  "\nRules: 3-7 tasks. risk is low, medium or high. Never promise a date or price not supported above. Keep clientReply under 80 words, casual and professional.";
+  return p;
+}
+async function generate(r,revision){
+  if(!sample){toast("Claude drafting isn’t available here");return}
+  await patch(r,{draftStatus:"generating",draftStartedAt:Date.now()},revision?"Asked Claude to redo the draft: "+revision.slice(0,120):"Asked Claude for a draft");
+  try{
+    var out=await sample.json(buildPrompt(r,revision),{cache:false});
+    if(!out||typeof out!=="object"||!out.summary)throw {code:"invalid_json"};
+    var fresh=requests.find(function(x){return x.id===r.id})||r;
+    await patch(fresh,{draft:out,draftStatus:"ready",draftAt:Date.now(),stage:(fresh.stage==="incoming"||fresh.stage==="approved")?"review":fresh.stage,approvedBy:"",approvedAt:0},"Claude drafted a plan — waiting on approval");
+    toast("Draft ready for approval");
+  }catch(e){
+    var fr=requests.find(function(x){return x.id===r.id})||r;
+    var why=e&&e.code==="not_granted"?"Claude access was declined":e&&e.code==="rate_limited"?"Claude usage limit hit — try later":"Draft didn’t come through";
+    await patch(fr,{draftStatus:"failed"},why);
+    toast(why);
+  }
+}
+
+/* ---------- new request ---------- */
+function openNew(){
+  var crewOpts='<option value="">Nobody yet</option>'+config.crew.map(function(c){return '<option>'+esc(c.name)+'</option>'}).join("");
+  function chips(name,arr,def){return '<div class="chips" role="radiogroup">'+arr.map(function(x,i){var id=name+i;var v=x.id||x;var l=x.label||x;return '<input type="radio" name="'+name+'" id="'+id+'" value="'+esc(v)+'"'+(v===def?' checked':'')+'><label for="'+id+'">'+esc(l)+'</label>'}).join("")+'</div>'}
+  $("#layer").innerHTML='<div class="scrim" data-close></div><aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="nh"><div class="dhead"><div><h3 id="nh">New client request</h3><div class="sub">Drop it in here — Claude drafts the plan, the crew approves.</div></div><button class="x" data-close aria-label="Close">×</button></div>'+
+  '<form class="dbody" id="newForm">'+
+    '<div class="grid2"><label class="f" for="nClient">Client / business<input id="nClient" required placeholder="e.g. Rosa’s Salon"></label><label class="f" for="nContact">Contact (phone, @handle, email)<input id="nContact" placeholder="optional"></label></div>'+
+    '<div class="f" style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:var(--ink-2)">What kind of job'+chips("nType",TYPES,"Change to a site")+'</div>'+
+    '<label class="f" for="nDetails">What did they ask for? (paste the DM or text)<textarea id="nDetails" required placeholder="Paste exactly what the client said…"></textarea></label>'+
+    '<div class="f" style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:var(--ink-2)">Came in through'+chips("nSource",SOURCES,"Instagram DM")+'</div>'+
+    '<div class="grid2"><div class="f" style="display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:600;color:var(--ink-2)">Priority'+chips("nPri",PRIORITY,"normal")+'</div><label class="f" for="nDue">Due date<input type="date" id="nDue"></label></div>'+
+    '<label class="f" for="nOwner">Who’s taking it<select id="nOwner">'+crewOpts+'</select></label>'+
+    '<label class="row" for="nGen" style="font-size:14px"><input type="checkbox" id="nGen" '+(sample?'checked':'disabled')+'> Have Claude draft the plan, price and client reply right away</label>'+
+    '<div class="err" id="nErr" hidden></div>'+
+    '<div class="row"><button class="btn primary" type="submit" id="nSubmit">Add request</button><button class="btn" type="button" data-close>Cancel</button></div>'+
+  '</form></aside>';
+  var cur=me(); if(cur)$("#nOwner").value="";
+  $("#nClient").focus();
+  $("#newForm").addEventListener("submit",async function(ev){
+    ev.preventDefault();
+    if(!db){$("#nErr").textContent="The shared board isn’t connected in this view.";$("#nErr").hidden=false;return}
+    var f=function(n){var x=document.querySelector('input[name="'+n+'"]:checked');return x?x.value:""};
+    var body={client:$("#nClient").value.trim(),contact:$("#nContact").value.trim(),type:f("nType"),details:$("#nDetails").value.trim(),source:f("nSource"),priority:f("nPri")||"normal",due:$("#nDue").value||"",owner:$("#nOwner").value,
+      stage:"incoming",createdAt:Date.now(),createdBy:me()||"",draft:null,draftStatus:"none",approvedBy:"",approvedAt:0,example:false,log:[{at:Date.now(),by:me()||"Someone",text:"Logged the request"}]};
+    if(!body.client||!body.details){$("#nErr").textContent="Add the client name and what they asked for.";$("#nErr").hidden=false;return}
+    $("#nSubmit").disabled=true;
+    try{
+      var ref=db.collection("requests").doc(); await ref.set(body);
+      var gen=$("#nGen").checked; closeLayer(); toast("Request added");
+      if(gen){var r=Object.assign({id:ref.id},body); openDetail(ref.id); generate(r,"")}
+    }catch(err){$("#nSubmit").disabled=false;$("#nErr").textContent=err&&err.code==="quota_exceeded"?"The board is full — clear out old done jobs.":err&&err.code==="invalid_argument"?"You don’t have edit access to this board.":"Couldn’t save — try again.";$("#nErr").hidden=false}
+  });
+}
+$("#newBtn").addEventListener("click",openNew);
+
+/* ---------- detail ---------- */
+function openDetail(id){openId=id;noteDraft="";renderDetail()}
+function closeLayer(){openId=null;$("#layer").innerHTML=""}
+document.addEventListener("keydown",function(e){if(e.key==="Escape"&&$("#layer").innerHTML)closeLayer()});
+$("#layer").addEventListener("click",function(e){if(e.target.closest("[data-close]")){e.preventDefault();closeLayer()}});
+
+function renderDetail(){
+  var r=requests.find(function(x){return x.id===openId});
+  if(!r){return}
+  var scroll=$(".dbody")?$(".dbody").scrollTop:0;
+  var d=r.draft; var generating=r.draftStatus==="generating"&&!isStuck(r);
+  var crewOpts='<option value="">Unclaimed</option>'+config.crew.map(function(c){return '<option'+(c.name===r.owner?' selected':'')+'>'+esc(c.name)+'</option>'}).join("")+(r.owner&&!config.crew.some(function(c){return c.name===r.owner})?'<option selected>'+esc(r.owner)+'</option>':'');
+  var du=dueLabel(r.due);
+  var html='<div class="scrim" data-close></div><aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="dh"><div class="dhead"><div><h3 id="dh">'+esc(r.client)+'</h3><div class="sub">'+
+    (r.example?'<span class="pill ex">Example</span>':'')+'<span class="pill">'+esc(r.type)+'</span>'+(r.priority==="rush"?'<span class="pill rush">Rush</span>':'')+(du?'<span class="pill '+du.cls+'">'+esc(du.t)+'</span>':'')+'<span>via '+esc(r.source)+' · '+esc(ago(r.createdAt))+'</span></div></div><button class="x" data-close aria-label="Close">×</button></div><div class="dbody">';
+
+  // approval block
+  if(r.stage==="review"&&d){
+    html+='<div class="approve"><p><strong>Waiting on approval.</strong> Check the plan, price and reply below. Approving means the reply can go to the client and work can start.</p>'+
+      '<label class="f" for="revNote">Want changes instead? Tell Claude what to fix<textarea id="revNote" style="min-height:64px" placeholder="e.g. price is too high, they already paid a deposit…">'+esc(noteDraft)+'</textarea></label>'+
+      '<div class="row"><button class="btn go" data-a="approve"'+(generating?' disabled':'')+'>Approve'+(me()?' as '+esc(me()):'')+'</button><button class="btn" data-a="redo"'+(generating||!sample?' disabled':'')+'>Redo draft with my note</button></div></div>';
+  } else if(r.approvedBy&&(r.stage==="approved"||r.stage==="building"||r.stage==="done")){
+    html+='<div class="approved-note">Approved by '+esc(r.approvedBy)+' · '+esc(stamp(r.approvedAt))+'</div>';
+  }
+
+  // stage + owner
+  html+='<section class="sec"><h4>Stage</h4><div class="stagebar">'+STAGES.map(function(s){return '<button data-stage="'+s.id+'" aria-current="'+(r.stage===s.id)+'">'+esc(s.label)+'</button>'}).join("")+'</div>'+
+    '<div class="row" style="margin-top:12px"><label class="f" for="dOwner" style="flex:1 1 200px">Who’s on it<select id="dOwner">'+crewOpts+'</select></label>'+
+    (me()&&r.owner!==me()?'<button class="btn" data-a="claim" style="align-self:flex-end">I’ll take it</button>':'')+'</div></section>';
+
+  // draft
+  html+='<section class="sec draft"><h4><span>Claude’s draft</span>'+(d&&!generating?'<span class="muted" style="text-transform:none;letter-spacing:0;font-family:var(--body);font-weight:400">'+esc(ago(r.draftAt))+'</span>':'')+'</h4>';
+  if(generating){html+='<p class="muted"><span class="spin"></span> Claude is drafting the plan, price and client reply… this usually takes under a minute.</p>'}
+  else if(!d){html+='<p class="muted">'+(r.draftStatus==="failed"||isStuck(r)?"The last draft didn’t come through. ":"No draft yet. ")+'Claude reads the request, your crew roles and price list, and writes a plan to approve.</p><button class="btn primary" data-a="gen"'+(sample?'':' disabled')+'>Draft it with Claude</button>'}
+  else{
+    var tasks=Array.isArray(d.tasks)?d.tasks:[]; var est=d.estimate||{}; var items=Array.isArray(est.items)?est.items:[]; var qs=Array.isArray(d.questions)?d.questions:[];
+    var riskCls=d.risk==="high"?"rush":d.risk==="medium"?"amber":"green";
+    html+='<p class="summary">'+esc(d.summary)+'</p><div class="row" style="margin-bottom:12px">'+(d.processStep?'<span class="pill blue">Step: '+esc(d.processStep)+'</span>':'')+(d.hours?'<span class="pill mono">~'+esc(d.hours)+' hrs</span>':'')+(d.risk?'<span class="pill '+riskCls+'" title="'+esc(d.riskWhy||"")+'">'+esc(d.risk)+' risk</span>':'')+'</div>';
+    if(d.riskWhy)html+='<p class="muted" style="margin:-4px 0 12px">'+esc(d.riskWhy)+'</p>';
+    if(tasks.length)html+='<ul class="tasks">'+tasks.map(function(t){return '<li><span>'+esc(t.task)+'</span><span class="who">'+esc(t.owner||"Anyone")+'</span></li>'}).join("")+'</ul>';
+    r.stage!=="review"&&r.draftStatus==="failed"&&(html+='<p class="err">Last redo failed — this is the previous draft.</p>');
+    html+='</section>';
+    html+='<section class="sec"><h4>Price estimate</h4>'+(items.length?'<table class="est">'+items.map(function(i){return '<tr><td>'+esc(i.item)+'</td><td>'+esc(i.price)+'</td></tr>'}).join("")+(est.total?'<tr class="total"><td>Total</td><td>'+esc(est.total)+'</td></tr>':'')+'</table>':'<p class="muted">No line items.</p>')+(est.note?'<p class="muted" style="margin:8px 0 0">'+esc(est.note)+'</p>':'')+'</section>';
+    html+='<section class="sec"><h4><span>Reply to send the client</span><button class="btn" data-a="copy" style="padding:5px 10px;font-size:12.5px">Copy</button></h4><div class="reply" id="replyText">'+esc(d.clientReply||"")+'</div>'+(r.stage==="review"?'<p class="muted" style="margin:8px 0 0">Don’t send until it’s approved.</p>':'')+'</section>';
+    if(qs.length)html+='<section class="sec"><h4>Confirm with the client</h4><ul class="qs">'+qs.map(function(q){return '<li>'+esc(q)+'</li>'}).join("")+'</ul></section>';
+    if(r.stage!=="review")html+='<div class="row"><button class="btn" data-a="gen"'+(sample?'':' disabled')+'>Redraft with Claude</button></div>';
+    html+='<section class="sec" style="display:none">';
+  }
+  html+='</section>';
+
+  // request
+  html+='<section class="sec"><h4>The request</h4><dl class="kv"><dt>Client</dt><dd>'+esc(r.client)+'</dd><dt>Contact</dt><dd>'+esc(r.contact||"—")+'</dd><dt>Came in via</dt><dd>'+esc(r.source)+'</dd><dt>Logged by</dt><dd>'+esc(r.createdBy||"—")+'</dd><dt>Due</dt><dd>'+esc(r.due||"—")+'</dd></dl><div class="details">'+esc(r.details)+'</div></section>';
+
+  // log
+  var log=(r.log||[]).slice().reverse();
+  html+='<section class="sec"><h4>Activity</h4><ul class="log">'+log.map(function(l){return '<li><time>'+esc(stamp(l.at))+'</time><span><strong>'+esc(l.by)+'</strong> — '+esc(l.text)+'</span></li>'}).join("")+'</ul></section>';
+  html+='<div class="row"><button class="btn danger" data-a="delete">Delete request</button></div></div></aside>';
+
+  var focusedId=document.activeElement&&document.activeElement.id;
+  $("#layer").innerHTML=html;
+  if($(".dbody"))$(".dbody").scrollTop=scroll;
+  if(focusedId&&document.getElementById(focusedId))document.getElementById(focusedId).focus();
+  var rn=$("#revNote"); if(rn)rn.addEventListener("input",function(){noteDraft=rn.value});
+  var ow=$("#dOwner"); if(ow)ow.addEventListener("change",function(){patch(r,{owner:ow.value},ow.value?ow.value+" is on it":"Unassigned")});
+}
+
+$("#layer").addEventListener("click",async function(e){
+  var r=requests.find(function(x){return x.id===openId}); if(!r)return;
+  var st=e.target.closest("[data-stage]");
+  if(st&&st.dataset.stage!==r.stage){
+    var s=st.dataset.stage; var f={stage:s};
+    if(s==="done")f.doneAt=Date.now();
+    if(s==="approved"&&!r.approvedBy){f.approvedBy=me()||"Someone";f.approvedAt=Date.now()}
+    await patch(r,f,"Moved to "+STAGES.find(function(x){return x.id===s}).label); return;
+  }
+  var b=e.target.closest("[data-a]"); if(!b)return;
+  var a=b.dataset.a;
+  if(a==="approve"){ if(!me()){toast("Pick your name at the top first");return} await patch(r,{stage:"approved",approvedBy:me(),approvedAt:Date.now()},"Approved the plan"); toast("Approved — reply can go out"); }
+  if(a==="redo"){ var note=(noteDraft||"").trim(); if(!note){toast("Write what to change first");$("#revNote")&&$("#revNote").focus();return} noteDraft=""; generate(r,note); }
+  if(a==="gen"){ generate(r,""); }
+  if(a==="claim"){ await patch(r,{owner:me()},me()+" took it"); }
+  if(a==="copy"){ var t=(r.draft&&r.draft.clientReply)||""; try{await navigator.clipboard.writeText(t);toast("Reply copied")}catch(err){var rng=document.createRange();rng.selectNodeContents($("#replyText"));var sel=getSelection();sel.removeAllRanges();sel.addRange(rng);toast("Selected — press copy")} }
+  if(a==="delete"){ if(b.dataset.confirm){try{await db.collection("requests").doc(r.id).delete();closeLayer();toast("Request deleted")}catch(err){toast("Couldn’t delete")}} else {b.dataset.confirm="1";b.textContent="Tap again to delete for everyone"} }
+});
+
+/* ---------- settings ---------- */
+function openSettings(){
+  var crewText=config.crew.map(function(c){return c.name+(c.role?" — "+c.role:"")}).join("\n");
+  $("#layer").innerHTML='<div class="scrim" data-close></div><aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="sh"><div class="dhead"><div><h3 id="sh">Crew &amp; prices</h3><div class="sub">Shared with everyone on the board. Claude reads this every time it drafts.</div></div><button class="x" data-close aria-label="Close">×</button></div>'+
+  '<form class="dbody" id="setForm"><label class="f" for="sCrew">Crew — one per line, "Name — what they handle"<textarea id="sCrew">'+esc(crewText)+'</textarea></label>'+
+  '<label class="f" for="sPrices">Price list<textarea id="sPrices" style="min-height:220px">'+esc(config.prices)+'</textarea></label>'+
+  '<label class="f" for="sNotes">House rules Claude should follow<textarea id="sNotes" style="min-height:90px">'+esc(config.notes)+'</textarea></label>'+
+  '<div class="row"><button class="btn primary" type="submit">Save for everyone</button><button class="btn" type="button" data-close>Cancel</button></div></form></aside>';
+  $("#setForm").addEventListener("submit",async function(ev){
+    ev.preventDefault(); if(!db)return;
+    var crew=$("#sCrew").value.split("\n").map(function(l){l=l.trim();if(!l)return null;var m=l.split(/\s+[—–-]\s+/);return {name:m[0].trim().slice(0,40),role:(m.slice(1).join(" — ")||"").trim().slice(0,120)}}).filter(Boolean).slice(0,12);
+    try{await db.doc("config/team").set({crew:crew,prices:$("#sPrices").value.slice(0,6000),notes:$("#sNotes").value.slice(0,2000),updatedAt:Date.now(),updatedBy:me()||""});closeLayer();toast("Saved for the crew")}
+    catch(err){toast(err&&err.code==="invalid_argument"?"You don’t have edit access":"Couldn’t save — try again")}
+  });
+}
+$("#settingsBtn").addEventListener("click",openSettings);
+
+/* ---------- boot ---------- */
+render();
+setInterval(function(){if(!openId||!$("#revNote")||document.activeElement!==$("#revNote"))renderBoard()},60000);
+
+if(window.claude&&window.claude.use){
+  claude.use("sample").then(function(s){sample=s;render()});
+  claude.use("db").then(function(d){
+    db=d;
+    if(!db){dbReady=true;$("#notice").hidden=false;$("#notice").innerHTML="<span>The shared board isn’t connected in this view. Open it from Claude while signed in to your team account.</span>";renderBoard();return}
+    db.doc("config/team").onSnapshot(function(snap){var x=snap.exists?snap.data():{};config={crew:Array.isArray(x.crew)?x.crew:[],prices:x.prices||"",notes:x.notes||""};render()},function(){});
+    db.collection("requests").onSnapshot(function(snap){
+      requests=snap.docs.map(function(dd){return Object.assign({id:dd.id},dd.data())});dbReady=true;
+      var keepTyping=openId&&document.activeElement&&document.activeElement.id==="revNote";
+      renderMe();renderStats();renderBoard();renderNotice(); if(openId&&!keepTyping)renderDetail();
+    },function(){dbReady=true;$("#notice").hidden=false;$("#notice").textContent="Lost connection to the shared board — reload the page.";});
+  });
+}else{
+  dbReady=true; renderBoard();
+  $("#notice").hidden=false; $("#notice").textContent="Open this board inside Claude to see and add requests.";
+}
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,1512 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>College Rewards · Brothers Barbershop</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: one narrow column led by the matte-black member card with a gold "comb" progress bar (20 teeth = 200 pts); the barber screen widens to a two-column console. One dark look by design. */
+:root {
+  --ink: #0c0c0d; --surface: #151516; --raise: #1d1c1a; --line: #2d2a25;
+  --text: #f2ede3; --muted: #a39d91; --gold: #c9a44c; --gold-hi: #ecd18a; --gold-lo: #8a6d2a;
+  --good: #86c095; --bad: #e46f62; --on-gold: #15110a; --tip-sub: #5d574c;
+  --f-display: 'Big Shoulders Display', 'Oswald', 'Arial Narrow', Impact, sans-serif;
+  --f-body: 'Instrument Sans', 'Helvetica Neue', Arial, sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+[hidden] { display: none !important; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--ink); color: var(--text); }
+body {
+  font: 16px/1.5 var(--f-body); -webkit-font-smoothing: antialiased; min-height: 100vh;
+  background: radial-gradient(900px 520px at 50% -180px, rgba(201,164,76,.12), transparent 65%), var(--ink);
+}
+.demo { font: 500 12px/1.45 var(--f-mono); color: var(--on-gold); background: var(--gold);
+  padding-block: 8px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); text-align: center; }
+.wrap { max-width: 560px; margin: 0 auto; padding-block: 20px 40px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap.wide { max-width: 1120px; }
+.mono { font-family: var(--f-mono); }
+
+/* header */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
+.brand { display: flex; flex-direction: column; gap: 4px; line-height: 1; }
+.brand small { font: 600 10.5px/1 var(--f-body); letter-spacing: .24em; text-transform: uppercase; color: var(--muted); }
+.brand b { font: 800 26px/1 var(--f-display); letter-spacing: .02em; text-transform: uppercase; color: var(--gold-hi); }
+.nav { display: flex; gap: 6px; justify-content: flex-end; flex: none; }
+@media (max-width: 420px) { .brand b { font-size: 21px; } .nav button { padding: 8px 10px; } }
+.nav button { appearance: none; background: none; cursor: pointer; font: 600 13px/1 var(--f-body); padding: 9px 13px; border-radius: 999px; color: var(--muted); border: 1px solid var(--line); }
+.nav button[aria-current="page"] { color: var(--on-gold); background: var(--gold); border-color: var(--gold); }
+:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
+
+/* member card */
+.card3d { perspective: 900px; max-width: 420px; margin: 0 auto; }
+.card {
+  position: relative; aspect-ratio: 1.586 / 1; border-radius: 18px; padding: 18px 20px 16px; overflow: hidden;
+  display: flex; flex-direction: column;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.02) 0 1px, transparent 1px 3px),
+    radial-gradient(120% 95% at 0% 0%, #25221d 0%, #131313 55%, #090909 100%);
+  border: 1px solid rgba(201,164,76,.5);
+  box-shadow: 0 30px 60px -28px rgba(0,0,0,.95), inset 0 1px 0 rgba(255,255,255,.07);
+  transition: transform .25s ease; transform-style: preserve-3d;
+  animation: rise .8s cubic-bezier(.2,.8,.2,1) backwards;
+}
+.card-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.card-shop { font: 600 10px/1 var(--f-body); letter-spacing: .28em; text-transform: uppercase; color: var(--muted); }
+.card-tag { font: 600 10px/1 var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--gold); border: 1px solid var(--gold-lo); padding: 4px 8px; border-radius: 999px; }
+.card-title {
+  margin-top: auto; display: flex; flex-direction: column;
+  font: 900 clamp(32px, 10vw, 46px)/.86 var(--f-display); text-transform: uppercase; letter-spacing: .01em;
+  background: linear-gradient(100deg, var(--gold-lo), var(--gold-hi) 32%, var(--gold) 55%, #fff1c4 72%, var(--gold-lo));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.comb { display: flex; gap: 3px; align-items: flex-start; height: 34px; margin: 12px 0 6px; border-top: 2px solid var(--gold-lo); }
+.tooth { flex: 1; height: 11px; border: 1px solid var(--line); border-top: 0; border-radius: 0 0 3px 3px; position: relative;
+  transition: background .35s ease var(--d, 0ms), border-color .35s ease var(--d, 0ms); }
+.tooth.on { background: var(--gold); border-color: var(--gold); }
+.tooth.mark { height: 18px; }
+.tooth.mark::after { content: attr(data-label); position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+  font: 600 10px/1 var(--f-mono); color: var(--gold); white-space: nowrap; }
+.card-foot { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+.k { font: 600 10px/1 var(--f-body); letter-spacing: .2em; text-transform: uppercase; color: var(--muted); }
+.v { margin-top: 5px; font: 600 15px/1 var(--f-mono); color: var(--text); letter-spacing: .06em; }
+.pts { display: flex; align-items: baseline; gap: 4px; }
+.pts b { font: 800 40px/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.pts small { font: 600 12px/1 var(--f-mono); color: var(--muted); text-transform: uppercase; }
+.foil { position: absolute; inset: 0; pointer-events: none; mix-blend-mode: screen;
+  background: linear-gradient(105deg, transparent 36%, rgba(236,209,138,.24) 48%, rgba(255,255,255,.1) 52%, transparent 64%);
+  background-size: 300% 100%; background-position: 150% 0; animation: sweep 2.4s ease .45s 1 both; }
+.card3d:hover .foil { animation: sweep 1.6s ease 0s 1 both; }
+@keyframes sweep { to { background-position: -50% 0; } }
+@keyframes rise { from { transform: translateY(16px) rotateX(10deg); } }
+
+/* join page */
+.lead { font: 800 clamp(34px, 9vw, 46px)/.95 var(--f-display); text-transform: uppercase; margin: 30px 0 10px; text-wrap: balance; letter-spacing: .005em; }
+.lead em { font-style: normal; color: var(--gold-hi); }
+.sub { color: var(--muted); margin: 0 0 20px; }
+.sub b, .callout b { color: var(--text); }
+.steps { list-style: none; padding: 0; margin: 0 0 26px; display: grid; gap: 10px; }
+.steps li { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: start; padding: 14px 16px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.steps .n { font: 800 30px/1 var(--f-display); color: var(--gold); }
+.steps b { display: block; font-weight: 600; }
+.steps span:not(.n) { color: var(--muted); font-size: 14px; }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: 18px; padding: 22px 20px; }
+.panel h2, .mh { font: 800 28px/1 var(--f-display); text-transform: uppercase; margin: 0 0 6px; letter-spacing: .01em; }
+form { display: grid; gap: 14px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 420px) { .row2 { grid-template-columns: 1fr; } }
+.f { display: grid; gap: 7px; font: 600 11.5px/1 var(--f-body); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); min-width: 0; }
+input[type=text], input[type=tel], input[type=email], input[type=password], input[type=search], input[type=number], select {
+  width: 100%; font: 500 16px/1.2 var(--f-body); color: var(--text); background: var(--ink);
+  border: 1px solid var(--line); border-radius: 11px; padding: 13px 12px; letter-spacing: 0; text-transform: none;
+}
+input:focus, select:focus { border-color: var(--gold); outline: none; }
+input::placeholder { color: #6f6a61; }
+.check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; color: var(--text); line-height: 1.4; }
+.check input { width: 20px; height: 20px; accent-color: var(--gold); margin: 0; flex: none; }
+.btn { appearance: none; border: 0; cursor: pointer; font: 700 15px/1 var(--f-body); letter-spacing: .01em; border-radius: 12px;
+  padding: 15px 18px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: transform .12s ease, opacity .2s, background .2s; }
+.btn:active { transform: scale(.98); }
+a.btn { text-decoration: none; }
+.btn.gold { background: linear-gradient(180deg, var(--gold-hi), var(--gold)); color: var(--on-gold); }
+.btn.outline { background: transparent; color: var(--gold-hi); border: 1px solid var(--gold-lo); }
+.btn.outline.confirm { background: var(--gold); color: var(--on-gold); border-color: var(--gold); }
+.btn.ghost { background: transparent; color: var(--muted); padding: 10px 6px; }
+.btn[disabled] { opacity: .36; cursor: not-allowed; }
+.btn.big { width: 100%; font-size: 17px; padding: 18px; }
+.err { color: var(--bad); font-size: 14px; margin: 0; }
+.err:empty { display: none; }
+.textlink { appearance: none; background: none; border: 0; padding: 0; font: inherit; cursor: pointer; color: var(--gold-hi); text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
+details.terms { margin-top: 22px; border-top: 1px solid var(--line); padding-top: 14px; color: var(--muted); font-size: 14px; }
+details.terms summary { cursor: pointer; color: var(--text); font-weight: 600; }
+details.terms ol { padding-left: 20px; margin: 10px 0 0; }
+details.terms li { margin: 7px 0; }
+.callout { border: 1px dashed var(--gold-lo); border-radius: 14px; padding: 14px 16px; background: rgba(201,164,76,.06); font-size: 15px; }
+.code { font: 600 36px/1 var(--f-mono); letter-spacing: .08em; color: var(--gold-hi); margin: 0 0 8px; }
+h3.sec { font: 700 11.5px/1 var(--f-body); letter-spacing: .22em; text-transform: uppercase; color: var(--muted); margin: 28px 0 8px; }
+footer { margin-top: 40px; display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; color: var(--muted); font-size: 13px; border-top: 1px solid var(--line); padding-top: 16px; }
+footer .textlink { color: var(--muted); font-weight: 500; }
+
+/* my card */
+.status-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+.rewards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 16px 0 0; }
+.reward { border: 1px solid var(--line); border-radius: 14px; padding: 14px; background: var(--surface); }
+.reward.ready { border-color: var(--gold); background: linear-gradient(180deg, rgba(201,164,76,.16), rgba(201,164,76,.04)); }
+.r-off { font: 800 32px/1 var(--f-display); text-transform: uppercase; }
+.reward.ready .r-off { color: var(--gold-hi); }
+.r-need { font: 600 12px/1 var(--f-mono); color: var(--muted); margin-top: 6px; }
+.r-state { font-size: 13px; margin-top: 10px; color: var(--muted); }
+.reward.ready .r-state { color: var(--text); font-weight: 600; }
+.pill { display: inline-flex; align-items: center; gap: 7px; font: 600 12px/1 var(--f-body); padding: 6px 10px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.pill::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.pill.Verified { color: var(--good); border-color: rgba(134,192,149,.4); }
+.pill.Pending { color: var(--gold-hi); border-color: var(--gold-lo); }
+.hist { list-style: none; margin: 0; padding: 0; }
+.hist li { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.h-type { font-weight: 600; }
+.h-when { grid-column: 1; color: var(--muted); font-size: 13px; }
+.h-pts { grid-row: 1 / span 2; grid-column: 2; align-self: center; font: 600 15px/1 var(--f-mono); font-variant-numeric: tabular-nums; }
+.pos { color: var(--gold-hi); } .neg { color: var(--muted); }
+.empty, .note { margin: 0; color: var(--muted); font-size: 13.5px; }
+.row-btns { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+
+/* barber console */
+.console-bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; justify-content: space-between; margin-bottom: 16px; }
+.console-bar .f { width: min(260px, 100%); }
+.warn { border: 1px solid var(--bad); background: rgba(228,111,98,.08); border-radius: 12px; padding: 12px 14px; font-size: 14px; margin-bottom: 14px; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 18px; }
+@media (max-width: 640px) { .stats { grid-template-columns: repeat(2, 1fr); } }
+.stat { border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; background: var(--surface); }
+.stat b { display: block; font: 800 32px/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.stat span { font: 600 10.5px/1 var(--f-body); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.cols { display: grid; grid-template-columns: 1.25fr 1fr; gap: 20px; }
+.cols > div { min-width: 0; }
+@media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
+.list { list-style: none; margin: 0; padding: 0; }
+.list button { appearance: none; background: none; border: 0; color: inherit; font: inherit; text-align: left; cursor: pointer; width: 100%;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; padding: 12px; border-radius: 12px; }
+.list button:hover { background: var(--raise); }
+.list .nm { font-weight: 600; overflow-wrap: anywhere; }
+.list .meta { color: var(--muted); font-size: 13px; grid-column: 1; overflow-wrap: anywhere; }
+.list .right { grid-row: 1 / span 2; grid-column: 2; align-self: center; display: flex; gap: 10px; align-items: center; }
+.list .p { font: 600 15px/1 var(--f-mono); font-variant-numeric: tabular-nums; }
+
+/* member sheet + QR sheet */
+.sheet { position: fixed; inset: 0; z-index: 30; background: rgba(0,0,0,.68); display: flex; align-items: flex-end; justify-content: center;
+  padding-top: max(12px, env(safe-area-inset-top, 0px)); }
+@media (min-width: 700px) { .sheet { align-items: center; padding: 24px; } }
+.sheet-body { width: 100%; max-width: 560px; max-height: 100%; overflow: auto; background: var(--surface); border: 1px solid var(--line);
+  border-radius: 22px 22px 0 0; padding-block: 18px calc(26px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px));
+  animation: up .28s cubic-bezier(.2,.8,.2,1) backwards; }
+@media (min-width: 700px) { .sheet-body { border-radius: 22px; padding: 24px; } }
+@keyframes up { from { transform: translateY(28px); } }
+.sheet-close { float: right; margin: -6px -4px 0 8px; }
+.m-head { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; }
+.m-head h3 { font: 800 32px/1 var(--f-display); text-transform: uppercase; margin: 0; overflow-wrap: anywhere; }
+.m-facts { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 14px; margin: 16px 0 18px; font-size: 14px; }
+.m-facts dt { color: var(--muted); }
+.m-facts dd { margin: 0; overflow-wrap: anywhere; }
+.flag { display: inline-block; color: var(--gold-hi); font-size: 12px; margin-left: 6px; }
+.m-points { display: flex; align-items: baseline; gap: 10px; }
+.m-points b { font: 800 56px/1 var(--f-display); color: var(--gold-hi); font-variant-numeric: tabular-nums; }
+.comb.mini { margin: 10px 0 22px; }
+.m-actions { display: grid; gap: 10px; }
+.redeem-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.result { border-radius: 16px; padding: 16px 18px; margin-bottom: 18px; background: linear-gradient(180deg, var(--gold-hi), var(--gold)); color: var(--on-gold);
+  font: 800 28px/1 var(--f-display); text-transform: uppercase; animation: pop .35s cubic-bezier(.2,.8,.2,1.2) backwards; }
+.result small { display: block; font: 600 13.5px/1.35 var(--f-body); text-transform: none; margin-top: 7px; }
+@keyframes pop { from { transform: scale(.94); } }
+.isteps { margin: 0 0 18px; padding-left: 22px; display: grid; gap: 8px; font-size: 15px; }
+.isteps b { color: var(--gold-hi); }
+.filepick { position: relative; overflow: hidden; }
+.filepick input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.filepick:focus-within { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
+#impSample { margin-top: 6px; }
+#impOut { margin-top: 18px; }
+.imp { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 14px; color: var(--muted); }
+.imp b { color: var(--text); font: 600 15px/1 var(--f-mono); margin-right: 6px; }
+.alias { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; align-items: end; margin-top: 24px; }
+.qr { background: #fff; border-radius: 16px; padding: 14px; width: min(280px, 100%); margin: 18px auto 12px; }
+.qr svg, .qr img { display: block; width: 100%; height: auto; }
+.url { font: 500 12px/1.45 var(--f-mono); color: var(--muted); overflow-wrap: anywhere; text-align: center; margin: 0; }
+.toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 40;
+  background: var(--text); color: var(--ink); padding: 12px 16px; border-radius: 12px; font-weight: 600; font-size: 14px;
+  width: max-content; max-width: calc(100% - 32px); box-shadow: 0 12px 30px rgba(0,0,0,.55); }
+/* owner dashboard */
+#ownerDash { display: grid; gap: 16px; }
+#ownerDash > *, .cols > * { min-width: 0; }
+#ownerDash .cols { align-items: start; }
+.dash-head { display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end; justify-content: space-between; margin-bottom: 4px; }
+.eyebrow { margin: 0 0 8px; font: 600 11px/1 var(--f-body); letter-spacing: .22em; text-transform: uppercase; color: var(--gold); }
+.dash-title { margin: 0; font: 900 clamp(38px, 7vw, 56px)/.88 var(--f-display); text-transform: uppercase; }
+.dash-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.kpis { display: grid; grid-template-columns: 1.4fr repeat(4, minmax(0, 1fr)); gap: 10px; }
+@media (max-width: 900px) { .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } .kpi.hero { grid-column: 1 / -1; } }
+.kpi { border: 1px solid var(--line); border-radius: 16px; padding: 16px; background: var(--surface); display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.kpi span { font: 600 10.5px/1.25 var(--f-body); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+.kpi b { font: 800 42px/1 var(--f-display); font-variant-numeric: tabular-nums; }
+.kpi em { font-style: normal; font-size: 13px; color: var(--muted); }
+.kpi.hero { border-color: var(--gold-lo); background: linear-gradient(160deg, rgba(201,164,76,.2), rgba(201,164,76,.03) 60%), var(--surface); }
+.kpi.hero b { font-size: 68px; color: var(--gold-hi); }
+.kpi em.up { color: var(--good); } .kpi em.down { color: var(--bad); }
+.ch { font: 800 22px/1 var(--f-display); text-transform: uppercase; margin: 0; letter-spacing: .01em; }
+.chart-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+.panel > .ch { margin-bottom: 12px; }
+.chart { position: relative; overflow-x: auto; }
+.chart svg { display: block; }
+.chart .ax { fill: var(--muted); font: 500 11px var(--f-mono); }
+.chart .val { fill: var(--text); font: 600 12px var(--f-mono); }
+.chart .gl { stroke: var(--line); }
+.chart .bl { stroke: var(--gold-lo); }
+.chart .bar { fill: var(--gold); transition: fill .15s; }
+.chart .col { cursor: default; outline: none; }
+.chart .col:hover .bar, .chart .col:focus .bar { fill: var(--gold-hi); }
+.chart .col:focus-visible .hit { stroke: var(--gold-hi); stroke-width: 1.5; }
+.chart .grow { transform-box: fill-box; transform-origin: bottom; animation: grow .6s cubic-bezier(.2,.8,.2,1) backwards; }
+@keyframes grow { from { transform: scaleY(0); } }
+.tip { position: absolute; pointer-events: none; background: var(--text); color: var(--ink); border-radius: 10px; padding: 8px 11px; font-size: 13px; line-height: 1.4;
+  white-space: nowrap; transform: translate(-50%, calc(-100% - 10px)); box-shadow: 0 10px 26px rgba(0,0,0,.55); z-index: 2; }
+.tip b { display: block; font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--tip-sub); }
+.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
+.tbl th { text-align: left; font: 600 10.5px/1 var(--f-body); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); padding: 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.tbl td { padding: 11px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+.tbl .num { text-align: right; font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.tbl tr[data-member] { cursor: pointer; }
+.tbl tr[data-member]:hover, .tbl tr[data-member]:focus-visible { background: var(--raise); }
+.tbl .sub { display: block; color: var(--muted); font: 500 12px/1.3 var(--f-mono); }
+.tablewrap { overflow-x: auto; }
+#oTable { min-width: 620px; }
+.dbar { display: block; height: 4px; border-radius: 2px; background: var(--gold); margin-top: 7px; }
+.tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 12px; }
+.tools input { flex: 1 1 220px; width: auto; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chips button { appearance: none; background: none; border: 1px solid var(--line); color: var(--muted); font: 600 13px/1 var(--f-body); padding: 9px 12px; border-radius: 999px; cursor: pointer; }
+.chips button[aria-pressed="true"] { background: var(--gold); border-color: var(--gold); color: var(--on-gold); }
+.owner-tools { margin-top: 24px; padding-top: 4px; border-top: 1px solid var(--line); display: grid; gap: 12px; }
+.quick { display: flex; gap: 8px; flex-wrap: wrap; }
+.quick button { appearance: none; background: var(--ink); border: 1px solid var(--gold-lo); color: var(--gold-hi); font: 600 14px/1 var(--f-mono); padding: 10px 14px; border-radius: 10px; cursor: pointer; }
+.h-note { grid-column: 1; color: var(--muted); font-size: 12.5px; font-style: italic; }
+/* counter code: student claim + counter screen */
+.claim { margin-top: 16px; border: 1px solid var(--gold-lo); border-radius: 16px; padding: 16px; background: linear-gradient(180deg, rgba(201,164,76,.12), rgba(201,164,76,.02)); display: grid; gap: 12px; }
+.claim-head b { display: block; font: 800 24px/1 var(--f-display); text-transform: uppercase; }
+.claim-head span { color: var(--muted); font-size: 14px; }
+#claimForm { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; }
+#claimCode { font: 600 26px/1 var(--f-mono); letter-spacing: .32em; text-align: center; padding: 14px 8px; }
+.ptswrap { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.pend { font: 600 11px/1 var(--f-mono); color: var(--gold); letter-spacing: .04em; }
+.counter-mode .top, .counter-mode footer, .counter-mode .demo { display: none; }
+.counter { min-height: calc(100vh - 40px); display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; gap: 16px; }
+.c-title { font: 900 clamp(42px, 9vw, 92px)/.9 var(--f-display); text-transform: uppercase; margin: 0; text-wrap: balance; }
+.c-sub { color: var(--muted); font-size: clamp(16px, 2.4vw, 22px); max-width: 640px; margin: 0; }
+.c-sub b { color: var(--text); }
+.c-code { font: 800 clamp(64px, 17vw, 184px)/1 var(--f-display); letter-spacing: .06em; color: var(--gold-hi); font-variant-numeric: tabular-nums; white-space: nowrap;
+  padding: 14px clamp(16px, 4vw, 40px); border: 1px solid var(--gold-lo); border-radius: 28px; background: radial-gradient(120% 120% at 50% 0%, rgba(201,164,76,.16), transparent 70%), var(--surface); }
+.c-code.flip { animation: flip .5s cubic-bezier(.2,.8,.2,1); }
+@keyframes flip { from { transform: perspective(600px) rotateX(80deg); opacity: .2; } }
+.c-bar { width: min(520px, 80vw); height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.c-bar span { display: block; height: 100%; background: var(--gold); transform-origin: left; transition: transform .25s linear; }
+.c-note { color: var(--muted); font-size: 14px; margin: 0; }
+.c-foot { display: flex; gap: 12px; align-items: center; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+</style>
+
+<div class="demo" id="demoBar" hidden>Demo with example data. Nothing is saved. Try My card: (609) 555-0142, PIN 1234. Barber PIN: 0000. Owner PIN: 9999.</div>
+
+<main class="wrap" id="wrap">
+  <header class="top">
+    <div class="brand"><small>Brothers Barbershop</small><b>College Rewards</b></div>
+    <nav class="nav" aria-label="Sections">
+      <button type="button" data-go="join" aria-current="page">Join</button>
+      <button type="button" data-go="card">My card</button>
+    </nav>
+  </header>
+
+  <!-- JOIN -->
+  <section id="v-join">
+    <div id="heroCard"></div>
+    <h1 class="lead">Every paid cut <em>adds up.</em></h1>
+    <p class="sub">College students earn <b><span class="r-cut">10</span> points</b> for every paid haircut, with any barber. <b><span class="r-t1p">100</span> points = $<span class="r-t1o">5</span> off.</b> <b><span class="r-t2p">200</span> points = $<span class="r-t2o">10</span> off.</b></p>
+    <ol class="steps">
+      <li><span class="n">1</span><div><b>Join below</b><span>Takes a minute. Use your college email.</span></div></li>
+      <li><span class="n">2</span><div><b>Show your student ID</b><span>Your barber checks it once, at your next cut. That turns your card on.</span></div></li>
+      <li><span class="n">3</span><div><b>Earn, then save</b><span>Points add after every paid cut. Ask any barber to use a reward before you pay.</span></div></li>
+    </ol>
+    <a class="btn outline big" data-book hidden href="#" target="_blank" rel="noopener" style="margin-bottom:26px">Book a cut</a>
+    <div class="panel">
+      <h2>Join College Rewards</h2>
+      <p class="sub" style="margin-bottom:16px">For students at any accredited college or university.</p>
+      <form id="joinForm" novalidate>
+        <div class="row2">
+          <label class="f" for="jFirst">First name<input type="text" id="jFirst" autocomplete="given-name" maxlength="40" required></label>
+          <label class="f" for="jLast">Last name<input type="text" id="jLast" autocomplete="family-name" maxlength="40" required></label>
+        </div>
+        <label class="f" for="jPhone">Phone<input type="tel" id="jPhone" autocomplete="tel" inputmode="tel" placeholder="(609) 555-0123" required></label>
+        <label class="f" for="jCollege">College or university<input type="text" id="jCollege" maxlength="80" placeholder="e.g. Rider University" required></label>
+        <label class="f" for="jEmail">College email<input type="email" id="jEmail" autocomplete="email" maxlength="120" placeholder="you@school.edu" required></label>
+        <label class="f" for="jPin">Create a 4-digit PIN<input type="password" id="jPin" inputmode="numeric" maxlength="4" autocomplete="new-password" placeholder="You'll use it to check your points" required></label>
+        <label class="check" for="jAgree"><input type="checkbox" id="jAgree"><span>I'm a current college student and I agree to the <button type="button" class="textlink" data-terms>program terms</button>.</span></label>
+        <p class="err" id="joinErr" role="alert"></p>
+        <button class="btn gold big" type="submit">Join College Rewards</button>
+      </form>
+      <p class="sub" style="margin:16px 0 0">Already joined? <button type="button" class="textlink" data-go="card">Check my points</button></p>
+    </div>
+    <details class="terms" id="terms">
+      <summary>Program terms</summary>
+      <ol>
+        <li>Open to students currently enrolled at an accredited college or university. A barber checks a valid student ID before your card earns points. Brothers Barbershop may ask to see it again each semester.</li>
+        <li>Earn <span class="r-cut">10</span> points for each completed, paid haircut at Brothers Barbershop, with any barber. Limit one haircut credit per day.</li>
+        <li>Canceled appointments, no-shows and unpaid services earn no points.</li>
+        <li><span class="r-t1p">100</span> points = $<span class="r-t1o">5</span> off. <span class="r-t2p">200</span> points = $<span class="r-t2o">10</span> off. Ask your barber before you pay. One reward per visit.</li>
+        <li>Rewards have no cash value, can't be combined with other discounts or promotions, and can't be transferred or shared.</li>
+        <li>We keep your name, phone, college and college email to run the program. We don't keep copies of your ID.</li>
+        <li>Brothers Barbershop may change or end the program. Changes will be posted in the shop.</li>
+      </ol>
+    </details>
+  </section>
+
+  <!-- JOINED -->
+  <section id="v-done" hidden>
+    <div id="doneCard"></div>
+    <h1 class="lead">You're in, <em id="doneName">friend.</em></h1>
+    <div class="callout">Your card is <b>pending</b>. Show your student ID to your barber at your next cut. After that, every paid haircut adds <b><span class="r-cut">10</span> points</b>.</div>
+    <h3 class="sec">Your member code</h3>
+    <p class="code" id="doneCode"></p>
+    <p class="sub">Give your barber this code or your phone number. Check your points anytime under My card, with your phone number and PIN.</p>
+    <div class="row-btns"><a class="btn gold" data-book hidden href="#" target="_blank" rel="noopener">Book your next cut</a><button class="btn outline" type="button" data-go="card">Go to My card</button></div>
+  </section>
+
+  <!-- MY CARD -->
+  <section id="v-card" hidden>
+    <div class="panel" id="cardLogin">
+      <h2>My card</h2>
+      <p class="sub" style="margin-bottom:16px">Enter the phone number and PIN you joined with.</p>
+      <form id="cardForm" novalidate>
+        <label class="f" for="cPhone">Phone<input type="tel" id="cPhone" autocomplete="tel" inputmode="tel" required></label>
+        <label class="f" for="cPin">PIN<input type="password" id="cPin" inputmode="numeric" maxlength="4" autocomplete="current-password" required></label>
+        <p class="err" id="cardErr" role="alert"></p>
+        <button class="btn gold big" type="submit">Show my points</button>
+      </form>
+      <p class="sub" style="margin:16px 0 0">Not a member yet? <button type="button" class="textlink" data-go="join">Join here</button></p>
+    </div>
+    <div id="cardView" hidden>
+      <div id="myCard"></div>
+      <div class="status-line"><span class="pill" id="myStatus"></span><span class="note" id="myCollege"></span></div>
+      <div class="callout" id="myPending" style="margin-top:14px" hidden>Show your student ID to any barber at your next cut. Your points start after that.</div>
+      <div class="claim" id="claimBox" hidden>
+        <div class="claim-head"><b>Just paid for your cut?</b><span>Type the 6-digit code on the counter screen by the register.</span></div>
+        <form id="claimForm" novalidate>
+          <input type="text" id="claimCode" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="000000" aria-label="Counter code">
+          <button class="btn gold" type="submit">Claim points</button>
+        </form>
+        <p class="err" id="claimErr" role="alert"></p>
+      </div>
+      <div class="callout" id="claimDone" style="margin-top:14px" hidden></div>
+      <div class="rewards" id="myRewards"></div>
+      <h3 class="sec">Activity</h3>
+      <div id="myHist"></div>
+      <div class="row-btns"><a class="btn gold" data-book hidden href="#" target="_blank" rel="noopener">Book your next cut</a><button class="btn outline" id="myRefresh" type="button">Refresh</button><button class="btn ghost" id="myOut" type="button">Sign out</button></div>
+    </div>
+  </section>
+
+  <!-- BARBERS -->
+  <section id="v-staff" hidden>
+    <div class="panel" id="staffGate" style="max-width:440px;margin:0 auto">
+      <h2>Staff login</h2>
+      <p class="sub" style="margin-bottom:16px">Barbers use the staff PIN. The owner PIN opens the owner dashboard.</p>
+      <form id="staffForm" novalidate>
+        <label class="f" for="sPin">Barber or owner PIN<input type="password" id="sPin" inputmode="numeric" autocomplete="off" required></label>
+        <p class="err" id="staffErr" role="alert"></p>
+        <button class="btn gold big" type="submit">Open barber screen</button>
+      </form>
+    </div>
+    <div id="console" hidden>
+      <div class="console-bar">
+        <label class="f" for="barberSel">Barber on this phone<select id="barberSel"></select></label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn outline" id="toOwner" type="button" hidden>Owner dashboard</button><button class="btn outline" id="ctrBtn" type="button">Counter screen</button><button class="btn gold" id="impBtn" type="button">Import SQUIRE report</button><button class="btn outline" id="qrBtn" type="button">Shop QR</button><button class="btn ghost" id="staffOut" type="button">Log out</button></div>
+      </div>
+      <div class="warn" id="pinWarn" hidden>The staff PIN is still 0000. Change it in the Settings tab of the Google Sheet before launch.</div>
+      <div class="stats">
+        <div class="stat"><b id="stMembers">0</b><span>Members</span></div>
+        <div class="stat"><b id="stVerified">0</b><span>Verified</span></div>
+        <div class="stat"><b id="stCuts">0</b><span>Cuts today</span></div>
+        <div class="stat"><b id="stRewards">0</b><span>Rewards today</span></div>
+      </div>
+      <label class="f" for="search">Find a member<input type="search" id="search" placeholder="Name, phone, or member code" autocomplete="off"></label>
+      <div class="cols">
+        <div><h3 class="sec" id="listTitle">Waiting for ID check</h3><ul class="list" id="list"></ul></div>
+        <div><h3 class="sec">Recent activity</h3><div id="recent"></div></div>
+      </div>
+    </div>
+
+    <div id="ownerDash" hidden>
+      <div class="dash-head">
+        <div><p class="eyebrow" id="oMonth">This month</p><h1 class="dash-title">Owner dashboard</h1></div>
+        <div class="dash-actions">
+          <button class="btn gold" id="oImp" type="button">Import SQUIRE report</button>
+          <button class="btn outline" id="oQr" type="button">Shop QR</button>
+          <button class="btn outline" id="oCtr" type="button">Counter screen</button>
+          <button class="btn outline" id="toBarber" type="button">Barber screen</button>
+          <button class="btn ghost" id="oOut" type="button">Log out</button>
+        </div>
+      </div>
+      <div class="warn" id="oWarn" hidden></div>
+      <div class="kpis">
+        <div class="kpi hero"><span>Paid haircuts this month</span><b id="kCuts">0</b><em id="kCutsVs"></em></div>
+        <div class="kpi"><span>Students</span><b id="kMembers">0</b><em id="kMembersSub"></em></div>
+        <div class="kpi"><span>New this month</span><b id="kNew">0</b><em>signed up</em></div>
+        <div class="kpi"><span>Rewards given</span><b id="kOff">$0</b><em id="kOffSub"></em></div>
+        <div class="kpi"><span>Points on cards</span><b id="kPts">0</b><em id="kReady"></em></div>
+      </div>
+      <div class="panel">
+        <div class="chart-head"><h2 class="ch">Paid haircuts per week</h2><span class="note">Students only · last 12 weeks · hover a bar for details</span></div>
+        <div class="chart" id="oChart"></div>
+      </div>
+      <div class="cols">
+        <div class="panel"><h2 class="ch">Barbers this month</h2><div class="tablewrap" id="oBarbers"></div></div>
+        <div class="panel"><h2 class="ch">Top students</h2><div id="oTop"></div></div>
+      </div>
+      <div class="panel">
+        <div class="chart-head"><h2 class="ch">All members</h2><span class="note" id="oCount"></span></div>
+        <div class="tools">
+          <input type="search" id="oSearch" placeholder="Search name, code, or college" aria-label="Search members" autocomplete="off">
+          <div class="chips" role="group" aria-label="Filter members">
+            <button type="button" data-f="all" aria-pressed="true">All</button>
+            <button type="button" data-f="Verified" aria-pressed="false">Verified</button>
+            <button type="button" data-f="Pending" aria-pressed="false">Waiting for ID</button>
+            <button type="button" data-f="ready" aria-pressed="false">Reward ready</button>
+          </div>
+        </div>
+        <div class="tablewrap"><table class="tbl" id="oTable"><thead><tr><th>Member</th><th>College</th><th>Status</th><th class="num">Points</th><th class="num">Lifetime</th><th>Last cut</th></tr></thead><tbody></tbody></table></div>
+        <p class="note" style="margin-top:10px">Tap a member to add or remove points, add a haircut, redeem, or ask for their ID again.</p>
+      </div>
+      <div class="panel"><h2 class="ch">Activity</h2><div id="oActivity"></div></div>
+    </div>
+  </section>
+
+  <section id="v-counter" hidden>
+    <div class="counter">
+      <p class="eyebrow">Brothers Barbershop · College Rewards</p>
+      <h1 class="c-title">Paid for your cut?</h1>
+      <p class="c-sub">Open College Rewards, tap <b>My card</b>, and type this code to claim <b>+<span class="r-cut">10</span> points</b>.</p>
+      <div class="c-code" id="cCode" aria-live="polite">&middot;&middot;&middot; &middot;&middot;&middot;</div>
+      <div class="c-bar" aria-hidden="true"><span id="cBar"></span></div>
+      <p class="c-note" id="cNote">New code every 60 seconds and after each use.</p>
+      <div class="c-foot">
+        <button class="btn outline" id="cDemo" type="button" hidden>Demo: switch to a student's phone</button>
+        <button class="btn ghost" id="cExit" type="button">Exit counter screen</button>
+      </div>
+    </div>
+  </section>
+
+  <footer><span>Brothers Barbershop · College Rewards</span><button type="button" class="textlink" data-go="staff">Barber login</button></footer>
+</main>
+
+<div class="sheet" id="mSheet" hidden><div class="sheet-body" role="dialog" aria-modal="true" aria-labelledby="mName">
+  <button class="btn ghost sheet-close" type="button" data-close>Close</button><div id="mBody"></div>
+</div></div>
+
+<div class="sheet" id="qSheet" hidden><div class="sheet-body" role="dialog" aria-modal="true" aria-labelledby="qTitle">
+  <button class="btn ghost sheet-close" type="button" data-close>Close</button>
+  <h2 class="mh" id="qTitle">Shop QR</h2>
+  <p class="sub">Students scan this to join and check their points. Screenshot it, or print it for the counter and mirrors.</p>
+  <div class="qr" id="qrBox"></div>
+  <p class="url" id="qrUrl"></p>
+  <div style="display:flex;justify-content:center;margin-top:12px"><button class="btn outline" id="copyUrl" type="button">Copy link</button></div>
+</div></div>
+
+<div class="sheet" id="iSheet" hidden><div class="sheet-body" role="dialog" aria-modal="true" aria-labelledby="iTitle">
+  <button class="btn ghost sheet-close" type="button" data-close>Close</button>
+  <h2 class="mh" id="iTitle">Add points from SQUIRE</h2>
+  <p class="sub">Every paid haircut in the report earns points for verified students. Importing the same days twice never doubles points.</p>
+  <ol class="isteps">
+    <li>On a computer, open the SQUIRE Commander web app at <span class="mono">app.getsquire.com</span>.</li>
+    <li>Tap <b>Register</b> (bottom right), then <b>Daily Summary</b>.</li>
+    <li>Tap <b>Download</b>, pick the days since your last import, and save the .CSV file.</li>
+    <li>Choose that file below.</li>
+  </ol>
+  <label class="btn gold big filepick" for="impFile">Choose SQUIRE .CSV file<input type="file" id="impFile" accept=".csv,text/csv"></label>
+  <button class="btn ghost" id="impSample" type="button" hidden>Try a sample report instead</button>
+  <div id="impOut" aria-live="polite"></div>
+</div></div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+(function () {
+  'use strict';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var live = !!(window.google && google.script && google.script.run);
+  var calm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var cfg = { perCut: 10, tiers: [{ points: 100, off: 5 }, { points: 200, off: 10 }], appUrl: '' };
+  var state = { creds: null, staff: null, member: null, pending: [], seq: 0 };
+  var store = {
+    get: function (k) { try { return localStorage.getItem('cr_' + k); } catch (e) { return null; } },
+    set: function (k, v) { try { localStorage.setItem('cr_' + k, v); } catch (e) {} },
+    del: function (k) { try { localStorage.removeItem('cr_' + k); } catch (e) {} }
+  };
+
+  /* ---------- formatting ---------- */
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function digits(s) { return String(s || '').replace(/\D/g, ''); }
+  function normPhone(s) { var d = digits(s); if (d.length === 11 && d[0] === '1') d = d.slice(1); return d.length === 10 ? d : ''; }
+  function fmtPhone(d) { return d.length === 10 ? '(' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6) : d; }
+  var MON = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function fmtWhen(s) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})(?: (\d{2}):(\d{2}))?/.exec(s || '');
+    if (!m) return s || '';
+    var out = MON[+m[2] - 1] + ' ' + (+m[3]);
+    if (m[4]) { var h = +m[4], ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; out += ', ' + h + ':' + m[5] + ' ' + ap; }
+    return out;
+  }
+  function label(a) {
+    if (a.type === 'Haircut') return 'Paid haircut';
+    if (a.type === 'Reward') return '$' + a.off + ' off reward';
+    if (a.type === 'Verified') return 'Student ID checked';
+    if (a.type === 'Adjustment') return a.points >= 0 ? 'Points added by owner' : 'Points removed by owner';
+    if (a.type === 'Recheck') return 'Asked for student ID again';
+    if (a.type === 'Claim') return 'Claimed at the counter (pending)';
+    if (a.type === 'Expired') return 'Claim dropped: no paid cut found';
+    return 'Joined';
+  }
+
+  /* ---------- backend ---------- */
+  function api(name) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    if (!live) {
+      return new Promise(function (res, rej) {
+        setTimeout(function () { try { res(JSON.parse(JSON.stringify(Mock[name].apply(null, args)))); } catch (e) { rej(e); } }, 240);
+      });
+    }
+    return new Promise(function (res, rej) {
+      var run = google.script.run.withSuccessHandler(res).withFailureHandler(function (e) {
+        rej(new Error(String((e && e.message) || e).replace(/^(Exception|Error):\s*/, '')));
+      });
+      run[name].apply(run, args);
+    });
+  }
+  function sapi(name) {
+    var args = [name, state.staff && state.staff.token].concat(Array.prototype.slice.call(arguments, 1));
+    return api.apply(null, args).catch(function (e) {
+      if (/session expired/i.test(e.message)) { lockStaff(e.message); }
+      throw e;
+    });
+  }
+
+  /* ---------- ui helpers ---------- */
+  var toastT;
+  function toast(msg) { var t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(function () { t.hidden = true; }, 3600); }
+  function busy(btn, on) {
+    if (!btn) return;
+    if (!btn.dataset.idle) btn.dataset.idle = btn.textContent;
+    btn.disabled = on; btn.textContent = on ? 'One sec…' : btn.dataset.idle;
+  }
+  function openSheet(sel) { $(sel).hidden = false; var c = $(sel + ' [data-close]'); if (c) c.focus(); }
+  function closeSheets() { $$('.sheet').forEach(function (s) { s.hidden = true; }); }
+  function applyRules() {
+    var t = cfg.tiers;
+    $$('.r-cut').forEach(function (e) { e.textContent = cfg.perCut; });
+    $$('.r-t1p').forEach(function (e) { e.textContent = t[0].points; });
+    $$('.r-t1o').forEach(function (e) { e.textContent = t[0].off; });
+    $$('.r-t2p').forEach(function (e) { e.textContent = t[1].points; });
+    $$('.r-t2o').forEach(function (e) { e.textContent = t[1].off; });
+    showBook();
+  }
+
+  /* ---------- SQUIRE booking widget ----------
+   * Loads SQUIRE's official widget (widget.getsquire.com) only when someone taps Book,
+   * and opens it with SquireWidget.open(). SQUIRE's widget does not report bookings or
+   * payments to this page, so points still come from the barber tap or the report import. */
+  var sq = { state: 'idle' };
+  function bookUrl() { return 'https://getsquire.com/booking/brands/' + encodeURIComponent(cfg.squireBrand || '') + '?platform=widget'; }
+  function showBook() {
+    var on = live ? !!cfg.squireBrand : true;
+    $$('[data-book]').forEach(function (a) { a.hidden = !on; a.href = cfg.squireBrand ? bookUrl() : '#'; });
+  }
+  function loadSquire(cb) {
+    if (window.SquireWidget) return cb(true);
+    if (sq.state !== 'loading') {
+      sq.state = 'loading';
+      var s = document.createElement('script');
+      s.src = 'https://widget.getsquire.com/widget.js?' + Date.now();
+      s.setAttribute('defer', ''); s.setAttribute('type', 'text/javascript');
+      s.setAttribute('brand', cfg.squireBrand);
+      s.setAttribute('x-squire-inline-enabled', 'true');
+      s.setAttribute('x-squire-show-btn', 'false');
+      document.head.appendChild(s);
+    }
+    var t0 = Date.now();
+    (function wait() {
+      if (window.SquireWidget && window.SquireWidget.open) { sq.state = 'ready'; return cb(true); }
+      if (Date.now() - t0 > 9000) { sq.state = 'failed'; return cb(false); }
+      setTimeout(wait, 150);
+    })();
+  }
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('[data-book]');
+    if (!a) return;
+    if (!cfg.squireBrand) {
+      e.preventDefault();
+      toast(live ? 'Booking turns on once the owner adds the SQUIRE brand ID in the Settings tab.' : 'Demo: this opens SQUIRE booking once the shop’s brand ID is in the Settings tab.');
+      return;
+    }
+    if (sq.state === 'failed') return; // the link opens SQUIRE booking in a new tab instead
+    e.preventDefault();
+    var label = a.textContent; a.textContent = 'Opening SQUIRE…';
+    loadSquire(function (ok) {
+      a.textContent = label;
+      if (ok) window.SquireWidget.open();
+      else toast('SQUIRE booking didn’t load here. Tap the button again to open it in a new tab.');
+    });
+  });
+
+  /* ---------- card + comb ---------- */
+  function comb(el, points) {
+    var per = cfg.perCut, max = cfg.tiers[cfg.tiers.length - 1].points;
+    var n = Math.min(40, Math.max(1, Math.round(max / per)));
+    var filled = Math.min(n, Math.floor(points / per));
+    el.innerHTML = '';
+    for (var i = 1; i <= n; i++) {
+      var t = document.createElement('span');
+      t.className = 'tooth';
+      var tier = cfg.tiers.filter(function (x) { return x.points === i * per; })[0];
+      if (tier) { t.className += ' mark'; t.setAttribute('data-label', '$' + tier.off); }
+      t.style.setProperty('--d', (i * 40) + 'ms');
+      el.appendChild(t);
+    }
+    var teeth = $$('.tooth', el);
+    var fill = function () { teeth.forEach(function (t, i) { if (i < filled) t.classList.add('on'); }); };
+    if (calm) fill(); else requestAnimationFrame(function () { requestAnimationFrame(fill); });
+  }
+  function tilt(wrap) {
+    if (calm || !wrap) return;
+    var c = wrap.firstElementChild;
+    wrap.addEventListener('pointermove', function (e) {
+      if (e.pointerType === 'touch') return;
+      var r = wrap.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+      c.style.transform = 'rotateY(' + (x * 12).toFixed(2) + 'deg) rotateX(' + (-y * 9).toFixed(2) + 'deg)';
+    });
+    wrap.addEventListener('pointerleave', function () { c.style.transform = ''; });
+  }
+  function mountCard(host, d, tag) {
+    host.innerHTML = '<div class="card3d"><div class="card">' +
+      '<div class="card-top"><span class="card-shop">Brothers Barbershop</span>' + (tag ? '<span class="card-tag">' + esc(tag) + '</span>' : '') + '</div>' +
+      '<div class="card-title"><span>College</span><span>Rewards</span></div>' +
+      '<div class="comb" aria-hidden="true"></div>' +
+      '<div class="card-foot"><div><div class="k">' + esc(d.first || 'Member') + '</div><div class="v">' + esc(d.id) + '</div></div>' +
+      '<div class="ptswrap"><div class="pts" aria-label="' + d.points + ' points"><b>' + d.points + '</b><small>pts</small></div>' +
+      (d.pending ? '<span class="pend">+' + d.pending + ' pending</span>' : '') + '</div></div>' +
+      '<i class="foil" aria-hidden="true"></i></div></div>';
+    comb($('.comb', host), d.points);
+    tilt($('.card3d', host));
+  }
+  function rewardsHTML(d) {
+    return d.tiers.map(function (t) {
+      var ready = d.points >= t.points, left = t.points - d.points;
+      var stateTxt = ready ? (d.status === 'Verified' ? 'Ready. Ask your barber.' : 'Ready after your ID check.')
+        : left + ' pts to go · ' + Math.ceil(left / d.perCut) + (Math.ceil(left / d.perCut) === 1 ? ' cut' : ' cuts');
+      return '<div class="reward' + (ready ? ' ready' : '') + '"><div class="r-off">$' + t.off + ' off</div><div class="r-need">' + t.points + ' pts</div><div class="r-state">' + esc(stateTxt) + '</div></div>';
+    }).join('');
+  }
+  function histHTML(h) {
+    if (!h || !h.length) return '<p class="empty">No activity yet.</p>';
+    return '<ul class="hist">' + h.map(function (a) {
+      var cls = a.points > 0 ? 'pos' : a.points < 0 ? 'neg' : '';
+      return '<li><span class="h-type">' + esc(label(a)) + '</span><span class="h-when">' + esc(fmtWhen(a.when)) + (a.barber ? ' · ' + esc(a.barber) : '') + '</span>' +
+        (a.type === 'Adjustment' && a.note ? '<span class="h-note">' + esc(a.note) + '</span>' : '') +
+        '<span class="h-pts ' + cls + '">' + (a.points ? (a.points > 0 ? '+' : '') + a.points : '') + '</span></li>';
+    }).join('') + '</ul>';
+  }
+
+  /* ---------- views ---------- */
+  function show(v) {
+    ['join', 'done', 'card', 'staff', 'counter'].forEach(function (k) { $('#v-' + k).hidden = k !== v; });
+    $('#wrap').classList.toggle('wide', v === 'staff');
+    $$('.nav button').forEach(function (b) { b.removeAttribute('aria-current'); });
+    var cur = $('.nav button[data-go="' + (v === 'done' ? 'join' : v) + '"]');
+    if (cur) cur.setAttribute('aria-current', 'page');
+    window.scrollTo(0, 0);
+    if (v === 'staff') openStaff();
+  }
+
+  document.addEventListener('click', function (e) {
+    var g = e.target.closest('[data-go]');
+    if (g) { e.preventDefault(); closeSheets(); show(g.getAttribute('data-go')); return; }
+    if (e.target.closest('[data-terms]')) { e.preventDefault(); var t = $('#terms'); t.open = true; t.scrollIntoView({ behavior: calm ? 'auto' : 'smooth', block: 'start' }); return; }
+    if (e.target.closest('[data-close]') || e.target.classList.contains('sheet')) closeSheets();
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSheets(); });
+  $$('input[type=tel]').forEach(function (i) {
+    i.addEventListener('input', function () {
+      var d = digits(i.value); if (d.length === 11 && d[0] === '1') d = d.slice(1); d = d.slice(0, 10);
+      i.value = d.length > 6 ? '(' + d.slice(0, 3) + ') ' + d.slice(3, 6) + '-' + d.slice(6) : d.length > 3 ? '(' + d.slice(0, 3) + ') ' + d.slice(3) : d;
+    });
+  });
+  $$('input[inputmode=numeric]').forEach(function (i) { i.addEventListener('input', function () { var d = digits(i.value); if (d !== i.value) i.value = d; }); });
+
+  /* ---------- join ---------- */
+  $('#joinForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = $('#joinForm [type=submit]'), err = $('#joinErr');
+    var data = { first: $('#jFirst').value, last: $('#jLast').value, phone: $('#jPhone').value, college: $('#jCollege').value,
+      email: $('#jEmail').value, pin: $('#jPin').value, agree: $('#jAgree').checked };
+    err.textContent = ''; busy(btn, true);
+    api('signUp', data).then(function (card) {
+      store.set('phone', normPhone(data.phone));
+      $('#joinForm').reset();
+      show('done');
+      mountCard($('#doneCard'), card, 'Pending');
+      $('#doneName').textContent = card.first + '.';
+      $('#doneCode').textContent = card.id;
+      $('#cPhone').value = fmtPhone(normPhone(data.phone));
+    }).catch(function (x) { err.textContent = x.message; }).then(function () { busy(btn, false); });
+  });
+
+  /* ---------- my card ---------- */
+  function renderMyCard(d) {
+    $('#cardLogin').hidden = true; $('#cardView').hidden = false;
+    mountCard($('#myCard'), d, d.status === 'Verified' ? 'Active' : 'Pending');
+    var st = $('#myStatus'); st.className = 'pill ' + d.status; st.textContent = d.status === 'Verified' ? 'Student verified' : 'Waiting for ID check';
+    $('#myCollege').textContent = d.college;
+    $('#myPending').hidden = d.status === 'Verified';
+    var canClaim = d.status === 'Verified' && !d.claimedToday && !d.earnedToday;
+    $('#claimBox').hidden = !canClaim; $('#claimErr').textContent = '';
+    if (canClaim && state.demoCode) { $('#claimCode').value = state.demoCode; state.demoCode = ''; }
+    var done = $('#claimDone');
+    done.hidden = !(d.claimedToday || d.earnedToday);
+    done.textContent = d.earnedToday ? 'Today\u2019s haircut is on your card.' :
+      'Today\u2019s cut is claimed: +' + d.perCut + ' pending. It counts once the shop matches it to your SQUIRE payment.';
+    $('#myRewards').innerHTML = rewardsHTML(d);
+    $('#myHist').innerHTML = histHTML(d.history);
+  }
+  $('#cardForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = $('#cardForm [type=submit]'), phone = $('#cPhone').value, pin = $('#cPin').value;
+    $('#cardErr').textContent = ''; busy(btn, true);
+    api('myCard', phone, pin).then(function (d) {
+      state.creds = { phone: phone, pin: pin }; store.set('phone', normPhone(phone)); $('#cPin').value = ''; renderMyCard(d);
+    }).catch(function (x) { $('#cardErr').textContent = x.message; }).then(function () { busy(btn, false); });
+  });
+  $('#myRefresh').addEventListener('click', function () {
+    if (!state.creds) return;
+    api('myCard', state.creds.phone, state.creds.pin).then(function (d) { renderMyCard(d); toast('Up to date.'); }).catch(function (x) { toast(x.message); });
+  });
+  $('#myOut').addEventListener('click', function () { state.creds = null; $('#cardView').hidden = true; $('#cardLogin').hidden = false; });
+
+  function deviceId() {
+    var d = store.get('dev');
+    if (!d) { d = 'D' + Math.random().toString(36).slice(2, 10) + Date.now().toString(36); store.set('dev', d); }
+    return d;
+  }
+  $('#claimForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    if (!state.creds) return;
+    var btn = $('#claimForm [type=submit]');
+    $('#claimErr').textContent = ''; busy(btn, true);
+    api('claimVisit', state.creds.phone, state.creds.pin, $('#claimCode').value, deviceId()).then(function (d) {
+      $('#claimCode').value = ''; renderMyCard(d); toast('+' + d.perCut + ' pending. Enjoy the fresh cut.');
+    }).catch(function (x) { $('#claimErr').textContent = x.message; }).then(function () { busy(btn, false); });
+  });
+
+  /* ---------- counter screen ---------- */
+  var ctr = { poll: null, tick: null, exp: 0, code: '', busy: false };
+  function startCounterMode() {
+    show('counter');
+    document.body.classList.add('counter-mode');
+    $('#cDemo').hidden = live;
+    ctr.code = ''; pollCounter();
+    clearInterval(ctr.poll); ctr.poll = setInterval(pollCounter, 4000);
+    clearInterval(ctr.tick); ctr.tick = setInterval(tickCounter, 250);
+    try { if (navigator.wakeLock) navigator.wakeLock.request('screen').catch(function () {}); } catch (e) {}
+  }
+  function stopCounterMode() {
+    clearInterval(ctr.poll); clearInterval(ctr.tick);
+    document.body.classList.remove('counter-mode');
+  }
+  function pollCounter() {
+    if (ctr.busy) return;
+    ctr.busy = true;
+    api('counterCode', store.get('ctr')).then(function (r) {
+      ctr.exp = Date.now() + r.msLeft;
+      if (r.code !== ctr.code) {
+        ctr.code = r.code;
+        var el = $('#cCode');
+        el.textContent = r.code.slice(0, 3) + ' ' + r.code.slice(3);
+        el.classList.remove('flip'); void el.offsetWidth; if (!calm) el.classList.add('flip');
+      }
+      $('#cNote').textContent = 'New code every 60 seconds and after each use.';
+    }).catch(function (x) {
+      if (/turned off/i.test(x.message)) { store.del('ctr'); stopCounterMode(); show('join'); toast(x.message); return; }
+      $('#cNote').textContent = 'Reconnecting\u2026';
+    }).then(function () { ctr.busy = false; });
+  }
+  function tickCounter() {
+    var left = Math.max(0, ctr.exp - Date.now());
+    $('#cBar').style.transform = 'scaleX(' + (left / 60000).toFixed(3) + ')';
+    if (!left && ctr.code) pollCounter();
+  }
+  function openCounter() {
+    sapi('startCounter').then(function (r) { store.set('ctr', r.counterToken); closeSheets(); startCounterMode(); })
+      .catch(function (x) { toast(x.message); });
+  }
+  $('#ctrBtn').addEventListener('click', openCounter);
+  $('#oCtr').addEventListener('click', openCounter);
+  $('#cExit').addEventListener('click', function () {
+    var b = this;
+    if (!b.classList.contains('confirm')) {
+      b.classList.add('confirm'); b.textContent = 'Tap again to exit';
+      setTimeout(function () { b.classList.remove('confirm'); b.textContent = 'Exit counter screen'; }, 4000);
+      return;
+    }
+    b.classList.remove('confirm'); b.textContent = 'Exit counter screen';
+    store.del('ctr'); stopCounterMode(); show('join');
+  });
+  $('#cDemo').addEventListener('click', function () {
+    state.demoCode = ctr.code; stopCounterMode(); show('card');
+    $('#cPhone').value = '(609) 555-0142';
+    toast('Demo: sign in as Maya with PIN 1234. The code is filled in for you.');
+  });
+
+  /* ---------- barbers ---------- */
+  function lockStaff(msg) {
+    state.staff = null; state.staffView = 'owner'; state.dashShown = false; store.del('tok'); closeSheets();
+    $('#console').hidden = true; $('#ownerDash').hidden = true; $('#staffGate').hidden = false; $('#staffErr').textContent = msg || '';
+  }
+  function openStaff() {
+    if (state.staff) { loadHome().catch(function (x) { toast(x.message); }); return; }
+    var tok = store.get('tok');
+    if (tok) { state.staff = { token: tok }; loadHome().catch(function () { lockStaff(''); }); return; }
+    lockStaff('');
+  }
+  function listHTML(items, empty) {
+    if (!items.length) return '<li class="note" style="padding:12px">' + esc(empty) + '</li>';
+    return items.map(function (m) {
+      return '<li><button type="button" data-member="' + esc(m.id) + '"><span class="nm">' + esc(m.name) + '</span><span class="meta">' + esc(m.id) + ' · ' + esc(m.college) + '</span>' +
+        '<span class="right"><span class="pill ' + esc(m.status) + '">' + esc(m.status) + '</span><span class="p">' + m.points + '</span></span></button></li>';
+    }).join('');
+  }
+  function showPending() { $('#listTitle').textContent = 'Waiting for ID check'; $('#list').innerHTML = listHTML(state.pending, 'No one is waiting for an ID check.'); }
+  function loadHome() {
+    return sapi('staffHome').then(function (h) {
+      state.staff.role = h.role;
+      $('#toOwner').hidden = h.role !== 'owner';
+      if (h.role === 'owner' && state.staffView !== 'barber') return loadOwner();
+      $('#staffGate').hidden = true; $('#ownerDash').hidden = true; $('#console').hidden = false;
+      cfg.perCut = h.perCut; cfg.tiers = h.tiers; applyRules();
+      var sel = $('#barberSel'), keep = sel.value || store.get('barber') || '';
+      sel.innerHTML = '<option value="">Pick your name</option>' + h.barbers.map(function (b) { return '<option' + (b === keep ? ' selected' : '') + '>' + esc(b) + '</option>'; }).join('');
+      $('#pinWarn').hidden = !h.defaultPin;
+      $('#stMembers').textContent = h.stats.members; $('#stVerified').textContent = h.stats.verified;
+      $('#stCuts').textContent = h.stats.cutsToday; $('#stRewards').textContent = h.stats.rewardsToday;
+      state.pending = h.pending;
+      if ($('#search').value.trim().length < 2) showPending();
+      $('#recent').innerHTML = h.recent.length ? '<ul class="list">' + h.recent.map(function (a) {
+        return '<li><button type="button" data-member="' + esc(a.id) + '"><span class="nm">' + esc(a.name) + '</span><span class="meta">' + esc(label(a)) + (a.barber ? ' · ' + esc(a.barber) : '') + ' · ' + esc(fmtWhen(a.when)) + '</span>' +
+          '<span class="right"><span class="p ' + (a.points < 0 ? 'neg' : 'pos') + '">' + (a.points ? (a.points > 0 ? '+' : '') + a.points : '') + '</span></span></button></li>';
+      }).join('') + '</ul>' : '<p class="note">No activity yet.</p>';
+    });
+  }
+  $('#staffForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var btn = $('#staffForm [type=submit]');
+    $('#staffErr').textContent = ''; busy(btn, true);
+    api('staffLogin', $('#sPin').value).then(function (r) {
+      state.staff = { token: r.token }; store.set('tok', r.token); $('#sPin').value = '';
+      return loadHome();
+    }).catch(function (x) { $('#staffErr').textContent = x.message; }).then(function () { busy(btn, false); });
+  });
+  $('#staffOut').addEventListener('click', function () { lockStaff(''); });
+  $('#barberSel').addEventListener('change', function () { store.set('barber', this.value); });
+
+  var searchT;
+  $('#search').addEventListener('input', function () { clearTimeout(searchT); searchT = setTimeout(runSearch, 280); });
+  function runSearch() {
+    var q = $('#search').value.trim(), my = ++state.seq;
+    if (q.length < 2) { showPending(); return; }
+    sapi('staffSearch', q).then(function (res) {
+      if (my !== state.seq) return;
+      $('#listTitle').textContent = 'Results for "' + q + '"';
+      $('#list').innerHTML = listHTML(res, 'No members match. Try the phone number or member code.');
+    }).catch(function (x) { toast(x.message); });
+  }
+  function onPick(e) { var b = e.target.closest('[data-member]'); if (b) openMember(b.getAttribute('data-member')); }
+  $('#list').addEventListener('click', onPick);
+  $('#recent').addEventListener('click', onPick);
+
+  function openMember(id) {
+    sapi('staffMember', id).then(function (m) { state.member = m; renderMember(m); openSheet('#mSheet'); }).catch(function (x) { toast(x.message); });
+  }
+  function renderMember(m, result) {
+    var t = cfg.tiers, actions;
+    if (m.status === 'Verified') {
+      actions = (m.claimToday ? '<div class="callout">Claimed at the counter today: +' + cfg.perCut + ' pending. Tapping +' + cfg.perCut + ' confirms it now. Otherwise the SQUIRE report will.</div>' : '') +
+        '<button class="btn gold big" type="button" data-act="earn"' + (m.earnedToday ? ' disabled' : '') + '>+' + cfg.perCut + ' pts · paid haircut</button>' +
+        '<p class="note">' + (m.earnedToday ? 'Haircut points were already added today.' : 'Tap only after the haircut is paid. No-shows and cancellations earn nothing.') + '</p>' +
+        '<div class="redeem-row">' + t.map(function (x, i) {
+          return '<button class="btn outline" type="button" data-act="redeem" data-tier="' + i + '"' + (m.points < x.points || m.rewardToday ? ' disabled' : '') + '>$' + x.off + ' off · ' + x.points + ' pts</button>';
+        }).join('') + '</div>' +
+        '<p class="note">' + (m.rewardToday ? 'One reward per visit. This card already used one today.' : 'One reward per visit. Not combinable with other discounts.') + '</p>';
+    } else {
+      actions = '<div class="callout">Check a valid student ID for this term before this card can earn points.</div>' +
+        '<label class="check" for="vChk"><input type="checkbox" id="vChk"><span>I checked a valid student ID for this term and the name matches.</span></label>' +
+        '<label class="f" for="vNote">Note (optional)<input type="text" id="vNote" maxlength="120" placeholder="e.g. Rider ID, valid through 05/2027"></label>' +
+        '<button class="btn gold big" type="button" data-act="verify">Verify student</button>';
+    }
+    $('#mBody').innerHTML =
+      '<div class="m-head"><div><h3 id="mName">' + esc(m.name) + '</h3><div class="v">' + esc(m.id) + '</div></div><span class="pill ' + esc(m.status) + '">' + esc(m.status) + '</span></div>' +
+      '<dl class="m-facts"><dt>College</dt><dd>' + esc(m.college) + '</dd><dt>Email</dt><dd>' + esc(m.email) + (m.edu ? '' : '<span class="flag">Not a .edu address. Check the ID closely.</span>') + '</dd>' +
+      '<dt>Phone</dt><dd>' + esc(m.phone) + '</dd><dt>Joined</dt><dd>' + esc(fmtWhen(m.joined)) + '</dd>' +
+      (m.verifiedOn ? '<dt>ID checked</dt><dd>' + esc(fmtWhen(m.verifiedOn)) + ' by ' + esc(m.verifiedBy) + (m.note ? ' · ' + esc(m.note) : '') + '</dd>' : '') + '</dl>' +
+      (result ? '<div class="result" role="status">' + esc(result.big) + '<small>' + esc(result.small) + '</small></div>' : '') +
+      '<div class="m-points"><b>' + m.points + '</b><span class="note">points · ' + m.lifetime + ' lifetime</span></div>' +
+      '<div class="comb mini" aria-hidden="true"></div>' +
+      '<div class="m-actions">' + actions + '</div>' +
+      '<form class="alias" id="aliasForm"><label class="f" for="aName">Name in SQUIRE<input type="text" id="aName" maxlength="80" value="' + esc(m.squireName) + '" placeholder="' + esc(m.name) + '"></label><button class="btn outline" type="submit">Save</button></form>' +
+      '<p class="note" style="margin-top:6px">Only needed if SQUIRE spells this client’s name differently. Report imports match on it.</p>' +
+      ownerToolsHTML(m) +
+      '<h3 class="sec">History</h3>' + histHTML(m.history);
+    comb($('#mBody .comb'), m.points);
+  }
+  $('#mBody').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-act]');
+    if (!b || b.disabled) return;
+    var isOwner = state.staff && state.staff.role === 'owner';
+    var m = state.member, act = b.getAttribute('data-act');
+    var barber = isOwner && state.staffView !== 'barber' ? 'Owner' : ($('#barberSel').value || (isOwner ? 'Owner' : ''));
+    if (!barber) { toast('Pick your name at the top of the barber screen first.'); return; }
+    if (act === 'redeem' && !b.classList.contains('confirm')) {
+      var tier = cfg.tiers[+b.getAttribute('data-tier')];
+      b.dataset.was = b.textContent; b.classList.add('confirm'); b.textContent = 'Tap again: $' + tier.off + ' off';
+      setTimeout(function () { if (b.isConnected && b.classList.contains('confirm')) { b.classList.remove('confirm'); b.textContent = b.dataset.was; } }, 4000);
+      return;
+    }
+    if (act === 'verify' && !$('#vChk').checked) { toast('Look at the student ID, then check the box.'); return; }
+    b.disabled = true;
+    var p;
+    if (act === 'verify') {
+      p = sapi('staffVerify', m.id, barber, $('#vNote').value).then(function (r) {
+        renderMember(r, { big: 'Student verified', small: r.first + ' earns points starting with today’s paid cut.' }); return r;
+      });
+    } else if (act === 'recheck') {
+      p = sapi('ownerSetStatus', m.id, 'Pending').then(function (r) {
+        renderMember(r, { big: 'ID check requested', small: r.first + ' keeps ' + r.points + ' points. Earning pauses until a barber checks a current ID.' }); return r;
+      });
+    } else if (act === 'earn') {
+      p = sapi('staffEarn', m.id, barber).then(function (r) {
+        var ready = cfg.tiers.filter(function (t) { return r.points >= t.points; }).pop();
+        renderMember(r); toast('+' + cfg.perCut + ' pts. ' + r.first + ' has ' + r.points + (ready ? '. $' + ready.off + ' reward ready.' : '.')); return r;
+      });
+    } else {
+      var i = +b.getAttribute('data-tier'), t = cfg.tiers[i];
+      p = sapi('staffRedeem', m.id, barber, i).then(function (r) {
+        renderMember(r, { big: 'Take $' + t.off + ' off at checkout', small: t.points + ' points used. ' + r.first + ' has ' + r.points + ' left.' }); return r;
+      });
+    }
+    p.then(function (r) { state.member = r; loadHome().catch(function () {}); }).catch(function (x) { toast(x.message); b.disabled = false; });
+  });
+
+  $('#mBody').addEventListener('submit', function (e) {
+    if (e.target.id !== 'aliasForm') return;
+    e.preventDefault();
+    sapi('staffSetSquireName', state.member.id, $('#aName').value).then(function (r) {
+      state.member = r; toast('Saved. Imports will match "' + (r.squireName || r.name) + '".');
+    }).catch(function (x) { toast(x.message); });
+  });
+
+  /* ---------- SQUIRE report import ---------- */
+  function parseCSV(text) {
+    var rows = [], row = [], f = '', q = false;
+    text = String(text || '').replace(/^﻿/, '');
+    for (var i = 0; i < text.length; i++) {
+      var c = text[i];
+      if (q) { if (c === '"') { if (text[i + 1] === '"') { f += '"'; i++; } else q = false; } else f += c; }
+      else if (c === '"') q = true;
+      else if (c === ',') { row.push(f); f = ''; }
+      else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(f); rows.push(row); row = []; f = ''; }
+      else f += c;
+    }
+    if (f !== '' || row.length) { row.push(f); rows.push(row); }
+    return rows.filter(function (r) { return r.some(function (x) { return x.trim(); }); });
+  }
+  function isoDate(s) {
+    s = String(s || '').trim(); var m;
+    var p = function (n) { return (n < 10 ? '0' : '') + n; };
+    if ((m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(s))) return m[1] + '-' + p(+m[2]) + '-' + p(+m[3]);
+    if ((m = /^(\d{1,2})\/(\d{1,2})\/(\d{2,4})/.exec(s))) return (m[3].length === 2 ? '20' + m[3] : m[3]) + '-' + p(+m[1]) + '-' + p(+m[2]);
+    var d = new Date(s);
+    return isNaN(d) ? '' : d.getFullYear() + '-' + p(d.getMonth() + 1) + '-' + p(d.getDate());
+  }
+  function hhmm(s) {
+    var m = /(\d{1,2}):(\d{2})\s*([ap]\.?m\.?)?/i.exec(String(s || ''));
+    if (!m) return '';
+    var h = +m[1];
+    if (m[3]) { var pm = /p/i.test(m[3]); h = h % 12 + (pm ? 12 : 0); }
+    return (h < 10 ? '0' : '') + h + ':' + m[2];
+  }
+  function money(s) { s = String(s == null ? '' : s).trim(); if (!s) return null; var n = parseFloat(s.replace(/[^0-9.\-]/g, '')); return isNaN(n) ? null : n; }
+  function squireRows(text) {
+    var rows = parseCSV(text), h = -1;
+    for (var i = 0; i < Math.min(rows.length, 15); i++) {
+      if (rows[i].some(function (c) { return /customer/i.test(c); }) && rows[i].some(function (c) { return /description|service/i.test(c); })) { h = i; break; }
+    }
+    if (h < 0) throw new Error('This doesn’t look like a SQUIRE Daily Summary. In SQUIRE, go to Register, then Daily Summary, then Download.');
+    var head = rows[h].map(function (c) { return c.trim().toLowerCase().replace(/:$/, ''); });
+    var col = function (re) { for (var j = 0; j < head.length; j++) if (re.test(head[j])) return j; return -1; };
+    var ix = { date: col(/^date$/), time: col(/^time$/), action: col(/^action/), barber: col(/^barber/), customer: col(/customer/),
+      description: col(/description|service/), cost: col(/^cost/), refunded: col(/refund/) };
+    if (ix.date < 0) ix.date = col(/date(?!.*cancel)/);
+    var get = function (r, k) { return ix[k] >= 0 ? (r[ix[k]] || '').trim() : ''; };
+    return rows.slice(h + 1).map(function (r) {
+      return { date: isoDate(get(r, 'date')), time: hhmm(get(r, 'time')), action: get(r, 'action'), barber: get(r, 'barber').slice(0, 40),
+        customer: get(r, 'customer'), description: get(r, 'description'), cost: ix.cost >= 0 ? money(get(r, 'cost')) : null,
+        refunded: ix.refunded >= 0 ? (money(get(r, 'refunded')) || 0) : 0 };
+    }).filter(function (r) { return r.customer || r.description; });
+  }
+  function importHTML(r) {
+    var names = function (a) { return a.map(esc).join(', '); };
+    return '<div class="result" role="status">' + (r.points ? '+' + r.points + ' points added' : 'No new points') +
+      '<small>' + (r.points ? r.added.length + ' paid ' + (r.added.length === 1 ? 'haircut' : 'haircuts') + ' credited to students.' : 'Everything in this report was already counted, or no students were in it.') + '</small></div>' +
+      '<ul class="imp">' +
+      '<li><b>' + r.already + '</b>already credited, so skipped (no double points)</li>' +
+      '<li><b>' + r.notMembers + '</b>haircuts by customers who aren’t in College Rewards</li>' +
+      '<li><b>' + r.skipped + '</b>rows that weren’t paid haircuts (refunds, other services, no customer)</li>' +
+      (r.before ? '<li><b>' + r.before + '</b>haircuts from before the student\u2019s ID check</li>' : '') +
+      '<li><b>' + (r.confirmed || 0) + '</b>counter claims confirmed by a paid haircut</li>' + '</ul>' +
+      (r.expired && r.expired.length ? '<h3 class="sec">Claims dropped</h3><p class="note">' + names(r.expired) + '. They claimed at the counter but no paid haircut showed up that day. If SQUIRE spells their name differently, fill in Name in SQUIRE and import again.</p>' : '') +
+      (r.waiting.length ? '<h3 class="sec">Got a cut, ID not checked yet</h3><p class="note">' + names(r.waiting) + '. Check their student ID next visit. These cuts didn’t earn points.</p>' : '') +
+      (r.ambiguous.length ? '<h3 class="sec">Two members share a name</h3><p class="note">' + names(r.ambiguous) + '. Open each member and fill in Name in SQUIRE, then import again.</p>' : '') +
+      (r.added.length ? '<h3 class="sec">Credited</h3><ul class="hist">' + r.added.map(function (a) {
+        return '<li><span class="h-type">' + esc(a.name) + '</span><span class="h-when">' + esc(fmtWhen(a.date)) + '</span><span class="h-pts pos">+' + cfg.perCut + '</span></li>';
+      }).join('') + '</ul>' : '') +
+      '<p class="note" style="margin-top:14px">A student missing? SQUIRE may spell their name differently. Open their member page and fill in Name in SQUIRE.</p>';
+  }
+  function runImport(text) {
+    var rows;
+    try { rows = squireRows(text); } catch (e) { $('#impOut').innerHTML = '<p class="err">' + esc(e.message) + '</p>'; return; }
+    $('#impOut').innerHTML = '<p class="note">Checking ' + rows.length + ' transactions…</p>';
+    sapi('staffImport', rows).then(function (r) { $('#impOut').innerHTML = importHTML(r); loadHome().catch(function () {}); })
+      .catch(function (x) { $('#impOut').innerHTML = '<p class="err">' + esc(x.message) + '</p>'; });
+  }
+  $('#impBtn').addEventListener('click', function () { $('#impOut').innerHTML = ''; $('#impFile').value = ''; $('#impSample').hidden = live; openSheet('#iSheet'); });
+  $('#impFile').addEventListener('change', function () {
+    var file = this.files && this.files[0]; if (!file) return;
+    var rd = new FileReader();
+    rd.onload = function () { runImport(String(rd.result)); };
+    rd.onerror = function () { $('#impOut').innerHTML = '<p class="err">That file couldn’t be opened. Download it from SQUIRE again.</p>'; };
+    rd.readAsText(file);
+  });
+  $('#impSample').addEventListener('click', function () {
+    var d = new Date(Date.now() - 864e5), y = (d.getMonth() + 1) + '/' + d.getDate() + '/' + d.getFullYear();
+    runImport('Date,Time,Action,Executed By,Barber,Customer,Description,Cost,Tips,Refunded Amount,Discounts/Promos/Loyalty rewards,Fees,Net Charge,Net Charge + Fee,Cash/POS/SQUIRE\n' +
+      y + ',2:15 PM,Charge,andy,Andy,Maya Torres,Haircut,$35.00,$5.00,$0.00,$0.00,$1.08,$33.92,$35.00,Reader\n' +
+      y + ',3:00 PM,Charge,andy,Andy,Jordan Ellis,Skin Fade,$40.00,$8.00,$0.00,$0.00,$1.20,$38.80,$40.00,SQUIRE\n' +
+      y + ',3:40 PM,Charge,barber2,Barber 2,Chris Nguyen,Haircut,$35.00,$0.00,$0.00,$0.00,$1.08,$33.92,$35.00,Reader\n' +
+      y + ',4:10 PM,Charge,barber2,Barber 2,Kevin Brooks,Haircut,$35.00,$5.00,$0.00,$0.00,$1.08,$33.92,$35.00,Cash\n' +
+      y + ',4:30 PM,Charge,barber3,Barber 3,Maya Torres,Beard Trim,$15.00,$0.00,$0.00,$0.00,$0.58,$14.42,$15.00,Reader\n' +
+      y + ',5:05 PM,Refund $35.00,barber3,Barber 3,Luis Ortiz,Haircut,$35.00,$0.00,$35.00,$0.00,$0.00,$0.00,$0.00,Reader\n');
+  });
+
+  /* ---------- owner tools in the member sheet ---------- */
+  function ownerToolsHTML(m) {
+    if (!state.staff || state.staff.role !== 'owner') return '';
+    return '<div class="owner-tools"><h3 class="sec" style="margin-top:18px">Owner: add or remove points</h3>' +
+      '<div class="quick" role="group" aria-label="Quick amounts"><button type="button" data-q="10">+10</button><button type="button" data-q="50">+50</button><button type="button" data-q="100">+100</button><button type="button" data-q="-10">−10</button></div>' +
+      '<form id="adjForm"><div class="row2"><label class="f" for="adjAmt">Points (minus removes)<input type="number" id="adjAmt" step="1" min="-1000" max="1000" placeholder="10 or -10"></label>' +
+      '<label class="f" for="adjWhy">Reason<input type="text" id="adjWhy" maxlength="120" placeholder="Cut on 11/2, forgot to scan"></label></div>' +
+      '<button class="btn gold" type="submit">Save points</button></form>' +
+      (m.status === 'Verified' ? '<button class="btn outline" type="button" data-act="recheck">Ask for student ID again</button><p class="note">Use at the start of a new semester. Points stay. Earning pauses until a barber checks a current ID.</p>' : '') +
+      '</div>';
+  }
+  $('#mBody').addEventListener('click', function (e) {
+    var q = e.target.closest('[data-q]');
+    if (q) { $('#adjAmt').value = q.getAttribute('data-q'); $('#adjWhy').focus(); }
+  });
+  $('#mBody').addEventListener('submit', function (e) {
+    if (e.target.id !== 'adjForm') return;
+    e.preventDefault();
+    var amt = $('#adjAmt').value, why = $('#adjWhy').value, btn = $('#adjForm [type=submit]');
+    busy(btn, true);
+    sapi('ownerAdjust', state.member.id, amt, why).then(function (r) {
+      var n = Math.round(Number(amt));
+      state.member = r;
+      renderMember(r, { big: (n > 0 ? '+' : '−') + Math.abs(n) + ' points ' + (n > 0 ? 'added' : 'removed'), small: r.first + ' now has ' + r.points + ' points. Saved with your reason.' });
+      loadHome().catch(function () {});
+    }).catch(function (x) { toast(x.message); busy(btn, false); });
+  });
+
+  /* ---------- owner dashboard ---------- */
+  var MONF = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  state.staffView = 'owner'; state.oFilter = 'all';
+  function countTo(el, n, pre) {
+    pre = pre || '';
+    if (calm || !n) { el.textContent = pre + n; return; }
+    var t0 = performance.now();
+    (function f(t) { var p = Math.min(1, (t - t0) / 750), e = 1 - Math.pow(1 - p, 3); el.textContent = pre + Math.round(n * e); if (p < 1) requestAnimationFrame(f); })(t0);
+  }
+  function loadOwner() {
+    return sapi('ownerDashboard').then(function (d) {
+      state.dash = d; cfg.perCut = d.perCut; cfg.tiers = d.tiers;
+      $('#staffGate').hidden = true; $('#console').hidden = true; $('#ownerDash').hidden = false;
+      renderOwner(d);
+    });
+  }
+  function actLi(a) {
+    return '<li><button type="button" data-member="' + esc(a.id) + '"><span class="nm">' + esc(a.name) + '</span><span class="meta">' + esc(label(a)) +
+      (a.barber ? ' · ' + esc(a.barber) : '') + ' · ' + esc(fmtWhen(a.when)) + (a.type === 'Adjustment' && a.note ? ' · ' + esc(a.note) : '') + '</span>' +
+      '<span class="right"><span class="p ' + (a.points < 0 ? 'neg' : 'pos') + '">' + (a.points ? (a.points > 0 ? '+' : '') + a.points : '') + '</span></span></button></li>';
+  }
+  function renderOwner(d) {
+    var k = d.kpi, first = !state.dashShown;
+    state.dashShown = true;
+    var set = function (sel, n, pre) { if (first) countTo($(sel), n, pre); else $(sel).textContent = (pre || '') + n; };
+    $('#oMonth').textContent = MONF[+d.month.slice(5, 7) - 1] + ' ' + d.month.slice(0, 4);
+    var w = [];
+    if (d.warn.same) w.push('The owner PIN and staff PIN are the same, so barbers can open this dashboard.');
+    if (d.warn.ownerDefault) w.push('The owner PIN is still 9999.');
+    if (d.warn.staffDefault) w.push('The staff PIN is still 0000.');
+    $('#oWarn').hidden = !w.length;
+    $('#oWarn').textContent = w.length ? w.join(' ') + ' Change them in the Settings tab of the Google Sheet before launch.' : '';
+    set('#kCuts', k.cutsMonth);
+    var diff = k.cutsMonth - k.cutsLast, vs = $('#kCutsVs');
+    vs.className = diff > 0 ? 'up' : diff < 0 ? 'down' : '';
+    var lmI = (+d.month.slice(5, 7) + 10) % 12, day = +d.today.slice(8, 10);
+    vs.textContent = !k.cutsLast && !k.cutsMonth ? 'No paid haircuts yet' :
+      (diff > 0 ? '+' + diff : diff < 0 ? '−' + Math.abs(diff) : 'Even') + ' vs ' + MON[lmI] + ' 1' + (day > 1 ? '–' + day : '') + ' (' + k.cutsLast + ')';
+    set('#kMembers', k.members); $('#kMembersSub').textContent = k.verified + ' verified · ' + k.pending + ' waiting for ID';
+    set('#kNew', k.newMonth);
+    set('#kOff', k.offMonth, '$'); $('#kOffSub').textContent = k.rewardsMonth + (k.rewardsMonth === 1 ? ' reward' : ' rewards') + ' this month · $' + k.offAll + ' all time';
+    set('#kPts', k.pointsOut); $('#kReady').textContent = k.ready + (k.ready === 1 ? ' card' : ' cards') + ' ready for a reward · ' + (k.claimsPending || 0) + ' claims pending';
+    weekChart($('#oChart'), d.weeks, first);
+    var maxC = Math.max.apply(null, [1].concat(d.barbers.map(function (b) { return b.cuts; })));
+    $('#oBarbers').innerHTML = d.barbers.length ? '<table class="tbl"><thead><tr><th>Barber</th><th class="num">Haircuts</th><th class="num">Rewards</th><th class="num">ID checks</th></tr></thead><tbody>' +
+      d.barbers.map(function (b) {
+        return '<tr><td>' + esc(b.barber) + '<span class="dbar" style="width:' + Math.round(b.cuts / maxC * 100) + '%"></span></td><td class="num">' + b.cuts + '</td><td class="num">' + b.rewards + '</td><td class="num">' + b.checks + '</td></tr>';
+      }).join('') + '</tbody></table>' : '<p class="note">No barber activity yet this month.</p>';
+    var top = d.members.slice().sort(function (a, b) { return b.lifetime - a.lifetime; }).slice(0, 5).filter(function (m) { return m.lifetime > 0; });
+    $('#oTop').innerHTML = top.length ? '<ul class="list">' + top.map(function (m, i) {
+      return '<li><button type="button" data-member="' + esc(m.id) + '"><span class="nm">' + (i + 1) + '. ' + esc(m.name) + '</span><span class="meta">' + esc(m.college) + '</span><span class="right"><span class="p">' + m.lifetime + ' pts</span></span></button></li>';
+    }).join('') + '</ul><p class="note" style="margin-top:8px">Ranked by lifetime points.</p>' : '<p class="note">No points earned yet.</p>';
+    renderTable();
+    $('#oActivity').innerHTML = d.recent.length ? '<ul class="list">' + d.recent.slice(0, 15).map(actLi).join('') + '</ul>' : '<p class="note">No activity yet.</p>';
+  }
+  function renderTable() {
+    var d = state.dash; if (!d) return;
+    var q = $('#oSearch').value.trim().toLowerCase(), f = state.oFilter, t1 = cfg.tiers[0].points;
+    var list = d.members.filter(function (m) {
+      if ((f === 'Verified' || f === 'Pending') && m.status !== f) return false;
+      if (f === 'ready' && !(m.status === 'Verified' && m.points >= t1)) return false;
+      return !q || (m.name + ' ' + m.id + ' ' + m.college).toLowerCase().indexOf(q) >= 0;
+    }).sort(function (a, b) { return b.points - a.points || a.name.localeCompare(b.name); });
+    $('#oCount').textContent = 'Showing ' + Math.min(list.length, 200) + ' of ' + d.members.length;
+    $('#oTable tbody').innerHTML = list.length ? list.slice(0, 200).map(function (m) {
+      return '<tr data-member="' + esc(m.id) + '" tabindex="0"><td><b>' + esc(m.name) + '</b><span class="sub">' + esc(m.id) + '</span></td><td>' + esc(m.college) + '</td>' +
+        '<td><span class="pill ' + esc(m.status) + '">' + (m.status === 'Pending' ? 'Waiting for ID' : esc(m.status)) + '</span></td><td class="num">' + m.points + '</td><td class="num">' + m.lifetime + '</td>' +
+        '<td>' + (m.lastCut ? esc(fmtWhen(m.lastCut)) : '<span class="note">None yet</span>') + '</td></tr>';
+    }).join('') : '<tr><td colspan="6" class="note">No members match.</td></tr>';
+  }
+  function weekChart(el, weeks, animate) {
+    var W = Math.max(520, el.clientWidth || 720), H = 260, L = 40, R = 16, T = 30, B = 36, iw = W - L - R, ih = H - T - B, base = T + ih;
+    var max = Math.max.apply(null, weeks.map(function (x) { return x.cuts; }));
+    var step = max <= 4 ? 1 : max <= 10 ? 2 : max <= 25 ? 5 : max <= 50 ? 10 : Math.ceil(max / 50) * 10;
+    var topV = Math.max(step * 4, Math.ceil(max / step) * step);
+    var Y = function (v) { return base - v / topV * ih; };
+    var bw = iw / weeks.length, bwid = Math.max(8, Math.min(40, bw - 12)), lastI = weeks.length - 1, maxI = -1;
+    weeks.forEach(function (x, i) { if (x.cuts && (maxI < 0 || x.cuts >= weeks[maxI].cuts)) maxI = i; });
+    var s = '';
+    for (var v = 0; v <= topV; v += step) {
+      s += '<line class="gl" x1="' + L + '" x2="' + (W - R) + '" y1="' + Y(v) + '" y2="' + Y(v) + '"/><text class="ax" x="' + (L - 10) + '" y="' + (Y(v) + 4) + '" text-anchor="end">' + v + '</text>';
+    }
+    weeks.forEach(function (x, i) {
+      var cx = L + bw * i + bw / 2, y0 = Y(x.cuts), h = base - y0, r = Math.min(4, h, bwid / 2), x0 = cx - bwid / 2;
+      var lab = MON[+x.start.slice(5, 7) - 1] + ' ' + (+x.start.slice(8));
+      s += '<g class="col" tabindex="0" data-i="' + i + '" aria-label="Week of ' + lab + ': ' + x.cuts + ' paid haircuts">' +
+        '<rect class="hit" x="' + (L + bw * i + 1) + '" y="' + T + '" width="' + (bw - 2) + '" height="' + ih + '" rx="6" fill="transparent"/>';
+      if (x.cuts) {
+        s += '<path class="bar' + (animate && !calm ? ' grow' : '') + '" style="animation-delay:' + (i * 45) + 'ms" d="M' + x0 + ' ' + base + 'V' + (y0 + r) + 'Q' + x0 + ' ' + y0 + ' ' + (x0 + r) + ' ' + y0 +
+          'H' + (x0 + bwid - r) + 'Q' + (x0 + bwid) + ' ' + y0 + ' ' + (x0 + bwid) + ' ' + (y0 + r) + 'V' + base + 'Z"/>';
+        if (i === lastI || i === maxI) s += '<text class="val" x="' + cx + '" y="' + (y0 - 9) + '" text-anchor="middle">' + x.cuts + '</text>';
+      }
+      if (bw >= 54 || i % 2 === lastI % 2) s += '<text class="ax" x="' + cx + '" y="' + (base + 22) + '" text-anchor="middle">' + (i === lastI ? 'This week' : lab) + '</text>';
+      s += '</g>';
+    });
+    s += '<line class="bl" x1="' + L + '" x2="' + (W - R) + '" y1="' + base + '" y2="' + base + '"/>';
+    var total = weeks.reduce(function (t, x) { return t + x.cuts; }, 0);
+    el.innerHTML = '<svg width="' + W + '" height="' + H + '" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Paid haircuts per week for the last 12 weeks: ' + total + ' in all, ' + weeks[lastI].cuts + ' this week.">' + s + '</svg><div class="tip" hidden></div>';
+    state.chart = { weeks: weeks, L: L, bw: bw, Y: Y, W: W };
+  }
+  function chartTip(e) {
+    var g = e.target.closest && e.target.closest('.col'), tip = $('#oChart .tip'), c = state.chart;
+    if (!tip || !c) return;
+    if (!g) { tip.hidden = true; return; }
+    var i = +g.getAttribute('data-i'), x = c.weeks[i], y = c.Y(x.cuts);
+    tip.innerHTML = '<b>Week of ' + esc(fmtWhen(x.start)) + '</b>' + x.cuts + ' paid ' + (x.cuts === 1 ? 'haircut' : 'haircuts') +
+      (x.rewards ? '<br>' + x.rewards + (x.rewards === 1 ? ' reward' : ' rewards') + ' · $' + x.off + ' off' : '');
+    tip.style.left = Math.min(c.W - 90, Math.max(90, c.L + c.bw * i + c.bw / 2)) + 'px';
+    tip.style.top = (y < 90 ? y + 20 : y) + 'px';
+    tip.style.transform = y < 90 ? 'translate(-50%, 0)' : '';
+    tip.hidden = false;
+  }
+  $('#oChart').addEventListener('pointerover', chartTip);
+  $('#oChart').addEventListener('focusin', chartTip);
+  $('#oChart').addEventListener('pointerleave', function () { var t = $('#oChart .tip'); if (t) t.hidden = true; });
+  $('#oChart').addEventListener('focusout', function () { var t = $('#oChart .tip'); if (t) t.hidden = true; });
+  var resizeT;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeT);
+    resizeT = setTimeout(function () { if (state.dash && !$('#ownerDash').hidden) weekChart($('#oChart'), state.dash.weeks, false); }, 200);
+  });
+  $('#oSearch').addEventListener('input', renderTable);
+  $$('.chips button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      state.oFilter = b.getAttribute('data-f');
+      $$('.chips button').forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+      renderTable();
+    });
+  });
+  $('#oTable').addEventListener('click', onPick);
+  $('#oTable').addEventListener('keydown', function (e) { if (e.key === 'Enter') onPick(e); });
+  $('#oTop').addEventListener('click', onPick);
+  $('#oActivity').addEventListener('click', onPick);
+  $('#oImp').addEventListener('click', function () { $('#impBtn').click(); });
+  $('#oQr').addEventListener('click', function () { $('#qrBtn').click(); });
+  $('#oOut').addEventListener('click', function () { lockStaff(''); });
+  $('#toBarber').addEventListener('click', function () { state.staffView = 'barber'; loadHome().catch(function (x) { toast(x.message); }); });
+  $('#toOwner').addEventListener('click', function () { state.staffView = 'owner'; loadHome().catch(function (x) { toast(x.message); }); });
+
+  /* ---------- QR ---------- */
+  $('#qrBtn').addEventListener('click', function () {
+    var url = cfg.appUrl || 'https://script.google.com/macros/s/YOUR-APP-ID/exec';
+    $('#qrUrl').textContent = cfg.appUrl ? url : url + ' (example link: your real one shows here after you deploy)';
+    try {
+      var q = qrcode(0, 'M'); q.addData(url); q.make();
+      $('#qrBox').innerHTML = q.createSvgTag({ cellSize: 6, margin: 2, scalable: true });
+    } catch (e) { $('#qrBox').innerHTML = '<p style="color:#111;margin:0">The QR code didn’t load. Paste the link below into any free QR maker.</p>'; }
+    openSheet('#qSheet');
+  });
+  $('#copyUrl').addEventListener('click', function () {
+    var text = cfg.appUrl || '';
+    var fallback = function () { var r = document.createRange(); r.selectNodeContents($('#qrUrl')); var s = getSelection(); s.removeAllRanges(); s.addRange(r); toast('Link selected. Copy it from your keyboard menu.'); };
+    if (!text) { toast('Your link appears here after you deploy.'); return; }
+    try { navigator.clipboard.writeText(text).then(function () { toast('Link copied.'); }, fallback); } catch (e) { fallback(); }
+  });
+
+  /* ---------- demo backend (used only outside Google) ---------- */
+  var Mock = (function () {
+    var pad = function (n) { return (n < 10 ? '0' : '') + n; };
+    var ymd = function (d) { return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); };
+    var today = function () { return ymd(new Date()); };
+    var now = function () { var d = new Date(); return ymd(d) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+    var ago = function (days, hm) { return ymd(new Date(Date.now() - days * 864e5)) + (hm ? ' ' + hm : ''); };
+    var S = { pin: '0000', barbers: ['Andy', 'Barber 2', 'Barber 3'], perCut: 10, tiers: [{ points: 100, off: 5 }, { points: 200, off: 10 }] };
+    var mem = [
+      { id: 'BB-4821', first: 'Maya', last: 'Torres', phone: '(609) 555-0142', email: 'mtorres@rider.edu', college: 'Rider University', status: 'Verified', points: 90, lifetime: 190, joined: ago(80, '15:10'), verifiedOn: ago(80, '15:42'), verifiedBy: 'Andy', note: 'Rider ID, valid through 05/2027', lastEarn: ago(13), pin: '1234' },
+      { id: 'BB-3307', first: 'Jordan', last: 'Ellis', phone: '(609) 555-0187', email: 'jellis@tcnj.edu', college: 'The College of New Jersey', status: 'Verified', points: 200, lifetime: 200, joined: ago(140, '11:05'), verifiedOn: ago(140, '11:31'), verifiedBy: 'Barber 2', note: 'TCNJ ID, fall term', lastEarn: ago(6), pin: '1234' },
+      { id: 'BB-6214', first: 'Chris', last: 'Nguyen', phone: '(215) 555-0163', email: 'chris.nguyen@gmail.com', college: 'Temple University', status: 'Pending', points: 0, lifetime: 0, joined: ago(1, '17:45'), verifiedOn: '', verifiedBy: '', note: '', lastEarn: '', pin: '1234' },
+      { id: 'BB-5590', first: 'Andre', last: 'Mitchell', phone: '(609) 555-0119', email: 'amitchell@mccc.edu', college: 'Mercer County Community College', status: 'Pending', points: 0, lifetime: 0, joined: ago(0, '10:20'), verifiedOn: '', verifiedBy: '', note: '', lastEarn: '', pin: '1234' }
+    ];
+    var act = [
+      { when: ago(27, '14:20'), id: 'BB-4821', name: 'Maya Torres', type: 'Reward', points: -100, off: 5, barber: 'Andy', note: '$5 off' },
+      { when: ago(13, '16:05'), id: 'BB-4821', name: 'Maya Torres', type: 'Haircut', points: 10, off: 0, barber: 'Andy', note: '' },
+      { when: ago(6, '12:10'), id: 'BB-3307', name: 'Jordan Ellis', type: 'Haircut', points: 10, off: 0, barber: 'Barber 2', note: '' },
+      { when: ago(1, '17:45'), id: 'BB-6214', name: 'Chris Nguyen', type: 'Joined', points: 0, off: 0, barber: '', note: '' },
+      { when: ago(0, '10:20'), id: 'BB-5590', name: 'Andre Mitchell', type: 'Joined', points: 0, off: 0, barber: '', note: '' }
+    ];
+    // Extra example members with 12 weeks of history, so the owner dashboard has something to show.
+    var rnd = (function () { var x = 11; return function () { x = (x * 16807) % 2147483647; return (x - 1) / 2147483646; }; })();
+    var FN = ['Isaiah', 'Brianna', 'Marcus', 'Sofia', 'Elijah', 'Destiny', 'Tyler', 'Gabriel', 'Aaliyah', 'Nathan', 'Jasmine', 'Kevin', 'Daniel', 'Camila'];
+    var LN = ['Reyes', 'Carter', 'Bell', 'Ramos', 'Hughes', 'Price', 'Ward', 'Santos', 'Brooks', 'Foster', 'Rivera', 'Coleman', 'Ortiz', 'Diaz'];
+    var CL = [['Rider University', 'rider.edu'], ['The College of New Jersey', 'tcnj.edu'], ['Mercer County Community College', 'mccc.edu'], ['Princeton University', 'princeton.edu'], ['Rutgers University', 'rutgers.edu']];
+    FN.forEach(function (f, i) {
+      var c = CL[i % CL.length], jd = 25 + Math.floor(rnd() * 60), nm = f + ' ' + LN[i];
+      var m = { id: 'BB-' + (2104 + i * 137), first: f, last: LN[i], phone: '(609) 555-01' + pad(20 + i), email: f.charAt(0).toLowerCase() + LN[i].toLowerCase() + '@' + c[1], college: c[0],
+        status: i % 6 === 5 ? 'Pending' : 'Verified', points: 0, lifetime: 0, joined: ago(jd, '13:' + pad(10 + i)), verifiedOn: '', verifiedBy: '', note: '', lastEarn: '', pin: '1234' };
+      act.push({ when: m.joined, id: m.id, name: nm, type: 'Joined', points: 0, off: 0, barber: '', note: '' });
+      if (m.status === 'Verified') {
+        m.verifiedOn = ago(jd, '13:' + pad(30 + i)); m.verifiedBy = S.barbers[i % 3];
+        act.push({ when: m.verifiedOn, id: m.id, name: nm, type: 'Verified', points: 0, off: 0, barber: m.verifiedBy, note: '' });
+        var d = jd;
+        while ((d -= 6 + Math.floor(rnd() * 12)) >= 0) {
+          var when = ago(d, pad(10 + Math.floor(rnd() * 8)) + ':' + pad(Math.floor(rnd() * 60)));
+          act.push({ when: when, id: m.id, name: nm, type: 'Haircut', points: 10, off: 0, barber: S.barbers[Math.floor(rnd() * 3)], note: '' });
+          m.points += 10; m.lifetime += 10; m.lastEarn = when.slice(0, 10);
+          if (m.points >= 100 && rnd() < .5) { m.points -= 100; act.push({ when: when.slice(0, 10) + ' 18:30', id: m.id, name: nm, type: 'Reward', points: -100, off: 5, barber: S.barbers[i % 3], note: '$5 off' }); }
+        }
+      }
+      mem.push(m);
+    });
+    act.sort(function (a, b) { return a.when < b.when ? -1 : a.when > b.when ? 1 : 0; });
+    var tokens = {};
+    var claims = [], counter = { token: null, cur: null };
+    var pendFor = function (id) { return claims.filter(function (c) { return c.member === id && c.status === 'Pending'; }); };
+    var confirmClaim = function (id, date) { var n = 0; claims.forEach(function (c) { if (c.member === id && c.date === date && c.status !== 'Confirmed') { c.status = 'Confirmed'; n++; } }); return n; };
+    var histFor = function (id, n) { return act.filter(function (a) { return a.id === id; }).slice(-n).reverse(); };
+    var pub = function (m) {
+      var p = pendFor(m.id);
+      return { id: m.id, first: m.first, college: m.college, status: m.status, points: m.points, lifetime: m.lifetime, joined: m.joined,
+        pending: p.reduce(function (t, c) { return t + c.points; }, 0), claimedToday: p.some(function (c) { return c.date === today(); }), earnedToday: m.lastEarn === today(),
+        perCut: S.perCut, tiers: S.tiers, history: histFor(m.id, 8) };
+    };
+    var rewardToday = function (id) { return act.some(function (a) { return a.id === id && a.type === 'Reward' && a.when.slice(0, 10) === today(); }); };
+    var view = function (m) { return { id: m.id, name: m.first + ' ' + m.last, first: m.first, last: m.last, phone: m.phone, email: m.email, college: m.college, status: m.status, points: m.points, lifetime: m.lifetime, joined: m.joined, verifiedOn: m.verifiedOn, verifiedBy: m.verifiedBy, note: m.note, squireName: m.squire || '', edu: /\.edu$/i.test(m.email), earnedToday: m.lastEarn === today(), rewardToday: rewardToday(m.id), history: histFor(m.id, 12), claimToday: pendFor(m.id).some(function (c) { return c.date === today(); }) }; };
+    var summary = function (m) { return { id: m.id, name: m.first + ' ' + m.last, college: m.college, status: m.status, points: m.points }; };
+    var need = function (t) { if (!tokens[t]) throw new Error('Barber session expired. Enter the staff PIN again.'); return tokens[t]; };
+    var owner = function (t) { if (need(t) !== 'owner') throw new Error('Only the owner can do that. Log in with the owner PIN.'); };
+    var find = function (id) { var m = mem.filter(function (x) { return x.id === id; })[0]; if (!m) throw new Error('Member not found.'); return m; };
+    var who = function (b, role) { if (!b) throw new Error('Pick your name at the top of the barber screen first.'); if (b === 'Owner' && role !== 'owner') throw new Error('Pick your name from the list.'); return b; };
+    var log = function (m, type, pts, off, b, note) { act.push({ when: now(), id: m.id, name: m.first + ' ' + m.last, type: type, points: pts, off: off, barber: b || '', note: note || '' }); };
+    return {
+      getConfig: function () { return { appUrl: '', perCut: S.perCut, tiers: S.tiers, squireBrand: '' }; },
+      signUp: function (f) {
+        var first = String(f.first || '').trim(), last = String(f.last || '').trim(), phone = normPhone(f.phone), email = String(f.email || '').trim().toLowerCase(), college = String(f.college || '').trim();
+        if (!first || !last) throw new Error('Enter your first and last name.');
+        if (!phone) throw new Error('Enter a 10-digit phone number.');
+        if (!college) throw new Error('Enter your college or university.');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Enter your college email address.');
+        if (!/^\d{4}$/.test(String(f.pin || ''))) throw new Error('Create a 4-digit PIN.');
+        if (!f.agree) throw new Error('Check the box to agree to the program terms.');
+        if (mem.some(function (m) { return normPhone(m.phone) === phone; })) throw new Error('That phone number already has a card. Tap "My card" to check your points.');
+        if (mem.some(function (m) { return m.email === email; })) throw new Error('That email already has a card. Tap "My card" to check your points.');
+        var m = { id: 'BB-' + (1000 + Math.floor(Math.random() * 9000)), first: first, last: last, phone: fmtPhone(phone), email: email, college: college, status: 'Pending', points: 0, lifetime: 0, joined: now(), verifiedOn: '', verifiedBy: '', note: '', lastEarn: '', pin: String(f.pin) };
+        mem.push(m); log(m, 'Joined', 0, 0); return pub(m);
+      },
+      myCard: function (phone, pin) {
+        var p = normPhone(phone);
+        if (!p || !/^\d{4}$/.test(String(pin || ''))) throw new Error('Enter your phone number and 4-digit PIN.');
+        var m = mem.filter(function (x) { return normPhone(x.phone) === p; })[0];
+        if (!m || m.pin !== String(pin)) throw new Error("That phone number and PIN don't match a card.");
+        return pub(m);
+      },
+      staffLogin: function (pin) {
+        var role = String(pin) === '9999' ? 'owner' : String(pin) === S.pin ? 'staff' : '';
+        if (!role) throw new Error('Wrong PIN.');
+        var t = 'demo' + Math.random().toString(36).slice(2); tokens[t] = role; return { token: t, role: role };
+      },
+      staffHome: function (t) {
+        need(t); var td = today(), tod = act.filter(function (a) { return a.when.slice(0, 10) === td; });
+        return { role: tokens[t], barbers: S.barbers, perCut: S.perCut, tiers: S.tiers, defaultPin: S.pin === '0000',
+          stats: { members: mem.length, verified: mem.filter(function (m) { return m.status === 'Verified'; }).length, cutsToday: tod.filter(function (a) { return a.type === 'Haircut'; }).length, rewardsToday: tod.filter(function (a) { return a.type === 'Reward'; }).length },
+          pending: mem.filter(function (m) { return m.status === 'Pending'; }).slice().reverse().map(summary), recent: act.slice(-8).reverse() };
+      },
+      staffSearch: function (t, q) {
+        need(t); var s = String(q).toLowerCase(), d = digits(s);
+        return mem.filter(function (m) { return m.id.toLowerCase().indexOf(s) >= 0 || (d.length >= 4 && (digits(m.phone).indexOf(d) >= 0 || m.id.indexOf(d) >= 0)) || (m.first + ' ' + m.last).toLowerCase().indexOf(s) >= 0 || m.email.indexOf(s) >= 0; }).map(summary);
+      },
+      staffMember: function (t, id) { need(t); return view(find(id)); },
+      staffVerify: function (t, id, b, note) { who(b, need(t)); var m = find(id); m.status = 'Verified'; m.verifiedOn = now(); m.verifiedBy = b; m.note = String(note || '').slice(0, 120); log(m, 'Verified', 0, 0, b, m.note); return view(m); },
+      staffEarn: function (t, id, b) {
+        who(b, need(t)); var m = find(id);
+        if (m.status !== 'Verified') throw new Error("Check this student's ID and verify the card before adding points.");
+        if (m.lastEarn === today()) throw new Error('Haircut points were already added today. Limit: one per day.');
+        m.points += S.perCut; m.lifetime += S.perCut; m.lastEarn = today();
+        var had = confirmClaim(m.id, today()); log(m, 'Haircut', S.perCut, 0, b, had ? 'Counter claim confirmed by barber' : ''); return view(m);
+      },
+      staffRedeem: function (t, id, b, i) {
+        who(b, need(t)); var m = find(id), tier = S.tiers[i];
+        if (rewardToday(m.id)) throw new Error('One reward per visit. This card already used a reward today.');
+        if (m.points < tier.points) throw new Error('This reward needs ' + tier.points + ' points. The card has ' + m.points + '.');
+        m.points -= tier.points; log(m, 'Reward', -tier.points, tier.off, b, '$' + tier.off + ' off'); return view(m);
+      },
+      ownerDashboard: function (t) {
+        owner(t);
+        var td = today(), month = td.slice(0, 7), dt = new Date(), lm = new Date(dt.getFullYear(), dt.getMonth() - 1, 1), lastMonth = lm.getFullYear() + '-' + pad(lm.getMonth() + 1);
+        var inM = function (m) { return function (a) { return a.when.slice(0, 7) === m; }; };
+        var cuts = act.filter(function (a) { return a.type === 'Haircut'; }), rw = act.filter(function (a) { return a.type === 'Reward'; });
+        var sumOff = function (l) { return l.reduce(function (x, a) { return x + (a.off || 0); }, 0); };
+        var mon = new Date(dt.getFullYear(), dt.getMonth(), dt.getDate() - (dt.getDay() + 6) % 7), weeks = [];
+        for (var i = 11; i >= 0; i--) {
+          var st = new Date(mon.getFullYear(), mon.getMonth(), mon.getDate() - 7 * i), en = new Date(st.getFullYear(), st.getMonth(), st.getDate() + 6);
+          weeks.push({ start: ymd(st), end: ymd(en), cuts: 0, rewards: 0, off: 0 });
+        }
+        act.forEach(function (a) { var d = a.when.slice(0, 10); weeks.forEach(function (w) { if (d >= w.start && d <= w.end) { if (a.type === 'Haircut') w.cuts++; if (a.type === 'Reward') { w.rewards++; w.off += a.off; } } }); });
+        var bb = {};
+        act.filter(inM(month)).forEach(function (a) {
+          if (!a.barber) return;
+          var o = bb[a.barber] = bb[a.barber] || { barber: a.barber, cuts: 0, rewards: 0, checks: 0 };
+          if (a.type === 'Haircut') o.cuts++; else if (a.type === 'Reward') o.rewards++; else if (a.type === 'Verified') o.checks++;
+        });
+        return { month: month, today: td, perCut: S.perCut, tiers: S.tiers, warn: { staffDefault: true, ownerDefault: true, same: false },
+          kpi: { members: mem.length, verified: mem.filter(function (m) { return m.status === 'Verified'; }).length, pending: mem.filter(function (m) { return m.status === 'Pending'; }).length,
+            newMonth: mem.filter(function (m) { return m.joined.slice(0, 7) === month; }).length, cutsMonth: cuts.filter(inM(month)).length, cutsLast: cuts.filter(function (a) { return inM(lastMonth)(a) && a.when.slice(8, 10) <= td.slice(8, 10); }).length,
+            rewardsMonth: rw.filter(inM(month)).length, offMonth: sumOff(rw.filter(inM(month))), offAll: sumOff(rw),
+            claimsPending: claims.filter(function (c) { return c.status === 'Pending'; }).length,
+            pointsOut: mem.reduce(function (x, m) { return x + m.points; }, 0), ready: mem.filter(function (m) { return m.status === 'Verified' && m.points >= S.tiers[0].points; }).length },
+          weeks: weeks,
+          barbers: Object.keys(bb).map(function (k) { return bb[k]; }).sort(function (a, b) { return b.cuts - a.cuts; }),
+          members: mem.map(function (m) { return { id: m.id, name: m.first + ' ' + m.last, college: m.college, status: m.status, points: m.points, lifetime: m.lifetime, joined: m.joined.slice(0, 10), lastCut: m.lastEarn }; }),
+          recent: act.slice(-40).reverse() };
+      },
+      ownerAdjust: function (t, id, amount, reason) {
+        owner(t);
+        var d = Math.round(Number(amount)), why = String(reason || '').trim().slice(0, 120), m = find(id);
+        if (!d || Math.abs(d) > 1000) throw new Error('Enter a number of points between -1000 and 1000 (not 0).');
+        if (!why) throw new Error('Add a short reason, like "Cut on 11/2, forgot to scan".');
+        if (m.points + d < 0) throw new Error('That would put the card below 0. It has ' + m.points + ' points.');
+        m.points += d; if (d > 0) m.lifetime += d; log(m, 'Adjustment', d, 0, 'Owner', why); return view(m);
+      },
+      ownerSetStatus: function (t, id, st) {
+        owner(t); var m = find(id); m.status = st;
+        if (st === 'Verified') { m.verifiedOn = now(); m.verifiedBy = 'Owner'; }
+        log(m, st === 'Verified' ? 'Verified' : 'Recheck', 0, 0, 'Owner'); return view(m);
+      },
+      startCounter: function (t) { need(t); counter.token = 'ctr' + Math.random().toString(36).slice(2); counter.cur = null; return { counterToken: counter.token }; },
+      counterCode: function (ct) {
+        if (!counter.token || ct !== counter.token) throw new Error('This counter screen was turned off. Open it again from the barber screen.');
+        var t0 = Date.now();
+        if (!counter.cur || counter.cur.exp <= t0) counter.cur = { code: ('00000' + Math.floor(Math.random() * 1e6)).slice(-6), exp: t0 + 60000 };
+        return { code: counter.cur.code, msLeft: counter.cur.exp - t0 };
+      },
+      claimVisit: function (phone, pin, code, dev) {
+        var p = normPhone(phone), c = String(code || '').replace(/\D/g, '');
+        if (!p || !/^\d{4}$/.test(String(pin || ''))) throw new Error('Sign in to My card again with your phone number and PIN.');
+        if (c.length !== 6) throw new Error('Type the 6-digit code from the counter screen.');
+        var m = mem.filter(function (x) { return normPhone(x.phone) === p; })[0];
+        if (!m || m.pin !== String(pin)) throw new Error("That phone number and PIN don't match a card.");
+        if (m.status !== 'Verified') throw new Error('Show your student ID to a barber first. Claims start once your card is verified.');
+        if (m.lastEarn === today()) throw new Error("Today's haircut is already on your card.");
+        if (claims.some(function (x) { return x.member === m.id && x.date === today() && x.status !== 'Expired'; })) throw new Error("You already claimed today's cut. Limit: one per day.");
+        if (dev && claims.some(function (x) { return x.device === dev && x.date === today() && x.member !== m.id; })) throw new Error('This phone already claimed a cut for someone else today. Use your own phone.');
+        if (!counter.cur || counter.cur.exp <= Date.now() || counter.cur.code !== c) throw new Error("That code didn't work. Codes change every 60 seconds and after each use, so type the one on the screen now.");
+        counter.cur = null;
+        claims.push({ member: m.id, name: m.first + ' ' + m.last, date: today(), status: 'Pending', points: S.perCut, device: dev || '' });
+        log(m, 'Claim', 0, 0, '', 'Counter code: +' + S.perCut + ' pending');
+        return pub(m);
+      },
+      staffSetSquireName: function (t, id, name) { need(t); var m = find(id); m.squire = String(name || '').trim().slice(0, 80); return view(m); },
+      staffImport: function (t, rows) {
+        need(t);
+        var kw = ['haircut', 'cut', 'fade', 'taper'];
+        var key = function (s) { return String(s || '').toLowerCase().replace(/[^a-z ]/g, ' ').replace(/\s+/g, ' ').trim(); };
+        var out = { added: [], points: 0, already: 0, waiting: [], before: 0, ambiguous: [], notMembers: 0, skipped: 0, confirmed: 0, expired: [] }, minD = '', maxD = '';
+        rows.forEach(function (x) {
+          if (/^\d{4}-\d{2}-\d{2}$/.test(x.date)) { if (!minD || x.date < minD) minD = x.date; if (!maxD || x.date > maxD) maxD = x.date; }
+          var desc = String(x.description || '').toLowerCase();
+          if (!/^\d{4}-\d{2}-\d{2}$/.test(x.date) || !x.customer || /no customer/i.test(x.customer) || (x.action && !/^\s*charge/i.test(x.action)) ||
+            x.refunded > 0 || (x.cost !== null && !(x.cost > 0)) || !kw.some(function (k) { return desc.indexOf(k) >= 0; })) { out.skipped++; return; }
+          var list = mem.filter(function (m) { return key(m.squire || m.first + ' ' + m.last) === key(x.customer); });
+          if (!list.length) { out.notMembers++; return; }
+          if (list.length > 1) { if (out.ambiguous.indexOf(x.customer) < 0) out.ambiguous.push(x.customer); return; }
+          var m = list[0], nm = m.first + ' ' + m.last;
+          if (m.status !== 'Verified') { if (out.waiting.indexOf(nm) < 0) out.waiting.push(nm); return; }
+          if (m.verifiedOn.slice(0, 10) > x.date) { out.before++; return; }
+          if (act.some(function (a) { return a.id === m.id && a.type === 'Haircut' && a.when.slice(0, 10) === x.date; })) { out.confirmed += confirmClaim(m.id, x.date); out.already++; return; }
+          var claimed = confirmClaim(m.id, x.date); out.confirmed += claimed;
+          m.points += S.perCut; m.lifetime += S.perCut; if (x.date > m.lastEarn) m.lastEarn = x.date;
+          act.push({ when: x.date + ' ' + (x.time || '12:00'), id: m.id, name: nm, type: 'Haircut', points: S.perCut, off: 0, barber: x.barber || '', note: claimed ? 'Counter claim confirmed by SQUIRE report' : 'From SQUIRE report' });
+          out.added.push({ name: nm, date: x.date }); out.points += S.perCut;
+        });
+        claims.forEach(function (c) {
+          if (c.status === 'Pending' && minD && c.date >= minD && c.date <= maxD && c.date < today()) {
+            c.status = 'Expired'; if (out.expired.indexOf(c.name) < 0) out.expired.push(c.name);
+            act.push({ when: now(), id: c.member, name: c.name, type: 'Expired', points: 0, off: 0, barber: '', note: 'Claim for ' + c.date + ': no paid haircut in SQUIRE report' });
+          }
+        });
+        act.sort(function (a, b) { return a.when < b.when ? -1 : a.when > b.when ? 1 : 0; });
+        return out;
+      }
+    };
+  })();
+
+  /* ---------- start ---------- */
+  function route(v) {
+    if (store.get('ctr')) { startCounterMode(); return; }
+    if (v === 'barber' || v === 'staff') show('staff'); else if (v === 'card') show('card');
+  }
+  applyRules();
+  mountCard($('#heroCard'), { id: 'BB-0000', first: 'Example', points: 70 }, 'Example');
+  var savedPhone = store.get('phone'); if (savedPhone) $('#cPhone').value = fmtPhone(savedPhone);
+  if (!live) $('#demoBar').hidden = false;
+  api('getConfig').then(function (c) {
+    var changed = JSON.stringify([c.perCut, c.tiers]) !== JSON.stringify([cfg.perCut, cfg.tiers]);
+    cfg = c; applyRules();
+    if (changed) mountCard($('#heroCard'), { id: 'BB-0000', first: 'Example', points: 70 }, 'Example');
+  }).catch(function () {});
+  if (live && google.script.url) google.script.url.getLocation(function (loc) { route(loc && loc.parameter && loc.parameter.view); });
+  else route(String(location.hash || '').replace('#', ''));
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Christopher Mormando · Actor, Writer, Director</title>
+<meta name="description" content="Christopher Mormando: Brooklyn-born actor, writer and director. Gaetano on Gravesend (Prime Video), For Life (ABC). Reel, credits, resume and audition requests.">
+<meta property="og:title" content="Christopher Mormando · Actor, Writer, Director">
+<meta property="og:description" content="Reel, credits, resume and audition requests.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fbfbf9; --panel:#f1f0ec; --card:#ffffff; --ink:#0b0b0c; --muted:#62646a; --line:#e2e0da;
+  --red:#d81e05; --red-ink:#ffffff; --photo:#d9d7d1; --photo2:#c4c1b9;
+  --f:"Archivo","Helvetica Neue",Arial,sans-serif;
+  color-scheme:light; box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0d0e;--panel:#151517;--card:#1b1b1e;--ink:#f3f2ee;--muted:#9c9da3;--line:#2a2a2e;--red:#ff3b1f;--photo:#26262a;--photo2:#323237;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d0d0e;--panel:#151517;--card:#1b1b1e;--ink:#f3f2ee;--muted:#9c9da3;--line:#2a2a2e;--red:#ff3b1f;--photo:#26262a;--photo2:#323237;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 68px)}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.55 var(--f)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.wrap{max-width:1280px;margin:0 auto;padding:0 28px}
+.cond{font-stretch:62%}
+h1,h2,h3{margin:0;font-family:var(--f);line-height:.9;letter-spacing:-.01em}
+h2{font-size:clamp(40px,6vw,76px);font-weight:900;font-stretch:62%;text-transform:uppercase}
+h3{font-size:22px;font-weight:800;line-height:1.1}
+.label{font:700 12px/1 var(--f);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.tbd{color:var(--muted);font-style:italic;font-weight:400}
+section{padding:96px 0;border-top:1px solid var(--line)}
+.head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:36px}
+.head p{color:var(--muted);max-width:44ch;margin:10px 0 0}
+.num{color:var(--red)}
+
+/* Bar */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:20px;height:64px}
+.logo{font:900 22px/1 var(--f);font-stretch:62%;letter-spacing:.02em;text-decoration:none;text-transform:uppercase;white-space:nowrap}
+.logo span{color:var(--red)}
+nav{display:flex;gap:2px;margin-left:auto}
+nav a{font:600 14px/1 var(--f);text-decoration:none;padding:9px 11px;border-radius:999px;color:var(--muted);transition:background .2s,color .2s}
+nav a:hover{color:var(--ink);background:var(--panel)}
+nav a.on{color:var(--ink);background:var(--panel)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font:700 15px/1 var(--f);padding:15px 20px;border-radius:999px;text-decoration:none;border:1.5px solid var(--ink);cursor:pointer;transition:transform .2s,background .2s,color .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px)}
+.btn.red{background:var(--red);border-color:var(--red);color:var(--red-ink)}
+.btn.ink{background:var(--ink);color:var(--bg)}
+.btn.ghost{background:transparent}
+.btn.sm{padding:11px 16px;font-size:14px}
+.tri{width:0;height:0;border-left:10px solid currentColor;border-top:6px solid transparent;border-bottom:6px solid transparent}
+.menu{display:none;margin-left:auto;background:none;border:1.5px solid var(--line);border-radius:999px;padding:10px 14px;font-weight:700;font-size:14px;cursor:pointer}
+
+/* Hero */
+.hero>*{min-width:0}
+.hero{display:grid;grid-template-columns:1.15fr 1fr;gap:48px;padding:56px 0 40px;border:0;align-items:stretch}
+.avail-pill{display:inline-flex;align-items:center;gap:8px;font:600 13px/1 var(--f);padding:8px 12px;border-radius:999px;background:var(--panel)}
+.avail-pill::before{content:"";width:8px;height:8px;border-radius:50%;background:#1e9e5a;box-shadow:0 0 0 4px rgba(30,158,90,.18)}
+.name{font-size:clamp(50px,8.6vw,150px);white-space:nowrap;font-weight:900;font-stretch:62%;text-transform:uppercase;line-height:.82;margin:22px 0 0;letter-spacing:-.015em}
+.name span{display:block;width:max-content}
+.name span:last-child{color:var(--red)}
+.roles{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+.roles span{font:700 14px/1 var(--f);letter-spacing:.06em;text-transform:uppercase;padding:9px 13px;border:1.5px solid var(--ink);border-radius:999px}
+.bio{font-size:clamp(18px,1.6vw,21px);line-height:1.5;max-width:44ch;margin:24px 0 0}
+.bio b{font-weight:700}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);margin-top:30px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.facts div{padding:14px 14px 14px 0}
+.facts div+div{padding-left:14px;border-left:1px solid var(--line)}
+.facts dd{margin:6px 0 0;font:700 17px/1.2 var(--f)}
+.facts dd.tbd{font-weight:400;font-size:15px}
+.ctas{display:flex;gap:10px;flex-wrap:wrap;margin-top:28px}
+.shot{position:relative;border-radius:18px;overflow:hidden;min-height:520px;background:
+  radial-gradient(24% 18% at 50% 32%,var(--photo2) 98%,transparent 100%),
+  radial-gradient(62% 44% at 50% 100%,var(--photo2) 98%,transparent 100%),
+  linear-gradient(160deg,var(--photo),var(--panel))}
+.shot .tag{position:absolute;left:16px;top:16px;font:600 12px/1 var(--f);background:var(--bg);padding:7px 10px;border-radius:999px}
+.shot .now{position:absolute;left:16px;right:16px;bottom:16px;background:var(--bg);border-radius:14px;padding:16px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.shot .now b{display:block;font:800 18px/1.15 var(--f)}
+.shot .now small{color:var(--muted);font-size:14px}
+.badge{font:800 11px/1 var(--f);letter-spacing:.1em;text-transform:uppercase;background:var(--red);color:var(--red-ink);padding:6px 8px;border-radius:999px;white-space:nowrap}
+
+/* Known for */
+.known{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding-bottom:56px}
+.kf{display:grid;grid-template-columns:64px 1fr;gap:14px;align-items:center;padding:14px;border-radius:14px;background:var(--panel);text-decoration:none;transition:transform .2s,background .2s}
+.kf:hover{transform:translateY(-3px);background:var(--card);box-shadow:0 12px 30px -18px rgba(0,0,0,.35)}
+.kf .p{aspect-ratio:2/3;border-radius:8px;display:flex;align-items:end;padding:6px;font:900 13px/.9 var(--f);font-stretch:62%;color:#fff;text-transform:uppercase}
+.kf b{display:block;font:800 17px/1.15 var(--f)}
+.kf small{color:var(--muted);font-size:14px;line-height:1.3;display:block;margin-top:3px}
+
+/* Poster colors */
+.c1{background:linear-gradient(165deg,#3a1209,#c2321c 55%,#f39b3a)}
+.c2{background:linear-gradient(165deg,#081a2e,#2361b0)}
+.c3{background:linear-gradient(165deg,#3f1228,#cf6390)}
+.c4{background:linear-gradient(165deg,#0b141d,#45607a)}
+.c5{background:linear-gradient(165deg,#161616,#666)}
+.c6{background:linear-gradient(165deg,#0f271b,#4f8a64)}
+.c7{background:linear-gradient(165deg,#1d1209,#866029)}
+.c8{background:linear-gradient(165deg,#170e26,#6243a3)}
+.c9{background:linear-gradient(165deg,#0b0b0c,#d81e05)}
+
+/* Reel */
+.reel{display:grid;grid-template-columns:1fr 340px;gap:20px}
+.player{position:relative;aspect-ratio:16/9;border-radius:18px;overflow:hidden;background:#0b0b0c;color:#fff}
+.player .bg{position:absolute;inset:0;background:radial-gradient(50% 60% at 50% 45%,#2a2a2e,#0b0b0c)}
+.player .playbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:88px;height:88px;border-radius:50%;background:var(--red);border:0;display:grid;place-items:center;cursor:pointer;color:#fff;transition:transform .25s}
+.player .playbtn:hover{transform:translate(-50%,-50%) scale(1.08)}
+.player .playbtn .tri{border-left-width:22px;border-top-width:13px;border-bottom-width:13px;margin-left:6px}
+.player .meta{position:absolute;left:20px;right:20px;bottom:18px;display:flex;justify-content:space-between;align-items:end;gap:10px}
+.player .meta b{display:block;margin-top:6px;font:900 30px/1 var(--f);font-stretch:62%;text-transform:uppercase}
+.player .meta small{color:#b9b9be}
+.player .bar2{position:absolute;left:0;right:0;bottom:0;height:4px;background:#2a2a2e}
+.player .bar2 i{display:block;height:100%;background:var(--red);width:30%;transition:width .5s}
+.chapters{display:grid;gap:8px;align-content:start}
+.ch{display:grid;grid-template-columns:44px 1fr auto;gap:12px;align-items:center;text-align:left;padding:14px;border-radius:14px;background:var(--panel);border:1.5px solid transparent;cursor:pointer;transition:border-color .2s,background .2s}
+.ch:hover{background:var(--card)}
+.ch[aria-pressed="true"]{border-color:var(--ink);background:var(--card)}
+.ch .n{font:900 26px/1 var(--f);font-stretch:62%;color:var(--muted)}
+.ch[aria-pressed="true"] .n{color:var(--red)}
+.ch b{display:block;font-weight:800;font-size:16px}
+.ch small{color:var(--muted);font-size:13px}
+.ch time{font-weight:700;font-size:14px;color:var(--muted)}
+
+/* Credits */
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.filters button{font:700 14px/1 var(--f);padding:11px 15px;border-radius:999px;border:1.5px solid var(--line);background:transparent;cursor:pointer}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.filters em{font-style:normal;opacity:.6;margin-left:4px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.cr{transition:opacity .3s,transform .3s}
+.cr.hide{display:none}
+.cr .poster{aspect-ratio:2/3;border-radius:14px;padding:16px;display:flex;flex-direction:column;justify-content:space-between;color:#fff;position:relative;overflow:hidden;transition:transform .3s}
+.cr:hover .poster{transform:translateY(-4px)}
+.cr .net{font:700 11px/1 var(--f);letter-spacing:.18em}
+.cr .ttl{font:900 clamp(32px,3.2vw,46px)/.86 var(--f);font-stretch:62%;text-transform:uppercase}
+.cr .poster .badge{position:absolute;right:14px;top:12px}
+.cr .info{padding:14px 2px 0}
+.cr .info b{font:800 18px/1.2 var(--f);display:block}
+.cr .info span{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;margin-top:4px;gap:8px}
+
+/* About */
+.about{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+.about .big{font:800 clamp(26px,2.8vw,38px)/1.18 var(--f);letter-spacing:-.01em;margin:0}
+.about .big em{font-style:normal;color:var(--red)}
+.about p{margin:0 0 16px}
+.list{list-style:none;padding:0;margin:0;border-top:1px solid var(--line)}
+.list li{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-bottom:1px solid var(--line)}
+.list li span:last-child{color:var(--muted);text-align:right}
+.types{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 28px}
+.types span{font:700 15px/1 var(--f);padding:10px 14px;border-radius:999px;background:var(--panel)}
+
+/* Resume table */
+.tblwrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px}
+table{width:100%;border-collapse:collapse;min-width:640px;font-size:16px}
+th{text-align:left;font:700 12px/1 var(--f);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:14px 18px;background:var(--panel)}
+td{padding:15px 18px;border-top:1px solid var(--line);vertical-align:top}
+td:first-child{font-weight:800}
+tr.grp td{background:var(--bg);font:900 20px/1 var(--f);font-stretch:62%;text-transform:uppercase;letter-spacing:.02em;padding-top:22px}
+
+/* Photos */
+.photos{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:240px 240px;gap:14px}
+.ph{position:relative;border:0;border-radius:14px;overflow:hidden;cursor:pointer;padding:0;text-align:left;background:
+  radial-gradient(22% 18% at 50% 34%,var(--photo2) 98%,transparent 100%),radial-gradient(58% 40% at 50% 100%,var(--photo2) 98%,transparent 100%),linear-gradient(160deg,var(--photo),var(--panel));transition:transform .3s}
+.ph:hover{transform:scale(.985)}
+.ph:first-child{grid-row:span 2}
+.ph span{position:absolute;left:12px;bottom:12px;font:700 13px/1 var(--f);background:var(--bg);padding:7px 10px;border-radius:999px}
+.lb{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.88);display:none;place-items:center;padding:24px}
+.lb.on{display:grid}
+.lb .f{width:min(86vw,520px);aspect-ratio:4/5;border-radius:16px;background:linear-gradient(160deg,#2a2a2e,#3a3a40);display:grid;place-items:center;color:#d0d0d4;font-weight:700;text-align:center}
+.lb button{position:absolute;top:calc(env(safe-area-inset-top,0px) + 16px);right:18px;background:#fff;color:#000;border:0;border-radius:999px;padding:10px 14px;font-weight:800;cursor:pointer}
+
+/* Director */
+.dir{display:grid;grid-template-columns:1fr 1.1fr;gap:0;border-radius:18px;overflow:hidden;background:#0b0b0c;color:#f3f2ee}
+.dir .art{min-height:380px;background:linear-gradient(165deg,#0b0b0c 0%,#3a1209 45%,#d81e05 100%);padding:30px;display:flex;flex-direction:column;justify-content:space-between}
+.dir .art .t{font:900 clamp(64px,8vw,120px)/.82 var(--f);font-stretch:62%;text-transform:uppercase}
+.dir .art small{font:700 12px/1 var(--f);letter-spacing:.18em;opacity:.8}
+.dir .body{padding:36px}
+.dir .body p{color:#c9c9cd;margin:14px 0 0;max-width:46ch}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:28px 0}
+.steps div{font:700 12px/1.2 var(--f);letter-spacing:.08em;text-transform:uppercase;padding:12px 10px;border-radius:10px;background:#1b1b1e;color:#8a8a90}
+.steps div.on{background:#f3f2ee;color:#0b0b0c}
+.steps div.cur{background:var(--red);color:#fff}
+
+/* Book */
+.book{display:grid;grid-template-columns:1.2fr 1fr;gap:28px}
+form{background:var(--panel);border-radius:18px;padding:28px;display:grid;gap:14px}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg input{position:absolute;opacity:0;pointer-events:none}
+.seg label{font:700 14px/1 var(--f);padding:11px 14px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);cursor:pointer}
+.seg input:checked+label{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.seg input:focus-visible+label{outline:3px solid var(--red);outline-offset:2px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.fl{display:grid;gap:6px;font:700 13px/1 var(--f)}
+.fl input,.fl textarea{font:400 16px/1.4 var(--f);padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);width:100%}
+.fl input:focus,.fl textarea:focus{outline:none;border-color:var(--ink)}
+.ok,.err{display:none;padding:14px;border-radius:12px;font-weight:700}
+.ok{background:#1e9e5a;color:#fff}.err{background:var(--red);color:#fff}
+.side{display:grid;gap:14px;align-content:start}
+.box{border:1px solid var(--line);border-radius:18px;padding:22px}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:14px}
+.day{text-align:center;padding:12px 0;border-radius:10px;background:var(--panel);font:800 14px/1.2 var(--f)}
+.day small{display:block;font-weight:600;font-size:11px;margin-top:3px;color:var(--muted)}
+.day.open{background:#1e9e5a;color:#fff}.day.open small{color:#d9f3e5}
+.how{list-style:none;padding:0;margin:12px 0 0;counter-reset:s}
+.how li{counter-increment:s;display:grid;grid-template-columns:30px 1fr;gap:10px;padding:10px 0;border-top:1px solid var(--line)}
+.how li::before{content:counter(s);font:900 22px/1 var(--f);font-stretch:62%;color:var(--red)}
+.how b{display:block}
+.how span{color:var(--muted);font-size:15px}
+
+/* Footer */
+footer{background:#0b0b0c;color:#f3f2ee;padding:64px 0 calc(env(safe-area-inset-bottom,0px) + 28px)}
+.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px}
+.foot .big{font:900 clamp(44px,6vw,84px)/.85 var(--f);font-stretch:62%;text-transform:uppercase}
+.foot .big span{color:var(--red)}
+.foot .label{color:#8a8a90;margin-bottom:12px}
+.foot a{text-decoration:none;display:block;padding:4px 0;color:#f3f2ee}
+.foot a:hover{color:var(--red)}
+.legal{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:56px;padding-top:20px;border-top:1px solid #2a2a2e;color:#8a8a90;font-size:14px}
+.legal a{display:inline;color:#f3f2ee}
+
+/* Mobile menu */
+.mm{position:fixed;inset:0;z-index:40;background:var(--bg);display:none;padding:calc(env(safe-area-inset-top,0px) + 80px) 28px 28px;flex-direction:column;gap:4px}
+.mm.on{display:flex}
+.mm a{font:900 46px/1.05 var(--f);font-stretch:62%;text-transform:uppercase;text-decoration:none}
+.mm .x{position:absolute;top:calc(env(safe-area-inset-top,0px) + 14px);right:20px;background:var(--panel);border:0;border-radius:999px;padding:10px 14px;font-weight:800;cursor:pointer}
+
+/* Reveal */
+.js .rv{opacity:0;transform:translateY(24px)}
+.js .rv.in{opacity:1;transform:none;transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+
+@media (max-width:1060px){
+  nav,.bar .btn{display:none}.menu{display:block}
+  .hero,.reel,.about,.book,.dir{grid-template-columns:1fr}
+  .shot{min-height:360px;order:-1}
+  .known,.grid{grid-template-columns:repeat(2,1fr)}
+  .foot{grid-template-columns:1fr 1fr}
+}
+@media (max-width:620px){
+  .wrap{padding:0 18px}
+  .shot{min-height:300px}
+  section{padding:72px 0}
+  .facts{grid-template-columns:1fr 1fr}.facts div:nth-child(3){padding-left:0;border-left:0;border-top:1px solid var(--line)}.facts div:nth-child(4){border-top:1px solid var(--line)}
+  .known{grid-template-columns:1fr}
+  .grid{gap:14px}.cr .poster{padding:12px}.cr .info b{font-size:16px}
+  .photos{grid-template-columns:1fr 1fr;grid-template-rows:200px 150px 150px}.ph:first-child{grid-column:span 2;grid-row:span 1}
+  .f2{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .ctas .btn{flex:1}
+  .foot{grid-template-columns:1fr}
+}
+@media print{header,.hero .shot,.known,#reel,#credits,#about,#photos,#director,#book,footer,.no-print{display:none!important}section{border:0;padding:0}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+<header><div class="wrap bar">
+  <a class="logo" href="#top">Chris <span>Mormando</span></a>
+  <nav aria-label="Sections" id="nav">
+    <a href="#reel">Reel</a><a href="#credits">Credits</a><a href="#about">About</a><a href="#resume">Resume</a><a href="#photos">Photos</a><a href="#director">Directing</a>
+  </nav>
+  <a class="btn red sm" href="#book">Book an audition</a>
+  <button class="menu" id="menuBtn" aria-haspopup="dialog">Menu</button>
+</div></header>
+
+<main id="top">
+<!-- HERO: everything casting needs above the fold -->
+<div class="wrap">
+  <div class="hero">
+    <div>
+      <span class="avail-pill">Available for self-tapes and in-person auditions</span>
+      <h1 class="name"><span>Christopher</span><span>Mormando</span></h1>
+      <div class="roles"><span>Actor</span><span>Writer</span><span>Director</span></div>
+      <p class="bio">Brooklyn-born actor known as <b>Gaetano on Prime Video’s Gravesend</b> and for <b>16 episodes of ABC’s For Life</b>. Now writing and starring in his own pilot, <b>Chrisboy</b>.</p>
+      <dl class="facts">
+        <div><dt class="label">Based in</dt><dd>New York City</dd></div>
+        <div><dt class="label">Accent</dt><dd>Native Brooklyn</dd></div>
+        <div><dt class="label">Union</dt><dd class="tbd">To confirm</dd></div>
+        <div><dt class="label">Playing age</dt><dd class="tbd">To confirm</dd></div>
+      </dl>
+      <div class="ctas">
+        <a class="btn red" href="#reel"><span class="tri"></span>Watch reel</a>
+        <a class="btn ink" href="#resume">Resume</a>
+        <a class="btn ghost" href="#book">Request audition</a>
+      </div>
+    </div>
+    <div class="shot" role="img" aria-label="Headshot placeholder">
+      <span class="tag">Headshot · swap in Chris’s photo</span>
+      <div class="now"><div><span class="label">Now streaming</span><b>Gravesend</b><small>Gaetano · Prime Video</small></div><span class="badge">Series lead</span></div>
+    </div>
+  </div>
+
+  <div class="known" aria-label="Known for">
+    <a class="kf rv" href="#credits"><span class="p c1">Graves­end</span><span><b>Gravesend</b><small>Gaetano · Prime Video</small></span></a>
+    <a class="kf rv" href="#credits"><span class="p c2">For Life</span><span><b>For Life</b><small>16 episodes · ABC</small></span></a>
+    <a class="kf rv" href="#credits"><span class="p c7">Lurking Fear</span><span><b>The Lurking Fear</b><small>Sheriff Nassar · 2023</small></span></a>
+    <a class="kf rv" href="#credits"><span class="p c4">FBI: MW</span><span><b>FBI: Most Wanted</b><small>Guest · CBS</small></span></a>
+  </div>
+</div>
+
+<!-- REEL -->
+<section id="reel"><div class="wrap">
+  <div class="head rv"><div><span class="label"><span class="num">01</span> · Reel</span><h2>Watch his work</h2><p>Jump straight to the scene type that fits your role.</p></div></div>
+  <div class="reel rv">
+    <div class="player">
+      <div class="bg"></div>
+      <button class="playbtn" id="play" aria-label="Play reel"><span class="tri"></span></button>
+      <div class="meta"><div><span class="label" style="color:#b9b9be" id="chLabel">Chapter A</span><b id="chName">Full reel</b></div><small id="chTime">1:30</small></div>
+      <div class="bar2"><i id="chBar"></i></div>
+    </div>
+    <div class="chapters" role="group" aria-label="Reel chapters">
+      <button class="ch" aria-pressed="true" data-n="Full reel" data-t="1:30" data-w="100" data-l="A"><span class="n">A</span><span><b>Full reel</b><small>Best scene first</small></span><time>1:30</time></button>
+      <button class="ch" aria-pressed="false" data-n="Crime drama" data-t="0:45" data-w="50" data-l="B"><span class="n">B</span><span><b>Crime drama</b><small>Gravesend · For Life</small></span><time>0:45</time></button>
+      <button class="ch" aria-pressed="false" data-n="Network TV" data-t="0:40" data-w="44" data-l="C"><span class="n">C</span><span><b>Network TV</b><small>ABC · CBS · NBC</small></span><time>0:40</time></button>
+      <button class="ch" aria-pressed="false" data-n="Comedy" data-t="0:30" data-w="33" data-l="D"><span class="n">D</span><span><b>Comedy</b><small>Timing and lighter roles</small></span><time>0:30</time></button>
+      <button class="ch" aria-pressed="false" data-n="Stunts and action" data-t="0:30" data-w="33" data-l="E"><span class="n">E</span><span><b>Stunts and action</b><small>Trained with Johnny C.</small></span><time>0:30</time></button>
+    </div>
+  </div>
+</div></section>
+
+<!-- CREDITS -->
+<section id="credits"><div class="wrap">
+  <div class="head rv">
+    <div><span class="label"><span class="num">02</span> · Credits</span><h2>Selected credits</h2><p>Most recent first. Filter by format.</p></div>
+    <div class="filters" role="group" aria-label="Filter credits">
+      <button aria-pressed="true" data-f="all">All<em id="cAll"></em></button><button aria-pressed="false" data-f="tv">Television<em id="cTv"></em></button><button aria-pressed="false" data-f="film">Film<em id="cFilm"></em></button><button aria-pressed="false" data-f="dir">Writing<em id="cDir"></em></button>
+    </div>
+  </div>
+  <div class="grid" id="grid">
+    <article class="cr rv" data-k="tv"><div class="poster c1"><span class="net">PRIME VIDEO</span><span class="badge">Lead</span><span class="ttl">Graves<br>end</span></div><div class="info"><b>Gaetano</b><span><span>Gravesend · Series lead</span><span>2020–23</span></span></div></article>
+    <article class="cr rv" data-k="dir"><div class="poster c9"><span class="net">ORIGINAL PILOT</span><span class="badge">In dev</span><span class="ttl">Chris<br>boy</span></div><div class="info"><b>Writer and star</b><span><span>TV pilot</span><span>Now</span></span></div></article>
+    <article class="cr rv" data-k="film"><div class="poster c7"><span class="net">FEATURE</span><span class="ttl">The<br>Lurking<br>Fear</span></div><div class="info"><b>Sheriff Nassar</b><span><span>Horror feature</span><span>2023</span></span></div></article>
+    <article class="cr rv" data-k="film"><div class="poster c5"><span class="net">FEATURE</span><span class="ttl">The<br>Families<br>Feud</span></div><div class="info"><b class="tbd">Role to confirm</b><span><span>Feature film</span><span>2023</span></span></div></article>
+    <article class="cr rv" data-k="tv"><div class="poster c2"><span class="net">ABC</span><span class="badge">16 eps</span><span class="ttl">For<br>Life</span></div><div class="info"><b>Recurring</b><span><span>For Life · ABC</span><span>2020–21</span></span></div></article>
+    <article class="cr rv" data-k="tv"><div class="poster c4"><span class="net">CBS</span><span class="ttl">FBI:<br>Most<br>Wanted</span></div><div class="info"><b class="tbd">Role to confirm</b><span><span>FBI: Most Wanted · CBS</span><span>Guest</span></span></div></article>
+    <article class="cr rv" data-k="tv"><div class="poster c6"><span class="net">NBC</span><span class="ttl">Black&shy;list:<br>Redemp&shy;tion</span></div><div class="info"><b class="tbd">Role to confirm</b><span><span>The Blacklist: Redemption · NBC</span><span>Guest</span></span></div></article>
+    <article class="cr rv" data-k="tv"><div class="poster c3"><span class="net">PRIME VIDEO</span><span class="ttl">Mrs.<br>Maisel</span></div><div class="info"><b class="tbd">Role to confirm</b><span><span>The Marvelous Mrs. Maisel</span><span>Guest</span></span></div></article>
+    <article class="cr rv" data-k="tv"><div class="poster c8"><span class="net">NETFLIX</span><span class="ttl">Lily&shy;<br>hammer</span></div><div class="info"><b class="tbd">Role to confirm</b><span><span>Lilyhammer · Netflix</span><span>With Steven Van Zandt</span></span></div></article>
+  </div>
+</div></section>
+
+<!-- ABOUT -->
+<section id="about"><div class="wrap">
+  <div class="head rv"><div><span class="label"><span class="num">03</span> · About</span><h2>The short version</h2></div></div>
+  <div class="about">
+    <div class="rv">
+      <p class="big">Started acting in his forties after a career in sales. <em>Now he’s a series lead.</em></p>
+      <p style="margin-top:24px">Chris grew up in Brooklyn and came to acting later than most. He started with a small part in a National Lampoon feature, then joined Netflix’s Lilyhammer with Steven Van Zandt. Network roles on The Marvelous Mrs. Maisel, The Blacklist: Redemption and FBI: Most Wanted followed.</p>
+      <p>He spent 16 episodes on ABC’s For Life, produced by Curtis “50 Cent” Jackson, and plays Gaetano in Gravesend on Prime Video. He trained in stunts with coordinator John “Johnny C.” Cenatiempo, and he is now writing and starring in his own pilot.</p>
+    </div>
+    <div class="rv">
+      <span class="label">Cast as</span>
+      <div class="types"><span>Wiseguy</span><span>Street boss</span><span>Detective</span><span>Sheriff</span><span>Corrections officer</span><span>Brooklyn father</span><span>Blue-collar tough</span><span>Comic heavy</span></div>
+      <span class="label">Worked alongside</span>
+      <ul class="list" style="margin-top:12px">
+        <li><span>Chazz Palminteri</span><span>Gravesend</span></li>
+        <li><span>Vincent Pastore</span><span>Gravesend</span></li>
+        <li><span>Steven Van Zandt</span><span>Lilyhammer</span></li>
+        <li><span>Nicholas Pinnock</span><span>For Life</span></li>
+      </ul>
+    </div>
+  </div>
+</div></section>
+
+<!-- RESUME -->
+<section id="resume"><div class="wrap">
+  <div class="head rv"><div><span class="label"><span class="num">04</span> · Resume</span><h2>Full resume</h2><p>Formatted the way casting reads it.</p></div>
+    <button class="btn ink no-print" id="printBtn">Download PDF</button></div>
+  <div class="tblwrap rv"><table>
+    <thead><tr><th>Project</th><th>Role</th><th>Network or studio</th></tr></thead>
+    <tbody>
+      <tr class="grp"><td colspan="3">Television</td></tr>
+      <tr><td>Gravesend</td><td>Gaetano (series lead)</td><td>Prime Video</td></tr>
+      <tr><td>For Life</td><td>Recurring, 16 episodes</td><td>ABC</td></tr>
+      <tr><td>FBI: Most Wanted</td><td class="tbd">To confirm</td><td>CBS</td></tr>
+      <tr><td>The Blacklist: Redemption</td><td class="tbd">To confirm</td><td>NBC</td></tr>
+      <tr><td>The Marvelous Mrs. Maisel</td><td class="tbd">To confirm</td><td>Prime Video</td></tr>
+      <tr><td>Lilyhammer</td><td class="tbd">To confirm</td><td>Netflix</td></tr>
+      <tr class="grp"><td colspan="3">Film</td></tr>
+      <tr><td>The Lurking Fear (2023)</td><td>Sheriff Nassar</td><td>Feature</td></tr>
+      <tr><td>The Families Feud (2023)</td><td class="tbd">To confirm</td><td>Feature</td></tr>
+      <tr><td>National Lampoon feature</td><td class="tbd">To confirm</td><td>Feature</td></tr>
+      <tr class="grp"><td colspan="3">Writing and training</td></tr>
+      <tr><td>Chrisboy (TV pilot)</td><td>Writer, star</td><td>In development</td></tr>
+      <tr><td>Stunt training</td><td>John “Johnny C.” Cenatiempo</td><td>Coordinator</td></tr>
+      <tr class="grp"><td colspan="3">Stats and skills</td></tr>
+      <tr><td>Based in</td><td>New York City</td><td>Native Brooklyn accent</td></tr>
+      <tr><td>Height · Eyes · Hair</td><td class="tbd">To confirm</td><td></td></tr>
+      <tr><td>Representation</td><td class="tbd">Agent and manager</td><td></td></tr>
+    </tbody></table></div>
+</div></section>
+
+<!-- PHOTOS -->
+<section id="photos"><div class="wrap">
+  <div class="head rv"><div><span class="label"><span class="num">05</span> · Photos</span><h2>Headshots and stills</h2><p>Tap any photo to view full size.</p></div></div>
+  <div class="photos rv">
+    <button class="ph" data-c="Theatrical headshot"><span>Theatrical headshot</span></button>
+    <button class="ph" data-c="Commercial headshot"><span>Commercial</span></button>
+    <button class="ph" data-c="Gravesend, on set"><span>Gravesend</span></button>
+    <button class="ph" data-c="For Life, on set"><span>For Life</span></button>
+    <button class="ph" data-c="Behind the scenes"><span>On set</span></button>
+  </div>
+</div></section>
+
+<!-- DIRECTOR -->
+<section id="director"><div class="wrap">
+  <div class="head rv"><div><span class="label"><span class="num">06</span> · Writing and directing</span><h2>His own project</h2></div></div>
+  <div class="dir rv">
+    <div class="art"><small>ORIGINAL TV PILOT</small><span class="t">Chris<br>boy</span><small>WRITTEN BY AND STARRING CHRISTOPHER MORMANDO</small></div>
+    <div class="body">
+      <span class="badge">In development</span>
+      <h3 style="font-size:34px;margin-top:16px">A man comes home after fourteen years.</h3>
+      <p>Brooklyn kept moving without him. No money, no one waiting, and a neighborhood he barely recognizes. Chrisboy follows him as he tries to rebuild a life from nothing.</p>
+      <div class="steps" aria-label="Stage: pre-production"><div class="on">Written</div><div class="cur">Pre-production</div><div>Shooting</div><div>Release</div></div>
+      <a class="btn red" href="#book" data-type="directing">Talk about the pilot</a>
+    </div>
+  </div>
+</div></section>
+
+<!-- BOOK -->
+<section id="book"><div class="wrap">
+  <div class="head rv"><div><span class="label"><span class="num">07</span> · Book</span><h2>Request an audition</h2><p>Goes straight to Chris’s inbox. His team replies within 24 hours.</p></div></div>
+  <div class="book">
+    <form id="audForm" novalidate class="rv">
+      <div class="seg" role="radiogroup" aria-label="Request type">
+        <input type="radio" name="type" value="self-tape" id="ty1" checked><label for="ty1">Self-tape</label>
+        <input type="radio" name="type" value="in-person" id="ty2"><label for="ty2">In person</label>
+        <input type="radio" name="type" value="offer" id="ty3"><label for="ty3">Direct offer</label>
+        <input type="radio" name="type" value="directing" id="ty4"><label for="ty4">Writing or directing</label>
+        <input type="radio" name="type" value="press" id="ty5"><label for="ty5">Press</label>
+      </div>
+      <div class="f2">
+        <label class="fl">Your name<input required name="name" autocomplete="name" maxlength="120"></label>
+        <label class="fl">Email<input required type="email" name="email" autocomplete="email"></label>
+      </div>
+      <div class="f2">
+        <label class="fl">Casting office or production<input required name="company" maxlength="160"></label>
+        <label class="fl">Sides due by<input type="date" name="due"></label>
+      </div>
+      <label class="fl">Role and project<textarea rows="4" name="details" maxlength="4000" placeholder="Character, logline, shoot dates, location"></textarea></label>
+      <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position:absolute;left:-9999px">
+      <button class="btn red" type="submit">Send request</button>
+      <div class="err" id="err" role="alert"></div>
+      <div class="ok" id="ok" role="status">Request sent. Chris’s team replies within 24 hours.</div>
+    </form>
+    <div class="side rv">
+      <div class="box"><span class="label">In-person availability</span><div class="week" id="week"></div></div>
+      <div class="box"><span class="label">How it works</span>
+        <ol class="how"><li><div><b>Send the role</b><span>Breakdown, sides and deadline</span></div></li><li><div><b>Confirmed within 24 hours</b><span>His team replies with timing</span></div></li><li><div><b>Tape delivered on time</b><span>Slated and lit</span></div></li></ol></div>
+    </div>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div class="foot">
+    <div class="big">Christopher<br><span>Mormando</span></div>
+    <div><div class="label">Representation</div><span class="tbd" style="color:#8a8a90">Agent and agency</span></div>
+    <div><div class="label">Follow</div><a href="#">Instagram</a><a href="#">YouTube</a><a href="https://www.imdb.com/name/nm2722220/" rel="noopener">IMDb</a></div>
+    <div><div class="label">Jump to</div><a href="#reel">Reel</a><a href="#resume">Resume</a><a href="#book">Book an audition</a></div>
+  </div>
+  <div class="legal"><span>© Christopher Mormando</span><span>Site by <a href="https://ltgpeak.app">LTGPEAK</a></span></div>
+</div></footer>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Photo"><button data-close>Close</button><div class="f" id="lbf"></div></div>
+<div class="mm" id="mm" role="dialog" aria-modal="true" aria-label="Menu"><button class="x" data-close>Close</button>
+  <a href="#reel">Reel</a><a href="#credits">Credits</a><a href="#about">About</a><a href="#resume">Resume</a><a href="#photos">Photos</a><a href="#director">Directing</a><a href="#book" style="color:var(--red)">Book audition</a></div>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+document.documentElement.classList.add("js");
+
+// Fit the name to its column on any screen and any font
+const nm=$(".name");
+function fit(){nm.style.fontSize="";const w=nm.parentElement.clientWidth,big=Math.max(...[...nm.children].map(c=>c.scrollWidth)),cur=parseFloat(getComputedStyle(nm).fontSize);
+  if(big>w)nm.style.fontSize=Math.floor(cur*w/big)+"px"}
+fit();addEventListener("resize",fit);if(document.fonts)document.fonts.ready.then(fit);
+
+// Reveal on scroll
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12});
+$$(".rv").forEach(el=>io.observe(el));
+
+// Active nav link
+const links=$$("#nav a");const so=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)links.forEach(a=>a.classList.toggle("on",a.hash==="#"+e.target.id))}),{rootMargin:"-40% 0px -55% 0px"});
+links.forEach(a=>{const s=$(a.hash);if(s)so.observe(s)});
+
+// Reel chapters
+$$(".ch").forEach(b=>b.addEventListener("click",()=>{$$(".ch").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  $("#chName").textContent=b.dataset.n;$("#chTime").textContent=b.dataset.t;$("#chLabel").textContent="Chapter "+b.dataset.l;$("#chBar").style.width=b.dataset.w+"%"}));
+$("#chBar").style.width="100%";
+$("#play").addEventListener("click",()=>{$("#chName").textContent="Add the reel link to play"});
+
+// Credit filters with counts
+const cards=$$(".cr"),cnt=k=>cards.filter(c=>k==="all"||c.dataset.k===k).length;
+$("#cAll").textContent=cnt("all");$("#cTv").textContent=cnt("tv");$("#cFilm").textContent=cnt("film");$("#cDir").textContent=cnt("dir");
+$$(".filters button").forEach(b=>b.addEventListener("click",()=>{$$(".filters button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  cards.forEach(c=>c.classList.toggle("hide",b.dataset.f!=="all"&&c.dataset.k!==b.dataset.f))}));
+
+// Print resume
+$("#printBtn").addEventListener("click",()=>print());
+
+// Photo viewer
+const lb=$("#lb");$$(".ph").forEach(p=>p.addEventListener("click",()=>{$("#lbf").innerHTML=p.dataset.c+"<br><small style='font-weight:400;opacity:.7'>Chris’s photo goes here</small>";lb.classList.add("on");lb.querySelector("button").focus()}));
+lb.addEventListener("click",e=>{if(e.target===lb||e.target.closest("[data-close]"))lb.classList.remove("on")});
+
+// Mobile menu
+const mm=$("#mm"),mb=$("#menuBtn");
+mb.addEventListener("click",()=>{mm.classList.add("on");document.body.style.overflow="hidden";mm.querySelector(".x").focus()});
+const closeMM=()=>{mm.classList.remove("on");document.body.style.overflow=""};
+mm.addEventListener("click",e=>{if(e.target.closest("a,[data-close]"))closeMM()});
+addEventListener("keydown",e=>{if(e.key==="Escape"){lb.classList.remove("on");if(mm.classList.contains("on")){closeMM();mb.focus()}}});
+
+// Availability: next 7 days
+const open=[1,1,0,1,1,0,1],D=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],t=new Date();
+$("#week").innerHTML=open.map((o,i)=>{const d=new Date(t);d.setDate(t.getDate()+i);return `<div class="day${o?" open":""}">${D[d.getDay()]}<small>${o?"Open":"Booked"}</small></div>`}).join("");
+
+// Pilot button preselects request type
+$$("[data-type]").forEach(a=>a.addEventListener("click",()=>{const r=$(`input[name=type][value="${a.dataset.type}"]`);if(r)r.checked=true}));
+
+// Audition form → /api/request
+const f=$("#audForm"),ok=$("#ok"),er=$("#err"),DEMO="Demo preview: on the live site this request goes straight to Chris’s inbox.";
+f.addEventListener("submit",async e=>{e.preventDefault();ok.style.display=er.style.display="none";
+  const bad=[...f.querySelectorAll("[required]")].find(i=>!i.value.trim()||(i.type==="email"&&!/^\S+@\S+\.\S{2,}$/.test(i.value)));
+  if(bad){er.textContent=bad.type==="email"?"Enter a valid email so Chris’s team can reply.":"Fill in “"+bad.parentElement.firstChild.textContent.trim()+"” to send.";er.style.display="block";bad.focus();return}
+  const b=f.querySelector("button[type=submit]");b.disabled=true;b.textContent="Sending…";
+  try{const r=await fetch("/api/request",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(Object.fromEntries(new FormData(f)))});
+    if(r.ok){ok.textContent="Request sent. Chris’s team replies within 24 hours.";ok.style.display="block";f.reset()}
+    else if(r.status===404||r.status===405){ok.textContent=DEMO;ok.style.display="block";f.reset()}
+    else{const j=await r.json().catch(()=>({}));er.textContent=j.error||"The request didn’t send. Try again.";er.style.display="block"}
+  }catch{ok.textContent=DEMO;ok.style.display="block";f.reset()}
+  b.disabled=false;b.textContent="Send request"});
+})();
+</script>
+</body>
+</html>

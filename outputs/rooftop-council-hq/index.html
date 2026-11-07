@@ -1,0 +1,464 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<meta charset="utf-8">
+<title>Rooftop Council HQ</title>
+<style>
+  :root{
+    --sky-top:#1c2350;
+    --sky-mid:#5c3b6b;
+    --sky-horizon:#f2a65a;
+    --sun:#ffd27a;
+    --rock:#8a7259;
+    --rock-dark:#5e4c39;
+    --rock-shadow:#3c3020;
+    --wall:#7a3b2e;
+    --wall-dark:#5c2c22;
+    --roof:#3f6b52;
+    --roof-dark:#2b4d3a;
+    --deck:#c9a86a;
+    --deck-dark:#a3835039;
+    --ink:#2a1c14;
+    --parchment:#f6ecd9;
+    --parchment-edge:#d8c39b;
+    --accent:#e8722c;
+    --accent-2:#b8c4cc;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0;
+    width:100%;
+    height:100%;
+    overflow:hidden;
+    background:linear-gradient(to bottom, var(--sky-top) 0%, var(--sky-mid) 45%, var(--sky-horizon) 78%, #f8c37a 100%);
+    font-family:'Space Mono', ui-monospace, Menlo, monospace;
+    color:var(--ink);
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .enter{ animation: rise 1.1s cubic-bezier(.2,.8,.2,1) both; }
+  }
+  @keyframes rise{
+    from{ opacity:0; transform:translateY(24px) scale(.98); }
+    to{ opacity:1; transform:translateY(0) scale(1); }
+  }
+
+  .sun{
+    position:fixed; left:50%; top:30%;
+    width:170px; height:170px; margin:-85px 0 0 -85px;
+    border-radius:50%;
+    background:radial-gradient(circle at 50% 50%, var(--sun) 0%, rgba(255,210,122,.4) 40%, rgba(255,210,122,0) 72%);
+    filter:blur(1px);
+    pointer-events:none;
+  }
+  .cloud{
+    position:fixed; pointer-events:none;
+    background:rgba(255,255,255,.16);
+    border-radius:50%;
+    filter:blur(6px);
+  }
+
+  .stage{
+    position:fixed; inset:0;
+    perspective:2000px;
+    perspective-origin:50% 30%;
+    cursor:grab;
+    touch-action:none;
+  }
+  .stage.dragging{ cursor:grabbing; }
+
+  .world{
+    position:absolute; left:50%; top:74%;
+    width:0; height:0;
+    transform-style:preserve-3d;
+    will-change:transform;
+  }
+  .part{ position:absolute; transform-style:preserve-3d; }
+
+  /* ---------- ground ---------- */
+  .ground{
+    position:absolute; left:-900px; top:-600px;
+    width:1800px; height:1200px;
+    transform:rotateX(90deg) translateZ(40px);
+    background:radial-gradient(ellipse at 50% 40%, #6f8a4f 0%, #4c6339 55%, #33452a 100%);
+    box-shadow:inset 0 0 140px rgba(0,0,0,.4);
+  }
+
+  /* ---------- mountain ---------- */
+  .medallion{ position:absolute; transform-style:preserve-3d; }
+  .m-rock{
+    position:absolute; left:-58px; top:-58px;
+    width:116px; height:116px; border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, var(--rock) 0%, var(--rock-dark) 62%, var(--rock-shadow) 100%);
+    box-shadow:0 10px 26px rgba(0,0,0,.45), inset 0 -10px 18px rgba(0,0,0,.35);
+    border:3px solid rgba(0,0,0,.18);
+  }
+  .m-hair{ position:absolute; left:-40px; top:-72px; width:80px; height:60px; background:var(--rock-dark); opacity:.85; }
+  .m-eye{ position:absolute; width:9px; height:5px; border-radius:50%; background:rgba(0,0,0,.55); top:-6px; }
+  .m-eye.l{ left:-24px; } .m-eye.r{ left:15px; }
+  .m-brow{ position:absolute; width:16px; height:4px; background:rgba(0,0,0,.4); border-radius:2px; top:-16px; }
+  .m-brow.l{ left:-27px; transform:rotate(-8deg);} .m-brow.r{ left:11px; transform:rotate(8deg);}
+  .m-mouth{ position:absolute; left:-10px; top:14px; width:20px; height:3px; background:rgba(0,0,0,.3); border-radius:2px;}
+  .m-hat{ position:absolute; left:-26px; top:-94px; width:52px; height:0; border-left:26px solid transparent; border-right:26px solid transparent; border-bottom:32px solid #b5453a; filter:drop-shadow(0 4px 4px rgba(0,0,0,.35)); }
+  .m-hat::after{ content:''; position:absolute; left:-30px; top:28px; width:84px; height:8px; background:#e7d9b8; border-radius:50%; }
+
+  /* ---------- building ---------- */
+  .box-face{ position:absolute; background:var(--wall); }
+  .roofdeck{
+    position:absolute; left:-360px; top:-8px;
+    width:720px; height:340px;
+    transform:rotateX(90deg);
+    background:linear-gradient(180deg, var(--deck), var(--deck-dark));
+    box-shadow:0 0 0 6px var(--wall-dark) inset, 0 18px 40px rgba(0,0,0,.5);
+  }
+  .tower-roof{
+    position:absolute; left:-120px; top:0; width:0; height:0;
+    border-left:120px solid transparent; border-right:120px solid transparent; border-bottom:100px solid var(--roof);
+    filter:drop-shadow(0 10px 12px rgba(0,0,0,.4));
+  }
+  .banner{
+    position:absolute; width:56px; height:130px; left:-28px; top:-8px;
+    background:linear-gradient(180deg, var(--accent), #a1441c);
+    clip-path:polygon(0 0,100% 0,100% 82%,50% 100%,0 82%);
+    box-shadow:0 6px 16px rgba(0,0,0,.4);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--parchment); font-family:'Bungee',sans-serif; font-size:11px; letter-spacing:.05em; text-align:center; line-height:1.15; padding-top:6px;
+  }
+
+  /* ---------- seats ---------- */
+  .seat{ position:absolute; transform-style:preserve-3d; }
+  .desk{
+    position:absolute; left:-30px; top:0; width:60px; height:34px;
+    background:linear-gradient(180deg,#8a5a34,#6b4223);
+    border-radius:3px;
+    box-shadow:0 8px 14px rgba(0,0,0,.4), inset 0 2px 0 rgba(255,255,255,.15);
+  }
+  .laptop{ position:absolute; left:-14px; top:-9px; width:28px; height:16px; background:#2c2c2c; border-radius:2px 2px 0 0; }
+  .laptop::after{ content:''; position:absolute; left:2px; top:2px; width:24px; height:10px; background:#7fd8ff; opacity:.85; border-radius:1px; }
+  .figure{ position:absolute; left:-24px; top:-70px; width:48px; height:74px; }
+  .torso{
+    position:absolute; left:11px; top:32px; width:26px; height:30px;
+    border-radius:10px 10px 4px 4px;
+  }
+  .arm{ position:absolute; top:36px; width:7px; height:20px; border-radius:4px; }
+  .arm.l{ left:8px; transform:rotate(18deg); } .arm.r{ left:33px; transform:rotate(-18deg); }
+  .head{ position:absolute; left:9px; top:6px; width:30px; height:30px; border-radius:50%; box-shadow:inset -4px -4px 8px rgba(0,0,0,.18); }
+  .band{ position:absolute; left:1px; top:11px; width:28px; height:7px; background:#1c2333; }
+  .plate{ position:absolute; left:9px; top:10px; width:12px; height:9px; background:linear-gradient(180deg,#e7edf1,#9aa7ae); border-radius:1px; box-shadow:0 1px 2px rgba(0,0,0,.4); }
+  .leaf{ position:absolute; left:12.5px; top:11.5px; width:5px; height:5px; background:#3f6b52; clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%); }
+  .plate.hidden{ opacity:0; }
+  .nameplate{
+    position:absolute; left:-46px; top:78px; width:92px;
+    text-align:center; font-size:10px; letter-spacing:.02em;
+    color:var(--parchment); text-shadow:0 1px 3px rgba(0,0,0,.7);
+    font-weight:700;
+  }
+  .nameplate small{ display:block; font-weight:400; opacity:.8; font-size:8.5px; margin-top:1px; }
+
+  /* hair shapes */
+  .hair{ position:absolute; }
+  .hair.spikyA{ left:-3px; top:-9px; width:36px; height:24px; background:var(--hc); clip-path:polygon(6% 90%,14% 20%,26% 60%,38% 8%,50% 55%,62% 8%,74% 60%,86% 20%,94% 90%,50% 75%); }
+  .hair.sweep{ left:-4px; top:-10px; width:38px; height:26px; background:var(--hc); clip-path:polygon(10% 85%,14% 30%,40% 0%,86% 18%,90% 60%,55% 42%,30% 58%); }
+  .mask{ position:absolute; left:6px; top:18px; width:18px; height:11px; background:#3a4552; border-radius:0 0 8px 8px; }
+  .buns{ position:absolute; width:15px; height:15px; border-radius:50%; background:var(--hc); top:-2px; }
+  .buns.l{ left:-9px; } .buns.r{ left:24px; }
+  .hair.bangs{ left:0; top:-4px; width:30px; height:14px; background:var(--hc); border-radius:12px 12px 40% 40%; }
+  .hair.spikyB{ left:-2px; top:-8px; width:34px; height:20px; background:var(--hc); clip-path:polygon(8% 80%,22% 15%,40% 45%,50% 5%,60% 45%,78% 15%,92% 80%,50% 60%); }
+  .hair.center{ left:-3px; top:-8px; width:36px; height:26px; background:var(--hc); clip-path:polygon(8% 90%,8% 20%,50% 0%,92% 20%,92% 90%,72% 30%,50% 48%,28% 30%); }
+  .lock{ position:absolute; width:6px; height:24px; background:var(--hc); border-radius:3px; top:8px; }
+  .lock.l{ left:-6px; } .lock.r{ left:30px; }
+  .hair.slick{ left:-1px; top:-7px; width:32px; height:20px; background:var(--hc); clip-path:polygon(14% 90%,18% 25%,50% 4%,82% 25%,86% 90%,50% 40%); }
+  .kagehat{ position:absolute; left:-9px; top:-24px; width:48px; height:0; border-left:24px solid transparent; border-right:24px solid transparent; border-bottom:22px solid #b5453a; }
+  .kagehat::after{ content:''; position:absolute; left:-27px; top:19px; width:66px; height:6px; background:#e7d9b8; border-radius:50%; }
+  .hair.small{ left:2px; top:-4px; width:26px; height:12px; background:var(--hc); border-radius:10px 10px 0 0; }
+
+  .scroll{ position:absolute; left:-16px; top:-16px; width:32px; height:22px; background:linear-gradient(180deg,#e7d9b8,#cbb589); border-radius:3px; box-shadow:0 4px 8px rgba(0,0,0,.35); }
+  .scroll::after{ content:'?'; position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-family:'Bungee',sans-serif; color:#8a6a3a; font-size:14px; }
+  .chair-outline{ position:absolute; left:-16px; top:-4px; width:32px; height:30px; border:2px dashed rgba(246,236,217,.55); border-radius:6px; }
+
+  /* ---------- UI ---------- */
+  .ui{ position:fixed; inset:0; pointer-events:none; }
+  .card{
+    position:absolute; pointer-events:auto;
+    background:linear-gradient(180deg, var(--parchment), #ecdcb8);
+    border:1px solid var(--parchment-edge);
+    box-shadow:0 14px 30px rgba(0,0,0,.35);
+    border-radius:4px;
+    color:var(--ink);
+  }
+  .title-card{ top:22px; left:22px; max-width:300px; padding:16px 18px; }
+  .title-card h1{
+    margin:0 0 4px; font-family:'Bungee',sans-serif; font-size:20px; letter-spacing:.01em;
+    color:#5c2c22;
+  }
+  .title-card p{ margin:0; font-size:11.5px; line-height:1.5; opacity:.85; }
+
+  .legend{ top:22px; right:22px; width:210px; padding:14px 16px; max-height:78vh; overflow:auto; }
+  .legend h2{ margin:0 0 8px; font-family:'Bungee',sans-serif; font-size:12px; color:#5c2c22; letter-spacing:.03em; }
+  .legend .row{ display:flex; align-items:center; gap:8px; padding:5px 0; border-top:1px dashed var(--parchment-edge); font-size:11px; }
+  .legend .row:first-of-type{ border-top:none; }
+  .swatch{ width:10px; height:10px; border-radius:50%; flex:none; box-shadow:inset -2px -2px 3px rgba(0,0,0,.25); }
+  .legend .row b{ display:block; }
+  .legend .row span.sub{ display:block; opacity:.65; font-size:9.5px; }
+
+  .hint{
+    bottom:20px; left:50%; transform:translateX(-50%);
+    padding:8px 16px; font-size:11px; letter-spacing:.03em; text-align:center;
+    background:rgba(20,14,10,.55); color:var(--parchment); border:none; border-radius:20px;
+    backdrop-filter:blur(3px);
+  }
+  @media (max-width:760px){
+    .legend{ display:none; }
+    .title-card{ max-width:70vw; padding:12px 14px; }
+    .title-card h1{ font-size:16px; }
+  }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Mono:wght@400;700&display=swap">
+
+<div class="sun"></div>
+<div id="clouds"></div>
+
+<div class="stage" id="stage">
+  <div class="world" id="world">
+    <div class="ground"></div>
+    <div class="part" id="mountain"></div>
+    <div class="part" id="building"></div>
+    <div class="part" id="rooftopSeats"></div>
+    <div class="part" id="mountainSeats"></div>
+  </div>
+</div>
+
+<div class="ui">
+  <div class="card title-card enter">
+    <h1>Rooftop Council HQ</h1>
+    <p>Eight seats on the office roof for the council, eight more up on the mountain - one perched over each carved face - for the teams they send out. Drag to look around.</p>
+  </div>
+  <div class="card legend enter" id="legend">
+    <h2>Seated on the roof</h2>
+  </div>
+  <div class="card hint">drag to rotate - scroll or pinch to zoom</div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------------- roster ----------------
+  // Eight council seats, loosely in the spirit of Leaf's line of Hokage -
+  // original character designs, not reproductions. Rename freely once this
+  // is yours: swap `name`/`sub` for your actual bot and subagent names.
+  var roster = [
+    { name:"Hashirama", sub:"the founder",  hair:"center", hc:"#3b2a1a", skin:"#e7b98c", outfit:"#7c2f2f", team:"Team Hashirama - builds & scaffolds" },
+    { name:"Tobirama",  sub:"the strategist", hair:"slick", hc:"#e9edf0", skin:"#eccaa2", outfit:"#22344a", team:"Team Tobirama - planning & routing" },
+    { name:"Hiruzen",   sub:"the elder",    hair:"small",  hc:"#c9c9c9", skin:"#e2b287", outfit:"#5c3a2e", team:"Team Hiruzen - review & policy", hat:true },
+    { name:"Minato",    sub:"the flash",    hair:"spikyB", hc:"#f2c94c", skin:"#f0cba0", outfit:"#22344a", team:"Team Minato - fast fixes" },
+    { name:"Tsunade",   sub:"the healer",   hair:"buns",   hc:"#f4d35e", skin:"#f0c9a0", outfit:"#3f6b52", team:"Team Tsunade - debugging & repair" },
+    { name:"Kakashi",   sub:"the copycat",  hair:"sweep",  hc:"#dfe4e8", skin:"#e7bd91", outfit:"#22344a", team:"Team Kakashi - research & search", mask:true },
+    { name:"Naruto",    sub:"the closer",   hair:"spikyA", hc:"#f7c548", skin:"#f0cba0", outfit:"#d4711f", team:"Team Naruto - ships the PR" },
+    { name:"Open Seat", sub:"next hire",    hair:"empty",  hc:"", skin:"", outfit:"", team:"reserved for your next bot" }
+  ];
+
+  var deg = Math.PI/180;
+  var world = document.getElementById('world');
+  var mountainEl = document.getElementById('mountain');
+  var buildingEl = document.getElementById('building');
+  var roofSeatsEl = document.getElementById('rooftopSeats');
+  var mtnSeatsEl = document.getElementById('mountainSeats');
+  var legendEl = document.getElementById('legend');
+
+  function el(tag, cls, parent){
+    var e = document.createElement(tag);
+    if(cls) e.className = cls;
+    if(parent) parent.appendChild(e);
+    return e;
+  }
+
+  function buildHair(head, r){
+    if(r.hair === "empty") return;
+    if(r.hair === "buns"){
+      var b = el('div','hair bangs',head); b.style.setProperty('--hc', r.hc);
+      var l = el('div','buns l',head); l.style.setProperty('--hc', r.hc);
+      var rr = el('div','buns r',head); rr.style.setProperty('--hc', r.hc);
+      return;
+    }
+    var h = el('div','hair '+r.hair, head);
+    h.style.setProperty('--hc', r.hc);
+    if(r.hair === "center"){
+      var ll = el('div','lock l',head); ll.style.setProperty('--hc', r.hc);
+      var lr = el('div','lock r',head); lr.style.setProperty('--hc', r.hc);
+    }
+    if(r.mask) el('div','mask', head);
+    if(r.hat) el('div','kagehat', head);
+  }
+
+  function buildFigure(seat, r, scale){
+    var fig = el('div','figure', seat);
+    if(scale) fig.style.transform = 'scale('+scale+')';
+    if(r.hair === "empty"){
+      el('div','scroll', seat.querySelector('.desk'));
+      el('div','chair-outline', fig);
+      return;
+    }
+    var torso = el('div','torso', fig); torso.style.background = r.outfit;
+    var al = el('div','arm l', fig); al.style.background = r.outfit;
+    var ar = el('div','arm r', fig); ar.style.background = r.outfit;
+    var head = el('div','head', fig); head.style.background = r.skin;
+    buildHair(head, r);
+    if(!r.hat){
+      var band = el('div','band', head);
+      var plate = el('div','plate', head);
+      el('div','leaf', head);
+    }
+  }
+
+  function buildSeat(parent, x, y, z, ry, r, opts){
+    opts = opts || {};
+    var seat = el('div','seat', parent);
+    seat.style.transform = 'translate3d('+x+'px,'+y+'px,'+z+'px) rotateY('+ry+'deg)';
+    var desk = el('div','desk', seat);
+    if(!opts.noLaptop && r.hair !== "empty") el('div','laptop', desk);
+    buildFigure(seat, r, opts.scale);
+    var plate = el('div','nameplate', seat);
+    plate.innerHTML = r.name + (opts.showSub ? '<small>'+r.sub+'</small>' : (r.hair==='empty' ? '<small>open</small>' : ''));
+    if(opts.dy) plate.style.top = (78+opts.dy)+'px';
+  }
+
+  // ---------------- shared vertical layout (all values are WORLD-space y) ----------------
+  var GROUND_Y   = 0;
+  var WALL_H     = 170;
+  var ROOF_Y     = -(WALL_H + 4);          // deck surface / rooftop seats
+  var MTN_BASE_Y = ROOF_Y - 300;           // where the mountain faces cluster
+  var SUB_Y      = ROOF_Y - 150;           // subagent desk ledge, well clear of the roof row
+
+  // ---------------- rooftop council (8 seats along the roof edge) ----------------
+  var n = roster.length;
+  var spanRoof = 620;
+  roster.forEach(function(r, i){
+    var t = (i/(n-1)) - 0.5;           // -0.5 .. 0.5
+    var x = t * spanRoof;
+    var z = -Math.pow(t*2,2) * 26 + 40; // slight arc toward camera
+    var ry = -t * 30;
+    buildSeat(roofSeatsEl, x, ROOF_Y, z, ry, r, { showSub:true });
+  });
+
+  // ---------------- mountain: carved faces + subagent desks ----------------
+  var spanMtn = 780;
+  roster.forEach(function(r, i){
+    var t = (i/(n-1)) - 0.5;
+    var x = t * spanMtn;
+    var z = -Math.pow(t*2,2) * 40 - 90;
+    var y = MTN_BASE_Y - Math.cos(t*Math.PI*0.9) * 55;
+    var ry = -t * 44;
+
+    var med = el('div','medallion', mountainEl);
+    med.style.transform = 'translate3d('+x+'px,'+y+'px,'+z+'px) rotateY('+ry+'deg)';
+    el('div','m-rock', med);
+    if(r.hair !== 'empty'){
+      var hair = el('div','m-hair', med);
+      if(r.hat){ el('div','m-hat', med); hair.style.opacity = 0; }
+      var el1 = el('div','m-eye l', med), el2 = el('div','m-eye r', med);
+      el('div','m-brow l', med); el('div','m-brow r', med);
+      el('div','m-mouth', med);
+    } else {
+      med.style.opacity = 0.35;
+    }
+
+    // subagent desk on its own ledge, well below the carved face
+    var teamRoster = { name: r.hair==='empty' ? 'Open' : 'Team '+r.name, sub:'subagent desk', hair:'small', hc:'#333', skin:'#d9b58c', outfit:'#3a3a3a', hat:false };
+    if(r.hair === 'empty') teamRoster.hair = 'empty';
+    buildSeat(mtnSeatsEl, x, SUB_Y, z+55, ry, teamRoster, { scale:0.72, dy:-10 });
+  });
+
+  // ---------------- building (all faces placed directly in world space) ----------------
+  (function(){
+    var wallW = 700, wallD = 300;
+    var wallCenterY = (GROUND_Y + (ROOF_Y+4)) / 2; // vertical middle of the walls
+    function face(w,h,tf,bg){ var f = el('div','box-face', buildingEl); f.style.width=w+'px'; f.style.height=h+'px'; f.style.marginLeft=(-w/2)+'px'; f.style.marginTop=(-h/2)+'px'; f.style.transform = 'translateY('+wallCenterY+'px) '+tf; f.style.background = bg; return f; }
+    face(wallW, WALL_H, 'translateZ('+(wallD/2)+'px)', 'linear-gradient(180deg,#8a4433,var(--wall-dark))');
+    face(wallW, WALL_H, 'translateZ('+(-wallD/2)+'px) rotateY(180deg)', 'var(--wall-dark)');
+    face(wallD, WALL_H, 'translateX('+(wallW/2)+'px) rotateY(90deg)', 'var(--wall-dark)');
+    face(wallD, WALL_H, 'translateX('+(-wallW/2)+'px) rotateY(-90deg)', 'var(--wall-dark)');
+
+    var deck = el('div','roofdeck', buildingEl);
+    deck.style.top = (ROOF_Y - 2) + 'px';
+
+    var towerH = 90, towerW = 140;
+    var towerBase = el('div','box-face', buildingEl);
+    towerBase.style.width = towerW+'px'; towerBase.style.height = towerH+'px';
+    towerBase.style.marginLeft = (-towerW/2)+'px'; towerBase.style.marginTop = (-towerH/2)+'px';
+    towerBase.style.transform = 'translateY('+(ROOF_Y - towerH/2)+'px) translateZ(-70px)';
+    towerBase.style.background = 'linear-gradient(180deg,#8a4433,var(--wall-dark))';
+
+    var roof = el('div','tower-roof', buildingEl);
+    roof.style.transform = 'translateY('+(ROOF_Y - towerH)+'px) translateZ(-70px)';
+
+    var flag = el('div','banner', buildingEl);
+    flag.style.transform = 'translateY('+(ROOF_Y - towerH - 22)+'px) translateZ(-70px) translateX(-95px)';
+    flag.textContent = 'HQ';
+  })();
+
+  // ---------------- legend ----------------
+  roster.forEach(function(r){
+    var row = el('div','row', legendEl);
+    var sw = el('div','swatch', row); sw.style.background = r.hair==='empty' ? '#999' : r.hc;
+    var txt = el('div','', row);
+    txt.innerHTML = '<b>'+r.name+'</b><span class="sub">'+r.team+'</span>';
+  });
+
+  // ---------------- clouds ----------------
+  var cloudLayer = document.getElementById('clouds');
+  var cloudDefs = [[10,18,180,60],[70,12,240,70],[25,30,140,50],[55,26,200,60],[85,20,160,50]];
+  cloudDefs.forEach(function(c){
+    var cl = el('div','cloud', cloudLayer);
+    cl.style.left = c[0]+'vw'; cl.style.top = c[1]+'vh';
+    cl.style.width = c[2]+'px'; cl.style.height = c[3]+'px';
+  });
+
+  // ---------------- interaction: drag to orbit, wheel to zoom ----------------
+  var stage = document.getElementById('stage');
+  var rotY = 8, rotX = -12, zoom = 0.82, viewScale = 1;
+  var dragging = false, lastX = 0, lastY = 0;
+  var autoSpin = !reduceMotion;
+
+  function apply(){
+    world.style.transform = 'scale('+viewScale+') rotateX('+rotX+'deg) rotateY('+rotY+'deg) scale('+zoom+')';
+  }
+  apply();
+
+  function down(x,y){ dragging = true; autoSpin = false; lastX = x; lastY = y; stage.classList.add('dragging'); }
+  function move(x,y){
+    if(!dragging) return;
+    rotY += (x-lastX) * 0.25;
+    rotX = Math.max(-25, Math.min(15, rotX - (y-lastY)*0.15));
+    lastX = x; lastY = y;
+    apply();
+  }
+  function up(){ dragging = false; stage.classList.remove('dragging'); }
+
+  stage.addEventListener('mousedown', function(e){ down(e.clientX, e.clientY); });
+  window.addEventListener('mousemove', function(e){ move(e.clientX, e.clientY); });
+  window.addEventListener('mouseup', up);
+  stage.addEventListener('touchstart', function(e){ var t=e.touches[0]; down(t.clientX,t.clientY); }, {passive:true});
+  stage.addEventListener('touchmove', function(e){ var t=e.touches[0]; move(t.clientX,t.clientY); }, {passive:true});
+  stage.addEventListener('touchend', up);
+  stage.addEventListener('wheel', function(e){
+    e.preventDefault();
+    zoom = Math.max(0.55, Math.min(1.7, zoom - e.deltaY*0.0012));
+    apply();
+  }, {passive:false});
+
+  if(autoSpin){
+    (function spin(){
+      if(!dragging && autoSpin){ rotY += 0.035; apply(); }
+      requestAnimationFrame(spin);
+    })();
+  }
+
+  window.addEventListener('resize', function(){
+    var s = Math.min(1, Math.min(window.innerWidth/1000, window.innerHeight/760));
+    viewScale = Math.max(s, 0.34);
+    apply();
+  });
+  window.dispatchEvent(new Event('resize'));
+})();
+</script>
+
+</body></html>

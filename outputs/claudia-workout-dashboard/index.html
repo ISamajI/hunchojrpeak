@@ -1,0 +1,1819 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Claudia's Workout Dashboard</title>
+<meta name="description" content="A personal nutrition and workout tracker with a rotating 4-week hybrid endurance/strength program." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIkNsYXVkaWEncyBXb3Jrb3V0IERhc2hib2FyZCIsICJzaG9ydF9uYW1lIjogIldvcmtvdXQiLCAiZGVzY3JpcHRpb24iOiAiTnV0cml0aW9uIGFuZCB3b3Jrb3V0IHRyYWNrZXIgd2l0aCBhIHJvdGF0aW5nIDQtd2VlayBoeWJyaWQgcHJvZ3JhbS4iLCAic3RhcnRfdXJsIjogIi4iLCAic2NvcGUiOiAiLiIsICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLCAiYmFja2dyb3VuZF9jb2xvciI6ICIjZmZmZmZmIiwgInRoZW1lX2NvbG9yIjogIiNjODEwMmUiLCAiaWNvbnMiOiBbeyJzcmMiOiAiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFNQUFBQURBQ0FNQUFBQmxBcHcxQUFBQUlHTklVazBBQUhvbUFBQ0FoQUFBK2dBQUFJRG9BQUIxTUFBQTZtQUFBRHFZQUFBWGNKeTZVVHdBQUFHOFVFeFVSY2dRTHNjUExjZ1JMc2dQTGNnU01NZ1JMOGNOSzhjTEtzY01Lc2dTTDhVR0pjVUhKc29hTjhzZU9zc2NPY1VESThzZE9jVUdKc1VGSmRJOVZ1Kzd4UG5uNnZ2eDgvdnc4dnZ4OHZycjd2UE4wOXBmZE5wZ2ROSS9WL3owOWYvLy8vNysvdjc5L2Qxd2dzVURJdTJ6dmYzNCtmNzkvdjc2Ky9qajVzb2NPTWNNSzhvWk52amo1OU5DV3NVRUpQNzgvTlZNWXNRQ0lzVUNJc2dUTU1RQUlNVUVJOFlKSjhZSktPS0JrZTYzd1BIRHl2REJ5ZkhDeXZEQ3llKzl4ZWFWb3M4eFM4VUZKT2FXbzhZTEtjd2pQdlhVMmZ6eTg5UklYL3p5OU13aVB1aWNxUDc3L1AzNSt2VFExZlRRMXNjT0xNa1dNL2JiNFAvKy92NzcrOUU2VTlJOFZQYmEzc2tWTXZ2djhkVk1ZOGdUTWRaT1pjSUFHZEkrVnRaTlk5TkNXZEU1VXZmYjROMXVnZmppNWQxdWdQTEl6Ly8rLy9UUjE5NXpoZmprNTlOQldmWFgzUFhXMjlFNFVkWk5aTkU2VXNjTkxNa1hOUGZlNHVxa3I4WUtLY3dsUVBYVjJ0VktZTlZMWWN3a1FOOTRpZTJ6dlBIRXkrU01tczR1U004dlNlU0xtdkhEeStCNGlmbm02ZFJGWE8rOHhQMzYrL25wNjlORFd2ejE5dDUwaGZ6MDl2cnE3ZkhGek5sZGNkcGVjdkhFek1vWk5jc2ZPOFlJSjVyQVRTRUFBQUFCWWt0SFJCOEZEUkM5QUFBQUIzUkpUVVVINmdnYkVTTWp6VW5HVHdBQUJFbEpSRUZVZU5ydDIrdC8wMVFZQi9Da082ZHJzczVxR1J1Z2NFN29CYllCV2J1V3doQWtJdUxZZEhNRFpZUENFSUVOcHpMQSsxMnVLbDZBZjlnazdaSm1ZdnZDSjhuNjhmZDkyUmM1enkrbmF5N1BNMFVCQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQXFxcUlrWElyU0U5WWFQZjRhS25uOWpDZDdVeTZGMFIrK2NZcVkwbGloTjhrMTRpVlVUZTlMOTd0ZVNHVjRHQWxVaFdkU0x6YldTUGU5Ukp0QTFiSmJCcllPRHRtMmJkL3hzczdwNjFjVXJyK3lZL3MyWjQzQnJRTmJzcFFKN1BPL2M1ZVF3aVVOc1R2SHlQOE9lbGh1dHpEVzF4QzdkdXFVQ1RROUx3cUdMTnBrY1kvWU96eENYYitpakF6dkZYdUtqVFdNZ3Nqckd1SEJrNlA3L0xOamI4SCtBNHk2Zm5aZ3Y3MkV2OHY3UnBOMEIwK2srb2RFVVRSSlU0eVY2QU9VeG9RcDE5Y29pcUgrVkNMRUFHWDZBT1ZJQTNUOURpQkFhQUhVeERqempYTTE3Z0FxRHhTVTZIQnhVSG15a3FsNktnZVpHbThBbFIycytQVmtLa25lTm9IS2ErbERoeWVPdk9vNE9uSHN0ZU9Xa3lDK0FDcXpqcjkrYk9Lb1c5Q1JpY09IMHJWMkNWUis0bzJUM2hYTHVhSy9lY3BKRUZzQXUvNVRid20vSGtPY25EelJMZ0hMblJhRktkTXpMZDdXNHQwQjdSMHg3ZGN6VlJDbmMrMlducGw5MTk2QU9hOVVLZWZQMlBja3NRWFE5TE9tbE42bmMvWVd2UGYrekw4ZnhDNzBuTDloZnEyeEJRaCs2SDZwejdYN2VRMFc2dDgxeEJlZ3ZDRkFoK3ZEY3dOc3FoMUFnT2FIQzZWRlJteXh0QkRsRGxnOFd5cVh5SlJMV1c1RnVRUG5MOHpXTDQ0UnVsaWZ2WEErd2dDWGxpNjMvRHovZC9iQkxpOWRpaXlBRkI5Y0VZWkp5aEJYUGhReW9nQmk2cXB3THBDa1RIRjFTa1FUWUU3SWdoU0VYNkRHV1hFTzZ0M0VoQnJBU1VCY2Z2T2I2ZFVmY29EZ1drU0NaeVhrQU9GREFBVFkzQUc2L1kvNFdsZy9vOWNpMjRIcE1DNWswMUh0Z0JUbTlUQnVKYTZiRWQxSzJIdTl2RUovTTdleUhObk5uQ2x1blBsb252SkxKTVg4NnNjM0luMmc0VXVrRHpTZmZNb2pmYUFaczVoTyswaXBzMGdmS1JkSzR4cnRNNzAySHUxRGZiZS9WdW1xQUYzMmFyRzdYKzRxTjlkdUJWK3ZHN0tlalROQXRpNk40T3YxVzJzMzJ4eEZzMjV2YUhDc3JzM0UyZUNZV1Z2ZDBPQzRiYldab1ZENW5jOCtEN1NZQnIrSXU4WDA1WVlXMDFkMzJqZkphdW12di9sMnZjazM4TjMzY1RmNU5PdUhId2ZXbTN3LzVYOGVyWFZxVXlZcnVaWTJhMjF6dFZsem5kcXNUcU83OWNYNTRtWm9kQWNLNnRUb2ZyNXVHalZBZ0M0SmdJR25md1lJY3dlVVpQcHVZT2p2WHBVK1FQVmVZT2p2YnBwdzZFL2h0ZnZlMktYeFFEeWM3Q1VmZmVXOWt3L0ZBOE1idTd4ZkkxeENaZnFqWDFvR1g1Y3o1QnRnYjBIbTE1YkIxOThlNll4MGROZXE1MWZjMGVQQng3Ly9vUk4rTzF2b2YvNzF1TEhHU3Y2c1JUMDgzVmQ5OHRRZHpCNStsZ3RyK0R2M2JOaGQ0dW1UYWgvbCtXOGtZTTN4K3hFZTN2ZzlIMm1PM3pQcThmdkFQMENFVW41VWF3QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBL0EvOURaSEw5MjNwYlFXQUFBQUFBRWxGVGtTdVFtQ0MiLCAic2l6ZXMiOiAiMTkyeDE5MiIsICJ0eXBlIjogImltYWdlL3BuZyIsICJwdXJwb3NlIjogImFueSJ9LCB7InNyYyI6ICJkYXRhOmltYWdlL3BuZztiYXNlNjQsaVZCT1J3MEtHZ29BQUFBTlNVaEVVZ0FBQWdBQUFBSUFDQUlBQUFCN0drT3RBQUFOQjBsRVFWUjRuT3pkWFdpZTVSM0g4U3R4U2F0TnVzaHNLOVV1YW9RaGFIMkp4ZEpLWWV5Z01CQjhtVWZPQThYcDhSQ2tFemQwVmNHRDZRYXk2cEhDRUFUTFRqeFF6NnFVb3JpS1hkUldUSm0xVTd0VTE5bzJMMjNXYkRjYkcyeHNneWJwODl5WHY4K0htOUNqWGpmaHV2N2YzTS9USi8zR20wTnJDd0I1dmxFQWlDUUFBS0VFQUNDVUFBQ0VFZ0NBVUFJQUVFb0FBRUlKQUVBb0FRQUlKUUFBb1FRQUlKUUFBSVFTQUlCUUFnQVFTZ0FBUWdrQVFDZ0JBQWdsQUFDaEJBQWdsQUFBaEJJQWdGQUNBQkJLQUFCQ0NRQkFLQUVBQ0NVQUFLRUVBQ0NVQUFDRUVnQ0FVQUlBRUVvQUFFSUpBRUFvQVFBSUpRQUFvUVFBSUpRQUFJUVNBSUJRQWdBUVNnQUFRZ2tBUUNnQkFBZ2xBQUNoQkFBZ2xBQUFoQklBZ0ZBQ0FCQktBQUJDQ1FCQUtBRUFDQ1VBQUtFRUFDQ1VBQUNFRWdDQVVBSUFFRW9BQUVJSkFFQW9BUUFJSlFBQW9RUUFJSlFBQUlRU0FJQlFBZ0FRU2dBQVFna0FRQ2dCQUFnbEFBQ2hCQUFnbEFBQWhCSUFnRkFDQUJCS0FBQkNDUUJBS0FFQUNDVUFBS0VFQUNDVUFBQ0VFZ0NBVUFJQUVFb0FBRUlKQUVBb0FRQUlKUUFBb1FRQUlKUUFBSVFTQUlCUUFnQVFTZ0FBUWdrQVFDZ0JBQWdsQUFDaEJBQWdsQUFBaEJJQWdGQUNBQkJLQUFCQ0NRQkFLQUVBQ0NVQUFLRUVBQ0NVQUFDRUVnQ0FVQUlBRUVvQUFFSUpBRUFvQVFBSUpRQUFvUVFBSUpRQUFJUVNBSUJRQWdBUVNnQUFRZ2tBUUNnQkFBZ2xBQUNoQkFBZ2xBQUFoQklBZ0ZBQ0FCQktBQUJDQ1FCQUtBRUFDQ1VBQUtFRUFDQ1VBQUNFRWdDQVVBSUFFRW9BQUVJSkFFQW9BUUFJSlFBQW9RUUFJSlFBQUlRU0FJQlFBZ0FRU2dBQVFna0FRQ2dCQUFnbEFBQ2hCQUFnbEFBQWhCSUFnRkFDQUJCS0FBQkNDUUJBS0FFQUNDVUFBS0VFQUNDVUFBQ0VFZ0NBVUFJQUVFb0FBRUlKQUVBb0FRQUlKUUFBb1FRQUlKUUFBSVFTQUlCUUFnQVFTZ0FBUWdrQVFDZ0JBQWdsQUFDaEJBQWdsQUFBaEJJQWdGQUNBQkJLQUFCQ0NRQkFLQUVBQ0NVQUFLRUVBQ0NVQUFDRUVnQ0FVQUlBRUVvQUFFSUp3S0laMnJ4cFlQU3FaVmRmMFZ4OXF5NG9aMjcyME9ISlBYdWI2OFE3N3gxOTdZMENYeGRPUnp2MXZEbTB0ckF3UzRZdkdubjI4Y0VicmltTDUvaGI3KzYvNzhHVEJ6NHRVRE9ubzgzT3VXZnBxc0lDckxqejF1Kzg4S3VsbDYwcGkyckp4UmV1L09FdHN4TmZUbzN0SzFBbnA2UGxCR0JCVnQ1MSsyVy8vRmxQZjE4NUM1cS85dnp2ZjdmWjVaUHZmbENnTms1SCsza0phUDZXWEhMeFZUdTNuN1BzM0hJMm5aNmNIcnZ4QnljLy9tT0JlamdkVmVndHpFOVB6OGd6ajUzdC9kMW9saGpaOW1pelhJRmFPQjJWRUlCNUdoaTljbkhmMS9vL0J0ZGYyeXhYb0JKT1J5MEVZSjRHMW5YMHBiTU9Md2NMNFhUVVFnRG1hZUQ2em03eDYyMXhxdUYwMU1JSHdlWnBzTE0vZEF6NkdZZDZPQjIxRUlCNTZsK3p1blJRaDVlRGhYQTZhaUVBQUtFRUFDQ1VBQUNFRWdDQVVBSUFFRW9BQUVJSkFFQW9BUUFJSlFBQW9RUUFJSlFBQUlRU0FJQlFBZ0FRU2dBQVFna0FRQ2dCQUFnbEFBQ2hCQUFnbEFBQWhHcFJBSVkyYnhvWXZXcloxVmMwVjkrcUM4cmltVDEwZUhMUDN1WTY4YzU3UjE5N293RDhOMmxUcUJVQldESjgwY2l6ancvZWNFMDVPL291WERIVVhKczNOWDgrL3RhNysrOTc4T1NCVHd2QVAyVk9vZDdTYlN2dXZIWHR6dTFuNy92K0g1cUZtdVZXM0hGekFmaTcyQ25VNVNlQWxYZmRmdW1URDVYTzZoMDQ3N0tuSCtucDc1dDQ3cVVDWkV1ZVF0MThBbGh5eWNYZjNucC82WkptNmVZR0NoQXNmQXAxTHdBOVBTUFBQSGJPc25OTGx6UkxqMng3dExtTkFtU0tuMEpkQzhEQTZKVWRlOFh0ZnhsY2YyMXpHd1dJWkFwMUx3RHIxcFlXYU1sdEFKMW5DblV0QU10dlhGZGFZT0I2QVlCUXBsRFgvaFZRU3lidm9DY0FTR1VLZFMwQWZTdS9WVnFnZjgzcUFrUXloZnd1SUlCUUFnQVFTZ0FBUWdrQVFDZ0JBQWdsQUFDaEJBQWdsQUFBaEJJQWdGQUNBQkJLQUFCQ0NRQkFLQUVBQ0NVQUFLRUVBQ0NVQUFDRUVnQ0FVQUpRc2FITm13WkdyMXAyOVJYTjFiZnFnZ0tkTW52bzhPU2V2YzExNHAzM2pyNzJScUZPQWxDbEpjTVhYZjdzNHdNM1hGT2dHL291WERIVVhKczNOWDgrOGRhNzQvYzllUExBcDRYYTlCWnFzK0xPVzlmdTNHNzYweExOVm13MjVJbzdiaTdVeGhOQVpWYmVkZnVsVHo1VW9FMTZCODY3N09sSGV2cjdKcDU3cVZBUFR3QTFXWExKeGNOYjd5L1FTczNtYkxab29SNENVSStlbnN1ZmVheDMyYmtGV3FuWm5DUGJIbTAyYXFFU1hnS3F4c0RvbFY3M3ArVUcxMS9iYk5SQ0pRU2dHZ1ByMWhab1BSdTFJZ0pRallIcm5Tc3FZS05XUkFDcU1lZ0hLMnBnbzFaRUFLclJ2MloxZ2RhelVTc2lBQUNoQkFBZ2xBQUFoQklBZ0ZBQ0FCQktBQUJDQ1FCQUtBRUFDQ1VBQUtFRUFDQ1VBQUNFRWdDQVVBSUFFRW9BQUVJSkFFQW9BUUFJSlFBQW9RUUFJSlFBQUlRU0FJQlFBZ0FRU2dBQVFna0FRS2plUWlWbUo3NHMwSG8yYWtVRW9CcFRZL3NLdEo2TldoRUJxTWJrMkljRldzOUdyWWozQUtveDVWeFJBeHUxSXA0QXFuSGsxZGVuM3Yrb1FJdE43eDAvOHNxT1FpVUVvQnB6VTlQajkyNzU2Nm5aQXEzVWJNNlA3bjVnYm5xbVVBa0JxTW4wQitPZlBQeFVnVlpxTnVmMHZ2MkZlbmdQb0RLSHRyMHdOMzF5ZU92OXZRUG5GV2lIMDE4ZC8zakxFMSs4K0hLaEtwNEE2alB4L1BiZmI3enQyTTYzQzdSQXN4WDNyTC9GOUsrUko0QXFuZnprczcwMzNiTjBaSGh3dytqeURkY3QzemphdjJaMWdVNDVkZkR6WTd0Mkg5KzF1L2s2TTM2Z1VDY0JxTmpNL2dQTmRmZzN2eTBBWjA0QUFFSUpBRUFvQVFBSUpRQUFvUVFBSUpRQUFJUVNBSUJRQWdBUVNnQUFRZ2tBUUNnQkFBZ2xBQUNoQkFBZ2xBQUFoQklBZ0ZBQ0FCQktBQUJDZGUzL0JKNmQrTEswUUV0dUErZzhVNmhyQVpnYTIxZGFvQ1czQVhTZUtkUzFBRXlPZlZoYW9DVzNBWFNlS2RTMTl3Q20ydkd0YjhsdEFKMW5Dblh0Q2VESXF6dW0zditvZE5YVTN2RWpyK3dvUUNSVHFHc0JtSnVhR2I5M3k5eXAyZElsemRMamR6OHdOejFUZ0VpbVVOY0MwSmorWVB6Z3cwK1ZMbW1XbnQ2M3Z3REJ3cWRRbHo4SGNHamJDM1BUSjRlMzN0ODdjRjdwbE5OZkhmOTR5eE5mdlBoeUFlSWxUNkZ1UGdIOHc4VHoyL2RzdU8zWXpyZExSelFMN1ZsL2kra1AvRXZzRkdyRko0RlBIZnhzNzAzM0xCMFpIdHd3dW56RGRjczNqdmF2V1YwV3o2bURueC9idGZ2NHJ0M04xNW54QXdYZzMyVk9vWjQzaDlZV3p0d05SL2FVem5yci9Lc0wxTURwcUlYZkJRUVFTZ0FBUWdrQVFDZ0JBQWdsQUFDaEJBQWdsQUFBaEJJQWdGQUNBQkJLQUFCQ0NRQkFLQUVBQ0NVQUFLRUVBQ0NVQUFDRUVnQ0FVQUlBRUVvQUFFSUpBRUNvM3NLOHpFNThXVHFvdzh2QlFqZ2R0UkNBZVpvYTIxYzZxTVBMd1VJNEhiVVFnSG1hSFB1d2RGQ0hsNE9GY0RwcTRUMkFlWnJxN0o2YnNzV3BoOU5SQzA4QTgzVGsxUjFUNzM5VU9tSnE3L2lSVjNZVXFJVFRVUXNCbUtlNXFabnhlN2ZNblpvdFoxbXp4UGpkRDh4Tnp4U29oTk5SaTNQdVdicXFNQzkvT2Z6bnVjbkpvZTl0TEdmVEp6Lzl4ZEZYWHk5UUZhZWpDZ0t3SUNkK056YjdweSsrZWVPNm52NitzdGhPZjNYOER6L2VPdkg4OWdJVmNqcmFyK2ZOb2JXRmhlbGZzM3JrMXo5ZmZ1TzZzbmlPN1h4Ny9FYy9tVDEwdUVETm5JNDJFNEJGczNSa2VIREQ2UElOMXkzZk9OcHMrbkxtVGgzOC9OaXUzY2QzN1c2K3pvd2ZLUEIxNFhTMGt3QUFoUEk1QUlCUUFnQVFTZ0FBUWdrQVFDZ0JBQWdsQUFDaEJBQWdsQUFBaEJJQWdGQUNBQkJLQUFCQ0NRQkFLQUVBQ0NVQUFLRUVBQ0NVQUFDRUVnQ0FVQUlBRUVvQUFFSUpBRUFvQVFBSUpRQUFvUVFBSUpRQUFJUVNBSUJRQWdBUVNnQUFRZ2tBUUNnQkFBZ2xBQUNoQkFBZ2xBQUFoQklBZ0ZBQ0FCQktBQUJDQ1FCQUtBRUFDQ1VBQUtFRUFDQ1VBQUNFRWdDQVVBSUFFRW9BQUVJSkFFQW9BUUFJSlFBQW9RUUFJSlFBQUlRU0FJQlFBZ0FRU2dBQVFna0FRQ2dCQUFnbEFBQ2hCQUFnbEFBQWhCSUFnRkFDQUJCS0FBQkNDUUJBS0FFQUNDVUFBS0VFQUNDVUFBQ0VFZ0NBVUFJQUVFb0FBRUlKQUVBb0FRQUlKUUFBb1FRQUlKUUFBSVFTQUlCUUFnQVFTZ0FBUWdrQVFDZ0JBQWdsQUFDaEJBQWdsQUFBaEJJQWdGQUNBQkJLQUFCQ0NRQkFLQUVBQ0NVQUFLRUVBQ0NVQUFDRUVnQ0FVQUlBRUVvQUFFSUpBRUFvQVFBSUpRQUFvUVFBSUpRQUFJUVNBSUJRQWdBUVNnQUFRZ2tBUUNnQkFBZ2xBQUNoQkFBZ2xBQUFoQklBZ0ZBQ0FCQktBQUJDQ1FCQUtBRUFDQ1VBQUtFRUFDQ1VBQUNFRWdDQVVBSUFFRW9BQUVJSkFFQW9BUUFJSlFBQW9RUUFJSlFBQUlRU0FJQlFBZ0FRU2dBQVFna0FRQ2dCQUFnbEFBQ2hCQUFnbEFBQWhCSUFnRkFDQUJCS0FBQkNDUUJBS0FFQUNDVUFBS0VFQUNDVUFBQ0VFZ0NBVUFJQUVFb0FBRUlKQUVBb0FRQUlKUUFBb1FRQUlKUUFBSVFTQUlCUUFnQVFTZ0FBUWdrQVFDZ0JBQWdsQUFDaEJBQWdsQUFBaEJJQWdGQUNBQkJLQUFCQ0NRQkFLQUVBQ0NVQUFLRUVBQ0NVQUFDRUVnQ0FVQUlBRUVvQUFFSUpBRUFvQVFBSUpRQUFvUVFBSUpRQUFJUVNBSUJRQWdBUVNnQUFRZ2tBUUNnQkFBZ2xBQUNoQkFBZzFOOEFBQUQvLytuM1dZMEFBQUFHU1VSQlZBTUFmR2tIV1BwOHkrUUFBQUFBU1VWT1JLNUNZSUk9IiwgInNpemVzIjogIjUxMng1MTIiLCAidHlwZSI6ICJpbWFnZS9wbmciLCAicHVycG9zZSI6ICJhbnkifSwgeyJzcmMiOiAiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFNQUFBQURBQ0FNQUFBQmxBcHcxQUFBQUlHTklVazBBQUhvbUFBQ0FoQUFBK2dBQUFJRG9BQUIxTUFBQTZtQUFBRHFZQUFBWGNKeTZVVHdBQUFHOFVFeFVSY2dRTHNjUExjZ1JMc2dQTGNnU01NZ1JMOGNOSzhjTEtzY01Lc2dTTDhVR0pjVUhKc29hTjhzZU9zc2NPY1VESThzZE9jVUdKc1VGSmRJOVZ1Kzd4UG5uNnZ2eDgvdnc4dnZ4OHZycjd2UE4wOXBmZE5wZ2ROSS9WL3owOWYvLy8vNysvdjc5L2Qxd2dzVURJdTJ6dmYzNCtmNzkvdjc2Ky9qajVzb2NPTWNNSzhvWk52amo1OU5DV3NVRUpQNzgvTlZNWXNRQ0lzVUNJc2dUTU1RQUlNVUVJOFlKSjhZSktPS0JrZTYzd1BIRHl2REJ5ZkhDeXZEQ3llKzl4ZWFWb3M4eFM4VUZKT2FXbzhZTEtjd2pQdlhVMmZ6eTg5UklYL3p5OU13aVB1aWNxUDc3L1AzNSt2VFExZlRRMXNjT0xNa1dNL2JiNFAvKy92NzcrOUU2VTlJOFZQYmEzc2tWTXZ2djhkVk1ZOGdUTWRaT1pjSUFHZEkrVnRaTlk5TkNXZEU1VXZmYjROMXVnZmppNWQxdWdQTEl6Ly8rLy9UUjE5NXpoZmprNTlOQldmWFgzUFhXMjlFNFVkWk5aTkU2VXNjTkxNa1hOUGZlNHVxa3I4WUtLY3dsUVBYVjJ0VktZTlZMWWN3a1FOOTRpZTJ6dlBIRXkrU01tczR1U004dlNlU0xtdkhEeStCNGlmbm02ZFJGWE8rOHhQMzYrL25wNjlORFd2ejE5dDUwaGZ6MDl2cnE3ZkhGek5sZGNkcGVjdkhFek1vWk5jc2ZPOFlJSjVyQVRTRUFBQUFCWWt0SFJCOEZEUkM5QUFBQUIzUkpUVVVINmdnYkVTTWp6VW5HVHdBQUJFbEpSRUZVZU5ydDIrdC8wMVFZQi9Da082ZHJzczVxR1J1Z2NFN29CYllCV2J1V3doQWtJdUxZZEhNRFpZUENFSUVOcHpMQSsxMnVLbDZBZjlnazdaSm1ZdnZDSjhuNjhmZDkyUmM1enkrbmF5N1BNMFVCQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQXFxcUlrWElyU0U5WWFQZjRhS25uOWpDZDdVeTZGMFIrK2NZcVkwbGloTjhrMTRpVlVUZTlMOTd0ZVNHVjRHQWxVaFdkU0x6YldTUGU5Ukp0QTFiSmJCcllPRHRtMmJkL3hzczdwNjFjVXJyK3lZL3MyWjQzQnJRTmJzcFFKN1BPL2M1ZVF3aVVOc1R2SHlQOE9lbGh1dHpEVzF4QzdkdXFVQ1RROUx3cUdMTnBrY1kvWU96eENYYitpakF6dkZYdUtqVFdNZ3Nqckd1SEJrNlA3L0xOamI4SCtBNHk2Zm5aZ3Y3MkV2OHY3UnBOMEIwK2srb2RFVVRSSlU0eVY2QU9VeG9RcDE5Y29pcUgrVkNMRUFHWDZBT1ZJQTNUOURpQkFhQUhVeERqempYTTE3Z0FxRHhTVTZIQnhVSG15a3FsNktnZVpHbThBbFIycytQVmtLa25lTm9IS2ErbERoeWVPdk9vNE9uSHN0ZU9Xa3lDK0FDcXpqcjkrYk9Lb1c5Q1JpY09IMHJWMkNWUis0bzJUM2hYTHVhSy9lY3BKRUZzQXUvNVRid20vSGtPY25EelJMZ0hMblJhRktkTXpMZDdXNHQwQjdSMHg3ZGN6VlJDbmMrMlducGw5MTk2QU9hOVVLZWZQMlBja3NRWFE5TE9tbE42bmMvWVd2UGYrekw4ZnhDNzBuTDloZnEyeEJRaCs2SDZwejdYN2VRMFc2dDgxeEJlZ3ZDRkFoK3ZEY3dOc3FoMUFnT2FIQzZWRlJteXh0QkRsRGxnOFd5cVh5SlJMV1c1RnVRUG5MOHpXTDQ0UnVsaWZ2WEErd2dDWGxpNjMvRHovZC9iQkxpOWRpaXlBRkI5Y0VZWkp5aEJYUGhReW9nQmk2cXB3THBDa1RIRjFTa1FUWUU3SWdoU0VYNkRHV1hFTzZ0M0VoQnJBU1VCY2Z2T2I2ZFVmY29EZ1drU0NaeVhrQU9GREFBVFkzQUc2L1kvNFdsZy9vOWNpMjRIcE1DNWswMUh0Z0JUbTlUQnVKYTZiRWQxSzJIdTl2RUovTTdleUhObk5uQ2x1blBsb252SkxKTVg4NnNjM0luMmc0VXVrRHpTZmZNb2pmYUFaczVoTyswaXBzMGdmS1JkSzR4cnRNNzAySHUxRGZiZS9WdW1xQUYzMmFyRzdYKzRxTjlkdUJWK3ZHN0tlalROQXRpNk40T3YxVzJzMzJ4eEZzMjV2YUhDc3JzM0UyZUNZV1Z2ZDBPQzRiYldab1ZENW5jOCtEN1NZQnIrSXU4WDA1WVlXMDFkMzJqZkphdW12di9sMnZjazM4TjMzY1RmNU5PdUhId2ZXbTN3LzVYOGVyWFZxVXlZcnVaWTJhMjF6dFZsem5kcXNUcU83OWNYNTRtWm9kQWNLNnRUb2ZyNXVHalZBZ0M0SmdJR25md1lJY3dlVVpQcHVZT2p2WHBVK1FQVmVZT2p2YnBwdzZFL2h0ZnZlMktYeFFEeWM3Q1VmZmVXOWt3L0ZBOE1idTd4ZkkxeENaZnFqWDFvR1g1Y3o1QnRnYjBIbTE1YkIxOThlNll4MGROZXE1MWZjMGVQQng3Ly9vUk4rTzF2b2YvNzF1TEhHU3Y2c1JUMDgzVmQ5OHRRZHpCNStsZ3RyK0R2M2JOaGQ0dW1UYWgvbCtXOGtZTTN4K3hFZTN2ZzlIMm1PM3pQcThmdkFQMENFVW41VWF3QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBL0EvOURaSEw5MjNwYlFXQUFBQUFBRWxGVGtTdVFtQ0MiLCAic2l6ZXMiOiAiMTkyeDE5MiIsICJ0eXBlIjogImltYWdlL3BuZyIsICJwdXJwb3NlIjogIm1hc2thYmxlIn1dfQ==">
+<meta name="theme-color" content="#c8102e">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Workout">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAMAAAAKE/YAAAAAIGNIUk0AAHomAACAhAAA+gAAAIDoAAB1MAAA6mAAADqYAAAXcJy6UTwAAAHgUExURcgQLscPLcgRL8YKKcYHJsYIJ8cOLMgSMMUGJc0mQdA0TdAzTNAzTc8wSskUMsUDI80lQcsgPOyvufzz9P7+/v////76+/fe4tphdcUFJfzy9PHDy/78/NhWa8gPLdhWbPHDysUEI9VMYv77+/79/f35+u64wcUHJsgTMcMAHt91hvff48gUMd94if/+//jj5//+/t94iOB4icgTMMQBIcQAH8YLKdtleOaUouibp+eapueap+eZpeB5isUFJOB6iueZpuaUocgRLscMK8oaN/HEy/79/vrs7tNBWdNCWeWQnfPO1PTT2P78/f77/NE5UsgSL9E6U/TR18kWM/nl6NVJX8kVM/nm6dVIX9VJYPjj5sQAIMYKKM4tR+aVou+7w/C/x/C+xvba39NDWvvt79NCWvfd4fDCyfDByf33+Pzy8/z09vjh5PLIz/ba3tRFXPvu8Prt784rRuSMmu+5wu+6ws4qRcYJKPXW29I9VeeXpP36+vXU2ccMKsobOPHFzPrq7dNEW9lccOaSn+ibqOeYpd5xg8wiPswjPuaSoMcQLsQCIsYLKt92h/jg5MUDItdTaf36+/HHztlbcMwhPeurtvvt8P35+fbY3dpfc/34+euqtc8uSccPLs8uSMwiPdcLULkAAAABYktHRBXl2PmjAAAAB3RJTUUH6ggbESMjzUnGTwAABEtJREFUeNrtmvt3E0UYhncmNpsmgbW4X2ikoiW7sIE0LKQUoVq1QKpgajVtI7RABUS5CYpa7ioCXiiUm4r3f9VpLrtpz0kO2tndRN7np5zTc755MpvOzH7zKgoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaBmYwquIj21SnXEeeqZMR1iVrc0UNdxRqR7iXFpxxkORzmgsHo/FV6zUOJNqzRjXVq4QpWOx+LORkCxr4dy16jld10mnxOruJJfprCg82b06IUqLAZ5f1SXPmq2hHiojzF/Q1LXylNeq2osLVcv00EuyHqPau45Shl7BpPUbpE4137CezGpxI0XrelUpZa30RkpV50I3aJMVlikdtjaRUaueoo1pS0rZTLqPEtlKWTJoc0audGazKFrBTlBfOiNJegslyA9pMcwWadJb/ZPe+rRIMyWXcbAqa2YQ0oxbrkeu+SbMOOtPO2wbUFkw0kwd2OZ69LNmO47Y+/j2l3fsHBTsHHzl1c6hBWv/pZk61Pna64MVjx1vbOdN9kk2vGv3HmfRpDyNvBkR1r5LMzXy1ogY3tka9uzeNdzQOte/l8yUg0n7eDAzzfct9tjbn2tYgClvU0G3a19R10ffiYz5Lz0WebeQr51HyNYL9F6TI0m4OE5GzVlYF2hCU/2XVrUJMXeOhm3QeLHxmOHJklsgSOn366XFn0uTTaSLS6X3ByO9f6l08emUVjKqNEQxP6QPFDumNGlMdRQP+CBdmj546PDMB1KYOXzo4HTJB+kjR485u9WyydOxD4/4IH38IzJHJdEzatLHxz2X1unESeftefmISidPkFPOI+nyOPaT+DwZ9qIZ8Gymy00baSyu59lM2xLneWk9z6S9BNL10lnZP4+s+9kjaduLf0RnGrDk1S955im5m8sp0/MlL0+nz4htvEfeNn7mtHuU8ezs8cnZczIPTJ+e9ePAVJr+7Pznso6mX5z/ctaPo2lbvgS05etWm77Ytph0qzRrJv5Vs2acjGyrzXS2eVuMDV8go64BaegXg2lAXhRDuw1Igy407vSKr3iJzFSi1mK9TFcWHov/rd7w5BW6XLNIpEy6pDW8EmX86rWvnKa6naevjyaDaaonvxmhfPWJi4lec+1qk6sAHlKuf3ujen1x89Z3QV1fjCW/v3Wzen1x44frP4aaX7qw2+4FzdRcgBdFU67HbdY8msCUnNVqV3JW7j/kYlr+8vN/JN3nn7S8FEIbSlvpO/UhlbuyQyp360MqdySFVNT5e3TfjQPNzMqNA83OuHGg+3RvXk4cSKyaD6hQO4/QQ0kpo9qU9D503u4L9ECVFnGbffTTz3a5SfPL41+HZEfchrof/1aJuJ37vWtaXjBvQHsUjcXisegfigdhwvk//4ouhAmjf/cOyIxAqnPV2CbzIrbJqrHNOVWec3sGZAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADAcvkHYWSQ4DAexs4AAAAASUVORK5CYII=">
+
+<style>
+  :root {
+    --ground: #ffffff;
+    --surface: #fdfdfd;
+    --surface-raised: #ffffff;
+    --ink: #1a1113;
+    --ink-secondary: #5c4548;
+    --ink-muted: #8f7a7c;
+    --border: #ece1e2;
+    --border-strong: #d9c7c9;
+
+    --accent-strength: #c8102e;
+    --accent-strength-ink: #fdfdfd;
+    --accent-endurance: #c8102e;
+    --accent-endurance-ink: #7a0f1f;
+
+    --status-good: #2e8b57;
+    --status-good-bg: #e3f2e8;
+    --status-warn: #b8860b;
+    --status-warn-bg: #f7edd6;
+    --status-critical: #c8102e;
+    --status-critical-bg: #fbe4e1;
+
+    --shadow: 0 1px 2px rgba(20,16,17,0.06), 0 6px 20px -8px rgba(20,16,17,0.18);
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+
+    --font-display: "Big Shoulders Display", "Oswald", "Arial Narrow", sans-serif;
+    --font-body: "Work Sans", "Segoe UI", system-ui, sans-serif;
+    --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground: #141010;
+      --surface: #1c1616;
+      --surface-raised: #241c1c;
+      --ink: #f5eceb;
+      --ink-secondary: #cbb0b1;
+      --ink-muted: #8f7576;
+      --border: #332627;
+      --border-strong: #453436;
+
+      --accent-strength: #ff4757;
+      --accent-strength-ink: #ffffff;
+      --accent-endurance: #ff4757;
+      --accent-endurance-ink: #ffb3ba;
+
+      --status-good: #3fae6b;
+      --status-good-bg: #1a3325;
+      --status-warn: #d4a017;
+      --status-warn-bg: #382d10;
+      --status-critical: #ff4757;
+      --status-critical-bg: #3a1e1b;
+
+      --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -10px rgba(0,0,0,0.55);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground: #141010;
+    --surface: #1c1616;
+    --surface-raised: #241c1c;
+    --ink: #f5eceb;
+    --ink-secondary: #cbb0b1;
+    --ink-muted: #8f7576;
+    --border: #332627;
+    --border-strong: #453436;
+
+    --accent-strength: #ff4757;
+    --accent-strength-ink: #ffffff;
+    --accent-endurance: #ff4757;
+    --accent-endurance-ink: #ffb3ba;
+
+    --status-good: #3fae6b;
+    --status-good-bg: #1a3325;
+    --status-warn: #d4a017;
+    --status-warn-bg: #382d10;
+    --status-critical: #ff4757;
+    --status-critical-bg: #3a1e1b;
+
+    --shadow: 0 1px 2px rgba(0,0,0,0.3), 0 8px 24px -10px rgba(0,0,0,0.55);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+
+  body {
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--font-body);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-endurance);
+    outline-offset: 2px;
+  }
+
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 24px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  /* ---------- Header ---------- */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 18px;
+  }
+
+  .topbar h1 {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(2.1rem, 4.2vw, 3.1rem);
+    letter-spacing: 0.01em;
+    margin: 0;
+    text-wrap: balance;
+    line-height: 0.95;
+  }
+
+  .topbar .lane {
+    display: inline-block;
+    width: 1.1em;
+    height: 0.16em;
+    background: var(--accent-endurance);
+    margin-right: 0.05em;
+    vertical-align: middle;
+    border-radius: 2px;
+  }
+
+  .topbar-meta {
+    text-align: right;
+    color: var(--ink-secondary);
+    font-size: 0.85rem;
+  }
+
+  .topbar-meta .cycle {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+
+  /* ---------- Stat row ---------- */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+
+  .stat-tile {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .stat-tile .label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-muted);
+  }
+
+  .stat-tile .value {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 1.55rem;
+    font-weight: 600;
+  }
+
+  .stat-tile .sub {
+    font-size: 0.78rem;
+    color: var(--ink-secondary);
+  }
+
+  .stat-tile .sub.good { color: var(--status-good); }
+  .stat-tile .sub.warn { color: var(--status-warn); }
+
+  /* ---------- Main grid ---------- */
+  .grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  @media (max-width: 860px) {
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .panel h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+
+  .panel .panel-sub {
+    font-size: 0.82rem;
+    color: var(--ink-muted);
+    margin-top: -12px;
+  }
+
+  /* ---------- Macro rings ---------- */
+  .macro-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+  }
+
+  .macro-ring {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .macro-ring svg { display: block; }
+
+  .macro-ring .ring-label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+  }
+
+  .macro-ring .ring-value {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  /* ---------- Meal form ---------- */
+  .meal-form {
+    display: grid;
+    grid-template-columns: 1.6fr 0.7fr 0.7fr 0.7fr 0.7fr auto;
+    gap: 8px;
+    align-items: end;
+  }
+
+  .field { display: flex; flex-direction: column; gap: 4px; }
+
+  .field label {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+  }
+
+  .field input {
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    padding: 8px 9px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--surface-raised);
+    color: var(--ink);
+    width: 100%;
+  }
+
+  .field input:focus { border-color: var(--accent-endurance); }
+
+  .btn {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 0.85rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 9px 14px;
+    cursor: pointer;
+    background: var(--accent-endurance);
+    color: #fbfffe;
+    transition: filter 0.15s ease, transform 0.1s ease;
+  }
+  .btn:hover { filter: brightness(1.08); }
+  .btn:active { transform: translateY(1px); }
+  .btn.secondary {
+    background: transparent;
+    border: 1px solid var(--border-strong);
+    color: var(--ink-secondary);
+  }
+  .btn.strength { background: var(--accent-strength); }
+
+  .computed-preview {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.85rem;
+    color: var(--ink-secondary);
+    padding: 8px 0;
+  }
+
+  select#f-food {
+    font-family: var(--font-body);
+    font-size: 0.88rem;
+    padding: 8px 9px;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    background: var(--surface-raised);
+    color: var(--ink);
+    width: 100%;
+  }
+  select#f-food:focus { border-color: var(--accent-endurance); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn { transition: none; }
+  }
+
+  @media (max-width: 640px) {
+    .meal-form { grid-template-columns: 1fr 1fr; }
+  }
+
+  #food-form { grid-template-columns: 2fr 1fr 1.3fr auto; }
+  @media (max-width: 640px) {
+    #food-form { grid-template-columns: 1fr 1fr; }
+  }
+
+  /* ---------- Meal list ---------- */
+  .meal-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 0; }
+
+  .meal-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.88rem;
+    gap: 10px;
+  }
+  .meal-row:last-child { border-bottom: none; }
+
+  .meal-row .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  .meal-row .macros {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-secondary);
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  .meal-row button {
+    background: none;
+    border: none;
+    color: var(--ink-muted);
+    cursor: pointer;
+    font-size: 0.95rem;
+    line-height: 1;
+    padding: 4px;
+  }
+  .meal-row button:hover { color: var(--status-critical); }
+
+  .empty-note {
+    color: var(--ink-muted);
+    font-size: 0.85rem;
+    font-style: italic;
+    padding: 6px 0;
+  }
+
+  /* ---------- Weekly chart ---------- */
+  .chart-wrap { position: relative; }
+  .chart-wrap svg { display: block; width: 100%; height: auto; overflow: visible; }
+
+  .tooltip {
+    position: absolute;
+    pointer-events: none;
+    background: var(--ink);
+    color: var(--ground);
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 5px 8px;
+    border-radius: 5px;
+    transform: translate(-50%, -110%);
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.1s ease;
+    z-index: 5;
+  }
+  .tooltip.show { opacity: 1; }
+
+  .legend-row {
+    display: flex;
+    gap: 16px;
+    font-size: 0.78rem;
+    color: var(--ink-secondary);
+    flex-wrap: wrap;
+  }
+  .legend-row .swatch {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  /* ---------- Training panel ---------- */
+  .week-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-secondary);
+    background: var(--ground);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 4px 10px;
+    width: fit-content;
+  }
+
+  .day-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .day-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 14px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.02em;
+  }
+
+  .day-card.strength .day-card-head { background: var(--accent-strength); color: var(--accent-strength-ink); }
+  .day-card.endurance .day-card-head { background: var(--surface); color: var(--ink); border-bottom: 2px solid var(--accent-endurance); }
+
+  .day-card-head .tag {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.85;
+  }
+
+  .exercise-list { list-style: none; margin: 0; padding: 10px 14px 14px; display: flex; flex-direction: column; gap: 2px; }
+
+  .exercise-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 2px;
+    border-bottom: 1px solid var(--border);
+  }
+  .exercise-row:last-child { border-bottom: none; }
+
+  .exercise-row input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    accent-color: var(--accent-endurance);
+    flex-shrink: 0;
+  }
+
+  .exercise-row .ex-name { flex: 1; font-size: 0.9rem; }
+  .exercise-row.done .ex-name { color: var(--ink-muted); text-decoration: line-through; }
+
+  .exercise-row .ex-scheme {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.78rem;
+    color: var(--ink-secondary);
+    white-space: nowrap;
+  }
+
+  .day-card-foot {
+    padding: 8px 14px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .mark-done-btn {
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 6px 11px;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 9px;
+    border-radius: 999px;
+  }
+  .badge.good { background: var(--status-good-bg); color: var(--status-good); }
+  .badge.pending { background: var(--ground); color: var(--ink-muted); border: 1px solid var(--border); }
+
+  .week-dots {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .week-dots .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
+    background: var(--ground);
+    border: 1px solid var(--border-strong);
+  }
+  .week-dots .dot.filled.strength { background: var(--accent-strength); border-color: var(--accent-strength); }
+  .week-dots .dot.filled.endurance { background: var(--surface); border: 2px solid var(--accent-endurance); }
+  .week-dots .dot-label { font-size: 0.76rem; color: var(--ink-muted); margin-left: 4px; }
+
+  .progression-note {
+    font-size: 0.8rem;
+    color: var(--ink-secondary);
+    background: var(--ground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 9px 11px;
+  }
+  .progression-note strong { color: var(--ink); }
+
+  /* ---------- Muscle map ---------- */
+  .muscle-map {
+    border-top: 1px solid var(--border);
+    padding-top: 14px;
+    margin-top: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .muscle-map-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .muscle-map-head h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.05rem;
+    margin: 0;
+    letter-spacing: 0.01em;
+  }
+
+  .muscle-view-toggle {
+    display: inline-flex;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 2px;
+    background: var(--ground);
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.05em;
+  }
+  .muscle-view-toggle button {
+    border: none;
+    background: none;
+    padding: 5px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    color: var(--ink-muted);
+    font-family: inherit;
+    text-transform: uppercase;
+  }
+  .muscle-view-toggle button.active { background: var(--accent-endurance); color: #fbfffe; }
+
+  .muscle-map-body {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .muscle-diagram { width: 118px; flex: none; }
+  .muscle-diagram svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .mm-skin { fill: var(--ground); stroke: var(--border-strong); stroke-width: 1; }
+  .mm-muscle {
+    fill: none;
+    stroke: var(--accent-strength);
+    stroke-opacity: 0.45;
+    stroke-width: 1.4;
+    cursor: pointer;
+    pointer-events: all;
+    transition: fill 0.25s ease, fill-opacity 0.25s ease;
+  }
+  .mm-muscle.active { fill: var(--accent-strength); fill-opacity: 0.85; stroke-opacity: 0.95; }
+
+  .muscle-groups { display: flex; flex-wrap: wrap; gap: 6px; flex: 1; min-width: 180px; align-content: flex-start; }
+  .muscle-group-btn {
+    font-family: var(--font-body);
+    font-size: 0.74rem;
+    font-weight: 500;
+    padding: 6px 11px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--ground);
+    color: var(--ink-secondary);
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .muscle-group-btn:hover { border-color: var(--accent-strength); }
+  .muscle-group-btn.active { background: var(--accent-strength); border-color: var(--accent-strength); color: var(--accent-strength-ink); }
+  .muscle-group-btn:focus-visible { outline: 2px solid var(--accent-endurance); outline-offset: 2px; }
+
+  .muscle-map-note { font-size: 0.78rem; color: var(--ink-muted); }
+
+  /* ---------- Calendar ---------- */
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+  }
+
+  .cal-weekday {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--ink-muted);
+    text-align: center;
+    padding-bottom: 2px;
+  }
+
+  .cal-day {
+    position: relative;
+    aspect-ratio: 1 / 1;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface-raised);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.82rem;
+    color: var(--ink-secondary);
+  }
+  .cal-day:hover { border-color: var(--border-strong); }
+  .cal-day.outside { opacity: 0.32; cursor: default; }
+  .cal-day.today { border-color: var(--accent-endurance); border-width: 2px; color: var(--ink); }
+  .cal-day.selected { box-shadow: 0 0 0 2px var(--accent-strength) inset; }
+
+  .cal-day .cal-dots { display: flex; gap: 3px; height: 6px; }
+  .cal-day .cal-dot { width: 6px; height: 6px; }
+  .cal-day .cal-dot.a { background: var(--accent-strength); border-radius: 50%; }
+  .cal-day .cal-dot.b { background: var(--accent-endurance); border-radius: 1px; }
+
+  .selected-day-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 10px 12px;
+    background: var(--ground);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+  .selected-day-panel .sd-date {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--ink-secondary);
+    margin-right: 4px;
+  }
+
+  /* ---------- Footer ---------- */
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  footer a { color: var(--ink-secondary); }
+
+  .reset-link {
+    background: none;
+    border: none;
+    color: var(--ink-muted);
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-family: var(--font-body);
+    padding: 0;
+  }
+</style>
+
+<div class="page">
+
+  <header class="topbar">
+    <h1><span class="lane" aria-hidden="true"></span>Claudia's Workout Dashboard</h1>
+    <div class="topbar-meta">
+      <div id="today-date"></div>
+      <div class="cycle" id="cycle-label">Cycle 1 · Week 1 of 4</div>
+    </div>
+  </header>
+
+  <section class="stats-row" aria-label="Today's summary">
+    <div class="stat-tile">
+      <span class="label">Calories today</span>
+      <span class="value" id="stat-cal">0<span style="font-size:0.65em; color:var(--ink-muted);">/1900</span></span>
+      <span class="sub" id="stat-cal-sub">0% of target</span>
+    </div>
+    <div class="stat-tile">
+      <span class="label">Protein today</span>
+      <span class="value" id="stat-protein">0g<span style="font-size:0.65em; color:var(--ink-muted);">/125g</span></span>
+      <span class="sub" id="stat-protein-sub">0% of target</span>
+    </div>
+    <div class="stat-tile">
+      <span class="label">Workouts this week</span>
+      <span class="value" id="stat-workouts">0/2</span>
+      <span class="sub" id="stat-workouts-sub">Get moving</span>
+    </div>
+    <div class="stat-tile">
+      <span class="label">Current weight</span>
+      <span class="value">130<span style="font-size:0.65em; color:var(--ink-muted);"> lb</span></span>
+      <span class="sub">5'1" · intermediate</span>
+    </div>
+  </section>
+
+  <div class="grid">
+
+    <section class="panel" aria-label="Nutrition tracker">
+      <div>
+        <h2>Nutrition</h2>
+        <div class="panel-sub">Hybrid endurance + muscle targets · no shellfish</div>
+      </div>
+
+      <div class="macro-row" id="macro-rings"></div>
+
+      <form class="meal-form" id="food-form">
+        <div class="field">
+          <label for="f-food">Food</label>
+          <select id="f-food"></select>
+        </div>
+        <div class="field">
+          <label for="f-qty" id="f-qty-label">Grams</label>
+          <input type="number" id="f-qty" min="0" step="1" />
+        </div>
+        <div class="field">
+          <label>Calculated</label>
+          <div class="computed-preview" id="f-preview">— kcal</div>
+        </div>
+        <button type="submit" class="btn">Add to log</button>
+      </form>
+      <div class="panel-sub" style="margin-top: -8px;">
+        Pick a food and how much of it — calories, protein, carbs and fat are calculated for you.
+        <button type="button" class="reset-link" id="toggle-manual" style="margin-left: 4px;">Not on the list? Log it manually.</button>
+      </div>
+
+      <form class="meal-form" id="meal-form" style="display:none;">
+        <div class="field">
+          <label for="m-name">Meal</label>
+          <input type="text" id="m-name" placeholder="e.g. Homemade curry" required />
+        </div>
+        <div class="field">
+          <label for="m-cal">Kcal</label>
+          <input type="number" id="m-cal" min="0" required />
+        </div>
+        <div class="field">
+          <label for="m-protein">Protein</label>
+          <input type="number" id="m-protein" min="0" />
+        </div>
+        <div class="field">
+          <label for="m-carbs">Carbs</label>
+          <input type="number" id="m-carbs" min="0" />
+        </div>
+        <div class="field">
+          <label for="m-fat">Fat</label>
+          <input type="number" id="m-fat" min="0" />
+        </div>
+        <button type="submit" class="btn secondary">Add manual entry</button>
+      </form>
+
+      <ul class="meal-list" id="meal-list"></ul>
+
+      <div>
+        <div class="legend-row" style="margin-bottom:8px;">
+          <span><span class="swatch" style="background:var(--accent-endurance);"></span>Calories logged</span>
+          <span><span class="swatch" style="background:var(--ink-muted); opacity:0.5;"></span>Daily target (1900)</span>
+        </div>
+        <div class="chart-wrap" id="calorie-chart"></div>
+      </div>
+    </section>
+
+    <section class="panel" aria-label="This week's training">
+      <div>
+        <h2>This Week's Training</h2>
+        <div class="panel-sub" id="training-sub">Full gym · 2 days/week · intermediate athlete · legs / back / arms, no chest</div>
+      </div>
+
+      <span class="week-pill" id="week-pill">Week 1 · baseline</span>
+
+      <div id="day-cards" style="display:flex; flex-direction:column; gap:12px;"></div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="week-dots" id="week-dots"></div>
+      </div>
+
+      <div class="progression-note" id="progression-note"></div>
+
+      <div class="muscle-map" id="muscle-map-wrap">
+        <div class="muscle-map-head">
+          <h3>Muscles Worked Today</h3>
+          <div class="muscle-view-toggle" id="muscle-view-toggle">
+            <button type="button" data-view="front" class="active">Front</button>
+            <button type="button" data-view="back">Back</button>
+          </div>
+        </div>
+        <div class="muscle-map-note">Tap a group below, or tap it right on the body — the whole group lights up together. Tap again to undo.</div>
+        <div class="muscle-map-body">
+          <div class="muscle-diagram" id="muscle-diagram"></div>
+          <div class="muscle-groups" id="muscle-groups"></div>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <section class="panel" aria-label="Workout calendar">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+      <div>
+        <h2>Workout Calendar</h2>
+        <div class="panel-sub">Every day you've marked a workout done, at a glance</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <button type="button" class="btn secondary" id="cal-prev" aria-label="Previous month">←</button>
+        <span class="week-pill" id="cal-month-label" style="min-width:150px; justify-content:center;"></span>
+        <button type="button" class="btn secondary" id="cal-next" aria-label="Next month">→</button>
+      </div>
+    </div>
+
+    <div class="legend-row">
+      <span><span class="swatch" style="background:var(--accent-strength); border-radius:50%;"></span>Day A · Legs &amp; Power</span>
+      <span><span class="swatch" style="background:var(--surface); border:2px solid var(--accent-endurance); border-radius:1px;"></span>Day B · Back, Arms &amp; Conditioning</span>
+    </div>
+
+    <div class="calendar-grid" id="calendar-grid"></div>
+    <div class="selected-day-panel" id="selected-day-panel"></div>
+  </section>
+
+  <footer>
+    <div>Stored privately in this browser only · no shellfish noted for meal ideas · not medical advice, just a training log.</div>
+    <button class="reset-link" id="reset-btn">Reset all data</button>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------------- Constants ----------------
+  var TARGETS = { cal: 1900, protein: 125, carbs: 200, fat: 67 };
+  var STORAGE_KEY = "training-log-v1";
+
+  // 4-week rotating hybrid program (2 days/week, full gym, intermediate athlete)
+  // No chest work by request — split is legs/power one day, back+arms+conditioning the other.
+  // Each week nudges load/volume up; week 4 is a lighter deload before the cycle repeats heavier.
+  var PROGRAM = [
+    {
+      label: "Week 1 · baseline",
+      note: "Establish baseline loads. Leave 2 reps in reserve on every set — this is the number next week's jump is measured against.",
+      days: [
+        { key: "A", type: "strength", title: "Legs & Power", tagLabel: "Legs + athletic power", exercises: [
+          { name: "Back squat", scheme: "4×6" },
+          { name: "Romanian deadlift", scheme: "3×8" },
+          { name: "Bulgarian split squat", scheme: "3×10/leg" },
+          { name: "Broad jumps", scheme: "4×5" },
+          { name: "Hanging leg raises (core)", scheme: "3×12" },
+          { name: "Sled push (finisher)", scheme: "4×20m" }
+        ]},
+        { key: "B", type: "endurance", title: "Back, Arms & Conditioning", tagLabel: "Back + arms + engine", exercises: [
+          { name: "Conventional deadlift", scheme: "3×6" },
+          { name: "Pull-ups / lat pulldown", scheme: "4×8" },
+          { name: "Barbell row", scheme: "3×10" },
+          { name: "DB curl + triceps pushdown (superset)", scheme: "3×12 each" },
+          { name: "Pallof press (anti-rotation core)", scheme: "3×12/side" },
+          { name: "Farmer's carry sprint (finisher)", scheme: "4×30m fast" }
+        ]}
+      ]
+    },
+    {
+      label: "Week 2 · add load",
+      note: "Add 5 lb (or 1 rep) to every main lift from last week. Finishers get a touch more distance or load.",
+      days: [
+        { key: "A", type: "strength", title: "Legs & Power", tagLabel: "Legs + athletic power", exercises: [
+          { name: "Back squat", scheme: "4×6 +5lb" },
+          { name: "Romanian deadlift", scheme: "3×8 +1 rep" },
+          { name: "Bulgarian split squat", scheme: "3×10/leg +5lb" },
+          { name: "Broad jumps", scheme: "4×6" },
+          { name: "Hanging leg raises (core)", scheme: "3×14" },
+          { name: "Sled push (finisher)", scheme: "4×25m" }
+        ]},
+        { key: "B", type: "endurance", title: "Back, Arms & Conditioning", tagLabel: "Back + arms + engine", exercises: [
+          { name: "Conventional deadlift", scheme: "3×6 +5lb" },
+          { name: "Pull-ups / lat pulldown", scheme: "4×9" },
+          { name: "Barbell row", scheme: "3×10 +5lb" },
+          { name: "DB curl + triceps pushdown (superset)", scheme: "3×12 +2.5lb" },
+          { name: "Pallof press (anti-rotation core)", scheme: "3×12/side, heavier" },
+          { name: "Farmer's carry sprint (finisher)", scheme: "4×35m fast" }
+        ]}
+      ]
+    },
+    {
+      label: "Week 3 · intensify",
+      note: "Drop to fewer reps at a heavier weight on main lifts — this is the peak week before the deload.",
+      days: [
+        { key: "A", type: "strength", title: "Legs & Power", tagLabel: "Legs + athletic power", exercises: [
+          { name: "Back squat", scheme: "4×5, heavier" },
+          { name: "Romanian deadlift", scheme: "4×8" },
+          { name: "Bulgarian split squat", scheme: "4×10/leg" },
+          { name: "Broad jumps", scheme: "5×5, max distance" },
+          { name: "Hanging leg raises (core)", scheme: "4×12, add ankle weight" },
+          { name: "Sled push (finisher)", scheme: "5×20m, heavier" }
+        ]},
+        { key: "B", type: "endurance", title: "Back, Arms & Conditioning", tagLabel: "Back + arms + engine", exercises: [
+          { name: "Conventional deadlift", scheme: "4×5, heavier" },
+          { name: "Pull-ups / lat pulldown", scheme: "5×8" },
+          { name: "Barbell row", scheme: "4×10" },
+          { name: "DB curl + triceps pushdown (superset)", scheme: "4×10, heavier" },
+          { name: "Pallof press (anti-rotation core)", scheme: "4×12/side, heaviest" },
+          { name: "Farmer's carry sprint (finisher)", scheme: "5×30m, heavier" }
+        ]}
+      ]
+    },
+    {
+      label: "Week 4 · deload",
+      note: "Cut volume, keep the weight moderate. You should leave the gym feeling fresh — next cycle starts heavier than this one did.",
+      days: [
+        { key: "A", type: "strength", title: "Legs & Power", tagLabel: "Legs + athletic power", exercises: [
+          { name: "Back squat", scheme: "3×5, lighter" },
+          { name: "Romanian deadlift", scheme: "2×8" },
+          { name: "Bulgarian split squat", scheme: "2×10/leg" },
+          { name: "Broad jumps", scheme: "3×5, easy" },
+          { name: "Hanging leg raises (core)", scheme: "2×12" },
+          { name: "Sled push (finisher)", scheme: "3×20m, light" }
+        ]},
+        { key: "B", type: "endurance", title: "Back, Arms & Conditioning", tagLabel: "Back + arms + engine", exercises: [
+          { name: "Conventional deadlift", scheme: "2×6, lighter" },
+          { name: "Pull-ups / lat pulldown", scheme: "3×8" },
+          { name: "Barbell row", scheme: "2×10, lighter" },
+          { name: "DB curl + triceps pushdown (superset)", scheme: "2×12, light" },
+          { name: "Pallof press (anti-rotation core)", scheme: "2×12/side, light" },
+          { name: "Farmer's carry (finisher)", scheme: "3×30m, easy" }
+        ]}
+      ]
+    }
+  ];
+
+  // ---------------- Muscle map (front/back body diagram) ----------------
+  var MUSCLE_GROUPS = [
+    { id: "chest", label: "Chest", view: "front" },
+    { id: "shoulders", label: "Shoulders", view: "front" },
+    { id: "biceps", label: "Biceps", view: "front" },
+    { id: "forearms", label: "Forearms", view: "front" },
+    { id: "abs", label: "Abs", view: "front" },
+    { id: "quads", label: "Quads", view: "front" },
+    { id: "traps", label: "Traps", view: "back" },
+    { id: "lats", label: "Lats", view: "back" },
+    { id: "triceps", label: "Triceps", view: "back" },
+    { id: "lowerBack", label: "Lower Back", view: "back" },
+    { id: "glutes", label: "Glutes", view: "back" },
+    { id: "hamstrings", label: "Hamstrings", view: "back" },
+    { id: "calves", label: "Calves", view: "both" }
+  ];
+
+  var MM_BODY_OUTLINE =
+    '<circle class="mm-skin" cx="100" cy="28" r="20"/>' +
+    '<rect class="mm-skin" x="92" y="46" width="16" height="10" rx="3"/>' +
+    '<rect class="mm-skin" x="60" y="54" width="80" height="130" rx="26"/>' +
+    '<rect class="mm-skin" x="28" y="60" width="26" height="72" rx="13"/>' +
+    '<rect class="mm-skin" x="26" y="128" width="22" height="66" rx="11"/>' +
+    '<circle class="mm-skin" cx="37" cy="200" r="10"/>' +
+    '<rect class="mm-skin" x="146" y="60" width="26" height="72" rx="13"/>' +
+    '<rect class="mm-skin" x="152" y="128" width="22" height="66" rx="11"/>' +
+    '<circle class="mm-skin" cx="163" cy="200" r="10"/>' +
+    '<rect class="mm-skin" x="62" y="180" width="34" height="92" rx="15"/>' +
+    '<rect class="mm-skin" x="64" y="268" width="28" height="82" rx="12"/>' +
+    '<rect class="mm-skin" x="60" y="348" width="34" height="12" rx="6"/>' +
+    '<rect class="mm-skin" x="104" y="180" width="34" height="92" rx="15"/>' +
+    '<rect class="mm-skin" x="108" y="268" width="28" height="82" rx="12"/>' +
+    '<rect class="mm-skin" x="106" y="348" width="34" height="12" rx="6"/>';
+
+  var MM_FRONT_MUSCLES =
+    '<circle class="mm-muscle" data-group="shoulders" cx="41" cy="66" r="12"/>' +
+    '<circle class="mm-muscle" data-group="shoulders" cx="159" cy="66" r="12"/>' +
+    '<rect class="mm-muscle" data-group="chest" x="66" y="62" width="30" height="24" rx="10"/>' +
+    '<rect class="mm-muscle" data-group="chest" x="104" y="62" width="30" height="24" rx="10"/>' +
+    '<rect class="mm-muscle" data-group="abs" x="66" y="90" width="30" height="17" rx="6"/>' +
+    '<rect class="mm-muscle" data-group="abs" x="104" y="90" width="30" height="17" rx="6"/>' +
+    '<rect class="mm-muscle" data-group="abs" x="66" y="110" width="30" height="17" rx="6"/>' +
+    '<rect class="mm-muscle" data-group="abs" x="104" y="110" width="30" height="17" rx="6"/>' +
+    '<rect class="mm-muscle" data-group="abs" x="66" y="130" width="30" height="17" rx="6"/>' +
+    '<rect class="mm-muscle" data-group="abs" x="104" y="130" width="30" height="17" rx="6"/>' +
+    '<rect class="mm-muscle" data-group="abs" x="66" y="150" width="30" height="17" rx="6"/>' +
+    '<rect class="mm-muscle" data-group="abs" x="104" y="150" width="30" height="17" rx="6"/>' +
+    '<rect class="mm-muscle" data-group="biceps" x="31" y="66" width="18" height="40" rx="8"/>' +
+    '<rect class="mm-muscle" data-group="biceps" x="151" y="66" width="18" height="40" rx="8"/>' +
+    '<rect class="mm-muscle" data-group="forearms" x="28" y="132" width="18" height="54" rx="8"/>' +
+    '<rect class="mm-muscle" data-group="forearms" x="154" y="132" width="18" height="54" rx="8"/>' +
+    '<rect class="mm-muscle" data-group="quads" x="65" y="186" width="9" height="76" rx="4"/>' +
+    '<rect class="mm-muscle" data-group="quads" x="76" y="186" width="9" height="76" rx="4"/>' +
+    '<rect class="mm-muscle" data-group="quads" x="87" y="186" width="9" height="76" rx="4"/>' +
+    '<rect class="mm-muscle" data-group="quads" x="106" y="186" width="9" height="76" rx="4"/>' +
+    '<rect class="mm-muscle" data-group="quads" x="117" y="186" width="9" height="76" rx="4"/>' +
+    '<rect class="mm-muscle" data-group="quads" x="128" y="186" width="9" height="76" rx="4"/>' +
+    '<rect class="mm-muscle" data-group="calves" x="68" y="272" width="20" height="68" rx="8"/>' +
+    '<rect class="mm-muscle" data-group="calves" x="112" y="272" width="20" height="68" rx="8"/>';
+
+  var MM_BACK_MUSCLES =
+    '<rect class="mm-muscle" data-group="traps" x="88" y="52" width="24" height="16" rx="6"/>' +
+    '<rect class="mm-muscle" data-group="lats" x="60" y="84" width="28" height="62" rx="14"/>' +
+    '<rect class="mm-muscle" data-group="lats" x="112" y="84" width="28" height="62" rx="14"/>' +
+    '<rect class="mm-muscle" data-group="triceps" x="31" y="66" width="18" height="40" rx="8"/>' +
+    '<rect class="mm-muscle" data-group="triceps" x="151" y="66" width="18" height="40" rx="8"/>' +
+    '<rect class="mm-muscle" data-group="lowerBack" x="90" y="148" width="8" height="34" rx="4"/>' +
+    '<rect class="mm-muscle" data-group="lowerBack" x="102" y="148" width="8" height="34" rx="4"/>' +
+    '<rect class="mm-muscle" data-group="glutes" x="64" y="176" width="32" height="28" rx="12"/>' +
+    '<rect class="mm-muscle" data-group="glutes" x="104" y="176" width="32" height="28" rx="12"/>' +
+    '<rect class="mm-muscle" data-group="hamstrings" x="65" y="208" width="14" height="58" rx="7"/>' +
+    '<rect class="mm-muscle" data-group="hamstrings" x="81" y="208" width="14" height="58" rx="7"/>' +
+    '<rect class="mm-muscle" data-group="hamstrings" x="105" y="208" width="14" height="58" rx="7"/>' +
+    '<rect class="mm-muscle" data-group="hamstrings" x="121" y="208" width="14" height="58" rx="7"/>' +
+    '<rect class="mm-muscle" data-group="calves" x="66" y="274" width="11" height="48" rx="5"/>' +
+    '<rect class="mm-muscle" data-group="calves" x="79" y="274" width="11" height="48" rx="5"/>' +
+    '<rect class="mm-muscle" data-group="calves" x="110" y="274" width="11" height="48" rx="5"/>' +
+    '<rect class="mm-muscle" data-group="calves" x="123" y="274" width="11" height="48" rx="5"/>';
+
+  function mmSvgFor(view) {
+    return '<svg viewBox="0 0 200 366" aria-hidden="true">' + MM_BODY_OUTLINE + (view === "front" ? MM_FRONT_MUSCLES : MM_BACK_MUSCLES) + '</svg>';
+  }
+
+  var muscleView = "front";
+
+  // ---------------- Food database (per one unit; no shellfish) ----------------
+  // qty entered by the user is multiplied by these per-unit values.
+  var FOODS = [
+    { group: "Protein", name: "Chicken breast, cooked", unit: "g", step: 10, dflt: 150, per: { cal: 1.65, protein: 0.31, carbs: 0, fat: 0.036 } },
+    { group: "Protein", name: "Salmon, cooked", unit: "g", step: 10, dflt: 150, per: { cal: 2.08, protein: 0.20, carbs: 0, fat: 0.13 } },
+    { group: "Protein", name: "Lean ground turkey (93/7), cooked", unit: "g", step: 10, dflt: 150, per: { cal: 1.76, protein: 0.22, carbs: 0, fat: 0.09 } },
+    { group: "Protein", name: "Lean ground beef (90/10), cooked", unit: "g", step: 10, dflt: 150, per: { cal: 1.76, protein: 0.20, carbs: 0, fat: 0.10 } },
+    { group: "Protein", name: "Egg, large", unit: "egg", step: 1, dflt: 2, per: { cal: 72, protein: 6.3, carbs: 0.4, fat: 4.8 } },
+    { group: "Protein", name: "Egg whites", unit: "g", step: 10, dflt: 100, per: { cal: 0.52, protein: 0.11, carbs: 0.007, fat: 0.002 } },
+    { group: "Protein", name: "Greek yogurt, plain nonfat", unit: "g", step: 10, dflt: 170, per: { cal: 0.59, protein: 0.10, carbs: 0.036, fat: 0.004 } },
+    { group: "Protein", name: "Whey protein powder", unit: "scoop", step: 1, dflt: 1, per: { cal: 120, protein: 24, carbs: 3, fat: 1.5 } },
+    { group: "Protein", name: "Tofu, firm", unit: "g", step: 10, dflt: 150, per: { cal: 1.44, protein: 0.155, carbs: 0.028, fat: 0.087 } },
+    { group: "Protein", name: "Tuna, canned in water", unit: "g", step: 10, dflt: 120, per: { cal: 1.16, protein: 0.26, carbs: 0, fat: 0.008 } },
+    { group: "Protein", name: "Cottage cheese, low-fat", unit: "g", step: 10, dflt: 150, per: { cal: 0.81, protein: 0.11, carbs: 0.034, fat: 0.023 } },
+    { group: "Protein", name: "Black beans, cooked", unit: "g", step: 10, dflt: 150, per: { cal: 1.32, protein: 0.089, carbs: 0.237, fat: 0.005 } },
+    { group: "Protein", name: "Turkey breast, deli-sliced", unit: "g", step: 10, dflt: 100, per: { cal: 1.04, protein: 0.18, carbs: 0.02, fat: 0.01 } },
+    { group: "Protein", name: "Edamame, shelled, cooked", unit: "g", step: 10, dflt: 150, per: { cal: 1.21, protein: 0.12, carbs: 0.10, fat: 0.052 } },
+    { group: "Protein", name: "Salmon, canned", unit: "g", step: 10, dflt: 120, per: { cal: 1.42, protein: 0.20, carbs: 0, fat: 0.065 } },
+    { group: "Protein", name: "Steak (sirloin), cooked", unit: "g", step: 10, dflt: 170, per: { cal: 2.01, protein: 0.27, carbs: 0, fat: 0.10 } },
+    { group: "Protein", name: "Steak (ribeye), cooked", unit: "g", step: 10, dflt: 170, per: { cal: 2.91, protein: 0.24, carbs: 0, fat: 0.22 } },
+
+    { group: "Carbs", name: "White rice, cooked", unit: "g", step: 10, dflt: 180, per: { cal: 1.30, protein: 0.027, carbs: 0.28, fat: 0.003 } },
+    { group: "Carbs", name: "Brown rice, cooked", unit: "g", step: 10, dflt: 180, per: { cal: 1.12, protein: 0.026, carbs: 0.235, fat: 0.009 } },
+    { group: "Carbs", name: "Oats, dry", unit: "g", step: 5, dflt: 60, per: { cal: 3.89, protein: 0.169, carbs: 0.663, fat: 0.069 } },
+    { group: "Carbs", name: "Sweet potato, baked", unit: "g", step: 10, dflt: 200, per: { cal: 0.90, protein: 0.02, carbs: 0.207, fat: 0.0015 } },
+    { group: "Carbs", name: "White potato, baked", unit: "g", step: 10, dflt: 200, per: { cal: 0.93, protein: 0.025, carbs: 0.21, fat: 0.001 } },
+    { group: "Carbs", name: "Whole wheat bread", unit: "slice", step: 1, dflt: 2, per: { cal: 81, protein: 4, carbs: 13.8, fat: 1.1 } },
+    { group: "Carbs", name: "Banana, medium", unit: "banana", step: 1, dflt: 1, per: { cal: 105, protein: 1.3, carbs: 27, fat: 0.4 } },
+    { group: "Carbs", name: "Apple, medium", unit: "apple", step: 1, dflt: 1, per: { cal: 95, protein: 0.5, carbs: 25, fat: 0.3 } },
+    { group: "Carbs", name: "Mixed berries", unit: "g", step: 10, dflt: 150, per: { cal: 0.57, protein: 0.007, carbs: 0.14, fat: 0.003 } },
+    { group: "Carbs", name: "Pasta, cooked", unit: "g", step: 10, dflt: 180, per: { cal: 1.31, protein: 0.05, carbs: 0.25, fat: 0.011 } },
+    { group: "Carbs", name: "Bagel, plain", unit: "bagel", step: 1, dflt: 1, per: { cal: 289, protein: 11, carbs: 56, fat: 1.7 } },
+    { group: "Carbs", name: "Rice cakes", unit: "cake", step: 1, dflt: 2, per: { cal: 35, protein: 0.7, carbs: 7.3, fat: 0.3 } },
+    { group: "Carbs", name: "Honey", unit: "tbsp", step: 1, dflt: 1, per: { cal: 64, protein: 0.1, carbs: 17.3, fat: 0 } },
+    { group: "Carbs", name: "Quinoa, cooked", unit: "g", step: 10, dflt: 150, per: { cal: 1.20, protein: 0.044, carbs: 0.213, fat: 0.019 } },
+    { group: "Carbs", name: "Whole wheat tortilla", unit: "tortilla", step: 1, dflt: 2, per: { cal: 130, protein: 4, carbs: 22, fat: 3 } },
+    { group: "Carbs", name: "Granola", unit: "g", step: 10, dflt: 40, per: { cal: 4.5, protein: 0.10, carbs: 0.65, fat: 0.175 } },
+    { group: "Carbs", name: "English muffin", unit: "muffin", step: 1, dflt: 1, per: { cal: 134, protein: 5, carbs: 26, fat: 1.2 } },
+    { group: "Carbs", name: "Couscous, cooked", unit: "g", step: 10, dflt: 150, per: { cal: 1.12, protein: 0.038, carbs: 0.232, fat: 0.002 } },
+    { group: "Carbs", name: "Orange, medium", unit: "orange", step: 1, dflt: 1, per: { cal: 62, protein: 1.2, carbs: 15.4, fat: 0.2 } },
+    { group: "Carbs", name: "Grapes", unit: "g", step: 10, dflt: 100, per: { cal: 0.69, protein: 0.007, carbs: 0.18, fat: 0.002 } },
+    { group: "Carbs", name: "Mango", unit: "g", step: 10, dflt: 150, per: { cal: 0.60, protein: 0.008, carbs: 0.15, fat: 0.004 } },
+    { group: "Carbs", name: "Pineapple", unit: "g", step: 10, dflt: 150, per: { cal: 0.50, protein: 0.005, carbs: 0.13, fat: 0.001 } },
+
+    { group: "Fats", name: "Peanut butter", unit: "tbsp", step: 1, dflt: 2, per: { cal: 94, protein: 4, carbs: 3.2, fat: 8 } },
+    { group: "Fats", name: "Almonds", unit: "oz", step: 1, dflt: 1, per: { cal: 164, protein: 6, carbs: 6, fat: 14 } },
+    { group: "Fats", name: "Olive oil", unit: "tbsp", step: 1, dflt: 1, per: { cal: 119, protein: 0, carbs: 0, fat: 13.5 } },
+    { group: "Fats", name: "Avocado", unit: "half", step: 1, dflt: 1, per: { cal: 120, protein: 1.5, carbs: 6.4, fat: 10.5 } },
+    { group: "Fats", name: "Walnuts", unit: "oz", step: 1, dflt: 1, per: { cal: 185, protein: 4.3, carbs: 3.9, fat: 18.5 } },
+    { group: "Fats", name: "Cashews", unit: "oz", step: 1, dflt: 1, per: { cal: 157, protein: 5.2, carbs: 8.6, fat: 12.4 } },
+    { group: "Fats", name: "Chia seeds", unit: "tbsp", step: 1, dflt: 1, per: { cal: 58, protein: 2, carbs: 5, fat: 3.7 } },
+    { group: "Fats", name: "Coconut oil", unit: "tbsp", step: 1, dflt: 1, per: { cal: 121, protein: 0, carbs: 0, fat: 13.5 } },
+
+    { group: "Vegetables", name: "Broccoli, cooked", unit: "g", step: 10, dflt: 150, per: { cal: 0.35, protein: 0.024, carbs: 0.072, fat: 0.004 } },
+    { group: "Vegetables", name: "Spinach, cooked", unit: "g", step: 10, dflt: 100, per: { cal: 0.23, protein: 0.029, carbs: 0.038, fat: 0.003 } },
+    { group: "Vegetables", name: "Mixed vegetables", unit: "g", step: 10, dflt: 150, per: { cal: 0.65, protein: 0.026, carbs: 0.13, fat: 0.003 } },
+    { group: "Vegetables", name: "Bell pepper, raw", unit: "g", step: 10, dflt: 100, per: { cal: 0.31, protein: 0.01, carbs: 0.06, fat: 0.003 } },
+    { group: "Vegetables", name: "Carrots, raw", unit: "g", step: 10, dflt: 100, per: { cal: 0.41, protein: 0.009, carbs: 0.096, fat: 0.002 } },
+    { group: "Vegetables", name: "Asparagus, cooked", unit: "g", step: 10, dflt: 100, per: { cal: 0.22, protein: 0.024, carbs: 0.039, fat: 0.002 } },
+    { group: "Vegetables", name: "Cauliflower rice", unit: "g", step: 10, dflt: 150, per: { cal: 0.25, protein: 0.02, carbs: 0.05, fat: 0.003 } },
+    { group: "Vegetables", name: "Green beans, cooked", unit: "g", step: 10, dflt: 100, per: { cal: 0.35, protein: 0.018, carbs: 0.08, fat: 0.001 } },
+
+    { group: "Dairy", name: "Milk, 2%", unit: "cup", step: 1, dflt: 1, per: { cal: 122, protein: 8, carbs: 12, fat: 4.8 } },
+    { group: "Dairy", name: "Cheddar cheese", unit: "oz", step: 1, dflt: 1, per: { cal: 113, protein: 7, carbs: 0.4, fat: 9.3 } },
+
+    { group: "Athlete fuel", name: "Protein bar", unit: "bar", step: 1, dflt: 1, per: { cal: 220, protein: 20, carbs: 22, fat: 8 } },
+    { group: "Athlete fuel", name: "Sports drink", unit: "bottle (12oz)", step: 1, dflt: 1, per: { cal: 80, protein: 0, carbs: 21, fat: 0 } },
+    { group: "Athlete fuel", name: "Chocolate milk (post-workout)", unit: "cup", step: 1, dflt: 1, per: { cal: 190, protein: 7, carbs: 30, fat: 3 } },
+    { group: "Athlete fuel", name: "Trail mix", unit: "oz", step: 1, dflt: 1, per: { cal: 137, protein: 4, carbs: 13, fat: 8.5 } },
+    { group: "Athlete fuel", name: "Dates", unit: "date", step: 1, dflt: 2, per: { cal: 66, protein: 0.4, carbs: 18, fat: 0 } },
+    { group: "Athlete fuel", name: "Pretzels", unit: "oz", step: 1, dflt: 1, per: { cal: 108, protein: 2.6, carbs: 22.5, fat: 1 } },
+
+    { group: "Dominican", name: "Habichuelas guisadas (stewed red beans)", unit: "cup", step: 1, dflt: 1, per: { cal: 220, protein: 8, carbs: 34, fat: 6 } },
+    { group: "Dominican", name: "Moro de guandules (rice & pigeon peas)", unit: "cup", step: 1, dflt: 1, per: { cal: 260, protein: 6, carbs: 48, fat: 5 } },
+    { group: "Dominican", name: "Pollo guisado (stewed chicken)", unit: "serving (150g)", step: 1, dflt: 1, per: { cal: 280, protein: 26, carbs: 6, fat: 17 } },
+    { group: "Dominican", name: "Res guisada (stewed beef)", unit: "serving (150g)", step: 1, dflt: 1, per: { cal: 320, protein: 27, carbs: 5, fat: 21 } },
+    { group: "Dominican", name: "Mangú (mashed plantains)", unit: "cup", step: 1, dflt: 1, per: { cal: 260, protein: 2, carbs: 60, fat: 1 } },
+    { group: "Dominican", name: "Tostones (fried green plantain)", unit: "serving (8 pcs)", step: 1, dflt: 1, per: { cal: 280, protein: 2, carbs: 40, fat: 14 } },
+    { group: "Dominican", name: "Maduros (sweet fried plantain)", unit: "cup", step: 1, dflt: 1, per: { cal: 250, protein: 1.5, carbs: 48, fat: 7 } },
+    { group: "Dominican", name: "Sancocho (Dominican stew)", unit: "cup", step: 1, dflt: 1, per: { cal: 300, protein: 20, carbs: 25, fat: 14 } },
+    { group: "Dominican", name: "Pastelitos (fried turnover)", unit: "piece", step: 1, dflt: 1, per: { cal: 220, protein: 6, carbs: 22, fat: 12 } },
+    { group: "Dominican", name: "Yuca hervida (boiled cassava)", unit: "g", step: 10, dflt: 150, per: { cal: 1.47, protein: 0.012, carbs: 0.353, fat: 0.003 } },
+    { group: "Dominican", name: "Queso de freír (frying cheese)", unit: "oz", step: 1, dflt: 1, per: { cal: 90, protein: 6, carbs: 1, fat: 7 } },
+    { group: "Dominican", name: "Longaniza (Dominican sausage)", unit: "link", step: 1, dflt: 1, per: { cal: 180, protein: 9, carbs: 2, fat: 15 } },
+    { group: "Dominican", name: "Chicharrón de cerdo (fried pork belly)", unit: "g", step: 10, dflt: 80, per: { cal: 4.6, protein: 0.20, carbs: 0, fat: 0.42 } },
+    { group: "Dominican", name: "Ensalada rusa (Dominican potato salad)", unit: "cup", step: 1, dflt: 1, per: { cal: 280, protein: 4, carbs: 22, fat: 20 } },
+    { group: "Dominican", name: "Habichuelas con dulce (sweet bean dessert)", unit: "cup", step: 1, dflt: 1, per: { cal: 350, protein: 6, carbs: 60, fat: 9 } },
+    { group: "Dominican", name: "Casabe (cassava flatbread)", unit: "piece", step: 1, dflt: 1, per: { cal: 100, protein: 0.5, carbs: 24, fat: 0.2 } },
+    { group: "Dominican", name: "Locrio de pollo (Dominican chicken rice)", unit: "cup", step: 1, dflt: 1, per: { cal: 320, protein: 18, carbs: 40, fat: 10 } },
+    { group: "Dominican", name: "Salami frito (fried Dominican salami)", unit: "serving (2 slices)", step: 1, dflt: 1, per: { cal: 150, protein: 6, carbs: 2, fat: 13 } },
+    { group: "Dominican", name: "Batata (Dominican sweet potato)", unit: "g", step: 10, dflt: 150, per: { cal: 1.13, protein: 0.02, carbs: 0.26, fat: 0.002 } },
+    { group: "Dominican", name: "Arroz blanco (Dominican white rice)", unit: "cup", step: 1, dflt: 1, per: { cal: 240, protein: 5, carbs: 53, fat: 0.5 } },
+
+    { group: "Italian", name: "Spaghetti with marinara", unit: "plate", step: 1, dflt: 1, per: { cal: 320, protein: 11, carbs: 58, fat: 5 } },
+    { group: "Italian", name: "Fettuccine Alfredo", unit: "plate", step: 1, dflt: 1, per: { cal: 700, protein: 18, carbs: 55, fat: 45 } },
+    { group: "Italian", name: "Chicken parmesan", unit: "serving", step: 1, dflt: 1, per: { cal: 490, protein: 38, carbs: 25, fat: 25 } },
+    { group: "Italian", name: "Margherita pizza", unit: "slice", step: 1, dflt: 2, per: { cal: 270, protein: 11, carbs: 33, fat: 10 } },
+    { group: "Italian", name: "Lasagna", unit: "piece", step: 1, dflt: 1, per: { cal: 400, protein: 22, carbs: 35, fat: 20 } },
+    { group: "Italian", name: "Risotto", unit: "cup", step: 1, dflt: 1, per: { cal: 350, protein: 8, carbs: 55, fat: 10 } },
+    { group: "Italian", name: "Minestrone soup", unit: "cup", step: 1, dflt: 1, per: { cal: 150, protein: 6, carbs: 25, fat: 3 } },
+    { group: "Italian", name: "Chicken piccata", unit: "serving", step: 1, dflt: 1, per: { cal: 380, protein: 32, carbs: 8, fat: 24 } },
+    { group: "Italian", name: "Caprese salad", unit: "serving", step: 1, dflt: 1, per: { cal: 220, protein: 12, carbs: 6, fat: 17 } },
+    { group: "Italian", name: "Tiramisu", unit: "slice", step: 1, dflt: 1, per: { cal: 400, protein: 6, carbs: 40, fat: 24 } },
+    { group: "Italian", name: "Bruschetta", unit: "serving (2 pcs)", step: 1, dflt: 1, per: { cal: 140, protein: 4, carbs: 18, fat: 6 } },
+    { group: "Italian", name: "Osso buco", unit: "serving", step: 1, dflt: 1, per: { cal: 520, protein: 40, carbs: 8, fat: 34 } },
+    { group: "Italian", name: "Prosciutto", unit: "oz", step: 1, dflt: 1, per: { cal: 70, protein: 8, carbs: 0.3, fat: 4 } },
+    { group: "Italian", name: "Parmesan cheese, grated", unit: "tbsp", step: 1, dflt: 2, per: { cal: 22, protein: 2, carbs: 0.2, fat: 1.4 } },
+    { group: "Italian", name: "Penne alla vodka", unit: "plate", step: 1, dflt: 1, per: { cal: 620, protein: 14, carbs: 65, fat: 32 } },
+    { group: "Italian", name: "Gnocchi, cooked", unit: "cup", step: 1, dflt: 1, per: { cal: 250, protein: 5, carbs: 48, fat: 3 } },
+    { group: "Italian", name: "Chicken marsala", unit: "serving", step: 1, dflt: 1, per: { cal: 400, protein: 34, carbs: 12, fat: 22 } },
+    { group: "Italian", name: "Cheese ravioli, cooked", unit: "cup", step: 1, dflt: 1, per: { cal: 280, protein: 12, carbs: 40, fat: 8 } },
+    { group: "Italian", name: "Cannoli", unit: "piece", step: 1, dflt: 1, per: { cal: 300, protein: 5, carbs: 30, fat: 18 } },
+    { group: "Italian", name: "Focaccia bread", unit: "slice", step: 1, dflt: 1, per: { cal: 180, protein: 4, carbs: 28, fat: 6 } }
+  ];
+
+  function computeFood(food, qty) {
+    var n = Number(qty) || 0;
+    return {
+      cal: food.per.cal * n,
+      protein: food.per.protein * n,
+      carbs: food.per.carbs * n,
+      fat: food.per.fat * n
+    };
+  }
+
+  // ---------------- State ----------------
+  function todayISO(d) {
+    d = d || new Date();
+    var tz = d.getTimezoneOffset() * 60000;
+    return new Date(d - tz).toISOString().slice(0, 10);
+  }
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) return JSON.parse(raw);
+    } catch (e) { /* storage unavailable — fall through to fresh state */ }
+    return null;
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) { /* storage unavailable — session still works, just won't persist */ }
+  }
+
+  var existing = loadState();
+  var state = existing || {
+    startDate: todayISO(),
+    meals: {},          // { "YYYY-MM-DD": [ {name, cal, protein, carbs, fat} ] }
+    workoutsDone: {},    // { "YYYY-MM-DD": ["A","B"] }
+    exerciseChecks: {},  // { "cycle-week-day-exIndex": true }
+    muscleLog: {}        // { "YYYY-MM-DD": ["chest","abs",...] }
+  };
+  if (!existing) saveState();
+  if (!state.muscleLog) state.muscleLog = {};
+
+  // ---------------- Week / cycle math ----------------
+  function weekInfo() {
+    var start = new Date(state.startDate + "T00:00:00");
+    var now = new Date(todayISO() + "T00:00:00");
+    var diffDays = Math.round((now - start) / 86400000);
+    var totalWeeks = Math.floor(diffDays / 7);
+    var weekIndex = totalWeeks % 4;      // 0..3 -> program week
+    var cycle = Math.floor(totalWeeks / 4) + 1;
+    return { weekIndex: weekIndex, weekNumber: weekIndex + 1, cycle: cycle };
+  }
+
+  function startOfWeekISO() {
+    var now = new Date(todayISO() + "T00:00:00");
+    var day = now.getDay(); // 0 Sun .. 6 Sat
+    var diffToMonday = (day === 0 ? -6 : 1 - day);
+    var monday = new Date(now);
+    monday.setDate(now.getDate() + diffToMonday);
+    return todayISO(monday);
+  }
+
+  function last7Days() {
+    var days = [];
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date();
+      d.setDate(d.getDate() - i);
+      days.push(todayISO(d));
+    }
+    return days;
+  }
+
+  // ---------------- Rendering: header ----------------
+  function renderHeader() {
+    var now = new Date();
+    document.getElementById("today-date").textContent = now.toLocaleDateString(undefined, { weekday: "long", month: "long", day: "numeric" });
+    var wi = weekInfo();
+    document.getElementById("cycle-label").textContent = "Cycle " + wi.cycle + " · Week " + wi.weekNumber + " of 4";
+  }
+
+  // ---------------- Rendering: macro rings ----------------
+  function ring(value, target, color, label, unit) {
+    var pct = target > 0 ? Math.min(1, value / target) : 0;
+    var r = 30, c = 2 * Math.PI * r;
+    var offset = c * (1 - pct);
+    var svg = ""
+      + '<svg width="76" height="76" viewBox="0 0 76 76" role="img" aria-label="' + label + ' ' + Math.round(value) + ' of ' + target + ' ' + unit + '">'
+      + '<circle cx="38" cy="38" r="' + r + '" fill="none" stroke="var(--border)" stroke-width="7"></circle>'
+      + '<circle cx="38" cy="38" r="' + r + '" fill="none" stroke="' + color + '" stroke-width="7" stroke-linecap="round"'
+      + ' stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + offset.toFixed(1) + '"'
+      + ' transform="rotate(-90 38 38)"></circle>'
+      + '<text x="38" y="43" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="15" font-weight="600" fill="var(--ink)">' + Math.round(value) + '</text>'
+      + '</svg>';
+    return '<div class="macro-ring">' + svg + '<span class="ring-label">' + label + '</span><span class="ring-value">/' + target + unit + '</span></div>';
+  }
+
+  function renderMacros(dayMeals) {
+    var totals = dayMeals.reduce(function (acc, m) {
+      acc.cal += Number(m.cal) || 0;
+      acc.protein += Number(m.protein) || 0;
+      acc.carbs += Number(m.carbs) || 0;
+      acc.fat += Number(m.fat) || 0;
+      return acc;
+    }, { cal: 0, protein: 0, carbs: 0, fat: 0 });
+
+    var html = ""
+      + ring(totals.cal, TARGETS.cal, "var(--accent-strength)", "Calories", "")
+      + ring(totals.protein, TARGETS.protein, "var(--ink)", "Protein", "g")
+      + ring(totals.carbs, TARGETS.carbs, "var(--ink-secondary)", "Carbs", "g")
+      + ring(totals.fat, TARGETS.fat, "var(--ink-muted)", "Fat", "g");
+    document.getElementById("macro-rings").innerHTML = html;
+
+    document.getElementById("stat-cal").innerHTML = Math.round(totals.cal) + '<span style="font-size:0.65em; color:var(--ink-muted);">/' + TARGETS.cal + '</span>';
+    var calPct = Math.round((totals.cal / TARGETS.cal) * 100);
+    var calSub = document.getElementById("stat-cal-sub");
+    calSub.textContent = calPct + "% of target";
+    calSub.className = "sub " + (calPct >= 85 && calPct <= 110 ? "good" : (calPct > 110 ? "warn" : ""));
+
+    document.getElementById("stat-protein").innerHTML = Math.round(totals.protein) + 'g<span style="font-size:0.65em; color:var(--ink-muted);">/' + TARGETS.protein + 'g</span>';
+    var proPct = Math.round((totals.protein / TARGETS.protein) * 100);
+    var proSub = document.getElementById("stat-protein-sub");
+    proSub.textContent = proPct + "% of target";
+    proSub.className = "sub " + (proPct >= 90 ? "good" : "");
+
+    return totals;
+  }
+
+  // ---------------- Rendering: meal list ----------------
+  function renderMeals() {
+    var today = todayISO();
+    var meals = state.meals[today] || [];
+    var list = document.getElementById("meal-list");
+
+    if (meals.length === 0) {
+      list.innerHTML = '<li class="empty-note">No meals logged yet today.</li>';
+    } else {
+      list.innerHTML = meals.map(function (m, i) {
+        return '<li class="meal-row">'
+          + '<span class="name">' + escapeHtml(m.name) + '</span>'
+          + '<span class="macros">' + m.cal + ' kcal · ' + (m.protein || 0) + 'p / ' + (m.carbs || 0) + 'c / ' + (m.fat || 0) + 'f</span>'
+          + '<button type="button" data-i="' + i + '" aria-label="Remove ' + escapeHtml(m.name) + '">✕</button>'
+          + '</li>';
+      }).join("");
+    }
+
+    Array.prototype.forEach.call(list.querySelectorAll("button[data-i]"), function (btn) {
+      btn.addEventListener("click", function () {
+        var idx = Number(btn.getAttribute("data-i"));
+        meals.splice(idx, 1);
+        state.meals[today] = meals;
+        saveState();
+        renderAll();
+      });
+    });
+
+    return meals;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+
+  // ---------------- Rendering: 7-day calorie chart ----------------
+  function renderCalorieChart() {
+    var days = last7Days();
+    var w = 560, h = 180, padL = 34, padR = 10, padT = 14, padB = 26;
+    var plotW = w - padL - padR, plotH = h - padT - padB;
+    var maxVal = Math.max(TARGETS.cal * 1.15, 100);
+
+    var barGap = 10;
+    var barW = (plotW - barGap * (days.length - 1)) / days.length;
+
+    var targetY = padT + plotH * (1 - TARGETS.cal / maxVal);
+
+    var bars = days.map(function (day, i) {
+      var meals = state.meals[day] || [];
+      var cal = meals.reduce(function (s, m) { return s + (Number(m.cal) || 0); }, 0);
+      var barH = plotH * Math.min(1, cal / maxVal);
+      var x = padL + i * (barW + barGap);
+      var y = padT + plotH - barH;
+      var d = new Date(day + "T00:00:00");
+      var dayLabel = d.toLocaleDateString(undefined, { weekday: "short" }).slice(0, 2);
+      return {
+        x: x, y: y, w: barW, h: Math.max(barH, cal > 0 ? 2 : 0),
+        cal: cal, label: dayLabel, isToday: day === todayISO()
+      };
+    });
+
+    var barsSvg = bars.map(function (b) {
+      var fill = b.isToday ? "var(--accent-endurance)" : "var(--accent-endurance)";
+      var opacity = b.isToday ? "1" : "0.55";
+      return '<rect class="cal-bar" data-cal="' + b.cal + '" data-label="' + b.label + '"'
+        + ' x="' + b.x.toFixed(1) + '" y="' + b.y.toFixed(1) + '" width="' + b.w.toFixed(1) + '" height="' + b.h.toFixed(1) + '"'
+        + ' rx="3" fill="' + fill + '" opacity="' + opacity + '"></rect>'
+        + '<text x="' + (b.x + b.w / 2).toFixed(1) + '" y="' + (h - 6) + '" text-anchor="middle" font-size="10" font-family="IBM Plex Mono, monospace" fill="var(--ink-muted)">' + b.label + '</text>';
+    }).join("");
+
+    var svg = ""
+      + '<svg viewBox="0 0 ' + w + ' ' + h + '" role="img" aria-label="Calories logged over the last 7 days versus daily target">'
+      + '<line x1="' + padL + '" y1="' + targetY.toFixed(1) + '" x2="' + (w - padR) + '" y2="' + targetY.toFixed(1) + '" stroke="var(--ink-muted)" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.6"></line>'
+      + barsSvg
+      + '</svg>';
+
+    var wrap = document.getElementById("calorie-chart");
+    wrap.innerHTML = svg + '<div class="tooltip" id="cal-tooltip"></div>';
+
+    var tooltip = document.getElementById("cal-tooltip");
+    Array.prototype.forEach.call(wrap.querySelectorAll(".cal-bar"), function (rect) {
+      rect.addEventListener("mouseenter", function (evt) {
+        var cal = rect.getAttribute("data-cal");
+        var label = rect.getAttribute("data-label");
+        tooltip.textContent = label + ": " + cal + " kcal";
+        tooltip.classList.add("show");
+      });
+      rect.addEventListener("mousemove", function (evt) {
+        var wrapRect = wrap.getBoundingClientRect();
+        tooltip.style.left = (evt.clientX - wrapRect.left) + "px";
+        tooltip.style.top = (evt.clientY - wrapRect.top) + "px";
+      });
+      rect.addEventListener("mouseleave", function () {
+        tooltip.classList.remove("show");
+      });
+    });
+  }
+
+  // ---------------- Rendering: training ----------------
+  function exerciseKey(cycle, weekIndex, dayKey, exIndex) {
+    return cycle + "-" + weekIndex + "-" + dayKey + "-" + exIndex;
+  }
+
+  function renderTraining() {
+    var wi = weekInfo();
+    var week = PROGRAM[wi.weekIndex];
+
+    document.getElementById("week-pill").textContent = week.label;
+    document.getElementById("progression-note").innerHTML = "<strong>This week:</strong> " + week.note;
+
+    var cardsHtml = week.days.map(function (day) {
+      var typeLabel = "Day " + day.key + " — " + day.title;
+      var tagLabel = day.tagLabel;
+
+      var exercisesHtml = day.exercises.map(function (ex, i) {
+        var key = exerciseKey(wi.cycle, wi.weekIndex, day.key, i);
+        var done = !!state.exerciseChecks[key];
+        return '<li class="exercise-row' + (done ? " done" : "") + '">'
+          + '<input type="checkbox" data-key="' + key + '" ' + (done ? "checked" : "") + ' aria-label="Mark ' + escapeHtml(ex.name) + ' complete" />'
+          + '<span class="ex-name">' + escapeHtml(ex.name) + '</span>'
+          + '<span class="ex-scheme">' + escapeHtml(ex.scheme) + '</span>'
+          + '</li>';
+      }).join("");
+
+      var today = todayISO();
+      var doneToday = (state.workoutsDone[today] || []).indexOf(day.key) !== -1;
+
+      return '<div class="day-card ' + day.type + '">'
+        + '<div class="day-card-head"><span>' + typeLabel + '</span><span class="tag">' + tagLabel + '</span></div>'
+        + '<ul class="exercise-list">' + exercisesHtml + '</ul>'
+        + '<div class="day-card-foot">'
+        + (doneToday
+            ? '<span class="badge good">✓ Logged today</span>'
+            : '<span class="badge pending">Not logged today</span>')
+        + '<button type="button" class="btn mark-done-btn ' + (day.type === "strength" ? "strength" : "") + '" data-day="' + day.key + '">Mark ' + (doneToday ? "undone" : "day done") + '</button>'
+        + '</div>'
+        + '</div>';
+    }).join("");
+
+    document.getElementById("day-cards").innerHTML = cardsHtml;
+
+    // checkbox listeners
+    Array.prototype.forEach.call(document.querySelectorAll("#day-cards input[type=checkbox]"), function (cb) {
+      cb.addEventListener("change", function () {
+        var key = cb.getAttribute("data-key");
+        state.exerciseChecks[key] = cb.checked;
+        saveState();
+        renderTraining();
+      });
+    });
+
+    // mark-done buttons
+    Array.prototype.forEach.call(document.querySelectorAll(".mark-done-btn"), function (btn) {
+      btn.addEventListener("click", function () {
+        var dayKey = btn.getAttribute("data-day");
+        var today = todayISO();
+        var list = state.workoutsDone[today] || [];
+        var idx = list.indexOf(dayKey);
+        if (idx === -1) list.push(dayKey); else list.splice(idx, 1);
+        state.workoutsDone[today] = list;
+        saveState();
+        renderAll();
+      });
+    });
+
+    renderWeekDots();
+  }
+
+  function renderWeekDots() {
+    var monday = new Date(startOfWeekISO() + "T00:00:00");
+    var dots = [];
+    for (var i = 0; i < 7; i++) {
+      var d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      var iso = todayISO(d);
+      var done = state.workoutsDone[iso] || [];
+      dots.push({ iso: iso, done: done, label: d.toLocaleDateString(undefined, { weekday: "narrow" }) });
+    }
+    var totalDone = dots.reduce(function (s, d) { return s + d.done.length; }, 0);
+
+    var html = dots.map(function (d) {
+      if (d.done.length === 0) return '<span class="dot" title="' + d.iso + '"></span>';
+      var type = d.done.indexOf("A") !== -1 ? "strength" : "endurance";
+      return '<span class="dot filled ' + type + '" title="' + d.iso + ': Day ' + d.done.join(" &amp; ") + '"></span>';
+    }).join("");
+
+    document.getElementById("week-dots").innerHTML = html + '<span class="dot-label">this week</span>';
+
+    document.getElementById("stat-workouts").textContent = totalDone + "/2";
+    var sub = document.getElementById("stat-workouts-sub");
+    if (totalDone >= 2) { sub.textContent = "Week complete"; sub.className = "sub good"; }
+    else if (totalDone === 1) { sub.textContent = "1 more to go"; sub.className = "sub warn"; }
+    else { sub.textContent = "Get moving"; sub.className = "sub"; }
+  }
+
+  // ---------------- Rendering: muscle map ----------------
+  function toggleMuscleGroup(groupId) {
+    var today = todayISO();
+    var groups = new Set(state.muscleLog[today] || []);
+    if (groups.has(groupId)) groups.delete(groupId); else groups.add(groupId);
+    state.muscleLog[today] = Array.from(groups);
+    saveState();
+    renderMuscleGroups();
+  }
+
+  function renderMuscleGroups() {
+    var today = todayISO();
+    var logged = new Set(state.muscleLog[today] || []);
+
+    document.getElementById("muscle-groups").innerHTML = MUSCLE_GROUPS.map(function (g) {
+      return '<button type="button" class="muscle-group-btn' + (logged.has(g.id) ? " active" : "") + '" data-group="' + g.id + '" data-view="' + g.view + '">' + g.label + '</button>';
+    }).join("");
+
+    Array.prototype.forEach.call(document.querySelectorAll(".muscle-group-btn"), function (btn) {
+      btn.addEventListener("click", function () {
+        var view = btn.getAttribute("data-view");
+        if (view !== "both") setMuscleView(view);
+        toggleMuscleGroup(btn.getAttribute("data-group"));
+      });
+    });
+
+    Array.prototype.forEach.call(document.querySelectorAll("#muscle-diagram .mm-muscle"), function (m) {
+      m.classList.toggle("active", logged.has(m.getAttribute("data-group")));
+    });
+  }
+
+  function setMuscleView(view) {
+    if (muscleView === view) return;
+    muscleView = view;
+    document.getElementById("muscle-diagram").innerHTML = mmSvgFor(view);
+    Array.prototype.forEach.call(document.querySelectorAll("#muscle-view-toggle button"), function (b) {
+      b.classList.toggle("active", b.getAttribute("data-view") === view);
+    });
+    renderMuscleGroups();
+  }
+
+  function renderMuscleMap() {
+    var diagram = document.getElementById("muscle-diagram");
+    if (!diagram.innerHTML) diagram.innerHTML = mmSvgFor(muscleView);
+    renderMuscleGroups();
+  }
+
+  // ---------------- Food + portion form ----------------
+  var foodSelect = document.getElementById("f-food");
+  var qtyInput = document.getElementById("f-qty");
+  var qtyLabel = document.getElementById("f-qty-label");
+  var preview = document.getElementById("f-preview");
+
+  (function populateFoodSelect() {
+    var groups = {};
+    FOODS.forEach(function (f, i) {
+      if (!groups[f.group]) groups[f.group] = [];
+      groups[f.group].push(i);
+    });
+    var html = Object.keys(groups).map(function (g) {
+      var opts = groups[g].map(function (i) {
+        return '<option value="' + i + '">' + escapeHtml(FOODS[i].name) + '</option>';
+      }).join("");
+      return '<optgroup label="' + escapeHtml(g) + '">' + opts + '</optgroup>';
+    }).join("");
+    foodSelect.innerHTML = html;
+  })();
+
+  function unitLabelFor(unit) {
+    if (unit === "g") return "Grams";
+    if (unit === "oz") return "Ounces";
+    return "How many (" + unit + ")";
+  }
+
+  function updateFoodFormUI() {
+    var food = FOODS[Number(foodSelect.value)];
+    if (!food) return;
+    qtyLabel.textContent = unitLabelFor(food.unit);
+    if (!qtyInput.dataset.touched) qtyInput.value = food.dflt;
+    qtyInput.step = food.step;
+    updatePreview();
+  }
+
+  function updatePreview() {
+    var food = FOODS[Number(foodSelect.value)];
+    if (!food) { preview.textContent = "— kcal"; return; }
+    var c = computeFood(food, qtyInput.value);
+    preview.textContent = Math.round(c.cal) + " kcal · " + c.protein.toFixed(1) + "p / " + c.carbs.toFixed(1) + "c / " + c.fat.toFixed(1) + "f";
+  }
+
+  foodSelect.addEventListener("change", function () {
+    qtyInput.dataset.touched = "";
+    updateFoodFormUI();
+  });
+  qtyInput.addEventListener("input", function () {
+    qtyInput.dataset.touched = "1";
+    updatePreview();
+  });
+  updateFoodFormUI();
+
+  document.getElementById("food-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var food = FOODS[Number(foodSelect.value)];
+    if (!food) return;
+    var qty = Number(qtyInput.value) || 0;
+    if (qty <= 0) return;
+    var c = computeFood(food, qty);
+
+    var today = todayISO();
+    if (!state.meals[today]) state.meals[today] = [];
+    state.meals[today].push({
+      name: qty + " " + food.unit + (food.unit === "g" ? "" : (qty === 1 ? "" : "s")) + " " + food.name,
+      cal: Math.round(c.cal),
+      protein: Math.round(c.protein * 10) / 10,
+      carbs: Math.round(c.carbs * 10) / 10,
+      fat: Math.round(c.fat * 10) / 10
+    });
+    saveState();
+    renderAll();
+  });
+
+  document.getElementById("toggle-manual").addEventListener("click", function () {
+    var manualForm = document.getElementById("meal-form");
+    var isHidden = manualForm.style.display === "none";
+    manualForm.style.display = isHidden ? "grid" : "none";
+    this.textContent = isHidden ? "Hide manual entry" : "Not on the list? Log it manually.";
+  });
+
+  // ---------------- Meal form (manual fallback) ----------------
+  document.getElementById("meal-form").addEventListener("submit", function (e) {
+    e.preventDefault();
+    var name = document.getElementById("m-name").value.trim();
+    var cal = document.getElementById("m-cal").value;
+    var protein = document.getElementById("m-protein").value;
+    var carbs = document.getElementById("m-carbs").value;
+    var fat = document.getElementById("m-fat").value;
+    if (!name || !cal) return;
+
+    var today = todayISO();
+    if (!state.meals[today]) state.meals[today] = [];
+    state.meals[today].push({
+      name: name,
+      cal: Number(cal) || 0,
+      protein: Number(protein) || 0,
+      carbs: Number(carbs) || 0,
+      fat: Number(fat) || 0
+    });
+    saveState();
+
+    e.target.reset();
+    renderAll();
+  });
+
+  document.getElementById("reset-btn").addEventListener("click", function () {
+    if (!confirm("Clear all logged meals and workouts? This can't be undone.")) return;
+    state = { startDate: todayISO(), meals: {}, workoutsDone: {}, exerciseChecks: {} };
+    saveState();
+    renderAll();
+  });
+
+  // ---------------- Rendering: workout calendar ----------------
+  var calendarMonth = (function () {
+    var d = new Date();
+    d.setDate(1);
+    d.setHours(0, 0, 0, 0);
+    return d;
+  })();
+  var selectedDate = todayISO();
+
+  function daysInMonth(year, monthIndex) {
+    return new Date(year, monthIndex + 1, 0).getDate();
+  }
+
+  function renderCalendar() {
+    var year = calendarMonth.getFullYear(), month = calendarMonth.getMonth();
+    document.getElementById("cal-month-label").textContent = calendarMonth.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+
+    var firstDow = new Date(year, month, 1).getDay();
+    var totalDays = daysInMonth(year, month);
+    var prevMonthDays = new Date(year, month, 0).getDate();
+
+    var cells = [];
+    for (var i = 0; i < firstDow; i++) {
+      cells.push({ dayNum: prevMonthDays - firstDow + 1 + i, outside: true, iso: null });
+    }
+    for (var d = 1; d <= totalDays; d++) {
+      cells.push({ dayNum: d, outside: false, iso: todayISO(new Date(year, month, d)) });
+    }
+    var remainder = cells.length % 7;
+    if (remainder !== 0) {
+      var trailing = 7 - remainder;
+      for (var j = 1; j <= trailing; j++) cells.push({ dayNum: j, outside: true, iso: null });
+    }
+
+    var weekdayLabels = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+    var headHtml = weekdayLabels.map(function (w) { return '<div class="cal-weekday">' + w + '</div>'; }).join("");
+
+    var today = todayISO();
+    var bodyHtml = cells.map(function (c) {
+      if (c.outside) return '<div class="cal-day outside">' + c.dayNum + '</div>';
+      var done = state.workoutsDone[c.iso] || [];
+      var classes = "cal-day";
+      if (c.iso === today) classes += " today";
+      if (c.iso === selectedDate) classes += " selected";
+      var dotsHtml = '<div class="cal-dots">'
+        + (done.indexOf("A") !== -1 ? '<span class="cal-dot a"></span>' : '')
+        + (done.indexOf("B") !== -1 ? '<span class="cal-dot b"></span>' : '')
+        + '</div>';
+      return '<div class="' + classes + '" data-iso="' + c.iso + '"><span>' + c.dayNum + '</span>' + dotsHtml + '</div>';
+    }).join("");
+
+    document.getElementById("calendar-grid").innerHTML = headHtml + bodyHtml;
+
+    Array.prototype.forEach.call(document.querySelectorAll(".cal-day[data-iso]"), function (cell) {
+      cell.addEventListener("click", function () {
+        selectedDate = cell.getAttribute("data-iso");
+        renderCalendar();
+      });
+    });
+
+    renderSelectedDayPanel();
+  }
+
+  function renderSelectedDayPanel() {
+    var done = state.workoutsDone[selectedDate] || [];
+    var d = new Date(selectedDate + "T00:00:00");
+    var label = d.toLocaleDateString(undefined, { weekday: "long", month: "short", day: "numeric" });
+    var aDone = done.indexOf("A") !== -1, bDone = done.indexOf("B") !== -1;
+
+    var html = '<span class="sd-date">' + label + '</span>'
+      + '<button type="button" class="btn' + (aDone ? "" : " secondary") + '" data-toggle="A"'
+      + (aDone ? ' style="background:var(--accent-strength); border-color:var(--accent-strength);"' : '') + '>Day A' + (aDone ? " ✓" : "") + '</button>'
+      + '<button type="button" class="btn' + (bDone ? "" : " secondary") + '" data-toggle="B"'
+      + (bDone ? ' style="background:var(--surface); color:var(--accent-endurance); border:2px solid var(--accent-endurance);"' : '') + '>Day B' + (bDone ? " ✓" : "") + '</button>';
+
+    document.getElementById("selected-day-panel").innerHTML = html;
+
+    Array.prototype.forEach.call(document.querySelectorAll("#selected-day-panel button[data-toggle]"), function (btn) {
+      btn.addEventListener("click", function () {
+        var key = btn.getAttribute("data-toggle");
+        var list = state.workoutsDone[selectedDate] || [];
+        var idx = list.indexOf(key);
+        if (idx === -1) list.push(key); else list.splice(idx, 1);
+        state.workoutsDone[selectedDate] = list;
+        saveState();
+        renderAll();
+      });
+    });
+  }
+
+  document.getElementById("cal-prev").addEventListener("click", function () {
+    calendarMonth.setMonth(calendarMonth.getMonth() - 1);
+    renderCalendar();
+  });
+  document.getElementById("cal-next").addEventListener("click", function () {
+    calendarMonth.setMonth(calendarMonth.getMonth() + 1);
+    renderCalendar();
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll("#muscle-view-toggle button"), function (btn) {
+    btn.addEventListener("click", function () {
+      setMuscleView(btn.getAttribute("data-view"));
+    });
+  });
+
+  // Clicking directly on a muscle shape in the diagram highlights its WHOLE
+  // group too — not just the one shape under the pointer. The listener lives
+  // on the diagram container (not the swapped-out <svg>), so it survives
+  // front/back view toggles.
+  document.getElementById("muscle-diagram").addEventListener("click", function (evt) {
+    var shape = evt.target.closest ? evt.target.closest(".mm-muscle") : null;
+    if (!shape) return;
+    toggleMuscleGroup(shape.getAttribute("data-group"));
+  });
+
+  // ---------------- Render all ----------------
+  function renderAll() {
+    renderHeader();
+    var meals = renderMeals();
+    renderMacros(meals);
+    renderCalorieChart();
+    renderTraining();
+    renderMuscleMap();
+    renderCalendar();
+  }
+
+  renderAll();
+})();
+</script>
+
+</body></html>

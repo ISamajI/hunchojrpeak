@@ -1,0 +1,68 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Mormando Deploy Kit</title>
+<style>
+:root{--bg:#0a0908;--fg:#f3ede3;--muted:#a39b90;--line:#2d2925;--accent:#ff3b2a;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 ui-monospace,Menlo,monospace;padding-block:40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+main{max-width:60ch;margin:0 auto;display:grid;gap:14px}
+h1{font:700 28px/1.1 system-ui,sans-serif;margin:0;text-wrap:balance}
+p{margin:0;color:var(--muted)}
+ul{margin:0;padding-left:18px;color:var(--muted);font-size:13px}
+#log{border:1px solid var(--line);padding:10px 12px;min-height:3em;white-space:pre-wrap}
+b{color:var(--accent);font-weight:400}
+</style>
+<main>
+<h1>Mormando Deploy Kit</h1>
+<p>Holds the Cloudflare build of the Mormando v2 site. When the Cloudflare upload page asks for the files, this page hands them over.</p>
+<ul id="files"></ul>
+<button id="copy" type="button" style="font:inherit;min-height:56px;padding:0 24px;border:0;background:#d92b1a;color:#fff;cursor:pointer" disabled>Loading files…</button>
+<div id="log" role="status">Loading the build…</div>
+<label for="bundle" style="color:var(--muted);font-size:13px">Build text (select all and copy)</label>
+<textarea id="bundle" readonly style="width:100%;height:120px;background:#111;color:var(--muted);border:1px solid var(--line);font:11px/1.3 ui-monospace,monospace"></textarea>
+</main>
+<script>
+const FILES = ["auditions.html", "favicon.svg", "index.html", "og-2.jpg", "resume.html", "v2/base.css", "v2/base.js", "v2/home.css", "v2/home.js", "v2/pages.css", "v2/pages.js", "v2/work.css", "v2/work.js"];
+const log = (t) => { document.getElementById('log').textContent = t; };
+document.getElementById('files').innerHTML = FILES.map(f => '<li>' + f + '</li>').join('');
+let BUNDLE = '';
+(async () => {
+  try {
+    const out = {};
+    for (const p of FILES) {
+      const r = await fetch('site/' + p);
+      if (!r.ok) throw new Error(p + ' returned ' + r.status);
+      const b = new Uint8Array(await r.arrayBuffer());
+      let bin = ''; for (let i = 0; i < b.length; i += 0x8000) bin += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000));
+      out[p] = { type: r.headers.get('content-type') || '', b64: btoa(bin) };
+    }
+    BUNDLE = 'CMKIT1' + JSON.stringify(out);
+    document.getElementById('bundle').value = BUNDLE;
+    const btn = document.getElementById('copy');
+    btn.disabled = false; btn.textContent = 'Copy build to clipboard';
+    log('Ready: ' + FILES.length + ' files, ' + BUNDLE.length + ' characters.');
+  } catch (err) { log('Could not load: ' + err); }
+})();
+document.getElementById('copy').addEventListener('click', () => {
+  const ta = document.getElementById('bundle'); ta.focus(); ta.select();
+  let ok = false; try { ok = document.execCommand('copy'); } catch (e) {}
+  log(ok ? 'Copied ' + BUNDLE.length + ' characters. Paste on the Cloudflare upload page.' : 'Copy blocked here: select the build text below and press Cmd+C.');
+});
+window.addEventListener('message', async (e) => {
+  if (!e.data || e.data.type !== 'cm-need' || !e.source) return;
+  try {
+    log('Sending ' + FILES.length + ' files to ' + e.origin + '…');
+    const files = [];
+    for (const p of FILES) {
+      const r = await fetch('site/' + p);
+      if (!r.ok) throw new Error(p + ' returned ' + r.status);
+      files.push({ path: p, type: r.headers.get('content-type') || '', buf: await r.arrayBuffer() });
+    }
+    e.source.postMessage({ type: 'cm-files', files }, '*', files.map(f => f.buf));
+    log('Sent ' + files.length + ' files (' + files.reduce((s, f) => s + f.buf.byteLength, 0) + ' bytes).');
+  } catch (err) {
+    e.source.postMessage({ type: 'cm-error', message: String(err) }, '*');
+    log('Could not send: ' + err);
+  }
+});
+</script>
+
+</body></html>

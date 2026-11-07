@@ -1,0 +1,669 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Rollito's Ice Cream Rolls</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Figtree:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: frosted steel "cold plate" world — every section sits on chilled metal, color only arrives as flavor. */
+:root{
+  color-scheme: light;
+  --frost:#EAF1F8;      /* page ground: chilled steel mist */
+  --steel:#C9D6E3;      /* plate metal */
+  --steel-deep:#8FA3B8;
+  --ink:#2B0F2C;        /* deep berry ink */
+  --ink-soft:#5E4560;
+  --berry:#FF3D7F;      /* strawberry, the loud accent */
+  --mango:#FFB21E;
+  --matcha:#6CBF6E;
+  --sky:#5BC6F0;
+  --paper:#FFFFFF;
+  --line:rgba(43,15,44,.12);
+  --display:"Bagel Fat One","Arial Rounded MT Bold","Trebuchet MS",system-ui,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:22px;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{background:var(--frost);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;overflow-x:hidden;
+  background-image:radial-gradient(circle at 1px 1px,rgba(143,163,184,.25) 1px,transparent 0);background-size:22px 22px}
+a{color:inherit}
+h1,h2,h3{font-family:var(--display);font-weight:400;line-height:.95;letter-spacing:-.01em;text-wrap:balance;margin:0}
+p{margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding-inline:20px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+:focus-visible{outline:3px solid var(--berry);outline-offset:3px;border-radius:8px}
+.btn{display:inline-flex;align-items:center;gap:10px;font:700 16px var(--body);border:0;cursor:pointer;text-decoration:none;
+  padding:15px 24px;border-radius:999px;background:var(--ink);color:var(--paper);transition:transform .2s cubic-bezier(.3,1.6,.5,1),background .2s}
+.btn:hover{transform:translateY(-3px) rotate(-1.5deg)}
+.btn.pink{background:var(--berry)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 2px var(--ink)}
+
+/* NAV */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;padding-block:12px}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:16px;background:rgba(255,255,255,.78);backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);border-radius:999px;padding:8px 8px 8px 20px;box-shadow:0 8px 30px rgba(43,15,44,.08)}
+.logo{font-family:var(--display);font-size:26px;text-decoration:none;color:var(--berry);display:flex;align-items:center;gap:8px}
+.logo svg{width:30px;height:30px}
+.nav-links{display:flex;gap:22px;font-weight:600;font-size:15px}
+.nav-links a{text-decoration:none;opacity:.8}.nav-links a:hover{opacity:1;color:var(--berry)}
+.nav .btn{padding:11px 18px;font-size:14px}
+@media (max-width:860px){.nav-links{display:none}}
+
+/* HERO */
+.hero{padding-block:28px 40px}
+.hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:36px;align-items:center}
+.hero h1{font-size:clamp(54px,8.4vw,112px);color:var(--ink)}
+.hero h1 .roll{display:inline-block;color:var(--berry);animation:wob 3.6s ease-in-out infinite}
+.hero h1 .roll:nth-child(2){color:var(--mango);animation-delay:-.6s}
+@keyframes wob{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg) translateY(-4px)}}
+.hero-copy{display:grid;gap:22px;min-width:0}
+.hero-copy .lede{font-size:clamp(17px,1.6vw,20px);max-width:30em;color:var(--ink-soft)}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:12px}
+.facts{display:flex;flex-wrap:wrap;gap:10px}
+.chip{font-family:var(--mono);font-size:12.5px;font-weight:700;padding:8px 12px;border-radius:999px;background:var(--paper);box-shadow:inset 0 0 0 1.5px var(--line)}
+.chip b{color:var(--berry)}
+
+.plate-card{position:relative;border-radius:34px;padding:14px;background:linear-gradient(145deg,#fff,var(--steel));box-shadow:0 30px 60px -20px rgba(43,15,44,.35),inset 0 2px 0 #fff}
+.plate-card canvas{display:block;width:100%;aspect-ratio:5/4;border-radius:24px;touch-action:none;cursor:grab;background:var(--steel)}
+.plate-card canvas:active{cursor:grabbing}
+.plate-hud{position:absolute;top:28px;left:28px;right:28px;display:flex;justify-content:space-between;align-items:flex-start;pointer-events:none;gap:8px}
+.temp{font-family:var(--mono);font-size:13px;font-weight:700;background:rgba(43,15,44,.85);color:#fff;padding:7px 11px;border-radius:10px}
+.temp span{color:var(--sky)}
+.count{font-family:var(--display);font-size:22px;background:#fff;padding:4px 14px;border-radius:12px;color:var(--ink)}
+.plate-tip{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);font-weight:700;font-size:14px;background:#fff;padding:8px 14px;border-radius:999px;
+  white-space:nowrap;pointer-events:none;box-shadow:0 6px 16px rgba(43,15,44,.15);transition:opacity .3s}
+.flavor-pick{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;justify-content:center}
+.flavor-pick button{font:700 13px var(--body);border:0;cursor:pointer;padding:8px 13px 8px 9px;border-radius:999px;background:#fff;color:var(--ink);
+  display:flex;align-items:center;gap:7px;box-shadow:inset 0 0 0 1.5px var(--line);transition:transform .2s}
+.flavor-pick button i{width:16px;height:16px;border-radius:50%;display:block;box-shadow:inset 0 -3px 0 rgba(0,0,0,.12)}
+.flavor-pick button[aria-pressed="true"]{box-shadow:inset 0 0 0 2.5px var(--ink);transform:translateY(-2px)}
+@media (max-width:900px){.hero-grid{grid-template-columns:1fr}.plate-card{order:-1}}
+
+/* MARQUEE */
+.marquee{overflow:hidden;background:var(--ink);color:#fff;padding-block:16px;transform:rotate(-1.6deg);margin-inline:-20px}
+.marquee-track{display:flex;gap:40px;width:max-content;animation:mq 38s linear infinite;font-family:var(--display);font-size:30px;white-space:nowrap}
+.marquee-track span:nth-child(3n+1){color:var(--berry)}.marquee-track span:nth-child(3n+2){color:var(--mango)}.marquee-track span:nth-child(3n){color:var(--sky)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* SECTIONS */
+section{padding-block:80px}
+.sec-head{display:grid;gap:14px;margin-bottom:40px;max-width:720px}
+.sec-head h2{font-size:clamp(42px,6vw,74px)}
+.sec-head p{color:var(--ink-soft);font-size:18px;max-width:36em}
+
+/* PROCESS */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.step{background:var(--paper);border-radius:var(--r);padding:24px;display:grid;gap:12px;align-content:start;position:relative;overflow:hidden;min-width:0}
+.step .n{font-family:var(--mono);font-weight:700;font-size:13px;color:var(--berry)}
+.step h3{font-size:30px}
+.step p{color:var(--ink-soft);font-size:15px}
+.step .viz{height:90px;border-radius:14px;background:linear-gradient(180deg,#dfe8f1,var(--steel));position:relative;overflow:hidden}
+.viz .pour{position:absolute;left:50%;top:-10px;width:14px;height:70px;margin-left:-7px;border-radius:8px;background:var(--berry);animation:pour 2.4s ease-in-out infinite}
+.viz .puddle{position:absolute;left:50%;bottom:16px;height:12px;width:20px;margin-left:-10px;border-radius:50%;background:var(--berry);animation:pud 2.4s ease-in-out infinite}
+@keyframes pour{0%{height:0}40%,70%{height:74px}100%{height:0;top:84px}}
+@keyframes pud{0%,30%{width:10px;margin-left:-5px}80%,100%{width:140px;margin-left:-70px}}
+.viz .blade{position:absolute;top:18px;width:8px;height:56px;border-radius:3px;background:#f7f9fb;box-shadow:0 2px 6px rgba(0,0,0,.2);animation:chop 0.5s ease-in-out infinite alternate}
+.viz .blade.b2{animation-delay:.25s}
+@keyframes chop{from{transform:translateY(-10px) rotate(-8deg)}to{transform:translateY(6px) rotate(0)}}
+.viz .bits{position:absolute;inset:auto 20px 14px;height:14px;border-radius:8px;background:repeating-linear-gradient(90deg,var(--mango) 0 9px,#3a2318 9px 13px,var(--mango) 13px 22px)}
+.viz .sheet{position:absolute;left:14px;right:14px;bottom:16px;height:8px;border-radius:4px;background:var(--matcha);transform-origin:left;animation:spread 2.4s ease-in-out infinite}
+@keyframes spread{0%{transform:scaleX(.15);height:22px}60%,100%{transform:scaleX(1);height:6px}}
+.viz .curl{position:absolute;bottom:14px;width:34px;height:34px;border-radius:50%;border:6px solid var(--sky);border-right-color:#fff;animation:curl 2.4s ease-in-out infinite}
+@keyframes curl{0%{left:10px;transform:rotate(0) scale(.5)}100%{left:calc(100% - 50px);transform:rotate(720deg) scale(1)}}
+@media (max-width:900px){.steps{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.steps{grid-template-columns:1fr}}
+
+/* FILM (Higgsfield) */
+.film{position:relative;border-radius:34px;overflow:hidden;background:var(--ink);aspect-ratio:16/8;max-width:100%}
+.film video,.film img{width:100%;height:100%;object-fit:cover;display:block}
+.film .cap{position:absolute;left:24px;bottom:22px;right:24px;color:#fff;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
+.film .cap h3{font-size:clamp(30px,4vw,52px);text-shadow:0 4px 20px rgba(0,0,0,.4)}
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px}
+.gallery figure{margin:0;border-radius:24px;overflow:hidden;aspect-ratio:4/5;background:var(--steel);position:relative}
+.gallery img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.gallery figure:hover img{transform:scale(1.06) rotate(1deg)}
+.gallery figcaption{position:absolute;left:12px;bottom:12px;font-weight:800;font-size:14px;background:#fff;padding:6px 12px;border-radius:999px}
+@media (max-width:700px){.gallery{grid-template-columns:1fr 1fr}.gallery figure:last-child{display:none}.film{aspect-ratio:4/5}}
+
+/* MENU */
+.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.tabs button{font:700 15px var(--body);border:0;cursor:pointer;padding:11px 18px;border-radius:999px;background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.tabs button[aria-selected="true"]{background:var(--ink);color:#fff;box-shadow:none}
+.filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:22px}
+.filters button{font:600 13px var(--mono);border:0;cursor:pointer;padding:7px 12px;border-radius:8px;background:transparent;color:var(--ink-soft);box-shadow:inset 0 0 0 1.5px var(--line)}
+.filters button[aria-pressed="true"]{background:var(--berry);color:#fff;box-shadow:none}
+.menu-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:14px}
+.item{background:#fff;border-radius:20px;padding:18px;display:grid;grid-template-columns:54px 1fr;gap:14px;align-items:center;cursor:pointer;
+  transition:transform .25s cubic-bezier(.3,1.6,.5,1),box-shadow .25s;border:0;text-align:left;font:inherit;color:inherit;min-width:0}
+.item:hover{transform:translateY(-4px) rotate(-.6deg);box-shadow:0 14px 30px -12px rgba(43,15,44,.3)}
+.item svg{width:54px;height:54px}
+.item h3{font-family:var(--body);font-weight:800;font-size:16px;line-height:1.2}
+.item p{font-size:13px;color:var(--ink-soft);line-height:1.35}
+.item .price{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--berry);margin-top:4px}
+.item.feature{grid-column:span 2;grid-template-columns:90px 1fr;padding:22px}
+.item.feature svg{width:90px;height:90px}
+.item.feature h3{font-family:var(--display);font-weight:400;font-size:28px}
+.item .tag{display:inline-block;font:700 10px var(--mono);letter-spacing:.1em;text-transform:uppercase;background:var(--mango);color:var(--ink);padding:3px 7px;border-radius:5px;margin-bottom:6px}
+.menu-note{margin-top:18px;font-size:13px;color:var(--ink-soft);font-family:var(--mono)}
+@media (max-width:540px){.item.feature{grid-column:auto;grid-template-columns:64px 1fr}.item.feature svg{width:64px;height:64px}}
+
+/* BUILDER */
+.builder{display:grid;grid-template-columns:1fr 1fr;gap:28px;background:#fff;border-radius:36px;padding:32px;align-items:start}
+.cup-stage{position:sticky;top:100px;display:grid;gap:16px;justify-items:center;text-align:center;min-width:0}
+.cup-stage svg{width:min(100%,380px);height:auto;overflow:visible}
+.cup-name{font-family:var(--display);font-size:clamp(28px,3.4vw,40px);color:var(--berry);min-height:1.1em}
+.cup-sum{font-size:14px;color:var(--ink-soft);max-width:30em}
+.cup-price{font-family:var(--mono);font-weight:700}
+.opts{display:grid;gap:24px;min-width:0}
+.opt h3{font-family:var(--body);font-weight:800;font-size:15px;margin-bottom:10px;display:flex;justify-content:space-between}
+.opt h3 small{font-family:var(--mono);font-weight:500;font-size:12px;color:var(--ink-soft)}
+.pills{display:flex;flex-wrap:wrap;gap:7px}
+.pills button{font:600 14px var(--body);border:0;cursor:pointer;padding:8px 13px;border-radius:999px;background:var(--frost);color:var(--ink);display:flex;gap:7px;align-items:center;transition:transform .15s}
+.pills button i{width:12px;height:12px;border-radius:50%;display:block}
+.pills button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.pills button:active{transform:scale(.94)}
+@media (max-width:860px){.builder{grid-template-columns:1fr;padding:22px}.cup-stage{position:static}}
+
+/* STORY */
+.story{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center}
+.cart{background:var(--mango);border-radius:36px;aspect-ratio:1;max-width:100%;position:relative;overflow:hidden;display:grid;place-items:center}
+.cart canvas{width:100%;height:100%}
+.timeline{display:grid;gap:0;margin-top:26px}
+.tl{display:grid;grid-template-columns:110px 1fr;gap:16px;padding-block:14px;border-top:1.5px solid var(--line)}
+.tl b{font-family:var(--mono);font-size:13px;color:var(--berry)}
+.story blockquote{font-family:var(--display);font-size:clamp(30px,3.6vw,44px);line-height:1;margin:0 0 18px}
+@media (max-width:860px){.story{grid-template-columns:1fr}}
+
+/* CATERING */
+.cater{background:var(--ink);color:#fff;border-radius:40px;padding:clamp(24px,5vw,56px);display:grid;grid-template-columns:1fr 1fr;gap:36px;position:relative;overflow:hidden}
+.cater h2{font-size:clamp(42px,6vw,72px)}
+.cater h2 em{font-style:normal;color:var(--mango)}
+.cater p{color:rgba(255,255,255,.75)}
+.cater .eyebrow{color:var(--sky)}
+.events{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.events span{font-weight:700;font-size:14px;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.1)}
+.states{display:flex;gap:10px;margin-top:22px}
+.states b{font-family:var(--display);font-size:34px;font-weight:400;width:74px;height:74px;border-radius:50%;display:grid;place-items:center;background:var(--berry)}
+.states b:nth-child(2){background:var(--mango);color:var(--ink)}.states b:nth-child(3){background:var(--sky);color:var(--ink)}
+form.quote{display:grid;gap:12px;background:#fff;color:var(--ink);border-radius:26px;padding:24px;min-width:0}
+form.quote label{display:grid;gap:5px;font-weight:700;font-size:13px}
+form.quote input,form.quote select,form.quote textarea{font:500 15px var(--body);padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--frost);color:var(--ink);width:100%}
+form.quote .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ok{display:none;background:var(--matcha);color:var(--ink);padding:14px;border-radius:14px;font-weight:600;font-size:14px}
+.ok.show{display:block}
+@media (max-width:860px){.cater{grid-template-columns:1fr}}
+@media (max-width:440px){form.quote .row{grid-template-columns:1fr}}
+
+/* REWARDS */
+.rewards{display:grid;grid-template-columns:1fr 1.2fr;gap:36px;align-items:center}
+.card{background:linear-gradient(135deg,var(--berry),#ff7aa6);border-radius:30px;padding:28px;color:#fff;box-shadow:0 30px 50px -20px rgba(255,61,127,.6);transform:rotate(-2deg)}
+.card .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.card .top span{font-family:var(--display);font-size:30px}
+.stamps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.stamps button{aspect-ratio:1;border-radius:50%;border:2.5px dashed rgba(255,255,255,.7);background:transparent;cursor:pointer;display:grid;place-items:center;padding:0;transition:transform .3s cubic-bezier(.3,1.8,.5,1)}
+.stamps button.on{background:#fff;border-style:solid;transform:rotate(-12deg) scale(1.05)}
+.stamps button svg{width:62%;height:62%;opacity:0}
+.stamps button.on svg{opacity:1}
+.stamps button:last-child{border-color:var(--mango)}
+.card .foot{margin-top:18px;font-family:var(--mono);font-size:13px;font-weight:700}
+@media (max-width:860px){.rewards{grid-template-columns:1fr}}
+
+/* VISIT */
+.visit{display:grid;grid-template-columns:1.2fr 1fr;gap:20px}
+.visit .panel{background:#fff;border-radius:30px;padding:28px;display:grid;gap:18px;align-content:start;min-width:0}
+.hours{display:grid;gap:6px;font-family:var(--mono);font-size:14px}
+.hours div{display:flex;justify-content:space-between;padding-block:6px;border-bottom:1px dashed var(--line)}
+.hours .today{color:var(--berry);font-weight:700}
+.open-pill{display:inline-flex;align-items:center;gap:8px;font-weight:800;font-size:14px;padding:8px 14px;border-radius:999px;background:var(--frost)}
+.open-pill i{width:10px;height:10px;border-radius:50%;background:var(--steel-deep)}
+.open-pill.open i{background:var(--matcha);box-shadow:0 0 0 4px rgba(108,191,110,.25)}
+.addr{font-family:var(--display);font-size:clamp(28px,3.2vw,38px);line-height:1}
+.copyrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.copyrow code{font:700 15px var(--mono);background:var(--frost);padding:8px 12px;border-radius:10px;user-select:all}
+.mini{font:700 12px var(--body);border:0;background:var(--ink);color:#fff;padding:8px 12px;border-radius:999px;cursor:pointer}
+.socials{display:flex;flex-wrap:wrap;gap:8px}
+.socials a{font-weight:700;font-size:14px;text-decoration:none;padding:9px 14px;border-radius:999px;background:var(--frost)}
+.socials a:hover{background:var(--berry);color:#fff}
+.map{background:var(--steel);border-radius:30px;position:relative;overflow:hidden;min-height:320px}
+.map canvas{position:absolute;inset:0;width:100%;height:100%}
+.stars{font-family:var(--display);font-size:56px;line-height:1;color:var(--mango)}
+@media (max-width:860px){.visit{grid-template-columns:1fr}}
+
+footer{padding-block:50px 70px;text-align:center;display:grid;gap:12px;justify-items:center}
+footer .big{font-family:var(--display);font-size:clamp(60px,14vw,180px);color:var(--berry);line-height:.85;letter-spacing:-.02em}
+footer small{font-family:var(--mono);font-size:12px;color:var(--ink-soft)}
+.ltg{font:800 11px var(--mono);letter-spacing:.12em;padding:6px 10px;border-radius:6px;background:var(--ink);color:#fff;text-decoration:none}
+
+.rise{animation:rise .9s cubic-bezier(.2,.9,.3,1.2) both}
+@keyframes rise{from{transform:translateY(24px)}to{transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+</style>
+
+<header class="nav">
+  <div class="wrap">
+    <div class="nav-in">
+      <a class="logo" href="#top" aria-label="Rollito's home">
+        <svg viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="18" fill="#FF3D7F"/><path id="lgsp" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round"/></svg>
+        Rollito's
+      </a>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#menu">Menu</a><a href="#build">Build a roll</a><a href="#catering">Catering</a><a href="#rewards">Rewards</a><a href="#visit">Visit</a>
+      </nav>
+      <a class="btn pink" href="https://www.doordash.com/store/rollitos-ice-cream-rolls---876-white-horse-ave-hamilton-township-37382283/" target="_blank" rel="noopener">Order now</a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero" style="padding-block:24px 30px">
+  <div class="wrap hero-grid">
+    <div class="hero-copy rise">
+      <span class="eyebrow">Hamilton, NJ · Hand-rolled Thai-style ice cream</span>
+      <h1>Sweet, loud, <span class="roll">hand</span>-<span class="roll">rolled</span> joy.</h1>
+      <p class="lede">Every cup starts as liquid cream on a frozen plate and gets chopped, spread and rolled right in front of you. Nothing is pre-made. Try it yourself on the plate.</p>
+      <div class="hero-ctas">
+        <a class="btn pink" href="#build">Build your roll</a>
+        <a class="btn ghost" href="#menu">See the menu</a>
+      </div>
+      <div class="facts">
+        <span class="chip"><b>★ 4.8</b> on DoorDash</span>
+        <span class="chip">Open daily <b>2–10 PM</b></span>
+        <span class="chip">876 Whitehorse-Mercerville Rd</span>
+      </div>
+    </div>
+    <div>
+      <div class="plate-card">
+        <canvas id="plate" aria-label="Interactive cold plate. Drag across each strip of ice cream to roll it." role="img"></canvas>
+        <div class="plate-hud"><span class="temp">PLATE <span id="tempv">−4°F</span></span><span class="count" id="count">0/5 rolls</span></div>
+        <div class="plate-tip" id="tip">Drag across a strip to roll it →</div>
+      </div>
+      <div class="flavor-pick" id="flavorPick" aria-label="Pick a flavor for the plate"></div>
+    </div>
+  </div>
+</section>
+
+<div style="overflow:hidden;padding-block:20px"><div class="marquee" aria-hidden="true"><div class="marquee-track" id="mq"></div></div></div>
+
+<section id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">The show, in four moves</span>
+      <h2>How a roll is born</h2>
+      <p>It takes about two minutes from pour to cup. Grab a seat by the counter, because this part is the whole point.</p>
+    </div>
+    <div class="steps">
+      <article class="step"><span class="n">STEP 1</span><div class="viz"><div class="pour"></div><div class="puddle"></div></div><h3>Pour</h3><p>A fresh sweet cream base hits a plate held well below freezing.</p></article>
+      <article class="step"><span class="n">STEP 2</span><div class="viz"><div class="blade" style="left:38%"></div><div class="blade b2" style="left:56%"></div><div class="bits"></div></div><h3>Chop</h3><p>Fruit, cookies or cheesecake get chopped straight into the cream with two spatulas.</p></article>
+      <article class="step"><span class="n">STEP 3</span><div class="viz"><div class="sheet"></div></div><h3>Spread</h3><p>The mix is pressed into a paper-thin sheet that sets in seconds.</p></article>
+      <article class="step"><span class="n">STEP 4</span><div class="viz"><div class="curl"></div></div><h3>Roll</h3><p>Scraped into curls, stood up in the cup, then piled with toppings and drizzle.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="film" style="padding-top:20px">
+  <div class="wrap">
+    <div class="film" id="filmBox">
+      <canvas id="filmCanvas" style="width:100%;height:100%;display:block"></canvas>
+      <div class="cap"><h3>Rolled fresh,<br>to order.</h3><a class="btn pink" href="#visit">Come watch</a></div>
+    </div>
+    <div class="gallery" id="gallery"></div>
+  </div>
+</section>
+
+<section id="menu">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Menu</span>
+      <h2>Pick your obsession</h2>
+      <p>Twenty rolled flavors, signature cups stacked high, and mini pancakes with rolled ice cream on top. Tap any flavor to load it into the builder.</p>
+    </div>
+    <div class="tabs" role="tablist" id="tabs"></div>
+    <div class="filters" id="filters"></div>
+    <div class="menu-grid" id="menuGrid"></div>
+    <p class="menu-note">Prices shown from Rollito's delivery menu. In-store prices and seasonal items may differ.</p>
+  </div>
+</section>
+
+<section id="build">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Build-your-own</span>
+      <h2>Make it yours</h2>
+      <p>Choose a base, a mix-in, toppings and a drizzle. Your cup builds itself live. Show this screen at the counter.</p>
+    </div>
+    <div class="builder">
+      <div class="cup-stage">
+        <svg id="cup" viewBox="0 0 400 400" role="img" aria-label="Your cup, seen from above"></svg>
+        <div class="cup-name" id="cupName">Strawberry Fields</div>
+        <p class="cup-sum" id="cupSum"></p>
+        <div class="cup-price" id="cupPrice"></div>
+        <button class="btn" id="shuffle" type="button">Surprise me</button>
+      </div>
+      <div class="opts" id="opts"></div>
+    </div>
+  </div>
+</section>
+
+<section id="story">
+  <div class="wrap story">
+    <div>
+      <span class="eyebrow">Our story</span>
+      <blockquote style="margin-top:14px">"We started with a cart and one goal: bring joy through flavor."</blockquote>
+      <p style="color:var(--ink-soft);font-size:18px;max-width:34em">Ginger and Eduardo Salazar spent their weekends rolling ice cream at parties, festivals and family events across the area. The lines kept getting longer, so they gave the cart a permanent home on Whitehorse-Mercerville Road.</p>
+      <div class="timeline">
+        <div class="tl"><b>THE CART</b><span>Rolling at birthdays, weddings and street events</span></div>
+        <div class="tl"><b>JULY 23, 2025</b><span>Ribbon cutting in Hamilton Township with the town council</span></div>
+        <div class="tl"><b>NOW</b><span>Open every day, still rolling every cup to order</span></div>
+      </div>
+    </div>
+    <div class="cart"><canvas id="cartCanvas" aria-hidden="true"></canvas></div>
+  </div>
+</section>
+
+<section id="catering">
+  <div class="wrap">
+    <div class="cater">
+      <div>
+        <span class="eyebrow">Catering & events</span>
+        <h2 style="margin-top:12px">Bring the <em>plate</em> to your party.</h2>
+        <p style="margin-top:16px;font-size:17px;max-width:30em">The original Rollito's cart is still on the road. We set up, roll live for your guests and clean up after. Fully insured.</p>
+        <div class="events"><span>Birthdays</span><span>Weddings</span><span>Quinceañeras</span><span>Corporate</span><span>School events</span><span>Baby showers</span></div>
+        <div class="states" aria-label="Service area"><b>NJ</b><b>PA</b><b>NY</b></div>
+      </div>
+      <form class="quote" id="quote" novalidate>
+        <strong style="font-family:var(--display);font-size:28px;font-weight:400">Get a catering quote</strong>
+        <div class="row">
+          <label for="q-name">Name<input id="q-name" required placeholder="Your name"></label>
+          <label for="q-date">Event date<input id="q-date" type="date" required></label>
+        </div>
+        <div class="row">
+          <label for="q-type">Event<select id="q-type"><option>Birthday</option><option>Wedding</option><option>Quinceañera</option><option>Corporate</option><option>Other</option></select></label>
+          <label for="q-guests">Guests<input id="q-guests" type="number" min="10" placeholder="50"></label>
+        </div>
+        <label for="q-contact">Phone or email<input id="q-contact" required placeholder="So we can reach you"></label>
+        <label for="q-notes">Anything else<textarea id="q-notes" rows="2" placeholder="Location, flavors, timing"></textarea></label>
+        <button class="btn pink" type="submit">Request my quote</button>
+        <div class="ok" id="ok" role="status"></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section id="rewards">
+  <div class="wrap rewards">
+    <div class="sec-head" style="margin:0">
+      <span class="eyebrow">Rollito's Rewards</span>
+      <h2>10 stamps. One free roll.</h2>
+      <p>Free to join. Every visit earns a stamp, and your tenth cup is on us. Tap the card to see how it fills.</p>
+    </div>
+    <div class="card">
+      <div class="top"><span>Rollito's</span><span style="font-family:var(--mono);font-size:12px">REWARDS CARD</span></div>
+      <div class="stamps" id="stamps"></div>
+      <div class="foot" id="stampFoot">0 of 10 · keep rolling</div>
+    </div>
+  </div>
+</section>
+
+<section id="visit">
+  <div class="wrap">
+    <div class="sec-head"><span class="eyebrow">Visit</span><h2>Pull up</h2></div>
+    <div class="visit">
+      <div class="panel">
+        <span class="open-pill" id="openPill"><i></i><span id="openTxt">Open daily 2–10 PM</span></span>
+        <div class="addr">876 Whitehorse-Mercerville Rd<br>Hamilton, NJ 08610</div>
+        <div class="copyrow"><code id="phone">(609) 273-8541</code><button class="mini" type="button" data-copy="phone">Copy phone</button></div>
+        <div class="copyrow"><code id="mail" style="font-size:13px">rollitos.icecreamrolls@gmail.com</code><button class="mini" type="button" data-copy="mail">Copy email</button></div>
+        <div class="socials">
+          <a href="https://www.instagram.com/rollitos.icecream/" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://www.tiktok.com/@rollitosicecream" target="_blank" rel="noopener">TikTok</a>
+          <a href="https://www.google.com/maps/search/?api=1&query=876+Whitehorse-Mercerville+Rd+Hamilton+NJ+08610" target="_blank" rel="noopener">Directions</a>
+          <a href="https://www.ubereats.com/store/rollitos-ice-cream-rolls-876-whitehorse-mercerville-rd-hamilton-township-nj-08610/hsQ4qm8eR2yEKZ8tbiuEaw" target="_blank" rel="noopener">Uber Eats</a>
+        </div>
+      </div>
+      <div class="panel" style="gap:10px">
+        <div class="hours" id="hours"></div>
+        <div style="display:flex;align-items:center;gap:14px;margin-top:12px"><span class="stars">4.8</span><span style="font-size:14px;color:var(--ink-soft)">average from 100+ DoorDash ratings</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="big">Rollito's</div>
+  <small>Rolled fresh, to order · Hamilton, NJ</small>
+  <a class="ltg" href="#top">SITE BY LTGPEAK</a>
+</footer>
+
+<script>
+(()=>{
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* ---------- shared data ---------- */
+const FLAVORS = {
+  strawberry:{name:'Strawberry',c:'#FF6F9C',d:'#D9416F',tags:['fruity']},
+  mango:{name:'Mango',c:'#FFC23D',d:'#E08F00',tags:['fruity']},
+  matcha:{name:'Matcha',c:'#9ACD7A',d:'#5E9A47',tags:['classic']},
+  cookies:{name:'Cookies & Cream',c:'#F3EEE6',d:'#3A2A2A',tags:['chocolate'],speck:'#2a1c1c'},
+  pistachio:{name:'Pistachio',c:'#C8DD9A',d:'#8BA65A',tags:['classic']},
+  chocolate:{name:'Chocolate',c:'#7A4A33',d:'#4E2C1D',tags:['chocolate']},
+  coconut:{name:'Coconut',c:'#FAF7F0',d:'#C9BFA8',tags:['fruity']},
+  passion:{name:'Passion Fruit',c:'#FFD34E',d:'#E39A1B',tags:['fruity']},
+  mint:{name:'ChocoMint',c:'#A8E6CF',d:'#3F7F66',tags:['chocolate'],speck:'#3b2418'},
+  coffee:{name:'Coffee',c:'#C49A74',d:'#8A6040',tags:['classic']},
+  berries:{name:'Mix Berries',c:'#C25B9C',d:'#7E2E66',tags:['fruity'],speck:'#3c1450'},
+  vanilla:{name:'Vanilla',c:'#FFF6DE',d:'#E3C98A',tags:['classic']},
+  caramel:{name:'Salted Caramel',c:'#E3A35B',d:'#B36B22',tags:['classic']},
+  pb:{name:'Peanut Butter',c:'#D9A86C',d:'#9E6C33',tags:['classic']},
+  cheesecake:{name:'Strawberry Cheesecake',c:'#FFC0CF',d:'#E07A95',tags:['fruity'],speck:'#fff4e0'},
+  pina:{name:'Piña Colada',c:'#FFF0A8',d:'#E1C24A',tags:['fruity']},
+};
+
+/* spiral path generator */
+function spiral(cx,cy,r,turns=2.6,steps=90,phase=0){
+  let d='';for(let i=0;i<=steps;i++){const t=i/steps;const a=phase+t*turns*Math.PI*2;const rr=r*(0.12+0.88*t);
+  const x=cx+Math.cos(a)*rr,y=cy+Math.sin(a)*rr;d+=(i?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)}return d}
+document.getElementById('lgsp').setAttribute('d',spiral(20,20,12,2.3,60));
+
+/* ---------- HERO COLD PLATE ---------- */
+const cv=document.getElementById('plate'),ctx=cv.getContext('2d');
+const tip=document.getElementById('tip'),countEl=document.getElementById('count'),tempEl=document.getElementById('tempv');
+const plateFlavors=['strawberry','mango','matcha','cookies','pistachio','chocolate'];
+let flavor='strawberry',W=0,H=0,dpr=1,strips=[],N=5,active=-1,lastTouch=performance.now(),auto=null,done=false,frost=[],fog=[],popT=0;
+const pick=document.getElementById('flavorPick');
+plateFlavors.forEach(k=>{const b=document.createElement('button');b.type='button';b.innerHTML=`<i style="background:${FLAVORS[k].c}"></i>${FLAVORS[k].name}`;
+  b.setAttribute('aria-pressed',k===flavor);b.onclick=()=>{flavor=k;[...pick.children].forEach(x=>x.setAttribute('aria-pressed',x===b));reset();lastTouch=performance.now()};pick.appendChild(b)});
+function size(){const r=cv.getBoundingClientRect();dpr=Math.min(2,devicePixelRatio||1);W=r.width;H=r.height;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0);
+  frost=Array.from({length:Math.round(W*H/700)},()=>({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+.3,a:Math.random()*.5+.15}))}
+function sheet(){const padX=W*.1,top=H*.2,bot=H*.86;return{x0:padX,x1:W-padX-W*.0,y0:top,y1:bot,h:(bot-top)/N}}
+function reset(){strips=Array.from({length:N},()=>({p:0,rolled:false,cup:0,specks:Array.from({length:26},()=>[Math.random(),Math.random()])}));done=false;updCount();tip.style.opacity=1;tip.textContent='Drag across a strip to roll it →'}
+function updCount(){const n=strips.filter(s=>s.rolled).length;countEl.textContent=`${n}/5 rolls`;if(n===N&&!done){done=true;popT=performance.now();tip.textContent='Order up! Tap a flavor to pour again';tip.style.opacity=1}}
+function drawRoll(x,y,r,f,rot){ctx.save();ctx.translate(x,y);ctx.rotate(rot);
+  ctx.fillStyle=f.c;ctx.beginPath();ctx.arc(0,0,r,0,7);ctx.fill();
+  ctx.strokeStyle=f.d;ctx.lineWidth=Math.max(1.2,r*.12);ctx.lineCap='round';ctx.beginPath();
+  for(let i=0;i<=60;i++){const t=i/60,a=t*Math.PI*2*2.4,rr=r*.92*t;const px=Math.cos(a)*rr,py=Math.sin(a)*rr;i?ctx.lineTo(px,py):ctx.moveTo(px,py)}ctx.stroke();
+  ctx.fillStyle='rgba(255,255,255,.35)';ctx.beginPath();ctx.arc(-r*.35,-r*.4,r*.25,0,7);ctx.fill();ctx.restore()}
+function draw(t){
+  const s=sheet(),f=FLAVORS[flavor];
+  // steel
+  const g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#E7EEF5');g.addColorStop(.5,'#BFCDDA');g.addColorStop(1,'#DCE5EE');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+  // brushed lines
+  ctx.globalAlpha=.18;ctx.strokeStyle='#fff';ctx.lineWidth=1;for(let y=0;y<H;y+=5){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y+((y*7)%11)-5);ctx.stroke()}ctx.globalAlpha=1;
+  frost.forEach(p=>{ctx.fillStyle=`rgba(255,255,255,${p.a})`;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill()});
+  // cream strips
+  strips.forEach((st,i)=>{const y=s.y0+i*s.h+3,h=s.h-6,w=s.x1-s.x0;const sx=s.x0+st.p*w;
+    if(!st.rolled){
+      // scraped trail
+      if(st.p>0){ctx.fillStyle='rgba(255,255,255,.22)';ctx.fillRect(s.x0,y,sx-s.x0,h)}
+      ctx.fillStyle=f.c;ctx.beginPath();ctx.roundRect(sx,y,s.x1-sx,h,6);ctx.fill();
+      ctx.fillStyle='rgba(255,255,255,.18)';ctx.fillRect(sx,y+2,s.x1-sx,3);
+      if(f.speck){ctx.fillStyle=f.speck;st.specks.forEach(([a,b])=>{const px=s.x0+a*w;if(px>sx+3){ctx.fillRect(px,y+4+b*(h-8),3,2.4)}})}
+      if(st.p>0.02){const r=Math.min(h*.62,6+st.p*h*.62);drawRoll(sx,y+h/2,r,f,st.p*14)}
+    }
+  });
+  // rolled cup tray (top row)
+  const rolled=strips.filter(s=>s.rolled);
+  rolled.forEach((st,j)=>{st.cup=Math.min(1,st.cup+.06);const e=1-Math.pow(1-st.cup,3);
+    const tx=W/2+(j-(N-1)/2)*(Math.min(W*.13,64)),ty=H*.1;const r=Math.min(26,H*.06)*(.6+.4*e);
+    ctx.globalAlpha=e;drawRoll(tx,ty,r,f,j);ctx.globalAlpha=1});
+  // scraper
+  const a=active>=0?active:(auto?auto.i:-1);
+  if(a>=0&&!strips[a].rolled){const st=strips[a],w=s.x1-s.x0,x=s.x0+st.p*w-4,y=s.y0+a*s.h-6;
+    ctx.fillStyle='rgba(43,15,44,.18)';ctx.fillRect(x-2,y+6,10,s.h+4);
+    const sg=ctx.createLinearGradient(x-6,0,x+8,0);sg.addColorStop(0,'#fff');sg.addColorStop(1,'#9fb0c2');ctx.fillStyle=sg;ctx.beginPath();ctx.roundRect(x-6,y,10,s.h+8,3);ctx.fill();
+    ctx.fillStyle='#2B0F2C';ctx.beginPath();ctx.roundRect(x-7,y-26,12,30,5);ctx.fill()}
+  // fog
+  if(fog.length<40&&Math.random()<.4)fog.push({x:Math.random()*W,y:H+10,r:20+Math.random()*40,v:.3+Math.random()*.5,a:0});
+  fog.forEach(p=>{p.y-=p.v;p.x+=Math.sin((t/900)+p.r)*.3;p.a=Math.min(.16,p.a+.004);const gg=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);gg.addColorStop(0,`rgba(255,255,255,${p.a})`);gg.addColorStop(1,'rgba(255,255,255,0)');ctx.fillStyle=gg;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,7);ctx.fill()});
+  fog=fog.filter(p=>p.y>-60);
+  if(done){const k=Math.min(1,(t-popT)/500);ctx.save();ctx.translate(W/2,H*.55);ctx.scale(.6+.4*k,.6+.4*k);ctx.rotate(-.06);ctx.globalAlpha=k;
+    ctx.fillStyle='#2B0F2C';ctx.beginPath();ctx.roundRect(-130,-38,260,76,22);ctx.fill();ctx.fillStyle='#fff';ctx.font=`34px "Bagel Fat One", sans-serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('ORDER UP!',0,2);ctx.restore()}
+  tempEl.textContent=(-4-Math.round(Math.sin(t/2000)*2))+'°F';
+}
+function stripAt(y){const s=sheet();const i=Math.floor((y-s.y0)/s.h);return i>=0&&i<N?i:-1}
+function pos(e){const r=cv.getBoundingClientRect();return{x:e.clientX-r.left,y:e.clientY-r.top}}
+function advance(i,x){const s=sheet(),st=strips[i];if(st.rolled)return;const p=(x-s.x0)/(s.x1-s.x0);if(p>st.p&&p-st.p<.35)st.p=Math.min(1,p);else if(p>st.p&&st.p===0&&p<.3)st.p=p;
+  if(st.p>.94){st.rolled=true;active=-1;updCount();burst()}}
+cv.addEventListener('pointerdown',e=>{const {x,y}=pos(e);const i=stripAt(y);lastTouch=performance.now();auto=null;if(i>=0&&!strips[i].rolled){active=i;if(strips[i].p===0)strips[i].p=Math.max(0,Math.min(.05,(x-sheet().x0)/(sheet().x1-sheet().x0)));cv.setPointerCapture(e.pointerId);tip.style.opacity=0}});
+cv.addEventListener('pointermove',e=>{if(active<0)return;const {x,y}=pos(e);lastTouch=performance.now();const i=stripAt(y);if(i>=0&&i!==active&&!strips[i].rolled&&strips[i].p===0){}advance(active,x)});
+['pointerup','pointercancel'].forEach(ev=>cv.addEventListener(ev,()=>{active=-1}));
+let sparks=[];function burst(){}
+function loop(t){
+  if(!reduce&&active<0&&!done&&t-lastTouch>3500){if(!auto){const i=strips.findIndex(s=>!s.rolled);if(i>=0)auto={i}}
+    if(auto){const st=strips[auto.i];st.p=Math.min(1,st.p+.006);if(st.p>.94){st.rolled=true;updCount();auto=null;lastTouch=t-1500}}}
+  if(done&&!reduce&&t-popT>4200&&t-lastTouch>3500){const k=plateFlavors[(plateFlavors.indexOf(flavor)+1)%plateFlavors.length];flavor=k;[...pick.children].forEach((x,j)=>x.setAttribute('aria-pressed',plateFlavors[j]===k));reset()}
+  draw(t);requestAnimationFrame(loop)}
+size();reset();addEventListener('resize',size);requestAnimationFrame(loop);
+
+/* ---------- MARQUEE ---------- */
+const mqNames=['Dubai Strawberry Chocolate','Lotus Biscoff','Mango','Matcha Love','Cookie Monster','Piña Colada','Passion Fruit','Pistachio','Mini Pancakes','Salted Caramel'];
+document.getElementById('mq').innerHTML=[...mqNames,...mqNames].map(n=>`<span>${n} ✦</span>`).join('');
+
+/* ---------- FILM canvas (placeholder until Higgsfield clip loads) ---------- */
+(function(){const c=document.getElementById('filmCanvas');if(!c)return;const x=c.getContext('2d');let w,h;
+  function rs(){const r=c.getBoundingClientRect();w=r.width;h=r.height;c.width=w*dpr;c.height=h*dpr;x.setTransform(dpr,0,0,dpr,0,0)}rs();addEventListener('resize',rs);
+  const cols=['#FF6F9C','#FFC23D','#9ACD7A','#5BC6F0','#C25B9C','#F3EEE6'];
+  const rolls=Array.from({length:26},(_,i)=>({x:Math.random(),y:Math.random(),r:30+Math.random()*70,c:cols[i%cols.length],s:(Math.random()-.5)*.0006,v:.00008+Math.random()*.00018}));
+  function f(t){x.fillStyle='#2B0F2C';x.fillRect(0,0,w,h);
+    rolls.forEach(o=>{o.y-=o.v*16;if(o.y<-.3)o.y=1.3;const px=o.x*w+Math.sin(t/3000+o.r)*20,py=o.y*h;
+      x.save();x.translate(px,py);x.rotate(t*o.s);x.globalAlpha=.9;x.fillStyle=o.c;x.beginPath();x.arc(0,0,o.r,0,7);x.fill();
+      x.strokeStyle='rgba(43,15,44,.35)';x.lineWidth=o.r*.1;x.beginPath();for(let i=0;i<=60;i++){const tt=i/60,a=tt*Math.PI*5,rr=o.r*.9*tt;i?x.lineTo(Math.cos(a)*rr,Math.sin(a)*rr):x.moveTo(0,0)}x.stroke();x.restore()});
+    const gr=x.createLinearGradient(0,h*.4,0,h);gr.addColorStop(0,'rgba(43,15,44,0)');gr.addColorStop(1,'rgba(43,15,44,.85)');x.fillStyle=gr;x.fillRect(0,0,w,h);
+    if(!reduce)requestAnimationFrame(f)}requestAnimationFrame(f)})();
+
+/* ---------- MENU ---------- */
+const rolled=[
+ ['Choco Banana','Banana and Nutella',8,'chocolate','#F6D46B'],['Chocolate','Rolled chocolate ice cream',8,'chocolate','#7A4A33'],
+ ['ChocoMint','Mint blended with chocolate',8,'chocolate','#A8E6CF'],['Coconut','Rolled coconut ice cream',8,'fruity','#FAF7F0'],
+ ['Coffee','Rolled coffee ice cream',8,'classic','#C49A74'],['Cookie Dough','With cookie dough pieces',8,'chocolate','#E9CFA3'],
+ ['Cookie Monster','Oreo and Chips Ahoy',8,'chocolate','#6FB7E8'],['Cookies & Cream','Oreo',8,'chocolate','#F3EEE6'],
+ ['Strawberry Graham','Strawberry with graham cracker',8,'fruity','#FF9CB5'],['Mango','Mango',8,'fruity','#FFC23D'],
+ ['Matcha Love','Matcha',8,'classic','#9ACD7A'],['Mix Berries','Strawberry, blueberry, raspberry',8,'fruity','#C25B9C'],
+ ['Passion Fruit','Passion fruit',8,'fruity','#FFD34E'],['Peanut Butter','Blended with peanut butter',8,'classic','#D9A86C'],
+ ['Pistachio','Rolled pistachio ice cream',8.5,'classic','#C8DD9A'],['Piña Colada','Pineapple and coconut',8,'fruity','#FFF0A8'],
+ ['Salted Caramel','Salted caramel rolled ice cream',8,'classic','#E3A35B'],['Strawberry Cheesecake','Strawberries and cheesecake pieces',9,'fruity','#FFC0CF'],
+ ['Strawberry','Rolled strawberry ice cream',8,'fruity','#FF6F9C'],['Vanilla','All-vanilla, delicate curls',8,'classic','#FFF6DE']];
+const signature=[
+ ['Dubai Strawberry Chocolate','The viral one. Strawberries, chocolate and pistachio crunch.',16.99,'','#7A4A33',true,'Trending'],
+ ['Lotus Biscoff Strawberry','Biscoff cookie butter with fresh strawberry.',14.99,'','#E3A35B',true,'Fan favorite'],
+ ['Strawberries & Cream','Fresh berries piled on sweet cream rolls.',12.99,'','#FF6F9C',false]];
+const pancakes=[['Mini Pancakes + Rolled Ice Cream','A stack of warm mini pancakes topped with rolled ice cream.',16.99,'','#F6D46B',true,'Warm + cold']];
+const more=[['Taco Rolls','Waffle taco shell filled with rolled ice cream.',null,'','#E9CFA3'],['Milkshakes','Blended to order with your favorite flavor.',null,'','#C25B9C'],['Seasonal Special','Rotating fall flavors. Ask at the counter.',null,'','#E08F00']];
+const tabs={rolled:['Rolled',rolled],signature:['Signature cups',signature],pancakes:['Mini pancakes',pancakes],more:['Tacos & shakes',more]};
+let tab='signature',filt='all';
+const tabsEl=document.getElementById('tabs'),filtEl=document.getElementById('filters'),grid=document.getElementById('menuGrid');
+Object.entries(tabs).forEach(([k,[label]])=>{const b=document.createElement('button');b.role='tab';b.type='button';b.textContent=label;b.onclick=()=>{tab=k;filt='all';render()};b.dataset.k=k;tabsEl.appendChild(b)});
+['all','fruity','chocolate','classic'].forEach(f=>{const b=document.createElement('button');b.type='button';b.textContent=f==='all'?'All flavors':f[0].toUpperCase()+f.slice(1);b.dataset.f=f;b.onclick=()=>{filt=f;render()};filtEl.appendChild(b)});
+function cupIcon(c){const sp=[0,1,2].map(i=>`<path d="${spiral(16+i*11,22,8.5,2.2,40,i)}" fill="none" stroke="rgba(43,15,44,.35)" stroke-width="2" stroke-linecap="round"/>`).join('');
+  return `<svg viewBox="0 0 54 54" aria-hidden="true"><path d="M6 26h42l-5 24H11z" fill="#2B0F2C"/>${[0,1,2].map(i=>`<circle cx="${16+i*11}" cy="22" r="9" fill="${c}"/>`).join('')}${sp}</svg>`}
+function render(){[...tabsEl.children].forEach(b=>b.setAttribute('aria-selected',b.dataset.k===tab));filtEl.hidden=tab!=='rolled';[...filtEl.children].forEach(b=>b.setAttribute('aria-pressed',b.dataset.f===filt));
+  const items=tabs[tab][1].filter(i=>filt==='all'||i[3]===filt);
+  grid.innerHTML=items.map(([n,d,p,cat,c,feat,tag])=>`<button type="button" class="item${feat?' feature':''}" data-name="${n}">${cupIcon(c)}<div style="min-width:0">${tag?`<span class="tag">${tag}</span>`:''}<h3>${n}</h3><p>${d}</p><div class="price">${p?'$'+p.toFixed(2):'Ask in store'}</div></div></button>`).join('');
+  grid.querySelectorAll('.item').forEach(el=>el.onclick=()=>{const n=el.dataset.name;const k=Object.keys(FLAVORS).find(k=>n.toLowerCase().includes(FLAVORS[k].name.toLowerCase().split(' ')[0].toLowerCase()));if(k&&B.base.find(b=>b===k)){state.base=k;buildUI();drawCup()}document.getElementById('build').scrollIntoView({behavior:reduce?'auto':'smooth'})})}
+render();
+
+/* ---------- BUILDER ---------- */
+const B={base:['strawberry','mango','matcha','cookies','pistachio','chocolate','coconut','passion','mint','coffee','berries','vanilla','caramel','pb','cheesecake','pina'],
+ mix:{none:'No mix-in',oreo:'Oreo',strawb:'Fresh strawberry',banana:'Banana',cheesecake:'Cheesecake bites',graham:'Graham cracker',nutella:'Nutella'},
+ top:{sprinkles:['Rainbow sprinkles','#FF3D7F'],strawberries:['Strawberries','#E8264E'],oreo:['Oreo crumble','#2a1c1c'],mochi:['Mochi','#FFF'],gummy:['Gummy bears','#FFB21E'],pocky:['Pocky','#C9884A'],blueberry:['Blueberries','#4B4FB3'],coconut:['Toasted coconut','#E8D3A8'],biscoff:['Biscoff cookie','#B97A3A'],kiwi:['Kiwi','#7DBE3C']},
+ drizzle:{none:['None',''],nutella:['Nutella','#5A3220'],caramel:['Caramel','#D2852B'],condensed:['Condensed milk','#FFFBEA'],strawberry:['Strawberry syrup','#E8264E'],pistachio:['Pistachio cream','#9CB86A']}};
+const state={base:'strawberry',mix:'strawb',top:['strawberries','sprinkles'],drizzle:'condensed'};
+const opts=document.getElementById('opts');
+function pills(title,note,entries,isOn,onClick){const d=document.createElement('div');d.className='opt';d.innerHTML=`<h3>${title}<small>${note}</small></h3><div class="pills"></div>`;
+  const p=d.querySelector('.pills');entries.forEach(([k,label,col])=>{const b=document.createElement('button');b.type='button';b.innerHTML=(col?`<i style="background:${col};box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)"></i>`:'')+label;b.setAttribute('aria-pressed',isOn(k));b.onclick=()=>{onClick(k);buildUI();drawCup()};p.appendChild(b)});opts.appendChild(d)}
+function buildUI(){opts.innerHTML='';
+  pills('1 · Base flavor','pick one',B.base.map(k=>[k,FLAVORS[k].name,FLAVORS[k].c]),k=>k===state.base,k=>state.base=k);
+  pills('2 · Mix-in','chopped in on the plate',Object.entries(B.mix).map(([k,v])=>[k,v]),k=>k===state.mix,k=>state.mix=k);
+  pills('3 · Toppings','up to 3',Object.entries(B.top).map(([k,[v,c]])=>[k,v,c]),k=>state.top.includes(k),k=>{const i=state.top.indexOf(k);if(i>=0)state.top.splice(i,1);else{state.top.push(k);if(state.top.length>3)state.top.shift()}});
+  pills('4 · Drizzle','pick one',Object.entries(B.drizzle).map(([k,[v,c]])=>[k,v,c]),k=>k===state.drizzle,k=>state.drizzle=k)}
+const NAMES={strawberry:['Strawberry Fields','Pink Static'],mango:['Mango Sunset','Golden Hour'],matcha:['Green Machine','Zen Mode'],cookies:['Cookie Crush','Black & White'],pistachio:['Pistachio Dream','Dubai Drip'],chocolate:['Midnight Roll','Cocoa Loco'],coconut:['Island Snow','Coco Loco'],passion:['Passion Play','Tropic Heat'],mint:['Mint Condition','Cool Runnings'],coffee:['Café con Roll','Morning Rush'],berries:['Berry Blast','Purple Reign'],vanilla:['Classic Curl','Snow Day'],caramel:['Salty Sweet','Golden Spiral'],pb:['PB Power','Nutty Professor'],cheesecake:['Cheesecake Factory Reset','Pink Velvet'],pina:['Piña Party','Beach Mode']};
+const seeded=(s)=>{let h=0;for(const ch of s)h=(h*31+ch.charCodeAt(0))>>>0;return()=>{h=(h*1664525+1013904223)>>>0;return h/4294967296}};
+const svg=document.getElementById('cup');
+function drawCup(){const f=FLAVORS[state.base],R=seeded(JSON.stringify(state));
+  let s=`<defs><radialGradient id="cupg" cx="50%" cy="45%" r="60%"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#DDE6EF"/></radialGradient></defs>`;
+  s+=`<circle cx="200" cy="208" r="178" fill="rgba(43,15,44,.1)"/><circle cx="200" cy="200" r="178" fill="#2B0F2C"/><circle cx="200" cy="200" r="164" fill="url(#cupg)"/>`;
+  s+=`<text x="200" y="404" text-anchor="middle" font-family="Bagel Fat One, sans-serif" font-size="14" fill="#8FA3B8" letter-spacing="3">ROLLITO'S</text>`;
+  const pos=[[200,128],[130,180],[270,180],[160,262],[244,262]];
+  pos.forEach(([x,y],i)=>{const rr=50;s+=`<g class="rl" style="transform-origin:${x}px ${y}px;animation:pop .5s ${i*.06}s cubic-bezier(.3,1.7,.5,1) both"><circle cx="${x}" cy="${y+4}" r="${rr}" fill="rgba(0,0,0,.12)"/><circle cx="${x}" cy="${y}" r="${rr}" fill="${f.c}"/><path d="${spiral(x,y,rr*.92,2.6,80,i)}" fill="none" stroke="${f.d}" stroke-width="5" stroke-linecap="round" opacity=".75"/>`;
+    if(state.mix!=='none'){for(let k=0;k<5;k++){const a=R()*7,d=R()*rr*.8;s+=`<rect x="${x+Math.cos(a)*d-3}" y="${y+Math.sin(a)*d-3}" width="6" height="5" rx="1.5" fill="${({oreo:'#2a1c1c',strawb:'#E8264E',banana:'#F6E27A',cheesecake:'#FFF4E0',graham:'#C98B4A',nutella:'#5A3220'})[state.mix]}" opacity=".85"/>`}}
+    s+=`</g>`});
+  const dz=B.drizzle[state.drizzle];
+  if(dz[1]){let d='M70 150';for(let i=0;i<9;i++){d+=` Q ${90+i*28} ${i%2?120:300} ${110+i*28} ${i%2?250:150}`}s+=`<path d="${d}" fill="none" stroke="${dz[1]}" stroke-width="7" stroke-linecap="round" opacity=".92" style="stroke-dasharray:1400;stroke-dashoffset:1400;animation:drz 1s .3s ease-out forwards"/>`}
+  state.top.forEach((k,ti)=>{const col=B.top[k][1];for(let n=0;n<(k==='sprinkles'?34:k==='mochi'||k==='strawberries'||k==='biscoff'||k==='kiwi'?6:12);n++){const a=R()*7,d=Math.sqrt(R())*140,x=200+Math.cos(a)*d,y=200+Math.sin(a)*d;const dl=(.5+ti*.15+n*.01).toFixed(2);
+    const anim=`style="animation:drop .5s ${dl}s cubic-bezier(.3,1.6,.5,1) both;transform-origin:${x}px ${y}px"`;
+    if(k==='sprinkles'){const c=['#FF3D7F','#FFB21E','#5BC6F0','#6CBF6E','#fff'][n%5];s+=`<rect ${anim} x="${x}" y="${y}" width="11" height="3.6" rx="1.8" fill="${c}" transform="rotate(${R()*180} ${x} ${y})"/>`}
+    else if(k==='strawberries'){s+=`<g ${anim}><path d="M${x} ${y-12} C ${x+14} ${y-12} ${x+12} ${y+8} ${x} ${y+14} C ${x-12} ${y+8} ${x-14} ${y-12} ${x} ${y-12}Z" fill="${col}"/><path d="M${x-6} ${y-12} L${x} ${y-8} L${x+6} ${y-12}" stroke="#4F9A3A" stroke-width="3" fill="none"/></g>`}
+    else if(k==='mochi'){s+=`<rect ${anim} x="${x-9}" y="${y-9}" width="18" height="18" rx="7" fill="#FFF" stroke="#F3C6D3" stroke-width="2"/>`}
+    else if(k==='pocky'){s+=`<g ${anim} transform="rotate(${R()*180} ${x} ${y})"><rect x="${x-26}" y="${y-2.5}" width="52" height="5" rx="2.5" fill="#E8C792"/><rect x="${x-26}" y="${y-3}" width="34" height="6" rx="3" fill="#4E2C1D"/></g>`}
+    else if(k==='gummy'){s+=`<g ${anim} fill="${['#FFB21E','#FF3D7F','#6CBF6E','#E8264E'][n%4]}" opacity=".9"><circle cx="${x}" cy="${y}" r="6"/><circle cx="${x-4}" cy="${y-6}" r="3"/><circle cx="${x+4}" cy="${y-6}" r="3"/></g>`}
+    else if(k==='biscoff'||k==='kiwi'){s+=`<g ${anim}><circle cx="${x}" cy="${y}" r="13" fill="${col}"/>${k==='kiwi'?`<circle cx="${x}" cy="${y}" r="5" fill="#F2F6D0"/>`:`<circle cx="${x}" cy="${y}" r="9" fill="none" stroke="rgba(0,0,0,.2)" stroke-width="1.5"/>`}</g>`}
+    else{s+=`<circle ${anim} cx="${x}" cy="${y}" r="${k==='blueberry'?6:4}" fill="${col}"/>`}}});
+  svg.innerHTML=s;
+  const nm=NAMES[state.base]||['Your Roll'];document.getElementById('cupName').textContent=nm[Math.floor(R()*nm.length)];
+  const tops=state.top.map(k=>B.top[k][0].toLowerCase());
+  document.getElementById('cupSum').textContent=`${FLAVORS[state.base].name} rolls${state.mix!=='none'?' with '+B.mix[state.mix].toLowerCase()+' chopped in':''}${tops.length?', topped with '+tops.join(', '):''}${state.drizzle!=='none'?' and a '+B.drizzle[state.drizzle][0].toLowerCase()+' drizzle':''}.`;
+  const base=state.base==='pistachio'?8.5:state.base==='cheesecake'?9:8;
+  document.getElementById('cupPrice').textContent=`Rolls from $${base.toFixed(2)} · toppings priced in store`}
+const st=document.createElement('style');st.textContent='@keyframes pop{from{transform:scale(.2)}to{transform:scale(1)}}@keyframes drop{from{transform:translateY(-40px) scale(1.4)}to{transform:none}}@keyframes drz{to{stroke-dashoffset:0}}';document.head.appendChild(st);
+document.getElementById('shuffle').onclick=()=>{const r=a=>a[Math.floor(Math.random()*a.length)];state.base=r(B.base);state.mix=r(Object.keys(B.mix));const t=Object.keys(B.top).sort(()=>Math.random()-.5);state.top=t.slice(0,1+Math.floor(Math.random()*3));state.drizzle=r(Object.keys(B.drizzle));buildUI();drawCup()};
+buildUI();drawCup();
+
+/* ---------- CART canvas ---------- */
+(function(){const c=document.getElementById('cartCanvas'),x=c.getContext('2d');let w,h;function rs(){const r=c.getBoundingClientRect();w=r.width;h=r.height;c.width=w*dpr;c.height=h*dpr;x.setTransform(dpr,0,0,dpr,0,0)}rs();addEventListener('resize',rs);
+  function f(t){x.clearRect(0,0,w,h);const s=Math.min(w,h)/400;x.save();x.translate(w/2,h/2+20*s);x.scale(s,s);
+    const bob=reduce?0:Math.sin(t/500)*3;
+    // umbrella
+    x.save();x.translate(0,-150+bob);const cols=['#FF3D7F','#fff','#5BC6F0','#fff','#FF3D7F','#fff'];for(let i=0;i<6;i++){x.fillStyle=cols[i];x.beginPath();x.moveTo(0,0);x.arc(0,30,140,Math.PI+i*Math.PI/6,Math.PI+(i+1)*Math.PI/6);x.closePath();x.fill()}x.restore();
+    x.fillStyle='#2B0F2C';x.fillRect(-4,-120+bob,8,120);
+    // body
+    x.fillStyle='#fff';x.beginPath();x.roundRect(-130,0,260,120,22);x.fill();
+    x.fillStyle='#FF3D7F';x.font='44px "Bagel Fat One", sans-serif';x.textAlign='center';x.fillText("Rollito's",0,72);
+    x.fillStyle='#C9D6E3';x.fillRect(-120,-14,240,16);
+    // rolls on top
+    ['#FF6F9C','#FFC23D','#9ACD7A','#5BC6F0'].forEach((c,i)=>{const xx=-75+i*50,yy=-28+(reduce?0:Math.sin(t/300+i)*2);x.fillStyle=c;x.beginPath();x.arc(xx,yy,18,0,7);x.fill();x.strokeStyle='rgba(43,15,44,.35)';x.lineWidth=3;x.beginPath();for(let k=0;k<=40;k++){const tt=k/40,a=tt*Math.PI*4.6,rr=16*tt;k?x.lineTo(xx+Math.cos(a)*rr,yy+Math.sin(a)*rr):x.moveTo(xx,yy)}x.stroke()});
+    // wheels
+    [-80,80].forEach(wx=>{x.save();x.translate(wx,135);x.rotate(reduce?0:t/400);x.fillStyle='#2B0F2C';x.beginPath();x.arc(0,0,26,0,7);x.fill();x.strokeStyle='#FFB21E';x.lineWidth=4;for(let k=0;k<4;k++){x.beginPath();x.moveTo(0,0);x.lineTo(Math.cos(k*Math.PI/2)*20,Math.sin(k*Math.PI/2)*20);x.stroke()}x.restore()});
+    x.restore();if(!reduce)requestAnimationFrame(f)}requestAnimationFrame(f)})();
+
+/* ---------- CATERING ---------- */
+document.getElementById('quote').addEventListener('submit',e=>{e.preventDefault();const f=e.target;const name=f.querySelector('#q-name').value.trim(),contact=f.querySelector('#q-contact').value.trim(),date=f.querySelector('#q-date').value;const ok=document.getElementById('ok');
+  if(!name||!contact||!date){ok.style.background='#FFD6E3';ok.textContent='Add your name, event date and a phone or email so we can get back to you.';ok.classList.add('show');return}
+  ok.style.background='';ok.textContent=`Thanks ${name}! Your ${f.querySelector('#q-type').value.toLowerCase()} request for ${new Date(date+'T12:00').toLocaleDateString(undefined,{month:'long',day:'numeric'})} is ready. For the fastest reply, text or call (609) 273-8541.`;ok.classList.add('show')});
+
+/* ---------- REWARDS ---------- */
+const stEl=document.getElementById('stamps');let stamps=4;
+for(let i=0;i<10;i++){const b=document.createElement('button');b.type='button';b.setAttribute('aria-label',`Stamp ${i+1}`);b.innerHTML=`<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="${i===9?'#FFB21E':'#FF3D7F'}"/><path d="${spiral(20,20,11,2.2,50)}" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>`;b.onclick=()=>{stamps=stamps===i+1?i:i+1;paint()};stEl.appendChild(b)}
+function paint(){[...stEl.children].forEach((b,i)=>b.classList.toggle('on',i<stamps));document.getElementById('stampFoot').textContent=stamps>=10?'10 of 10 · your next roll is FREE':`${stamps} of 10 · ${10-stamps} more to a free roll`}paint();
+
+/* ---------- VISIT ---------- */
+const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const now=new Date(new Date().toLocaleString('en-US',{timeZone:'America/New_York'}));const td=now.getDay();
+document.getElementById('hours').innerHTML=[1,2,3,4,5,6,0].map(d=>`<div class="${d===td?'today':''}"><span>${days[d]}${d===td?' · today':''}</span><span>2:00 – 10:00 PM</span></div>`).join('');
+const hr=now.getHours()+now.getMinutes()/60,open=hr>=14&&hr<22;const pill=document.getElementById('openPill');pill.classList.toggle('open',open);
+document.getElementById('openTxt').textContent=open?`Open now · closes 10 PM`:(hr<14?'Opens today at 2 PM':'Closed · opens tomorrow at 2 PM');
+document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=async()=>{const el=document.getElementById(b.dataset.copy);try{await navigator.clipboard.writeText(el.textContent);b.textContent='Copied'}catch(e){const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Selected'}setTimeout(()=>b.textContent=b.dataset.copy==='phone'?'Copy phone':'Copy email',1600)});
+})();
+</script>
+
+</body></html>

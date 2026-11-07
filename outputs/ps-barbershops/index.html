@@ -1,0 +1,915 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>P's Barbershops</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: a polished two-location barbershop site in P's brand colors. Full-bleed photo hero with a shop switcher, then services, the standard, locations, gallery, reviews, P, FAQ and booking. One 12-column grid, consistent 8px spacing scale, black and off-white sections alternating. */
+:root{
+  --black:#0b0b0b;
+  --ink:#141414;
+  --card:#1b1b1b;
+  --line:#2b2b2b;
+  --paper:#f6f5f1;
+  --paper-2:#ecebe6;
+  --stone:#a9a9a4;
+  --muted:#5d5d58;
+  --red:#d12b3a;
+  --blue:#2356b8;
+  --gold:#d6a943;
+  --green:#2fbf57;
+  --fd:"Unbounded","Arial Black",sans-serif;
+  --f:"Manrope","Helvetica Neue",Arial,sans-serif;
+  --gut:clamp(20px,4vw,48px);
+  --max:1240px;
+  --r:14px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{overflow-x:clip}
+body{margin:0;background:var(--black);color:var(--paper);font-family:var(--f);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button{font:inherit;color:inherit}
+img{display:block;max-width:100%}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:4px}
+h1,h2,h3,h4,p{margin:0}
+.wrap{max-width:var(--max);margin-inline:auto;padding-inline:var(--gut)}
+.h1,.h2{font-family:var(--fd);font-weight:800;letter-spacing:-.035em;line-height:1.02;text-wrap:balance}
+.h2{font-size:clamp(30px,3.9vw,52px)}
+.sub{color:var(--stone);font-size:clamp(17px,1.3vw,19px);max-width:56ch}
+.kicker{display:inline-flex;align-items:center;gap:10px;font-weight:700;font-size:14px;color:var(--gold);margin-bottom:16px}
+.kicker::before{content:"";width:22px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--red) 50%,var(--blue) 50%)}
+section{padding-block:clamp(80px,9vw,120px)}
+.light{background:var(--paper);color:var(--black)}
+.light .sub{color:var(--muted)}
+.sec-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:20px 48px;margin-bottom:48px}
+.sec-head>div{max-width:640px}
+.sec-head .sub{margin-top:14px}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 24px;border-radius:10px;font-weight:700;font-size:16px;text-decoration:none;cursor:pointer;border:1px solid transparent;transition:transform .2s var(--ease),background .2s,box-shadow .2s,border-color .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-2px)}
+.btn.primary{background:var(--red);color:#fff;box-shadow:0 10px 24px -10px rgba(209,43,58,.7)}
+.btn.primary:hover{background:#e0384a}
+.btn.light-btn{background:var(--paper);color:var(--black)}
+.btn.outline{border-color:rgba(246,245,241,.35);color:var(--paper)}
+.btn.outline:hover{border-color:var(--paper);background:rgba(246,245,241,.06)}
+.light .btn.outline{border-color:rgba(11,11,11,.25);color:var(--black)}
+.btn svg{width:18px;height:18px;flex:none}
+
+/* header */
+.top{position:fixed;inset:0 0 auto 0;z-index:60;padding-top:env(safe-area-inset-top,0px);transition:background .3s,box-shadow .3s}
+.top.solid{background:rgba(11,11,11,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 1px 0 var(--line)}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px;height:76px;transition:height .3s}
+.top.solid .wrap{height:64px}
+.brand{display:flex;align-items:center;text-decoration:none;flex:none}
+.brand img{height:68px;width:auto;transition:height .3s var(--ease),transform .4s var(--ease);filter:drop-shadow(0 4px 12px rgba(0,0,0,.6))}
+.top.solid .brand img{height:50px}
+.brand:hover img{transform:rotate(-4deg) scale(1.06)}
+@media (max-width:640px){.brand img{height:50px}.top.solid .brand img{height:44px}}
+.nav{display:flex;gap:28px}
+.nav a{font-weight:600;font-size:15px;text-decoration:none;color:var(--stone);transition:color .2s;position:relative}
+.nav a:hover,.nav a.on{color:var(--paper)}
+.nav a.on::after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:2px;background:var(--red);border-radius:2px}
+.top-r{display:flex;align-items:center;gap:16px}
+.top-r .tel{font-weight:600;font-size:15px;text-decoration:none;color:var(--stone);font-variant-numeric:tabular-nums}
+.top-r .btn{padding:11px 18px;font-size:15px}
+.menu-btn{display:none;width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:none;cursor:pointer;place-items:center}
+.menu-btn span{display:block;width:18px;height:2px;background:var(--paper);box-shadow:0 6px 0 var(--paper),0 -6px 0 var(--paper)}
+@media (max-width:1020px){.nav,.top-r .tel{display:none}.menu-btn{display:grid}}
+@media (max-width:480px){.top-r .btn{display:none}.brand{font-size:26px}}
+.drawer{position:fixed;inset:0;z-index:70;background:var(--black);padding:calc(90px + env(safe-area-inset-top,0px)) var(--gut) 40px;display:flex;flex-direction:column;gap:6px;transform:translateY(-100%);transition:transform .5s var(--ease);visibility:hidden}
+.drawer.open{transform:none;visibility:visible}
+.drawer a{font-weight:800;font-stretch:115%;font-size:32px;text-decoration:none;padding:10px 0;border-bottom:1px solid var(--line)}
+.drawer .close{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));right:var(--gut);width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:none;font-size:22px;cursor:pointer}
+
+/* hero */
+.hero{position:relative;min-height:min(880px,100svh);display:flex;align-items:flex-end;padding:calc(120px + env(safe-area-inset-top,0px)) 0 48px;overflow:hidden;isolation:isolate}
+.hero .bg{position:absolute;inset:0;z-index:-2}
+.hero .bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.08);transition:opacity 1s var(--ease)}
+.hero .bg img.on{opacity:1;animation:kb 18s ease-out both}
+@keyframes kb{from{transform:scale(1.12)}to{transform:scale(1)}}
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(11,11,11,.92) 0%,rgba(11,11,11,.72) 45%,rgba(11,11,11,.25) 100%),linear-gradient(0deg,rgba(11,11,11,.95) 0%,transparent 45%)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:48px;align-items:end}
+@media (max-width:960px){.hero-grid{grid-template-columns:1fr}}
+.status{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border-radius:999px;background:rgba(11,11,11,.55);border:1px solid rgba(246,245,241,.18);backdrop-filter:blur(8px);font-weight:600;font-size:14px}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--green);flex:none;box-shadow:0 0 0 0 rgba(47,191,87,.55);animation:ping 2s infinite}
+.dot.closed{background:var(--red);animation:none}
+@keyframes ping{70%,100%{box-shadow:0 0 0 9px rgba(47,191,87,0)}}
+.h1{font-size:clamp(40px,6.2vw,88px);margin-top:22px}
+.h1 .line{display:block;overflow:hidden;padding-bottom:.06em}
+.h1 .line>span{display:block}
+.h1 .accent{color:var(--gold)}
+.js .h1 .line>span{transform:translateY(105%)}
+.ready .h1 .line>span{transform:none;transition:transform 1s var(--ease)}
+.ready .h1 .line:nth-child(2)>span{transition-delay:.1s}
+.ready .h1 .line:nth-child(3)>span{transition-delay:.2s}
+.hero .sub{margin-top:22px;color:#d3d2cd}
+.hero-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+
+.picker{background:rgba(20,20,20,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(246,245,241,.12);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:10px}
+.picker h2{font-size:14px;font-weight:700;color:var(--stone);padding:4px 6px 6px}
+.pick{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:14px;align-items:center;padding:12px;border-radius:14px;border:1px solid transparent;background:none;text-align:left;cursor:pointer;transition:background .25s,border-color .25s}
+.pick:hover{background:rgba(246,245,241,.05)}
+.pick[aria-pressed="true"]{background:rgba(246,245,241,.08);border-color:rgba(214,169,67,.6)}
+.pick img{width:64px;height:64px;object-fit:contain;border-radius:10px;background:#000}
+.pick b{display:block;font-weight:800;font-stretch:110%;font-size:17px}
+.pick small{display:block;color:var(--stone);font-size:14px;line-height:1.4}
+.pick .st{display:flex;align-items:center;gap:6px;color:var(--paper);font-size:13px;margin-top:4px}
+.pick .st .dot{width:7px;height:7px}
+.pick .arrow{width:28px;height:28px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;transition:background .25s,transform .25s}
+.pick[aria-pressed="true"] .arrow{background:var(--gold);border-color:var(--gold);color:var(--black)}
+.pick .arrow svg{width:14px;height:14px}
+
+.facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:56px;border-top:1px solid rgba(246,245,241,.15)}
+@media (max-width:720px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.fact{padding:22px 20px 0 0}
+.fact b{font-family:var(--fd);letter-spacing:-.03em;display:block;font-weight:900;font-stretch:120%;font-size:clamp(30px,3.2vw,42px);line-height:1;font-variant-numeric:tabular-nums}
+.fact span{color:var(--stone);font-size:14px}
+
+.strip{height:6px;background:repeating-linear-gradient(-45deg,var(--red) 0 10px,var(--paper) 10px 20px,var(--blue) 20px 30px,var(--paper) 30px 40px);background-size:56.6px 6px;animation:pole 3s linear infinite}
+@keyframes pole{to{background-position:56.6px 0}}
+
+/* services */
+.svc{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+@media (max-width:1000px){.svc{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.svc{grid-template-columns:1fr}}
+.svc-card{position:relative;text-align:left;background:#fff;border:1px solid var(--paper-2);border-radius:18px;padding:26px 24px 24px;cursor:pointer;display:flex;flex-direction:column;gap:12px;min-height:250px;transition:transform .3s var(--ease),box-shadow .3s,border-color .3s;color:var(--black)}
+.svc-card:hover{transform:translateY(-6px);box-shadow:0 24px 40px -24px rgba(11,11,11,.35)}
+.svc-card[aria-pressed="true"]{border-color:var(--black);box-shadow:0 0 0 1px var(--black),0 24px 40px -24px rgba(11,11,11,.35)}
+.svc-card .ic{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;background:var(--black);color:var(--gold)}
+.svc-card .ic svg{width:26px;height:26px}
+.svc-card h3{font-weight:800;font-stretch:112%;font-size:21px;line-height:1.2}
+.svc-card p{color:var(--muted);font-size:15px;line-height:1.5;flex:1}
+.svc-card .price{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--paper-2);padding-top:14px}
+.svc-card .price b{font-family:var(--fd);letter-spacing:-.03em;font-weight:900;font-stretch:120%;font-size:32px;line-height:1}
+.svc-card .price span{font-size:14px;font-weight:600;color:var(--muted)}
+.svc-card .chk{position:absolute;top:22px;right:22px;width:26px;height:26px;border-radius:50%;border:2px solid var(--paper-2);display:grid;place-items:center;transition:background .2s,border-color .2s}
+.svc-card[aria-pressed="true"] .chk{background:var(--red);border-color:var(--red)}
+.svc-card[aria-pressed="true"] .chk::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:translateY(-1px) rotate(45deg)}
+.summary{margin-top:24px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding:18px 22px;border-radius:16px;background:var(--black);color:var(--paper)}
+.summary .l{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+.summary b{font-family:var(--fd);letter-spacing:-.03em;font-weight:900;font-stretch:120%;font-size:34px;line-height:1;font-variant-numeric:tabular-nums}
+.summary span{color:var(--stone);font-size:15px}
+
+/* standard */
+.std{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(32px,6vw,80px);align-items:center}
+@media (max-width:880px){.std{grid-template-columns:1fr}}
+.std .ph{position:relative;border-radius:20px;overflow:hidden;aspect-ratio:4/3.4}
+.std .ph img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.std .ph:hover img{transform:scale(1.04)}
+.std .ph .badge{position:absolute;left:18px;bottom:18px;background:rgba(11,11,11,.8);backdrop-filter:blur(8px);padding:10px 14px;border-radius:12px;font-weight:700;font-size:14px}
+.vals{display:grid;gap:4px;margin-top:32px}
+.val{display:grid;grid-template-columns:48px minmax(0,1fr);gap:16px;padding:18px 0;border-top:1px solid var(--line)}
+.val .n{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;background:var(--card);color:var(--gold)}
+.val .n svg{width:24px;height:24px}
+.val h3{font-weight:800;font-stretch:112%;font-size:19px}
+.val p{color:var(--stone);font-size:15px;margin-top:2px}
+
+/* locations */
+.locs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+@media (max-width:880px){.locs{grid-template-columns:1fr}}
+.loc{background:#fff;border:1px solid var(--paper-2);border-radius:20px;overflow:hidden;color:var(--black);display:flex;flex-direction:column;transition:transform .3s var(--ease),box-shadow .3s}
+.loc:hover{transform:translateY(-6px);box-shadow:0 30px 50px -30px rgba(11,11,11,.4)}
+.loc .img{position:relative;aspect-ratio:16/10;overflow:hidden;background:var(--black)}
+.loc .img img.photo{width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ease)}
+.loc:hover .img img.photo{transform:scale(1.05)}
+.loc .img .lg{position:absolute;left:18px;bottom:-34px;width:96px;height:96px;border-radius:18px;background:#000;border:4px solid #fff;object-fit:contain;padding:4px}
+.loc .body{padding:50px 26px 26px;display:flex;flex-direction:column;gap:16px;flex:1}
+.loc .hd{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.loc h3{font-family:var(--fd);letter-spacing:-.03em;font-weight:800;font-size:24px;line-height:1.05}
+.loc .city{color:var(--muted);font-size:15px;margin-top:4px}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--paper);font-size:13px;font-weight:700}
+.loc dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 20px;margin:0;font-size:15px}
+.loc dt{color:var(--muted)}
+.loc dd{margin:0;font-weight:600;overflow-wrap:anywhere}
+.loc .acts{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
+.loc .acts .btn{padding:12px 18px;font-size:15px}
+
+/* gallery */
+.gal{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-rows:clamp(150px,16vw,220px);gap:14px}
+.gal button{position:relative;padding:0;border:0;border-radius:16px;overflow:hidden;cursor:zoom-in;background:var(--card)}
+.gal img{width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease),filter .4s}
+.gal button:hover img{transform:scale(1.06)}
+.gal button span{position:absolute;left:14px;bottom:12px;font-weight:700;font-size:14px;background:rgba(11,11,11,.7);backdrop-filter:blur(6px);padding:6px 10px;border-radius:8px;opacity:0;transform:translateY(6px);transition:opacity .3s,transform .3s}
+.gal button:hover span,.gal button:focus-visible span{opacity:1;transform:none}
+.g1{grid-column:span 7;grid-row:span 2}.g2{grid-column:span 5}.g3{grid-column:span 5}.g4{grid-column:span 4;grid-row:span 2}.g5{grid-column:span 8;grid-row:span 2}
+@media (max-width:760px){.gal{grid-template-columns:1fr 1fr;grid-auto-rows:170px}.gal button{grid-column:span 1!important;grid-row:span 1!important}.gal .g1,.gal .g5{grid-column:span 2!important;grid-row:span 1!important}}
+.lb{position:fixed;inset:0;z-index:90;background:rgba(5,5,5,.94);display:grid;place-items:center;padding:24px}
+.lb[hidden]{display:none}
+.lb figure{margin:0;max-width:min(1100px,100%);animation:zoomin .35s var(--ease)}
+@keyframes zoomin{from{transform:scale(.94);opacity:0}}
+.lb img{max-height:80vh;width:auto;border-radius:14px;margin:auto}
+.lb figcaption{text-align:center;color:var(--stone);margin-top:12px}
+.lb .x{position:absolute;top:calc(16px + env(safe-area-inset-top,0px));right:16px;width:48px;height:48px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-size:20px;cursor:pointer}
+
+/* reviews */
+.revs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+@media (max-width:960px){.revs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.revs{grid-template-columns:1fr}}
+.rev{margin:0;background:#fff;border:1px solid var(--paper-2);border-radius:18px;padding:26px;display:flex;flex-direction:column;gap:20px;color:var(--black);transition:transform .3s var(--ease),box-shadow .3s}
+.rev:hover{transform:translateY(-4px);box-shadow:0 24px 40px -26px rgba(11,11,11,.35)}
+.rev svg{width:30px;height:30px;color:var(--red)}
+.rev:nth-child(even) svg{color:var(--blue)}
+.rev p{font-size:18px;line-height:1.5;font-weight:500;flex:1}
+.rev footer{display:flex;align-items:center;gap:12px;border-top:1px solid var(--paper-2);padding-top:16px}
+.rev .av{width:40px;height:40px;border-radius:50%;background:var(--black);color:var(--gold);display:grid;place-items:center;font-weight:800;font-size:15px}
+.rev b{display:block;font-size:15px}
+.rev small{color:var(--muted);font-size:13px}
+
+/* P */
+.p-grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(32px,6vw,80px);align-items:center}
+@media (max-width:880px){.p-grid{grid-template-columns:1fr}}
+.p-ph{position:relative;margin:0;max-width:520px}
+.p-ph img{width:100%;aspect-ratio:4/5;object-fit:cover;object-position:50% 30%;border-radius:20px}
+.p-ph::before{content:"";position:absolute;inset:18px -18px -18px 18px;border-radius:20px;background:repeating-linear-gradient(-45deg,var(--red) 0 12px,var(--paper) 12px 24px,var(--blue) 24px 36px,var(--paper) 36px 48px);z-index:-1;opacity:.9}
+.p-ph{isolation:isolate}
+.p-copy blockquote{margin:24px 0 0;font-weight:800;font-stretch:112%;font-size:clamp(24px,2.4vw,32px);line-height:1.25;padding-left:20px;border-left:4px solid var(--gold)}
+.p-copy .sub{margin-top:20px}
+.sig{margin-top:28px;width:120px}
+
+/* FAQ */
+.faq-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(32px,6vw,80px)}
+@media (max-width:880px){.faq-grid{grid-template-columns:1fr}}
+.faq details{border-bottom:1px solid #d9d8d2}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;font-weight:700;font-size:19px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary i{flex:none;width:30px;height:30px;border-radius:50%;background:var(--black);color:var(--paper);display:grid;place-items:center;font-style:normal;transition:transform .3s,background .3s}
+.faq details[open] summary i{transform:rotate(45deg);background:var(--red)}
+.faq details p{padding:0 50px 22px 0;color:var(--muted)}
+
+
+/* header buttons + mobile bar */
+.navbtn{font-weight:600;font-size:15px;text-decoration:none;color:var(--paper);padding:11px 16px;border-radius:10px;border:1px solid rgba(246,245,241,.22);transition:background .2s,border-color .2s}
+.navbtn:hover{background:rgba(246,245,241,.08);border-color:var(--paper)}
+.mbar{display:none}
+@media (max-width:640px){.top .navbtn{display:none}.top-r .btn{display:inline-flex!important;padding:10px 16px}
+  .mbar{display:grid;grid-template-columns:1fr 1.6fr;gap:10px;position:fixed;left:0;right:0;bottom:0;z-index:58;padding:10px 16px calc(10px + env(safe-area-inset-bottom,0px));background:rgba(11,11,11,.94);backdrop-filter:blur(12px);border-top:1px solid var(--line);transform:translateY(110%);transition:transform .35s var(--ease)}
+  .mbar.on{transform:none}.mbar .btn{padding:13px}
+  body{padding-bottom:76px}}
+
+/* booking widget */
+.bw{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:22px;align-items:start}
+@media (max-width:960px){.bw{grid-template-columns:1fr}}
+.bw-main{background:#fff;border:1px solid var(--paper-2);border-radius:22px;padding:clamp(20px,3vw,32px);color:var(--black);box-shadow:0 30px 60px -40px rgba(11,11,11,.35);min-width:0}
+.steps{list-style:none;margin:0 0 28px;padding:0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.steps li{display:flex;flex-direction:column;gap:8px;font-size:13px;font-weight:600;color:var(--muted)}
+.steps li::before{content:"";height:4px;border-radius:4px;background:var(--paper-2);transition:background .4s}
+.steps li b{display:none}
+.steps li.done::before,.steps li.on::before{background:var(--black)}
+.steps li.on{color:var(--black)}
+@media (max-width:560px){.steps li span{display:none}.steps li.on span{display:inline;white-space:nowrap}}
+.pane{animation:paneIn .45s var(--ease)}
+@keyframes paneIn{from{opacity:0;transform:translateX(14px)}}
+.pt{font-family:var(--fd);letter-spacing:-.03em;font-weight:700;font-size:22px;margin-bottom:20px}
+.ph4{font-weight:800;font-size:16px;margin:26px 0 12px}
+.ph4 small,.fields label small{color:var(--muted);font-weight:500}
+.loc-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:620px){.loc-opts{grid-template-columns:1fr}}
+.lo{display:grid;grid-template-columns:72px minmax(0,1fr);gap:16px;align-items:center;text-align:left;padding:16px;border-radius:16px;border:2px solid var(--paper-2);background:#fff;cursor:pointer;transition:border-color .2s,transform .2s,box-shadow .2s}
+.lo:hover{border-color:#cfcdc6;transform:translateY(-2px)}
+.lo[aria-pressed="true"]{border-color:var(--black);box-shadow:0 0 0 1px var(--black)}
+.lo img{width:72px;height:72px;border-radius:14px;background:#000;object-fit:contain}
+.lo b{display:block;font-weight:800;font-size:18px}
+.lo small{display:block;color:var(--muted);font-size:14px;line-height:1.4}
+.lo em{display:flex;align-items:center;gap:6px;font-style:normal;font-size:13px;font-weight:600;margin-top:6px}
+.lo .dot{width:7px;height:7px}
+.svc-list{display:grid;gap:10px}
+.so{display:flex;justify-content:space-between;align-items:center;gap:16px;text-align:left;padding:16px 18px;border-radius:14px;border:2px solid var(--paper-2);background:#fff;cursor:pointer;transition:border-color .2s,background .2s}
+.so:hover{border-color:#cfcdc6}
+.so[aria-pressed="true"]{border-color:var(--black);background:var(--paper)}
+.so b{display:block;font-weight:800;font-size:17px}
+.so small{display:block;color:var(--muted);font-size:14px}
+.so strong{font-weight:900;font-stretch:115%;font-size:20px;flex:none}
+.so.add strong::before{content:"";display:inline-block;width:20px;height:20px;border-radius:6px;border:2px solid #cfcdc6;margin-right:12px;vertical-align:-3px;transition:background .2s,border-color .2s}
+.so.add[aria-pressed="true"] strong::before{background:var(--red) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M5 10l3 3 7-7' stroke='white' stroke-width='2.4' fill='none' stroke-linecap='round'/></svg>") center/14px no-repeat;border-color:var(--red)}
+.month{font-weight:800;font-size:15px;margin-bottom:10px}
+.days-wrap{display:grid;grid-template-columns:36px minmax(0,1fr) 36px;gap:8px;align-items:center}
+.dnav{height:36px;border-radius:10px;border:1px solid var(--paper-2);background:#fff;cursor:pointer;font-size:20px;line-height:1}
+.dnav:disabled{opacity:.3;cursor:default}
+.days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+.dy{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 0;border-radius:12px;border:2px solid var(--paper-2);background:#fff;cursor:pointer;transition:border-color .2s,background .2s,color .2s}
+.dy small{font-size:12px;font-weight:600;color:var(--muted)}
+.dy b{font-family:var(--fd);letter-spacing:-.03em;font-weight:900;font-size:20px;font-variant-numeric:tabular-nums}
+.dy:hover{border-color:#cfcdc6}
+.dy[aria-pressed="true"]{background:var(--black);border-color:var(--black);color:#fff}
+.dy[aria-pressed="true"] small{color:var(--stone)}
+.slot-groups{margin-top:22px;display:grid;gap:18px}
+.slot-groups h5{margin:0 0 10px;font-size:14px;font-weight:700;color:var(--muted)}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px}
+.sl{padding:11px 0;border-radius:10px;border:1px solid var(--paper-2);background:#fff;cursor:pointer;font-weight:700;font-size:15px;font-variant-numeric:tabular-nums;transition:border-color .2s,background .2s,color .2s,transform .15s}
+.sl:hover{border-color:var(--black)}
+.sl:disabled{color:#bdbcb6;background:var(--paper);border-color:var(--paper);cursor:not-allowed;text-decoration:line-through}
+.sl[aria-pressed="true"]{background:var(--red);border-color:var(--red);color:#fff;transform:scale(1.03)}
+.sl.first{grid-column:1/-1;text-align:left;padding:13px 16px}
+.note{color:var(--muted);font-size:14px;margin-top:18px}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.fields .full{grid-column:1/-1}
+@media (max-width:560px){.fields{grid-template-columns:1fr}}
+.fields label{display:block;font-weight:700;font-size:14px;margin-bottom:8px}
+.fields input{width:100%;font:inherit;font-size:16px;padding:14px;border-radius:12px;border:2px solid var(--paper-2);background:#fff;color:var(--black)}
+.fields input:focus{outline:none;border-color:var(--black)}
+.review{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px 24px;margin:0;padding:20px;border-radius:16px;background:var(--paper)}
+.review dt{color:var(--muted);font-size:15px}
+.review dd{margin:0;font-weight:700;overflow-wrap:anywhere}
+.nav-row{display:flex;justify-content:space-between;gap:12px;margin-top:28px;padding-top:22px;border-top:1px solid var(--paper-2)}
+.nav-row .btn.outline{border-color:var(--paper-2);color:var(--black)}
+.nav-row .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+
+.done{text-align:center;padding-block:10px}
+.done .sub{margin:8px auto 0}
+.done .sel{color:var(--black);user-select:all}
+.okmark{width:72px;height:72px;margin:0 auto 14px}
+.okmark svg{width:100%;height:100%;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.okmark circle{stroke:var(--green);stroke-dasharray:151;stroke-dashoffset:151;animation:draw .6s var(--ease) forwards}
+.okmark path{stroke:var(--green);stroke-dasharray:40;stroke-dashoffset:40;animation:draw .4s .45s var(--ease) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.msg{white-space:pre-wrap;text-align:left;font-family:var(--f);font-size:15px;line-height:1.5;background:var(--paper);border-radius:14px;padding:18px;margin:22px auto 0;max-width:480px;word-break:break-word}
+.done-acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.done-acts .btn.outline{border-color:var(--paper-2);color:var(--black)}
+.bw-side{position:sticky;top:90px;background:var(--black);color:var(--paper);border-radius:22px;padding:26px}
+.bw-side h3{font-weight:800;font-size:15px;color:var(--stone);margin-bottom:16px}
+.sum-shop{display:grid;grid-template-columns:52px minmax(0,1fr);gap:14px;align-items:center;padding-bottom:18px;border-bottom:1px solid var(--line)}
+.sum-shop img,.sum-shop .ph-logo{width:52px;height:52px;border-radius:12px;background:#222;object-fit:contain}
+.sum-shop b{display:block;font-weight:800;font-size:17px}
+.sum-shop small{color:var(--stone);font-size:13px}
+.sum{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px 18px;margin:18px 0;font-size:15px}
+.sum dt{color:var(--stone)}
+.sum dd{margin:0;font-weight:700;text-align:right;overflow-wrap:anywhere}
+.sum-total{display:flex;justify-content:space-between;align-items:baseline;padding-top:16px;border-top:1px solid var(--line)}
+.sum-total b{font-family:var(--fd);letter-spacing:-.03em;font-weight:900;font-stretch:118%;font-size:34px;color:var(--gold);font-variant-numeric:tabular-nums}
+.sum-note{color:var(--stone);font-size:13px;margin-top:8px}
+@media (max-width:960px){.bw-side{position:static}}
+
+
+/* section color fixes after reorder */
+.loc .btn.outline{border-color:rgba(11,11,11,.22);color:var(--black)}
+.loc .btn.outline:hover{background:var(--paper)}
+.light .val{border-color:#dcdbd5}
+.light .val .n{background:var(--black)}
+.light .val p{color:var(--muted)}
+#faq .faq details{border-color:var(--line)}
+#faq .faq summary i{background:var(--paper);color:var(--black)}
+#faq .faq details[open] summary i{background:var(--red);color:#fff}
+#faq .faq details p{color:var(--stone)}
+
+/* ===== language toggle ===== */
+.lang{position:relative;display:grid;grid-template-columns:1fr 1fr;padding:4px;border-radius:999px;background:rgba(246,245,241,.08);border:1px solid rgba(246,245,241,.18);isolation:isolate}
+.lang button{position:relative;z-index:1;border:0;background:none;padding:7px 12px;font-weight:800;font-size:13px;letter-spacing:.06em;cursor:pointer;color:var(--stone);transition:color .3s}
+.lang button[aria-pressed="true"]{color:var(--black)}
+.lang .knob{position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;background:var(--gold);transition:transform .45s cubic-bezier(.5,1.6,.4,1);z-index:0}
+.lang.es .knob{transform:translateX(100%)}
+.swap{animation:swapIn .5s var(--ease)}
+@keyframes swapIn{from{opacity:.2;filter:blur(4px)}}
+/* ===== progress ===== */
+.progress{position:fixed;top:0;left:0;height:3px;width:100%;z-index:80;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--red),var(--gold),var(--blue))}
+/* ===== ticker ===== */
+.ticker{display:flex;overflow:hidden;background:var(--black);border-bottom:1px solid var(--line);padding-block:16px}
+.tk{display:flex;flex:none;gap:46px;padding-right:46px;animation:tick 34s linear infinite}
+.ticker:hover .tk{animation-play-state:paused}
+.tk span{font-family:var(--fd);font-weight:700;font-size:clamp(18px,2.2vw,26px);letter-spacing:-.02em;white-space:nowrap;display:flex;align-items:center;gap:46px}
+.tk span::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--red)}
+.tk span:nth-child(3n+2)::after{background:var(--blue)}.tk span:nth-child(3n)::after{background:var(--gold)}
+.tk span:nth-child(even){color:transparent;-webkit-text-stroke:1px var(--stone)}
+@keyframes tick{to{transform:translateX(-100%)}}
+/* ===== gold shimmer ===== */
+.shine{background:linear-gradient(100deg,#b9842a 0%,#f3d58a 25%,#d6a943 45%,#fff2c4 55%,#d6a943 70%,#b9842a 100%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:shimmer 5s ease-in-out infinite}
+@keyframes shimmer{0%,100%{background-position:100% 0}50%{background-position:0 0}}
+/* ===== heading + image reveals ===== */
+.rv.in .h2,.rv.in.h2{animation:clipUp 1s var(--ease) both}
+@keyframes clipUp{from{clip-path:inset(0 0 100% 0);transform:translateY(30px)}to{clip-path:inset(0 0 -10% 0)}}
+.rimg{overflow:hidden}
+.rimg.in img{animation:imgIn 1.3s var(--ease) both}
+@keyframes imgIn{from{clip-path:inset(100% 0 0 0);transform:scale(1.25)}to{clip-path:inset(0 0 0 0)}}
+.kicker::before{transition:width .8s var(--ease)}
+.rv:not(.in) .kicker::before{width:22px}
+.rv.in .kicker::before{animation:grow .9s .2s var(--ease) both}
+@keyframes grow{from{width:0}}
+/* ===== button shine + magnetic ===== */
+.btn.primary{position:relative;overflow:hidden;isolation:isolate}
+.btn.primary::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.45) 50%,transparent 70%);transform:translateX(-120%)}
+.btn.primary:hover::after{animation:sweep .8s var(--ease)}
+.hero-ctas .btn.primary::after{animation:sweep 1s 2.2s var(--ease),sweep 1s 6s var(--ease)}
+@keyframes sweep{to{transform:translateX(120%)}}
+.mag{transition:transform .25s var(--ease)}
+/* ===== card tilt ===== */
+.svc-card,.loc{transform-style:preserve-3d;will-change:transform}
+.svc-card .ic{transition:transform .5s cubic-bezier(.4,1.8,.5,1)}
+.svc-card:hover .ic{transform:rotate(-10deg) scale(1.12)}
+.svc-card[aria-pressed="true"] .ic{background:var(--red);color:#fff}
+/* hero parallax */
+.hero .bg{will-change:transform}
+.pick:hover .arrow{transform:translateX(3px)}
+.facts .fact{transition:transform .3s var(--ease)}
+.facts .fact:hover{transform:translateY(-4px)}
+.facts .fact:hover b{color:var(--gold)}
+/* ===== phone layout ===== */
+@media (max-width:640px){
+  .hero{padding-top:calc(100px + env(safe-area-inset-top,0px))}
+  .hero-ctas .btn{flex:1}
+  .picker{padding:12px}.pick{grid-template-columns:52px minmax(0,1fr) auto}.pick img{width:52px;height:52px}
+  .svc{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin-inline:calc(var(--gut)*-1);padding:6px var(--gut) 18px;scrollbar-width:none}
+  .svc::-webkit-scrollbar{display:none}
+  .svc-card{flex:0 0 78%;scroll-snap-align:center;min-height:230px}
+  .revs{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;margin-inline:calc(var(--gut)*-1);padding:6px var(--gut) 18px;scrollbar-width:none}
+  .revs::-webkit-scrollbar{display:none}
+  .rev{flex:0 0 84%;scroll-snap-align:center}
+  .swipe-hint{display:block!important}
+  .lang button{padding:6px 9px}
+  .top-r{gap:8px}
+  .sec-head{margin-bottom:32px}
+  .loc .acts .btn{flex:1}
+}
+.swipe-hint{display:none;color:var(--muted);font-size:13px;font-weight:600;margin-top:-6px}
+
+/* cta band */
+.cta{background:var(--red);color:#fff;padding-block:clamp(56px,7vw,80px);position:relative;overflow:hidden}
+.cta .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:24px;position:relative}
+.cta h2{font-family:var(--fd);letter-spacing:-.03em;font-weight:800;font-size:clamp(26px,3.4vw,44px);line-height:1.05;max-width:18ch}
+.cta::before{content:"";position:absolute;right:-10%;top:-60%;width:60%;height:220%;background:repeating-linear-gradient(-45deg,rgba(255,255,255,.08) 0 30px,transparent 30px 60px)}
+
+/* footer */
+footer.site{padding-block:64px 36px;border-top:1px solid var(--line)}
+.f-grid{display:grid;grid-template-columns:minmax(0,1.4fr) repeat(3,minmax(0,1fr));gap:32px}
+@media (max-width:860px){.f-grid{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.f-grid{grid-template-columns:1fr}}
+.f-grid h4{font-size:15px;font-weight:800;margin-bottom:10px}
+.f-grid p,.f-grid a{display:block;color:var(--stone);text-decoration:none;line-height:1.8;font-size:15px;overflow-wrap:anywhere}
+.f-grid a:hover{color:var(--paper)}
+.legal{margin-top:44px;padding-top:22px;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--stone);font-size:13px}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,160%);visibility:hidden;background:var(--paper);color:var(--black);font-weight:700;padding:12px 18px;border-radius:12px;box-shadow:0 20px 40px -20px rgba(0,0,0,.8);z-index:95;transition:transform .35s var(--ease);max-width:calc(100% - 32px);text-align:center}
+.toast.on{transform:translate(-50%,0);visibility:visible}
+
+/* reveal (visible at rest; motion only when entering) */
+.rv.in{animation:up .9s var(--ease) both;animation-delay:var(--d,0s)}
+@keyframes up{from{opacity:.001;transform:translateY(28px)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.js .h1 .line>span{transform:none}html{scroll-behavior:auto}}
+</style>
+
+<div class="progress" id="progress" aria-hidden="true"></div>
+<header class="top" id="top-bar">
+  <div class="wrap">
+    <a class="brand" href="#home" aria-label="The Edge, P's Barbershop, home"><img src="img/edge-logo.png" alt="The Edge, P's Barber Shop logo"></a>
+    <div class="top-r">
+      <div class="lang" role="group" aria-label="Language"><span class="knob" aria-hidden="true"></span><button type="button" data-lang="en" aria-pressed="true">EN</button><button type="button" data-lang="es" aria-pressed="false">ES</button></div>
+      <a class="navbtn" href="#services">Prices</a>
+      <a class="navbtn" href="#locations">Locations</a>
+      <a class="btn primary" href="#book" data-book>Book now</a>
+    </div>
+  </div>
+</header>
+<div class="mbar" aria-label="Quick actions"><a class="btn outline" href="#services">Prices</a><a class="btn primary" href="#book" data-book>Book now</a></div>
+
+<main id="home">
+  <section class="hero" id="hero" aria-label="P's Barbershops">
+    <div class="bg" aria-hidden="true">
+      <img src="img/edge-interior.jpg" alt="" class="on" data-shop="edge">
+      <img src="img/sharp-interior.jpg" alt="" data-shop="sharp">
+    </div>
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <span class="status"><i class="dot" id="heroDot"></i><span id="heroStatus" data-dyn>Open daily, 9am to 9pm</span></span>
+          <h1 class="h1"><span class="line"><span>Fresh cuts.</span></span><span class="line"><span>Every age.</span></span><span class="line"><span class="accent shine">$35 flat.</span></span></h1>
+          <p class="sub">Two barbershops in the Inland Empire with one standard: every client leaves sharp. Walk in seven days a week or text us to hold your chair.</p>
+          <div class="hero-ctas">
+            <a class="btn primary" href="#book">Book your cut <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a class="btn outline" href="#services">View services</a>
+          </div>
+        </div>
+        <div class="picker" role="group" aria-label="Choose a location">
+          <h2>Choose your shop</h2>
+          <button class="pick" type="button" data-shop="edge" aria-pressed="true">
+            <img src="img/edge-logo.png" alt="">
+            <span><b>The Edge</b><small>397 W Baseline St, San Bernardino</small><span class="st"><i class="dot" data-dot></i><span data-st data-dyn>Open now</span></span></span>
+            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span>
+          </button>
+          <button class="pick" type="button" data-shop="sharp" aria-pressed="false">
+            <img src="img/sharp-logo.jpg" alt="">
+            <span><b>Sharp &amp; Faded</b><small>16005 Grand Ave, Lake Elsinore</small><span class="st"><i class="dot" data-dot></i><span data-st data-dyn>Open now</span></span></span>
+            <span class="arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 6l6 6-6 6"/></svg></span>
+          </button>
+        </div>
+      </div>
+      <div class="facts">
+        <div class="fact"><b data-count="2">2</b><span>Locations</span></div>
+        <div class="fact"><b data-count="7">7</b><span>Days a week</span></div>
+        <div class="fact"><b>9–9</b><span>Daily hours</span></div>
+        <div class="fact"><b data-count="35" data-pre="$">$35</b><span>Any haircut</span></div>
+      </div>
+    </div>
+  </section>
+  <div class="strip" aria-hidden="true"></div>
+  <div class="ticker" aria-hidden="true"><div class="tk"><span>Fades</span><span>Tapers</span><span>Designs</span><span>Line-ups</span><span>Beards</span><span>Kids cuts</span><span>Walk-ins welcome</span><span>Open 7 days</span></div><div class="tk"><span>Fades</span><span>Tapers</span><span>Designs</span><span>Line-ups</span><span>Beards</span><span>Kids cuts</span><span>Walk-ins welcome</span><span>Open 7 days</span></div></div>
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  <section class="light" id="services">
+    <div class="wrap">
+      <div class="sec-head rv">
+        <div><span class="kicker">Services</span><h2 class="h2">Simple pricing. Same at both shops.</h2><p class="sub">Every haircut is $35 for every age. Add a design or beard work for $10. Select what you want and we'll put it in your booking text.</p></div>
+      </div>
+      <div class="svc" id="svc">
+        <button class="svc-card rv" type="button" data-id="cut" data-price="35" aria-pressed="true">
+          <span class="chk" aria-hidden="true"></span>
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4h6l1 16a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1z"/><path d="M8 4V2h8v2"/><path d="M10 2V1M12 2V1M14 2V1"/><circle cx="12" cy="13" r="1.6"/></svg></span>
+          <h3>Haircut &amp; fade</h3><p>Fades, tapers and scissor cuts, finished clean. All ages.</p>
+          <span class="price"><b>$35</b><span>All ages</span></span>
+        </button>
+        <button class="svc-card rv" type="button" data-id="kids" data-price="35" aria-pressed="false" style="--d:.08s">
+          <span class="chk" aria-hidden="true"></span>
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M5 21c1-4 4-6 7-6s6 2 7 6"/></svg></span>
+          <h3>Kids cut</h3><p>Patient barbers and the same clean finish for the little ones.</p>
+          <span class="price"><b>$35</b><span>Ages 3–12</span></span>
+        </button>
+        <button class="svc-card rv" type="button" data-id="design" data-price="10" aria-pressed="false" style="--d:.16s">
+          <span class="chk" aria-hidden="true"></span>
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span>
+          <h3>Design &amp; line-up</h3><p>Hard parts, custom designs and crisp edges. Add to any cut.</p>
+          <span class="price"><b>+$10</b><span>All ages</span></span>
+        </button>
+        <button class="svc-card rv" type="button" data-id="beard" data-price="10" aria-pressed="false" style="--d:.24s">
+          <span class="chk" aria-hidden="true"></span>
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15l12-7 5 1-4 4-13 4z"/><path d="M15 8l2 7a1.5 1.5 0 0 0 3-.6L19 9"/></svg></span>
+          <h3>Beard &amp; shave</h3><p>Beard shape-up and razor finish for teens and adults.</p>
+          <span class="price"><b>+$10</b><span>Teens &amp; adults</span></span>
+        </button>
+      </div>
+      <p class="swipe-hint">Swipe to see all services →</p>
+      <div class="summary rv">
+        <div class="l"><b id="total" data-dyn>$35</b><span id="picked" data-dyn>Haircut &amp; fade</span></div>
+        <a class="btn primary" href="#book" id="svcBook">Book this</a>
+      </div>
+    </div>
+  </section>
+  <section id="locations">
+    <div class="wrap">
+      <div class="sec-head rv"><div><span class="kicker">Locations</span><h2 class="h2">Two shops. One standard.</h2><p class="sub">Same prices and same hours at both. Open every day from 9am to 9pm.</p></div></div>
+      <div class="locs">
+        <article class="loc rv">
+          <div class="img rimg"><img class="photo" src="img/edge-interior.jpg" alt="Inside The Edge" loading="lazy"><img class="lg" src="img/edge-logo.png" alt="The Edge logo"></div>
+          <div class="body">
+            <div class="hd"><div><h3>The Edge</h3><p class="city">San Bernardino, CA</p></div><span class="pill"><i class="dot" data-dot></i><span data-st data-dyn>Open now</span></span></div>
+            <dl><dt>Address</dt><dd>397 W Baseline St, San Bernardino, CA</dd><dt>Hours</dt><dd>Every day, 9:00am – 9:00pm</dd><dt>Phone</dt><dd>(951) 475-0932</dd><dt>Instagram</dt><dd>@edgebarbershop.sb</dd></dl>
+            <div class="acts"><a class="btn primary" href="#book" data-pick="edge">Book here</a><a class="btn outline" href="https://www.google.com/maps/search/?api=1&query=397+W+Baseline+St+San+Bernardino+CA" target="_blank" rel="noopener">Directions</a><a class="btn outline" href="https://www.instagram.com/edgebarbershop.sb/" target="_blank" rel="noopener">Instagram</a></div>
+          </div>
+        </article>
+        <article class="loc rv" style="--d:.1s">
+          <div class="img rimg"><img class="photo" src="img/sharp-interior.jpg" alt="Inside Sharp and Faded" loading="lazy"><img class="lg" src="img/sharp-logo.jpg" alt="Sharp and Faded logo"></div>
+          <div class="body">
+            <div class="hd"><div><h3>Sharp &amp; Faded</h3><p class="city">Lake Elsinore, CA</p></div><span class="pill"><i class="dot" data-dot></i><span data-st data-dyn>Open now</span></span></div>
+            <dl><dt>Address</dt><dd>16005 Grand Ave, Lake Elsinore, CA</dd><dt>Hours</dt><dd>Every day, 9:00am – 9:00pm</dd><dt>Phone</dt><dd>(951) 475-0932</dd><dt>Instagram</dt><dd>@sharp_faded_p_barbershop</dd></dl>
+            <div class="acts"><a class="btn primary" href="#book" data-pick="sharp">Book here</a><a class="btn outline" href="https://www.google.com/maps/search/?api=1&query=16005+Grand+Ave+Lake+Elsinore+CA" target="_blank" rel="noopener">Directions</a><a class="btn outline" href="https://www.instagram.com/sharp_faded_p_barbershop/" target="_blank" rel="noopener">Instagram</a></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+  <section class="light" id="standard">
+    <div class="wrap std">
+      <div class="ph rv rimg"><img src="img/fade.jpg" alt="A clean fade cut at P's Barbershops" loading="lazy"><span class="badge">A fresh fade from the chair</span></div>
+      <div class="rv" style="--d:.1s">
+        <span class="kicker">The P's standard</span>
+        <h2 class="h2">Quality and efficiency, guaranteed.</h2>
+        <p class="sub" style="margin-top:16px">It started with one chair and one rule. Every barber at both shops holds the same line, so your cut looks the same whichever door you walk through.</p>
+        <div class="vals">
+          <div class="val"><span class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.9z"/></svg></span><div><h3>Quality on every cut</h3><p>Clean fades, crisp line-ups and custom designs from barbers who know their craft.</p></div></div>
+          <div class="val"><span class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div><h3>Your time respected</h3><p>Walk-ins get in quick, and you can text ahead to hold a chair.</p></div></div>
+          <div class="val"><span class="n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3 20c.8-3.4 3.3-5 6-5s5.2 1.6 6 5M15 15.5c2.5 0 4.6 1.3 5.4 4.5"/></svg></span><div><h3>Every age welcome</h3><p>One price for everyone, from first haircuts to regulars.</p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="gallery">
+    <div class="wrap">
+      <div class="sec-head rv"><div><span class="kicker">Gallery</span><h2 class="h2">Inside the shops.</h2></div><p class="sub">Tap any photo to see it full size.</p></div>
+      <div class="gal" id="gal">
+        <button class="g1 rv rimg" type="button"><img src="img/edge-interior.jpg" alt="The Edge shop floor in San Bernardino" loading="lazy"><span>The Edge, San Bernardino</span></button>
+        <button class="g2 rv rimg" type="button" style="--d:.06s"><img src="img/fade.jpg" alt="A fresh fade" loading="lazy"><span>Fresh fade</span></button>
+        <button class="g3 rv rimg" type="button" style="--d:.12s"><img src="img/p.jpg" alt="P cutting a client's hair" loading="lazy" style="object-position:50% 25%"><span>P on the clippers</span></button>
+        <button class="g4 rv rimg" type="button" style="--d:.06s"><img src="img/sharp-interior.jpg" alt="Sharp and Faded in Lake Elsinore" loading="lazy"><span>Sharp &amp; Faded, Lake Elsinore</span></button>
+        <button class="g5 rv rimg" type="button" style="--d:.12s"><img src="img/edge-interior.jpg" alt="Waiting area at The Edge" loading="lazy" style="object-position:20% 60%"><span>The lounge at The Edge</span></button>
+      </div>
+    </div>
+  </section>
+  <section class="light" id="reviews">
+    <div class="wrap">
+      <div class="sec-head rv"><div><span class="kicker">Reviews</span><h2 class="h2">What our clients say.</h2></div><p class="sub">From regulars at The Edge and Sharp &amp; Faded.</p></div>
+      <div class="revs" id="revs" data-dyn></div>
+      <p class="swipe-hint" style="margin-top:8px">Swipe for more reviews →</p>
+    </div>
+  </section>
+  <section id="about">
+    <div class="wrap p-grid">
+      <figure class="p-ph rv rimg"><img src="img/p.jpg" alt="P, founder of P's Barbershops, cutting hair" loading="lazy"></figure>
+      <div class="p-copy rv" style="--d:.1s">
+        <span class="kicker">Meet the owner</span>
+        <h2 class="h2">P, founder &amp; master barber.</h2>
+        <blockquote>“P's started with one chair and one standard: every client leaves looking sharp.”</blockquote>
+        <p class="sub">P built The Edge in San Bernardino and Sharp &amp; Faded in Lake Elsinore on that rule. From clean fades and crisp line-ups to custom designs, P brings years behind the chair to every cut, and every barber on the floor holds the same standard.</p>
+        <img class="sig" src="img/edge-logo.png" alt="" aria-hidden="true">
+      </div>
+    </div>
+  </section>
+  <section class="light" id="book">
+    <div class="wrap">
+      <div class="sec-head rv"><div><span class="kicker">Online booking</span><h2 class="h2">Book your appointment.</h2><p class="sub">Pick your shop, service and time. Takes under a minute. Walk-ins are always welcome too.</p></div></div>
+      <div class="bw rv" id="bw">
+        <div class="bw-main">
+          <ol class="steps" id="steps" aria-label="Booking steps">
+            <li data-s="1"><b>1</b><span>Location</span></li><li data-s="2"><b>2</b><span>Service</span></li><li data-s="3"><b>3</b><span>Date &amp; time</span></li><li data-s="4"><b>4</b><span>Your details</span></li><li data-s="5"><b>5</b><span>Confirm</span></li>
+          </ol>
+          <div class="pane" data-p="1">
+            <h3 class="pt">Choose a location</h3>
+            <div class="loc-opts">
+              <button type="button" class="lo" data-shop="edge"><img src="img/edge-logo.png" alt=""><span><b>The Edge</b><small>397 W Baseline St, San Bernardino</small><em><i class="dot" data-dot></i><span data-st data-dyn>Open now</span> · 9am–9pm daily</em></span></button>
+              <button type="button" class="lo" data-shop="sharp"><img src="img/sharp-logo.jpg" alt=""><span><b>Sharp &amp; Faded</b><small>16005 Grand Ave, Lake Elsinore</small><em><i class="dot" data-dot></i><span data-st data-dyn>Open now</span> · 9am–9pm daily</em></span></button>
+            </div>
+          </div>
+          <div class="pane" data-p="2" hidden>
+            <h3 class="pt">Choose a service</h3>
+            <div class="svc-list" id="svcList">
+              <button type="button" class="so" data-base="cut"><span><b>Haircut &amp; fade</b><small>Fades, tapers, scissor cuts · all ages</small></span><strong>$35</strong></button>
+              <button type="button" class="so" data-base="kids"><span><b>Kids cut</b><small>Ages 3–12</small></span><strong>$35</strong></button>
+            </div>
+            <h4 class="ph4">Add-ons <small>optional</small></h4>
+            <div class="svc-list">
+              <button type="button" class="so add" data-add="design" aria-pressed="false"><span><b>Design or line-up</b><small>Hard parts, custom designs, crisp edges</small></span><strong>+$10</strong></button>
+              <button type="button" class="so add" data-add="beard" aria-pressed="false"><span><b>Beard or shave</b><small>Shape-up and razor finish · teens &amp; adults</small></span><strong>+$10</strong></button>
+            </div>
+          </div>
+          <div class="pane" data-p="3" hidden>
+            <h3 class="pt">Pick a date and time</h3>
+            <div class="month" id="month" data-dyn></div>
+            <div class="days-wrap"><button type="button" class="dnav" id="dPrev" aria-label="Earlier dates">‹</button><div class="days" id="days" data-dyn></div><button type="button" class="dnav" id="dNext" aria-label="Later dates">›</button></div>
+            <div class="slot-groups" id="slots" data-dyn></div>
+            <p class="note">Times are requests. The shop confirms your time by text.</p>
+          </div>
+          <div class="pane" data-p="4" hidden>
+            <h3 class="pt">Your details</h3>
+            <div class="fields">
+              <div><label for="nm">First name</label><input type="text" id="nm" autocomplete="given-name" placeholder="First name"></div>
+              <div><label for="ph">Mobile number</label><input type="tel" id="ph" autocomplete="tel" placeholder="(951) 555-0123" inputmode="tel"></div>
+              <div class="full"><label for="notes">Notes for your barber <small>optional</small></label><input type="text" id="notes" placeholder="e.g. mid skin fade, #3 on top"></div>
+            </div>
+          </div>
+          <div class="pane" data-p="5" hidden>
+            <h3 class="pt">Review and confirm</h3>
+            <dl class="review" id="review" data-dyn></dl>
+            <p class="note">Tapping confirm copies your booking request. Text it to <b>(951) 475-0932</b> and the shop confirms your chair.</p>
+          </div>
+          <div class="pane done" data-p="6" hidden>
+            <div class="okmark" aria-hidden="true"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="M15 27l7 7 15-16"/></svg></div>
+            <h3 class="pt">Your request is ready</h3>
+            <p class="sub">We copied it for you. Send it to <b class="sel">(951) 475-0932</b> to lock in your chair.</p>
+            <pre class="msg" id="msg" data-dyn></pre>
+            <div class="done-acts"><a class="btn primary" id="sms" href="sms:+19514750932">Open in Messages</a><button class="btn outline" type="button" id="copyAgain">Copy again</button><button class="btn outline" type="button" id="restart">Book another</button></div>
+          </div>
+          <div class="nav-row" id="navRow"><button type="button" class="btn outline" id="back">Back</button><button type="button" class="btn primary" id="next" data-dyn>Continue</button></div>
+        </div>
+        <aside class="bw-side" aria-live="polite">
+          <h3>Your appointment</h3>
+          <div class="sum-shop" id="sumShop" data-dyn><span class="ph-logo"></span><div><b>Choose a location</b><small>Step 1</small></div></div>
+          <dl class="sum">
+            <dt>Service</dt><dd id="sumSvc" data-dyn>Not selected</dd>
+            <dt>Date</dt><dd id="sumDate" data-dyn>Not selected</dd>
+            <dt>Time</dt><dd id="sumTime" data-dyn>Not selected</dd>
+          </dl>
+          <div class="sum-total"><span>Estimated total</span><b id="sumTotal" data-dyn>$0</b></div>
+          <p class="sum-note">Pay at the shop. Same prices at both locations.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+  <section id="faq">
+    <div class="wrap faq-grid">
+      <div class="rv"><span class="kicker">FAQ</span><h2 class="h2">Good to know.</h2><p class="sub" style="margin-top:14px">Still have a question? Text or call (951) 475-0932.</p></div>
+      <div class="faq rv" style="--d:.1s">
+        <details open><summary>Do you take walk-ins?<i>+</i></summary><p>Yes. Both shops welcome walk-ins every day from 9am to 9pm. To hold a chair, text us your shop, service and time.</p></details>
+        <details><summary>How much is a haircut?<i>+</i></summary><p>Every haircut is $35, including fades, tapers and kids cuts. Designs, line-ups and beard work are $10 each on top.</p></details>
+        <details><summary>Are prices the same at both locations?<i>+</i></summary><p>Yes. The Edge and Sharp &amp; Faded have the same prices and the same hours.</p></details>
+        <details><summary>Do you cut kids' hair?<i>+</i></summary><p>Yes. Kids cuts for ages 3 to 12 are $35, and we cut every age after that too.</p></details>
+        <details><summary>How do I book?<i>+</i></summary><p>Use the booking form above. It writes your text for you, then you send it to (951) 475-0932.</p></details>
+      </div>
+    </div>
+  </section>
+  <div class="cta"><div class="wrap"><h2>Walk in today. We're open until 9pm.</h2><a class="btn light-btn" href="#locations">Find your shop</a></div></div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="f-grid">
+      <div><a class="brand" href="#home" aria-label="P's Barbershops home"><img src="img/edge-logo.png" alt="The Edge logo" style="height:84px"><img src="img/sharp-logo.jpg" alt="Sharp and Faded logo" style="height:84px;border-radius:12px;margin-left:10px"></a><p style="margin-top:14px;max-width:32ch">Quality and efficiency, guaranteed. Two shops in San Bernardino and Lake Elsinore.</p></div>
+      <div><h4>The Edge</h4><p>397 W Baseline St<br>San Bernardino, CA</p><a href="https://www.instagram.com/edgebarbershop.sb/" target="_blank" rel="noopener">@edgebarbershop.sb</a></div>
+      <div><h4>Sharp &amp; Faded</h4><p>16005 Grand Ave<br>Lake Elsinore, CA</p><a href="https://www.instagram.com/sharp_faded_p_barbershop/" target="_blank" rel="noopener">@sharp_faded_p_barbershop</a></div>
+      <div><h4>Hours &amp; contact</h4><p>Every day, 9am – 9pm</p><a href="tel:+19514750932">(951) 475-0932</a><a href="#book">Book online</a></div>
+    </div>
+    <div class="legal"><span>© P's Barbershops. All rights reserved.</span><span>Website by LTGPEAK</span></div>
+  </div>
+</footer>
+
+<div class="lb" id="lb" hidden role="dialog" aria-modal="true" aria-label="Photo viewer"><button class="x" id="lbX" type="button" aria-label="Close">✕</button><figure><img id="lbImg" alt=""><figcaption id="lbCap"></figcaption></figure></div>
+<div class="toast" id="toast" data-dyn role="status"></div>
+
+<script>
+document.documentElement.classList.add('js');
+const ES={"Prices": "Precios", "Locations": "Ubicaciones", "Book now": "Reservar", "Fresh cuts.": "Cortes frescos.", "Every age.": "Todas las edades.", "$35 flat.": "$35 fijo.", "Two barbershops in the Inland Empire with one standard: every client leaves sharp. Walk in seven days a week or text us to hold your chair.": "Dos barberías en el Inland Empire con un solo estándar: cada cliente sale impecable. Llega sin cita los siete días de la semana o mándanos un texto para apartar tu silla.", "Book your cut": "Reserva tu corte", "View services": "Ver servicios", "Choose your shop": "Elige tu barbería", "Open now": "Abierto ahora", "Days a week": "Días a la semana", "Daily hours": "Horario diario", "Any haircut": "Cualquier corte", "Services": "Servicios", "Simple pricing. Same at both shops.": "Precios simples. Iguales en ambas barberías.", "Every haircut is $35 for every age. Add a design or beard work for $10. Select what you want and we'll put it in your booking text.": "Todo corte cuesta $35 para cualquier edad. Agrega un diseño o arreglo de barba por $10. Elige lo que quieras y lo ponemos en tu reservación.", "Haircut & fade": "Corte y fade", "Fades, tapers and scissor cuts, finished clean. All ages.": "Fades, tapers y cortes con tijera, con acabado limpio. Todas las edades.", "All ages": "Todas las edades", "Kids cut": "Corte de niño", "Patient barbers and the same clean finish for the little ones.": "Barberos pacientes y el mismo acabado limpio para los pequeños.", "Ages 3–12": "De 3 a 12 años", "Design & line-up": "Diseño y line-up", "Hard parts, custom designs and crisp edges. Add to any cut.": "Rayas marcadas, diseños personalizados y contornos definidos. Agrégalo a cualquier corte.", "Beard & shave": "Barba y afeitado", "Beard shape-up and razor finish for teens and adults.": "Arreglo de barba y acabado con navaja para jóvenes y adultos.", "Teens & adults": "Jóvenes y adultos", "Book this": "Reservar esto", "Two shops. One standard.": "Dos barberías. Un estándar.", "Same prices and same hours at both. Open every day from 9am to 9pm.": "Mismos precios y mismo horario en ambas. Abierto todos los días de 9am a 9pm.", "Address": "Dirección", "Hours": "Horario", "Every day, 9:00am – 9:00pm": "Todos los días, 9:00am – 9:00pm", "Phone": "Teléfono", "Book here": "Reservar aquí", "Directions": "Cómo llegar", "A fresh fade from the chair": "Un fade fresco recién salido de la silla", "The P's standard": "El estándar de P's", "Quality and efficiency, guaranteed.": "Calidad y eficiencia, garantizadas.", "It started with one chair and one rule. Every barber at both shops holds the same line, so your cut looks the same whichever door you walk through.": "Todo empezó con una silla y una regla. Cada barbero en ambas barberías sigue el mismo estándar, así que tu corte sale igual sin importar a cuál vayas.", "Quality on every cut": "Calidad en cada corte", "Clean fades, crisp line-ups and custom designs from barbers who know their craft.": "Fades limpios, line-ups definidos y diseños personalizados de barberos que dominan su oficio.", "Your time respected": "Respetamos tu tiempo", "Walk-ins get in quick, and you can text ahead to hold a chair.": "Los clientes sin cita pasan rápido, y puedes mandar un texto para apartar una silla.", "Every age welcome": "Todas las edades son bienvenidas", "One price for everyone, from first haircuts to regulars.": "Un solo precio para todos, desde el primer corte hasta los clientes de siempre.", "Gallery": "Galería", "Inside the shops.": "Dentro de las barberías.", "Tap any photo to see it full size.": "Toca cualquier foto para verla en grande.", "Fresh fade": "Fade fresco", "P on the clippers": "P con la máquina", "The lounge at The Edge": "La sala de espera de The Edge", "Reviews": "Reseñas", "What our clients say.": "Lo que dicen nuestros clientes.", "From regulars at The Edge and Sharp & Faded.": "De clientes frecuentes de The Edge y Sharp & Faded.", "Meet the owner": "Conoce al dueño", "P, founder & master barber.": "P, fundador y maestro barbero.", "“P's started with one chair and one standard: every client leaves looking sharp.”": "“P's empezó con una silla y un estándar: cada cliente sale impecable.”", "P built The Edge in San Bernardino and Sharp & Faded in Lake Elsinore on that rule. From clean fades and crisp line-ups to custom designs, P brings years behind the chair to every cut, and every barber on the floor holds the same standard.": "P construyó The Edge en San Bernardino y Sharp & Faded en Lake Elsinore con esa regla. Desde fades limpios y line-ups definidos hasta diseños personalizados, P aporta años de experiencia a cada corte, y cada barbero mantiene el mismo estándar.", "Online booking": "Reservación en línea", "Book your appointment.": "Reserva tu cita.", "Pick your shop, service and time. Takes under a minute. Walk-ins are always welcome too.": "Elige tu barbería, servicio y hora. Toma menos de un minuto. También siempre recibimos clientes sin cita.", "Location": "Ubicación", "Service": "Servicio", "Date & time": "Fecha y hora", "Your details": "Tus datos", "Confirm": "Confirmar", "Choose a location": "Elige una ubicación", "· 9am–9pm daily": "· 9am–9pm diario", "Choose a service": "Elige un servicio", "Fades, tapers, scissor cuts · all ages": "Fades, tapers, cortes con tijera · todas las edades", "Add-ons": "Extras", "optional": "opcional", "Design or line-up": "Diseño o line-up", "Hard parts, custom designs, crisp edges": "Rayas marcadas, diseños personalizados, contornos definidos", "Beard or shave": "Barba o afeitado", "Shape-up and razor finish · teens & adults": "Arreglo y acabado con navaja · jóvenes y adultos", "Pick a date and time": "Elige fecha y hora", "Times are requests. The shop confirms your time by text.": "Las horas son solicitudes. La barbería confirma tu hora por texto.", "First name": "Nombre", "Mobile number": "Número de celular", "Notes for your barber": "Notas para tu barbero", "Review and confirm": "Revisa y confirma", "Tapping confirm copies your booking request. Text it to": "Al confirmar se copia tu solicitud. Mándala por texto al", "and the shop confirms your chair.": "y la barbería confirma tu silla.", "Your request is ready": "Tu solicitud está lista", "We copied it for you. Send it to": "Ya la copiamos. Envíala al", "to lock in your chair.": "para asegurar tu silla.", "Open in Messages": "Abrir en Mensajes", "Copy again": "Copiar de nuevo", "Book another": "Reservar otra", "Back": "Atrás", "Continue": "Continuar", "Your appointment": "Tu cita", "Date": "Fecha", "Time": "Hora", "Estimated total": "Total estimado", "Pay at the shop. Same prices at both locations.": "Pagas en la barbería. Mismos precios en ambas ubicaciones.", "FAQ": "Preguntas", "Good to know.": "Bueno saber.", "Still have a question? Text or call (951) 475-0932.": "¿Tienes otra pregunta? Mándanos un texto o llama al (951) 475-0932.", "Do you take walk-ins?": "¿Atienden sin cita?", "Yes. Both shops welcome walk-ins every day from 9am to 9pm. To hold a chair, text us your shop, service and time.": "Sí. Ambas barberías reciben clientes sin cita todos los días de 9am a 9pm. Para apartar una silla, mándanos tu barbería, servicio y hora por texto.", "How much is a haircut?": "¿Cuánto cuesta un corte?", "Every haircut is $35, including fades, tapers and kids cuts. Designs, line-ups and beard work are $10 each on top.": "Todo corte cuesta $35, incluidos fades, tapers y cortes de niño. Diseños, line-ups y barba cuestan $10 adicionales cada uno.", "Are prices the same at both locations?": "¿Los precios son iguales en ambas ubicaciones?", "Yes. The Edge and Sharp & Faded have the same prices and the same hours.": "Sí. The Edge y Sharp & Faded tienen los mismos precios y el mismo horario.", "Do you cut kids' hair?": "¿Cortan el pelo a niños?", "Yes. Kids cuts for ages 3 to 12 are $35, and we cut every age after that too.": "Sí. Los cortes de niño de 3 a 12 años cuestan $35, y también atendemos a todas las demás edades.", "How do I book?": "¿Cómo reservo?", "Walk in today. We're open until 9pm.": "Ven hoy. Estamos abiertos hasta las 9pm.", "Find your shop": "Encuentra tu barbería", "Quality and efficiency, guaranteed. Two shops in San Bernardino and Lake Elsinore.": "Calidad y eficiencia, garantizadas. Dos barberías en San Bernardino y Lake Elsinore.", "Hours & contact": "Horario y contacto", "Every day, 9am – 9pm": "Todos los días, 9am – 9pm", "Book online": "Reservar en línea", "© P's Barbershops. All rights reserved.": "© P's Barbershops. Todos los derechos reservados.", "Website by LTGPEAK": "Sitio web por LTGPEAK", "Amazing cuts, professional, and fair prices. They respect your time and deliver.": "Cortes increíbles, profesionales y a buen precio. Respetan tu tiempo y cumplen.", "Sharp and Faded delivers. Every cut sharp and every fade perfect.": "Sharp and Faded cumple. Cada corte impecable y cada fade perfecto.", "Best barbershop in San Bernardino. The barbers know their craft.": "La mejor barbería de San Bernardino. Los barberos dominan su oficio.", "Great experience from walk-in to checkout. Skilled barbers and a welcoming vibe.": "Gran experiencia de principio a fin. Barberos expertos y un ambiente acogedor.", "Walk-ins always get me in quick, and the cut is clean every single time.": "Siempre me atienden rápido sin cita, y el corte sale limpio cada vez.", "Best barbershop in Lake Elsinore. Quality cuts, fair prices.": "La mejor barbería de Lake Elsinore. Cortes de calidad, precios justos.", "Fades": "Fades", "Tapers": "Tapers", "Designs": "Diseños", "Line-ups": "Line-ups", "Beards": "Barbas", "Kids cuts": "Cortes de niño", "Walk-ins welcome": "Sin cita", "Open 7 days": "Abierto 7 días", "Quick actions": "Acciones rápidas", "Inside The Edge": "Dentro de The Edge", "The Edge logo": "Logo de The Edge", "Inside Sharp and Faded": "Dentro de Sharp and Faded", "Sharp and Faded logo": "Logo de Sharp and Faded", "A clean fade cut at P's Barbershops": "Un fade limpio en P's Barbershops", "The Edge shop floor in San Bernardino": "El piso de The Edge en San Bernardino", "A fresh fade": "Un fade fresco", "P cutting a client's hair": "P cortándole el pelo a un cliente", "Sharp and Faded in Lake Elsinore": "Sharp and Faded en Lake Elsinore", "Waiting area at The Edge": "Sala de espera de The Edge", "P, founder of P's Barbershops, cutting hair": "P, fundador de P's Barbershops, cortando pelo", "Booking steps": "Pasos de reservación", "Earlier dates": "Fechas anteriores", "Later dates": "Fechas siguientes", "e.g. mid skin fade, #3 on top": "ej. mid skin fade, #3 arriba", "Photo viewer": "Visor de fotos", "Close": "Cerrar", "Language": "Idioma", "Open now until 9pm PT": "Abierto hasta las 9pm PT", "Closed · opens at 9am PT": "Cerrado · abre a las 9am PT", "Closed · opens tomorrow at 9am PT": "Cerrado · abre mañana a las 9am PT", "Closed": "Cerrado", "Select a service": "Elige un servicio", "Not selected": "Sin elegir", "Step 1": "Paso 1", "Morning": "Mañana", "Afternoon": "Tarde", "Evening": "Noche", "Today": "Hoy", "First available chair today": "Primera silla disponible hoy", "Choose a day to see times.": "Elige un día para ver las horas.", "First available": "Primera disponible", "First available chair": "Primera silla disponible", "Confirm booking": "Confirmar reservación", "Name": "Nombre", "Notes": "Notas", "Copied. Text it to (951) 475-0932": "Copiado. Envíalo por texto al (951) 475-0932", "Request selected. Copy it and text (951) 475-0932": "Solicitud seleccionada. Cópiala y envíala al (951) 475-0932", "397 W Baseline St, San Bernardino": "397 W Baseline St, San Bernardino", "16005 Grand Ave, Lake Elsinore": "16005 Grand Ave, Lake Elsinore", "Swipe to see all services →": "Desliza para ver todos los servicios →", "Swipe for more reviews →": "Desliza para ver más reseñas →", "Use the booking form above. It writes your text for you, then you send it to (951) 475-0932.": "Usa el formulario de reservación de arriba. Escribe el texto por ti y luego lo envías al (951) 475-0932."};
+let LANG='en';try{LANG=localStorage.getItem('ps-lang')||'en'}catch(e){}
+const T=s=>LANG==='es'&&ES[s]?ES[s]:s;
+const LOC=()=>LANG==='es'?'es-US':'en-US';
+
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const SHOPS={edge:{name:'The Edge',city:'San Bernardino'},sharp:{name:'Sharp & Faded',city:'Lake Elsinore'}};
+const LABEL={cut:'Haircut & fade',kids:'Kids cut',design:'Design or line-up',beard:'Beard or shave'};
+requestAnimationFrame(()=>requestAnimationFrame(()=>document.body.classList.add('ready')));
+
+/* header */
+const bar=$('#top-bar');const onScroll=()=>bar.classList.toggle('solid',scrollY>30);addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* open status, Pacific time */
+function status(){
+  const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',hour:'numeric',minute:'numeric',hour12:false}).formatToParts(new Date());
+  const g=t=>+p.find(x=>x.type===t).value,m=(g('hour')%24)*60+g('minute'),open=m>=540&&m<1260,left=1260-m;
+  const short=open?(left<=60?(LANG==='es'?`Cierra en ${left} min`:`Closes in ${left} min`):T('Open now')):T('Closed');
+  $('#heroStatus').textContent=open?(left<=60?(LANG==='es'?`Abierto · cierra en ${left} min`:`Open now · closes in ${left} min`):T('Open now until 9pm PT')):(m<540?T('Closed · opens at 9am PT'):T('Closed · opens tomorrow at 9am PT'));
+  $('#heroDot').classList.toggle('closed',!open);
+  $$('[data-dot]').forEach(d=>d.classList.toggle('closed',!open));$$('[data-st]').forEach(s=>s.textContent=short);
+}
+status();setInterval(status,60000);
+
+/* hero shop switcher */
+$$('.pick').forEach(b=>b.addEventListener('click',()=>{
+  $$('.pick').forEach(x=>x.setAttribute('aria-pressed',x===b));
+  $$('.hero .bg img').forEach(i=>{const on=i.dataset.shop===b.dataset.shop;if(on&&!i.classList.contains('on')){i.classList.remove('on');void i.offsetWidth}i.classList.toggle('on',on)});
+  BK.pickShop(b.dataset.shop,false);
+}));
+
+/* count up */
+function countUp(){$$('[data-count]').forEach(el=>{const to=+el.dataset.count,pre=el.dataset.pre||'',st=performance.now();if(RM){el.textContent=pre+to;return}(function f(n){const k=Math.min((n-st)/1400,1);el.textContent=pre+Math.round(to*(1-Math.pow(1-k,4)));if(k<1)requestAnimationFrame(f)})(st)})}
+setTimeout(countUp,350);
+
+/* reveal on scroll */
+if(!RM&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});
+  $$('.rv').forEach(el=>{if(el.getBoundingClientRect().top>innerHeight)io.observe(el)})}
+
+/* services */
+const cards=$$('.svc-card');
+function renderSvc(){const on=cards.filter(c=>c.getAttribute('aria-pressed')==='true');
+  $('#total').textContent='$'+on.reduce((s,c)=>s+ +c.dataset.price,0);
+  $('#picked').textContent=on.length?on.map(c=>T(LABEL[c.dataset.id])).join(' + '):T('Select a service')}
+cards.forEach(c=>c.addEventListener('click',()=>{const on=c.getAttribute('aria-pressed')!=='true';c.setAttribute('aria-pressed',on);
+  if(on&&c.dataset.id==='cut')$('#svc [data-id="kids"]').setAttribute('aria-pressed','false');
+  if(on&&c.dataset.id==='kids')$('#svc [data-id="cut"]').setAttribute('aria-pressed','false');renderSvc()}));
+renderSvc();
+$('#svcBook').addEventListener('click',()=>{const p=id=>$(`#svc [data-id="${id}"]`).getAttribute('aria-pressed')==='true';
+  BK.setService(p('cut')?'cut':p('kids')?'kids':null,{design:p('design'),beard:p('beard')});BK.go(BK.state.shop?3:1)});
+
+/* reviews */
+const REVIEWS=[['Marcus J.','edge','Amazing cuts, professional, and fair prices. They respect your time and deliver.'],['Anthony T.','sharp','Sharp and Faded delivers. Every cut sharp and every fade perfect.'],['David R.','edge','Best barbershop in San Bernardino. The barbers know their craft.'],['James P.','sharp','Great experience from walk-in to checkout. Skilled barbers and a welcoming vibe.'],['Carlos M.','edge','Walk-ins always get me in quick, and the cut is clean every single time.'],['Robert L.','sharp','Best barbershop in Lake Elsinore. Quality cuts, fair prices.']];
+$('#revs').innerHTML=REVIEWS.map(([n,s,q],i)=>`<blockquote class="rev rv" style="--d:${(i%3)*.08}s"><svg viewBox="0 0 32 32" fill="currentColor" aria-hidden="true"><path d="M13 7C7 9 4 13 4 19v6h9v-9H8c0-4 2-6 5-7zm15 0c-6 2-9 6-9 12v6h9v-9h-5c0-4 2-6 5-7z"/></svg><p>${T(q)}</p><footer><span class="av" aria-hidden="true">${n[0]}</span><span><b>${n}</b><small>${SHOPS[s].name}, ${SHOPS[s].city}</small></span></footer></blockquote>`).join('');
+if(!RM&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{rootMargin:'0px 0px -8% 0px'});$$('#revs .rv').forEach(el=>{if(el.getBoundingClientRect().top>innerHeight)io.observe(el)})}
+
+/* gallery lightbox */
+(()=>{const lb=$('#lb');let last;
+  $$('#gal button').forEach(b=>b.addEventListener('click',()=>{last=b;const i=b.querySelector('img');$('#lbImg').src=i.src;$('#lbImg').alt=i.alt;$('#lbCap').textContent=b.querySelector('span').textContent;lb.hidden=false;$('#lbX').focus()}));
+  const close=()=>{lb.hidden=true;last?.focus()};$('#lbX').onclick=close;lb.addEventListener('click',e=>{if(e.target===lb)close()});addEventListener('keydown',e=>{if(e.key==='Escape'&&!lb.hidden)close()})})();
+
+/* ===== booking widget ===== */
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),2800)}
+const BK=(()=>{
+  const st={shop:null,base:null,add:{design:false,beard:false},date:null,time:null,step:1};
+  const fmtD=d=>d.toLocaleDateString(LOC(),{weekday:'long',month:'long',day:'numeric'});
+  const ptNow=()=>{const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/Los_Angeles',year:'numeric',month:'2-digit',day:'2-digit',hour:'numeric',minute:'numeric',hour12:false}).formatToParts(new Date());const g=t=>+p.find(x=>x.type===t).value;return {y:g('year'),mo:g('month'),d:g('day'),min:(g('hour')%24)*60+g('minute')}};
+  const today=(()=>{const n=ptNow();return new Date(n.y,n.mo-1,n.d)})();
+  let offset=0;const SPAN=14;
+  function total(){return (st.base?35:0)+(st.add.design?10:0)+(st.add.beard?10:0)}
+  function svcText(){return [st.base&&T(LABEL[st.base]),st.add.design&&T(LABEL.design),st.add.beard&&T(LABEL.beard)].filter(Boolean).join(' + ')}
+  function timeLabel(m){const h=Math.floor(m/60),mm=m%60;return `${h%12||12}:${String(mm).padStart(2,'0')} ${h<12?'am':'pm'}`}
+  function valid(n){if(n===1)return !!st.shop;if(n===2)return !!(st.base||st.add.design||st.add.beard);if(n===3)return !!(st.date&&st.time);if(n===4)return $('#nm').value.trim().length>0;return true}
+  function summary(){
+    const sh=$('#sumShop');
+    if(!st.shop){sh.innerHTML=`<span class="ph-logo"></span><div><b>${T('Choose a location')}</b><small>${T('Step 1')}</small></div>`}
+    if(st.shop){const logo=st.shop==='edge'?'img/edge-logo.png':'img/sharp-logo.jpg';sh.innerHTML=`<img src="${logo}" alt=""><div><b>${SHOPS[st.shop].name}</b><small>${st.shop==='edge'?'397 W Baseline St, San Bernardino':'16005 Grand Ave, Lake Elsinore'}</small></div>`}
+    $('#sumSvc').textContent=svcText()||T('Not selected');
+    $('#sumDate').textContent=st.date?st.date.toLocaleDateString(LOC(),{weekday:'short',month:'short',day:'numeric'}):T('Not selected');
+    $('#sumTime').textContent=st.time==null?T('Not selected'):st.time==='first'?T('First available'):timeLabel(st.time);
+    $('#sumTotal').textContent='$'+total();
+    $$('.lo').forEach(b=>b.setAttribute('aria-pressed',b.dataset.shop===st.shop));
+    $$('.so[data-base]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.base===st.base));
+    $$('.so[data-add]').forEach(b=>b.setAttribute('aria-pressed',!!st.add[b.dataset.add]));
+    $('#next').disabled=!valid(st.step);
+  }
+  function renderDays(){
+    const box=$('#days');box.innerHTML='';
+    for(let i=0;i<7;i++){const d=new Date(today);d.setDate(today.getDate()+offset+i);
+      const b=document.createElement('button');b.type='button';b.className='dy';
+      b.innerHTML=`<small>${i+offset===0?T('Today'):d.toLocaleDateString(LOC(),{weekday:'short'})}</small><b>${d.getDate()}</b>`;
+      b.setAttribute('aria-label',fmtD(d));b.setAttribute('aria-pressed',!!(st.date&&+st.date===+d));
+      b.onclick=()=>{st.date=d;st.time=null;renderDays();renderSlots();summary()};box.append(b)}
+    const first=new Date(today);first.setDate(today.getDate()+offset);
+    $('#month').textContent=first.toLocaleDateString(LOC(),{month:'long',year:'numeric'});
+    $('#dPrev').disabled=offset===0;$('#dNext').disabled=offset+7>=SPAN;
+  }
+  function renderSlots(){
+    const box=$('#slots');box.innerHTML='';
+    if(!st.date){box.innerHTML=`<p class="note" style="margin:0">${T('Choose a day to see times.')}</p>`;return}
+    const isToday=+st.date===+today,nowMin=ptNow().min;
+    const groups=[['Morning',540,720],['Afternoon',720,1020],['Evening',1020,1230]];
+    if(isToday&&nowMin<1230){const w=document.createElement('div');w.className='slots';const f=document.createElement('button');f.type='button';f.className='sl first';f.textContent=T('First available chair today');f.setAttribute('aria-pressed',st.time==='first');f.onclick=()=>{st.time='first';renderSlots();summary()};w.append(f);box.append(w)}
+    groups.forEach(([name,a,b])=>{const g=document.createElement('div');g.innerHTML=`<h5>${T(name)}</h5>`;const w=document.createElement('div');w.className='slots';
+      for(let m=a;m<b;m+=30){const sl=document.createElement('button');sl.type='button';sl.className='sl';sl.textContent=timeLabel(m);
+        if(isToday&&m<=nowMin+15){sl.disabled=true;sl.setAttribute('aria-label',timeLabel(m)+', passed')}
+        sl.setAttribute('aria-pressed',st.time===m);sl.onclick=()=>{st.time=m;renderSlots();summary()};w.append(sl)}
+      g.append(w);box.append(g)});
+  }
+  function message(){
+    const nm=$('#nm').value.trim(),ph=$('#ph').value.trim(),notes=$('#notes').value.trim();const es=LANG==='es';
+    const when=`${st.date?fmtD(st.date):''}${st.time==='first'?(es?', primera silla disponible':', first available chair'):st.time!=null?(es?' a las ':' at ')+timeLabel(st.time):''}`;
+    return es
+      ?`¡Hola P's! Quiero reservar una cita.\n\nNombre: ${nm}${ph?`\nTeléfono: ${ph}`:''}\nUbicación: ${SHOPS[st.shop].name}, ${SHOPS[st.shop].city}\nServicio: ${svcText()}\nCuándo: ${when}${notes?`\nNotas: ${notes}`:''}\nTotal estimado: $${total()}\n\n¡Gracias!`
+      :`Hi P's! I'd like to book an appointment.\n\nName: ${nm}${ph?`\nPhone: ${ph}`:''}\nLocation: ${SHOPS[st.shop].name}, ${SHOPS[st.shop].city}\nService: ${svcText()}\nWhen: ${when}${notes?`\nNotes: ${notes}`:''}\nEstimated total: $${total()}\n\nThank you!`;
+  }
+  function go(n){
+    st.step=n;$$('.pane').forEach(p=>p.hidden=+p.dataset.p!==n);
+    $$('#steps li').forEach(li=>{const k=+li.dataset.s;li.classList.toggle('on',k===n);li.classList.toggle('done',k<n)});
+    $('#navRow').hidden=n===6;$('#back').style.visibility=n===1?'hidden':'visible';$('#next').textContent=n===5?T('Confirm booking'):T('Continue');
+    if(n===3){renderDays();renderSlots()}
+    if(n===5){const nm=$('#nm').value.trim(),ph=$('#ph').value.trim(),notes=$('#notes').value.trim();
+      $('#review').innerHTML=[[T('Location'),`${SHOPS[st.shop].name}, ${st.shop==='edge'?'397 W Baseline St, San Bernardino':'16005 Grand Ave, Lake Elsinore'}`],[T('Service'),svcText()],[T('Date'),fmtD(st.date)],[T('Time'),st.time==='first'?T('First available chair'):timeLabel(st.time)],[T('Name'),nm],...(ph?[[T('Phone'),ph]]:[]),...(notes?[[T('Notes'),notes]]:[]),[T('Estimated total'),'$'+total()]].map(([k,v])=>`<dt>${k}</dt><dd>${v.replace(/</g,'&lt;')}</dd>`).join('')}
+    summary();
+  }
+  function copy(msg){try{navigator.clipboard.writeText(msg).then(()=>toast(T('Copied. Text it to (951) 475-0932')),sel)}catch(e){sel()}}
+  function sel(){const r=document.createRange();r.selectNodeContents($('#msg'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast(T('Request selected. Copy it and text (951) 475-0932'))}
+  $$('.lo').forEach(b=>b.onclick=()=>{st.shop=b.dataset.shop;summary();setTimeout(()=>go(2),180)});
+  $$('.so[data-base]').forEach(b=>b.onclick=()=>{st.base=st.base===b.dataset.base?null:b.dataset.base;summary()});
+  $$('.so[data-add]').forEach(b=>b.onclick=()=>{st.add[b.dataset.add]=!st.add[b.dataset.add];summary()});
+  $('#dPrev').onclick=()=>{offset=Math.max(0,offset-7);renderDays()};$('#dNext').onclick=()=>{offset=Math.min(SPAN-7,offset+7);renderDays()};
+  ['nm','ph','notes'].forEach(id=>$('#'+id).addEventListener('input',summary));
+  $('#back').onclick=()=>go(Math.max(1,st.step-1));
+  $('#next').onclick=()=>{if(!valid(st.step))return;if(st.step<5){go(st.step+1);$('#bw').scrollIntoView({behavior:RM?'auto':'smooth',block:'start'});return}
+    const msg=message();$('#msg').textContent=msg;$('#sms').href='sms:+19514750932?&body='+encodeURIComponent(msg);go(6);copy(msg)};
+  $('#copyAgain').onclick=()=>copy($('#msg').textContent);
+  $('#restart').onclick=()=>{Object.assign(st,{base:null,add:{design:false,beard:false},date:null,time:null});['nm','ph','notes'].forEach(id=>$('#'+id).value='');go(1)};
+  go(1);
+  return {state:st,rerender(){go(st.step===6?6:st.step)},go,pickShop(shop,advance){st.shop=shop;summary();if(advance&&st.step===1)go(2)},setService(base,add){st.base=base;st.add={...st.add,...add};summary()}};
+})();
+$$('[data-pick]').forEach(a=>a.addEventListener('click',()=>{BK.pickShop(a.dataset.pick,false);BK.go(2)}));
+/* mobile bar shows after the hero */
+(()=>{const mb=$('.mbar');const f=()=>mb.classList.toggle('on',scrollY>innerHeight*.6);addEventListener('scroll',f,{passive:true});f()})();
+
+/* ===== language switch ===== */
+(()=>{
+  const SKIP='script,style,[data-dyn]';const ATTRS=['placeholder','aria-label','alt'];
+  function walk(lang){
+    const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;const nodes=[];
+    while(n=w.nextNode())nodes.push(n);
+    nodes.forEach(n=>{const el=n.parentElement;if(!el||el.closest(SKIP))return;
+      if(n.__en===undefined)n.__en=n.textContent;const raw=n.__en,t=raw.replace(/\s+/g,' ').trim();if(!t)return;
+      const out=lang==='es'&&ES[t]?raw.replace(raw.trim(),ES[t]):raw;if(n.textContent!==out)n.textContent=out});
+    $$('[placeholder],[aria-label],[alt]').forEach(el=>{if(el.closest('[data-dyn]'))return;ATTRS.forEach(a=>{const v=el.getAttribute(a);if(v==null)return;const k='en'+a.replace('-','');if(el.dataset[k]===undefined)el.dataset[k]=v;const en=el.dataset[k];el.setAttribute(a,lang==='es'&&ES[en]?ES[en]:en)})});
+  }
+  function set(lang,anim){LANG=lang;try{localStorage.setItem('ps-lang',lang)}catch(e){}
+    document.documentElement.lang=lang;$('.lang').classList.toggle('es',lang==='es');
+    $$('.lang button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.lang===lang));
+    walk(lang);status();renderSvc();BK.rerender();
+    $$('#revs .rev p').forEach((p,i)=>p.textContent=T(REVIEWS[i][2]));
+    if(anim&&!RM){$$('main h1,main .h2,main .sub').forEach(e=>{e.classList.remove('swap');void e.offsetWidth;e.classList.add('swap')})}}
+  $$('.lang button').forEach(b=>b.addEventListener('click',()=>set(b.dataset.lang,true)));
+  set(LANG,false);
+})();
+
+/* ===== motion layer ===== */
+(()=>{
+  const prog=$('#progress'),bg=$('.hero .bg');
+  addEventListener('scroll',()=>{const h=document.documentElement.scrollHeight-innerHeight;prog.style.transform=`scaleX(${h>0?scrollY/h:0})`;
+    if(!RM&&scrollY<innerHeight*1.2)bg.style.transform=`translate3d(0,${scrollY*.28}px,0)`},{passive:true});
+  if(RM||!matchMedia('(pointer:fine)').matches)return;
+  // magnetic buttons
+  $$('.top .btn.primary,.hero-ctas .btn,.summary .btn,.cta .btn').forEach(b=>{b.classList.add('mag');
+    b.addEventListener('pointermove',e=>{const r=b.getBoundingClientRect();b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.28}px)`});
+    b.addEventListener('pointerleave',()=>b.style.transform='')});
+  // tilt cards
+  $$('.svc-card,.loc,.rev').forEach(c=>{c.addEventListener('pointermove',e=>{const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;
+      c.style.transform=`perspective(900px) rotateX(${-y*6}deg) rotateY(${x*8}deg) translateY(-6px)`});
+    c.addEventListener('pointerleave',()=>c.style.transform='')});
+})();
+</script>
+
+</body></html>

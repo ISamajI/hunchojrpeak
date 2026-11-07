@@ -1,0 +1,133 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Claudia's Birthday Credits</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;1,400&family=Pinyon+Script&display=swap">
+<style>
+/* Layout: one dark screening room — title, the film, a quiet control bar. Single dark look on purpose. */
+:root{
+  --bg:#0b080d; --bg2:#1a0d16; --ivory:#f5ebdd; --muted:#b9a99c; --gold:#d9b56c; --rose:#5c1630;
+  --display:'Pinyon Script','Snell Roundhand','Apple Chancery',cursive;
+  --body:'Lora',Georgia,'Times New Roman',serif;
+  color-scheme:dark;
+}
+html,body{min-height:100%}
+body{background:radial-gradient(120% 80% at 50% 0%,var(--bg2) 0%,var(--bg) 60%) fixed,var(--bg);color:var(--ivory);font-family:var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;align-items:center;gap:18px}
+header{text-align:center;display:flex;flex-direction:column;gap:2px}
+.eyebrow{font-size:12px;letter-spacing:.38em;text-transform:uppercase;color:var(--gold)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(56px,11vw,96px);line-height:1;margin:6px 0 0;text-wrap:balance}
+.date{font-size:12px;letter-spacing:.32em;color:var(--muted)}
+.tabs{display:flex;gap:4px;padding:4px;border:1px solid #3a2a33;border-radius:999px;background:#140d12}
+.tabs button{font:500 13px var(--body);color:var(--muted);background:none;border:0;border-radius:999px;padding:8px 16px;cursor:pointer}
+.tabs button[aria-pressed="true"]{background:var(--ivory);color:var(--bg)}
+.tabs button:focus-visible,.ctl:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.stage{position:relative;background:#000;border-radius:6px;overflow:hidden;box-shadow:0 30px 80px -20px #000,0 0 0 1px #2a1d25;max-width:100%}
+.stage.v{aspect-ratio:9/16;height:min(78vh,860px)}
+.stage.w{aspect-ratio:16/9;width:100%}
+.stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+.play{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;border:0;cursor:pointer;
+  background:radial-gradient(60% 50% at 50% 50%,rgba(92,22,48,.55),rgba(0,0,0,.82));color:var(--ivory);font:400 15px var(--body);z-index:3}
+.play .ring{width:78px;height:78px;border-radius:50%;border:1.5px solid var(--gold);display:grid;place-items:center}
+.play .ring::after{content:"";border-left:22px solid var(--ivory);border-top:13px solid transparent;border-bottom:13px solid transparent;margin-left:6px}
+.play .lbl{letter-spacing:.3em;text-transform:uppercase;font-size:12px;color:var(--gold)}
+.bar{width:100%;max-width:inherit;display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+.track{flex:1;height:3px;background:#2e2129;border-radius:2px;overflow:hidden}
+.fill{height:100%;width:0;background:var(--gold)}
+.ctl{background:none;border:1px solid #3a2a33;color:var(--ivory);border-radius:999px;padding:6px 12px;font:13px var(--body);cursor:pointer}
+.note{font-size:13px;color:var(--muted);text-align:center;max-width:52ch}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Happy Birthday</span>
+    <h1>Claudia</h1>
+    <span class="date">11 · 03 · 2026</span>
+  </header>
+
+  <div class="tabs" role="group" aria-label="Video format">
+    <button id="tab-v" data-set="v" aria-pressed="true">Phone</button>
+    <button id="tab-w" data-set="w" aria-pressed="false">Widescreen</button>
+  </div>
+
+  <div id="stage" class="stage v">
+    <video id="va" muted playsinline preload="auto"></video>
+    <video id="vb" muted playsinline preload="auto" hidden></video>
+    <button id="play" class="play" aria-label="Play the birthday credits"><span class="ring"></span><span class="lbl">Press play</span></button>
+  </div>
+
+  <div class="bar" id="bar">
+    <button id="pp" class="ctl">Pause</button>
+    <div class="track"><div class="fill" id="fill"></div></div>
+    <span id="time">0:00 / 4:15</span>
+  </div>
+  <p class="note">Tap the video to pause. Turn your phone sideways and pick Widescreen for the movie-screen version.</p>
+</div>
+
+<script>
+const SETS = {
+  v: { dir: 'v', durs: [31.25,31.25,31.25,20.833,31.25,31.25,20.833,31.25,25.583] },
+  w: { dir: 'w', durs: [62.5,52.083,52.083,62.5,33.583] }
+};
+const stage = document.getElementById('stage'), playBtn = document.getElementById('play');
+const fill = document.getElementById('fill'), timeEl = document.getElementById('time'), pp = document.getElementById('pp');
+let vids = [document.getElementById('va'), document.getElementById('vb')];
+let set = 'v', idx = 0, cur = 0, started = false, paused = false;
+
+const src = i => `${SETS[set].dir}/part${String(i).padStart(2,'0')}.mp4`;
+const total = () => SETS[set].durs.reduce((a,b)=>a+b,0);
+const fmt = s => `${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
+
+function preloadNext(){
+  const nxt = vids[1-cur], n = idx + 1;
+  if (n < SETS[set].durs.length){ nxt.src = src(n); nxt.load(); } else { nxt.removeAttribute('src'); }
+}
+function load(which){
+  set = which; idx = 0; cur = 0; started = false; paused = false;
+  stage.className = 'stage ' + which;
+  document.querySelectorAll('.tabs button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.set === which)));
+  vids.forEach(v => { v.pause(); v.hidden = true; });
+  vids[0].hidden = false; vids[0].src = src(0); vids[0].load();
+  preloadNext();
+  playBtn.hidden = false; playBtn.querySelector('.lbl').textContent = 'Press play';
+  pp.textContent = 'Pause'; tick();
+}
+function tick(){
+  const el = SETS[set].durs.slice(0, idx).reduce((a,b)=>a+b,0) + (vids[cur].currentTime || 0);
+  fill.style.width = Math.min(100, el / total() * 100) + '%';
+  timeEl.textContent = `${fmt(el)} / ${fmt(total())}`;
+}
+function onEnded(e){
+  if (e.target !== vids[cur]) return;
+  if (idx + 1 >= SETS[set].durs.length){       // the end
+    playBtn.hidden = false; playBtn.querySelector('.lbl').textContent = 'Watch again'; started = false; return;
+  }
+  const old = vids[cur], nxt = vids[1-cur];
+  idx++; cur = 1 - cur;
+  nxt.hidden = false;
+  nxt.play().catch(()=>{});
+  nxt.addEventListener('playing', () => { old.hidden = true; preloadNext(); }, { once: true });
+}
+vids.forEach(v => { v.addEventListener('ended', onEnded); v.addEventListener('timeupdate', () => { if (v === vids[cur]) tick(); }); });
+
+function start(){
+  if (!started){ if (idx !== 0 || vids[cur].ended) load(set); started = true; }
+  playBtn.hidden = true; paused = false; pp.textContent = 'Pause';
+  vids[cur].play().catch(()=>{ playBtn.hidden = false; });
+}
+function togglePause(){
+  if (!started) return start();
+  paused = !paused;
+  if (paused){ vids[cur].pause(); pp.textContent = 'Play'; } else { vids[cur].play().catch(()=>{}); pp.textContent = 'Pause'; }
+}
+playBtn.addEventListener('click', start);
+stage.addEventListener('click', e => { if (e.target !== playBtn && !playBtn.contains(e.target)) togglePause(); });
+pp.addEventListener('click', togglePause);
+document.querySelectorAll('.tabs button').forEach(b => b.addEventListener('click', () => { if (b.dataset.set !== set) load(b.dataset.set); }));
+
+load(innerWidth > innerHeight * 1.1 ? 'w' : 'v');
+</script>
+
+</body></html>

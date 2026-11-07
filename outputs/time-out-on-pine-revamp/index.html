@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Time Out On Pine | Bar, Nightlife & Events in Huntingdon Valley, PA</title>
+<meta name="description" content="Trivia Wednesdays, Thursday Social, DJ nights, sports and private events at Time Out On Pine, 2840 Pine Rd, Huntingdon Valley, PA.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#EEF0F7; --surface:#FFFFFF; --ink:#1C1446; --muted:#5A5480; --line:rgba(28,20,70,.14);
+  --accent:#D92A63; --amber:#FFB627; --board:#160F3B; --board-2:#231A5C; --led-off:rgba(255,182,39,.08);
+  --display:"Big Shoulders Display", Impact, "Arial Narrow", sans-serif;
+  --body:"Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme:light;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg:#120D33;--surface:#1D1648;--ink:#F3EEFF;--muted:#A9A2D0;--line:rgba(243,238,255,.14);--accent:#FF4F8B;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#120D33;--surface:#1D1648;--ink:#F3EEFF;--muted:#A9A2D0;--line:rgba(243,238,255,.14);--accent:#FF4F8B;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-behavior:smooth;scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.6 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--amber);outline-offset:3px;border-radius:4px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+h1,h2,h3{font-family:var(--display);font-weight:900;line-height:.92;margin:0;letter-spacing:-.01em}
+h2{font-size:clamp(46px,8vw,104px)}
+p{margin:0}
+.lede{color:var(--muted);max-width:56ch;font-size:clamp(17px,1.6vw,19px)}
+
+/* nav */
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:900;font-size:26px;letter-spacing:.01em}
+.brand svg{width:30px;height:30px}
+.brand small{font-family:var(--body);font-weight:500;font-size:13px;color:var(--muted);letter-spacing:0}
+.nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0}
+.nav ul a{text-decoration:none;font-weight:500;font-size:15px;color:var(--muted)}
+.nav ul a:hover{color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border-radius:999px;font:600 16px var(--body);text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .15s ease,background .2s}
+.btn:active{transform:scale(.97)}
+.btn-hot{background:var(--accent);color:#fff}
+.btn-hot:hover{background:color-mix(in srgb,var(--accent) 85%,#000)}
+.btn-line{border-color:currentColor;background:transparent;color:inherit}
+.nav .btn{min-height:40px;padding:0 18px;font-size:14px}
+@media (max-width:820px){.nav ul{display:none}}
+
+/* hero */
+.hero{padding:clamp(28px,5vw,64px) 0 clamp(56px,8vw,96px)}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(28px,5vw,64px);align-items:center}
+@media (max-width:900px){.hero-grid{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(64px,11vw,148px);text-transform:uppercase}
+.hero h1 span{display:block}
+.hero .lede{margin:22px 0 30px}
+.cta-row{display:flex;flex-wrap:wrap;gap:12px}
+
+/* scoreboard */
+.board{position:relative;background:var(--board);color:var(--amber);border-radius:22px;padding:22px;box-shadow:0 30px 60px -30px rgba(22,15,59,.6),inset 0 0 0 1px rgba(255,255,255,.06);overflow:hidden}
+.board::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle,transparent 55%,rgba(22,15,59,.55) 56%) 0 0/4px 4px}
+.bolt{position:absolute;width:8px;height:8px;border-radius:50%;background:#3b3175}
+.bolt.a{top:10px;left:10px}.bolt.b{top:10px;right:10px}.bolt.c{bottom:10px;left:10px}.bolt.d{bottom:10px;right:10px}
+.board-head{display:flex;justify-content:space-between;align-items:center;font:600 13px var(--body);color:#C9C2F0;padding:4px 6px 14px}
+.status{display:inline-flex;align-items:center;gap:8px}
+.lamp{width:10px;height:10px;border-radius:50%;background:#5a5287}
+.lamp.on{background:#3DF58A;box-shadow:0 0 12px #3DF58A}
+.panel{background:var(--board-2);border-radius:12px;padding:16px 18px;margin-bottom:12px}
+.panel-label{font:500 13px var(--body);color:#C9C2F0;margin-bottom:6px}
+.led{font-family:var(--display);font-weight:700;text-transform:uppercase;text-shadow:0 0 18px rgba(255,182,39,.55);line-height:1}
+.flap{display:flex;flex-wrap:wrap;gap:3px;font-size:clamp(30px,4.4vw,46px);min-height:1em}
+.flap i{font-style:normal;display:inline-block;min-width:.55em;text-align:center;background:rgba(0,0,0,.25);border-radius:4px;padding:4px 2px;position:relative}
+.flap i::after{content:"";position:absolute;left:0;right:0;top:50%;height:1px;background:rgba(0,0,0,.45)}
+.flap i.sp{background:none;min-width:.3em}
+.flap i.go{animation:flip .5s cubic-bezier(.3,.7,.3,1) both}
+@keyframes flip{0%{transform:rotateX(90deg);opacity:0}100%{transform:none;opacity:1}}
+.clock{display:flex;gap:10px;align-items:flex-end}
+.clock .led{font-size:clamp(56px,8vw,92px);font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.clock .unit{font:500 12px var(--body);color:#C9C2F0;margin-top:4px;text-align:center}
+.colon{font-family:var(--display);font-size:clamp(44px,6vw,72px);color:var(--amber);opacity:.7;padding-bottom:22px}
+.board-sub{font:500 15px var(--body);color:#E6E0FF;margin-top:10px}
+.board-foot{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.board-foot .panel{margin:0}
+.board-foot .led{font-size:28px}
+
+/* week */
+.week{padding:clamp(64px,9vw,120px) 0;border-top:1px solid var(--line)}
+.week-top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:34px}
+.days{display:flex;gap:6px;flex-wrap:wrap}
+.day{font:600 15px var(--body);padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.day[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.track{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px clamp(18px,4vw,40px) 26px;margin:0 calc(-1 * clamp(18px,4vw,40px));scrollbar-width:thin}
+.ticket{scroll-snap-align:start;flex:0 0 clamp(270px,30vw,340px);background:var(--surface);border-radius:18px;padding:26px 24px 22px;position:relative;display:flex;flex-direction:column;gap:12px;transition:opacity .25s,transform .25s;
+  -webkit-mask:radial-gradient(circle 12px at 0 62%,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 12px at 100% 62%,#0000 98%,#000) right/51% 100% no-repeat;
+          mask:radial-gradient(circle 12px at 0 62%,#0000 98%,#000) left/51% 100% no-repeat,radial-gradient(circle 12px at 100% 62%,#0000 98%,#000) right/51% 100% no-repeat}
+.ticket.dim{opacity:.35}
+.ticket.big{flex-basis:clamp(300px,38vw,420px);background:var(--ink);color:var(--bg)}
+.ticket.big .when,.ticket.big p{color:color-mix(in srgb,var(--bg) 78%,transparent)}
+.ticket h3{font-size:clamp(38px,4vw,50px);text-transform:uppercase}
+.when{font:600 14px var(--body);color:var(--accent)}
+.ticket.big .when{color:var(--amber)}
+.ticket p{color:var(--muted);font-size:16px}
+.stub{margin-top:auto;padding-top:16px;border-top:2px dashed var(--line);display:flex;justify-content:space-between;align-items:center;font:500 14px var(--body)}
+.ticket.big .stub{border-color:rgba(255,255,255,.2)}
+.tonight{background:var(--amber);color:#1C1446;font:700 12px var(--body);padding:4px 10px;border-radius:999px}
+
+/* sports */
+.sports{background:var(--board);color:#F3EEFF;padding:clamp(70px,10vw,130px) 0;position:relative;overflow:hidden}
+.sports h2{font-size:clamp(64px,13vw,190px);text-transform:uppercase;color:#F3EEFF}
+.sports h2 .o{display:block;-webkit-text-stroke:2px var(--amber);color:transparent}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:clamp(36px,5vw,60px);border-top:1px solid rgba(255,255,255,.16)}
+.facts div{padding:22px 20px 0 0}
+.facts div+div{padding-left:20px;border-left:1px solid rgba(255,255,255,.16)}
+.facts b{display:block;font:700 30px var(--display);color:var(--amber);text-transform:uppercase;margin-bottom:6px}
+.facts span{color:#C9C2F0;font-size:15px}
+@media (max-width:760px){.facts{grid-template-columns:1fr 1fr}.facts div:nth-child(3){padding-left:0;border-left:0}.facts div{padding-bottom:20px}}
+
+/* private */
+.private{padding:clamp(64px,9vw,120px) 0}
+.private-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:clamp(30px,5vw,70px);align-items:start}
+@media (max-width:900px){.private-grid{grid-template-columns:1fr}}
+.private .lede{margin-top:22px}
+.planner{background:var(--surface);border-radius:24px;padding:clamp(22px,3vw,34px);border:1px solid var(--line)}
+.q{margin-bottom:24px;border:0;padding:0}
+.q legend,.q label.t{font:600 15px var(--body);margin-bottom:10px;display:block}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip span{display:inline-block;padding:10px 16px;border-radius:12px;border:1.5px solid var(--line);font:500 15px var(--body);cursor:pointer;transition:background .15s,border-color .15s}
+.chip input:checked+span{background:var(--accent);border-color:var(--accent);color:#fff}
+.chip input:focus-visible+span{outline:3px solid var(--amber);outline-offset:2px}
+.range-row{display:flex;align-items:center;gap:16px}
+input[type=range]{flex:1;accent-color:var(--accent);height:28px}
+.count{font:900 44px var(--display);min-width:3.2ch;text-align:right}
+.field{width:100%;min-height:48px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink);font:500 16px var(--body);padding:0 14px}
+.fit{background:var(--bg);border-radius:14px;padding:16px 18px;margin:4px 0 20px;font-size:15px;color:var(--muted)}
+.fit strong{color:var(--ink)}
+
+/* visit */
+.visit{padding:clamp(64px,9vw,120px) 0;border-top:1px solid var(--line)}
+.visit-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(30px,5vw,70px);margin-top:34px}
+@media (max-width:860px){.visit-grid{grid-template-columns:1fr}}
+.addr{font:700 clamp(30px,4vw,46px)/1.05 var(--display);text-transform:uppercase}
+.contact{display:flex;flex-direction:column;gap:6px;margin:22px 0 26px;font-size:18px}
+.contact a{text-decoration:none;border-bottom:1.5px solid var(--line);width:fit-content}
+.contact a:hover{border-color:var(--accent)}
+.hours{width:100%;border-collapse:collapse;font-size:17px}
+.hours td{padding:14px 4px;border-bottom:1px solid var(--line)}
+.hours td:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.hours tr.today td{font-weight:600;color:var(--accent)}
+.hours tr.closed td{color:var(--muted)}
+.near{color:var(--muted);font-size:15px;margin-top:18px}
+
+footer{padding:34px 0 44px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Time Out On Pine home">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="3" y="4" width="26" height="7" rx="3.5" fill="var(--accent)"/><rect x="12.5" y="9" width="7" height="20" rx="3.5" fill="currentColor"/></svg>
+      Time Out <small>on Pine</small>
+    </a>
+    <nav aria-label="Main"><ul>
+      <li><a href="#week">This week</a></li>
+      <li><a href="#sports">Game day</a></li>
+      <li><a href="#private">Private events</a></li>
+      <li><a href="#visit">Visit</a></li>
+    </ul></nav>
+    <a class="btn btn-hot" href="#private">Book a party</a>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <h1><span>Call a</span><span>time out.</span></h1>
+      <p class="lede">Trivia Wednesdays, Thursday Social, DJs and themed parties on the weekend, and every big game on massive screens. 2840 Pine Road, Huntingdon Valley, with free parking out front.</p>
+      <div class="cta-row">
+        <a class="btn btn-hot" href="#week">See this week</a>
+        <a class="btn btn-line" href="#private">Plan a private event</a>
+      </div>
+    </div>
+
+    <div class="board" role="region" aria-label="Tonight at Time Out">
+      <i class="bolt a"></i><i class="bolt b"></i><i class="bolt c"></i><i class="bolt d"></i>
+      <div class="board-head">
+        <span class="status"><span class="lamp" id="lamp"></span><span id="statusText">Checking hours</span></span>
+        <span id="nyTime">Huntingdon Valley</span>
+      </div>
+      <div class="panel">
+        <div class="panel-label" id="eventLabel">Tonight</div>
+        <div class="led flap" id="flap" aria-live="polite"></div>
+        <div class="board-sub" id="eventSub"></div>
+      </div>
+      <div class="panel">
+        <div class="panel-label" id="clockLabel">Doors open in</div>
+        <div class="clock" aria-live="off">
+          <div><div class="led" id="hh">00</div><div class="unit">hrs</div></div>
+          <div class="colon">:</div>
+          <div><div class="led" id="mm">00</div><div class="unit">min</div></div>
+          <div class="colon">:</div>
+          <div><div class="led" id="ss">00</div><div class="unit">sec</div></div>
+        </div>
+      </div>
+      <div class="board-foot">
+        <div class="panel"><div class="panel-label">Since</div><div class="led">2022</div></div>
+        <div class="panel"><div class="panel-label">Parking</div><div class="led">Free</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="week" id="week">
+  <div class="wrap">
+    <div class="week-top">
+      <div>
+        <h2>The lineup</h2>
+        <p class="lede" style="margin-top:16px">Two weekly regulars, plus a rotating weekend of DJs, throwbacks, karaoke, Latin and European parties.</p>
+      </div>
+      <div class="days" role="group" aria-label="Filter by night">
+        <button class="day" data-d="all" aria-pressed="true">All</button>
+        <button class="day" data-d="3" aria-pressed="false">Wed</button>
+        <button class="day" data-d="4" aria-pressed="false">Thu</button>
+        <button class="day" data-d="5" aria-pressed="false">Fri</button>
+        <button class="day" data-d="6" aria-pressed="false">Sat</button>
+      </div>
+    </div>
+    <div class="track" id="track">
+      <article class="ticket" data-days="3" data-weekly="3">
+        <div class="when">Every Wednesday</div>
+        <h3>Ultimate Trivia</h3>
+        <p>Live hosts, fast rounds, real prizes. Bring a team and a name you won’t regret.</p>
+        <div class="stub"><span>5 PM to midnight</span><span class="badge"></span></div>
+      </article>
+      <article class="ticket big" data-days="4" data-weekly="4">
+        <div class="when">Every Thursday</div>
+        <h3>Thursday Social</h3>
+        <p>Happy hour all night. Food and drink specials, sports on the big screens, and a DJ later in the evening.</p>
+        <div class="stub"><span>5 PM to midnight</span><span class="badge"></span></div>
+      </article>
+      <article class="ticket" data-days="5">
+        <div class="when">Select Fridays</div>
+        <h3>Run It Back Friday</h3>
+        <p>Throwback night. The songs you know every word to, played loud.</p>
+        <div class="stub"><span>5 PM to 2 AM</span><span class="badge"></span></div>
+      </article>
+      <article class="ticket" data-days="5 6">
+        <div class="when">Select dates</div>
+        <h3>Latin Night</h3>
+        <p>Reggaeton, bachata, salsa and a dance floor that fills up early.</p>
+        <div class="stub"><span>5 PM to 2 AM</span><span class="badge"></span></div>
+      </article>
+      <article class="ticket" data-days="5 6">
+        <div class="when">Select dates</div>
+        <h3>Karaoke Night</h3>
+        <p>Grab the mic. Solo, duet or the whole table, everybody gets a turn.</p>
+        <div class="stub"><span>5 PM to 2 AM</span><span class="badge"></span></div>
+      </article>
+      <article class="ticket" data-days="5 6">
+        <div class="when">Select dates</div>
+        <h3>Nashe Party</h3>
+        <p>European party night with DJs spinning the sound of the other side of the Atlantic.</p>
+        <div class="stub"><span>5 PM to 2 AM</span><span class="badge"></span></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="sports" id="sports">
+  <div class="wrap">
+    <h2>Big game.<span class="o">Bigger screens.</span></h2>
+    <p class="lede" style="color:#C9C2F0;margin-top:26px">Philly fans, rival fans, fans who just came for wings. Every major game plays here with sound that makes the living room feel small.</p>
+    <div class="facts">
+      <div><b>Massive</b><span>Screens on every sightline</span></div>
+      <div><b>Loud</b><span>A sound system built for nights out</span></div>
+      <div><b>Full bar</b><span>Food and drinks through the final whistle</span></div>
+      <div><b>Free</b><span>On-site parking, every night</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="private" id="private">
+  <div class="wrap private-grid">
+    <div>
+      <h2>Your party, our room.</h2>
+      <p class="lede">Birthdays, company outings, reunions, wedding after-parties. Take a semi-private section or buy out the whole venue. The sound, lights and energy are already here.</p>
+      <p class="lede">Not sure yet? Come out on a regular night and see the space first.</p>
+    </div>
+
+    <form class="planner" id="planner" aria-label="Private event inquiry">
+      <fieldset class="q">
+        <legend>What are you celebrating?</legend>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="occ" value="Birthday" checked><span>Birthday</span></label>
+          <label class="chip"><input type="radio" name="occ" value="Corporate outing"><span>Corporate outing</span></label>
+          <label class="chip"><input type="radio" name="occ" value="Reunion"><span>Reunion</span></label>
+          <label class="chip"><input type="radio" name="occ" value="Wedding after-party"><span>Wedding after-party</span></label>
+          <label class="chip"><input type="radio" name="occ" value="Something else"><span>Something else</span></label>
+        </div>
+      </fieldset>
+      <div class="q">
+        <label class="t" for="guests">How many guests?</label>
+        <div class="range-row">
+          <input type="range" id="guests" min="10" max="300" step="5" value="40">
+          <output class="count" id="guestOut" for="guests">40</output>
+        </div>
+      </div>
+      <div class="fit" id="fit" aria-live="polite"></div>
+      <div class="q">
+        <label class="t" for="date">Preferred date</label>
+        <input class="field" type="date" id="date">
+      </div>
+      <div class="q">
+        <label class="t" for="name">Your name</label>
+        <input class="field" type="text" id="name" autocomplete="name" placeholder="First and last name">
+      </div>
+      <div class="cta-row">
+        <a class="btn btn-hot" id="send" href="mailto:info@timeoutpa.com">Email my inquiry</a>
+        <a class="btn btn-line" href="tel:+12156145959">Call (215) 614-5959</a>
+      </div>
+    </form>
+  </div>
+</section>
+
+<section class="visit" id="visit">
+  <div class="wrap">
+    <h2>Find us on Pine.</h2>
+    <div class="visit-grid">
+      <div>
+        <p class="addr">2840 Pine Rd<br>Huntingdon Valley, PA 19006</p>
+        <div class="contact">
+          <a href="tel:+12156145959">(215) 614-5959</a>
+          <a href="mailto:info@timeoutpa.com">info@timeoutpa.com</a>
+        </div>
+        <a class="btn btn-hot" href="https://www.google.com/maps/search/?api=1&query=2840+Pine+Rd+Huntingdon+Valley+PA+19006" target="_blank" rel="noopener">Get directions</a>
+        <p class="near">Minutes from Abington, Willow Grove, Southampton, Feasterville and Northeast Philly.</p>
+      </div>
+      <table class="hours" aria-label="Hours">
+        <tbody id="hoursBody"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© Time Out On Pine, Huntingdon Valley, PA</span>
+    <span>Please drink responsibly. 21+ with valid ID.</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const EVENTS={3:["Ultimate Trivia","Live hosts, fast rounds and prizes."],4:["Thursday Social","Happy hour all night, sports, DJ later."],5:["Friday night","DJs, throwbacks and themed parties."],6:["Saturday night","DJs, Latin, karaoke and more."]};
+  const DAYNAMES=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const W=10080;
+  // open windows in minutes-of-week (Sun=0), NY time
+  const WIN=[[3,1020,1440],[4,1020,1440],[5,1020,1560],[6,1020,1560]].map(([d,s,e])=>[d*1440+s,d*1440+e,d]);
+  const fmt=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",weekday:"short",hour:"numeric",minute:"numeric",second:"numeric",hourCycle:"h23"});
+  const shortTime=new Intl.DateTimeFormat("en-US",{timeZone:"America/New_York",hour:"numeric",minute:"2-digit"});
+  const WD={Sun:0,Mon:1,Tue:2,Wed:3,Thu:4,Fri:5,Sat:6};
+  function now(){
+    const p={};fmt.formatToParts(new Date()).forEach(x=>p[x.type]=x.value);
+    const d=WD[p.weekday],h=+p.hour%24,m=+p.minute,s=+p.second;
+    return {d,secs:(d*1440+h*60+m)*60+s};
+  }
+  function state(){
+    const n=now(),t=n.secs/60;
+    for(const [s,e,d] of WIN){
+      for(const off of [0,-W]){ if(t>=s+off&&t<e+off) return {open:true,day:d,left:(e+off)*60-n.secs,today:n.d}; }
+    }
+    let best=null;
+    for(const [s,,d] of WIN){let st=s; if(st<=t) st+=W; if(!best||st<best.st) best={st,d};}
+    return {open:false,day:best.d,left:best.st*60-n.secs,today:n.d};
+  }
+  const flap=document.getElementById("flap");
+  let lastTitle="";
+  function setFlap(text,animate){
+    flap.setAttribute("aria-label",text);flap.innerHTML="";
+    [...text.toUpperCase()].forEach((c,i)=>{
+      const el=document.createElement("i");el.setAttribute("aria-hidden","true");
+      if(c===" "){el.className="sp";el.textContent=" ";}else{el.textContent=c;if(animate){el.className="go";el.style.animationDelay=(i*45)+"ms";}}
+      flap.appendChild(el);
+    });
+  }
+  const pad=n=>String(n).padStart(2,"0");
+  function tick(){
+    const s=state();
+    const ev=EVENTS[s.day];
+    const tonight=s.open||(s.day===s.today&&s.left<86400);
+    document.getElementById("eventLabel").textContent=s.open?"On now":(tonight?"Tonight":"Next up, "+DAYNAMES[s.day]);
+    if(ev[0]!==lastTitle){setFlap(ev[0],lastTitle==="");lastTitle=ev[0];}
+    document.getElementById("eventSub").textContent=ev[1];
+    document.getElementById("clockLabel").textContent=s.open?"Last call countdown":"Doors open in";
+    const lamp=document.getElementById("lamp");lamp.classList.toggle("on",s.open);
+    document.getElementById("statusText").textContent=s.open?"Open now":"Closed right now";
+    let L=Math.max(0,s.left);const h=Math.floor(L/3600);
+    document.getElementById("hh").textContent=pad(Math.min(h,99));
+    document.getElementById("mm").textContent=pad(Math.floor(L%3600/60));
+    document.getElementById("ss").textContent=pad(L%60);
+    document.getElementById("nyTime").textContent=shortTime.format(new Date())+" in HV";
+    return s;
+  }
+  const first=tick();setInterval(tick,1000);
+
+  // hours table
+  const rows=[[3,"Wednesday","5 PM to 12 AM"],[4,"Thursday","5 PM to 12 AM"],[5,"Friday","5 PM to 2 AM"],[6,"Saturday","5 PM to 2 AM"],[0,"Sunday to Tuesday","Closed"]];
+  document.getElementById("hoursBody").innerHTML=rows.map(([d,n,h])=>{
+    const isToday=d===0?[0,1,2].includes(first.today):d===first.today;
+    return `<tr class="${isToday?"today ":""}${d===0?"closed":""}"><td>${n}${isToday?" (today)":""}</td><td>${h}</td></tr>`;
+  }).join("");
+
+  // lineup badges + filter
+  const tickets=[...document.querySelectorAll(".ticket")];
+  tickets.forEach(t=>{ if(t.dataset.weekly&&+t.dataset.weekly===first.day&&(first.open||first.day===first.today)) t.querySelector(".badge").outerHTML='<span class="tonight">Tonight</span>'; });
+  document.querySelectorAll(".day").forEach(b=>b.addEventListener("click",()=>{
+    document.querySelectorAll(".day").forEach(x=>x.setAttribute("aria-pressed",x===b));
+    const d=b.dataset.d;let firstMatch=null;
+    tickets.forEach(t=>{const hit=d==="all"||t.dataset.days.split(" ").includes(d);t.classList.toggle("dim",!hit);if(hit&&!firstMatch)firstMatch=t;});
+    if(firstMatch){const tr=document.getElementById("track");tr.scrollTo({left:firstMatch.offsetLeft-tr.offsetLeft,behavior:"smooth"});}
+  }));
+
+  // planner
+  const g=document.getElementById("guests"),out=document.getElementById("guestOut"),fit=document.getElementById("fit"),send=document.getElementById("send");
+  const dt=document.getElementById("date");dt.min=new Date().toISOString().slice(0,10);
+  function plan(){
+    const n=+g.value;out.textContent=n+(n>=300?"+":"");
+    const space=n<=60?"a semi-private section":"a full venue buyout";
+    fit.innerHTML=`For <strong>${out.textContent} guests</strong>, we’d start you with <strong>${space}</strong>. The team will confirm what fits your date.`;
+    const occ=document.querySelector('input[name="occ"]:checked').value;
+    const name=document.getElementById("name").value.trim();
+    const body=`Hi Time Out team,\n\nI’d like to plan a private event.\n\nOccasion: ${occ}\nGuests: ${out.textContent}\nSpace: ${space}\nPreferred date: ${dt.value||"Flexible"}\nName: ${name||""}\n\nThanks!`;
+    send.href=`mailto:info@timeoutpa.com?subject=${encodeURIComponent("Private event inquiry: "+occ)}&body=${encodeURIComponent(body)}`;
+  }
+  document.getElementById("planner").addEventListener("input",plan);
+  document.getElementById("planner").addEventListener("submit",e=>e.preventDefault());
+  plan();
+})();
+</script>
+</body>
+</html>

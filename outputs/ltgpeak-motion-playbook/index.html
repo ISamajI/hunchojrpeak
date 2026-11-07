@@ -1,0 +1,495 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>LTGPeak Motion Playbook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Hanken+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a field manual — one narrow reading column, each technique a "plate" with a live demo beside its recipe */
+:root{
+  --bg:#ECEFEC; --surface:#F8FAF8; --ink:#17231F; --muted:#56635E; --line:#CBD3CF;
+  --pine:#1F3B34; --brass:#9A6B22; --glow:#E7C27A;
+  --display:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --body:"Hanken Grotesk",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1614; --surface:#16201D; --ink:#E6ECE8; --muted:#97A59F; --line:#2A3833;
+  --pine:#9FC7B8; --brass:#E2B464; --glow:#E7C27A; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1614; --surface:#16201D; --ink:#E6ECE8; --muted:#97A59F; --line:#2A3833;
+  --pine:#9FC7B8; --brass:#E2B464; --glow:#E7C27A; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:16px/1.6 var(--body);padding-inline:16px;padding-block:0 64px}
+.wrap{max-width:980px;margin:0 auto}
+a{color:var(--brass);text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:2px solid var(--brass);outline-offset:3px}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0;line-height:1.05}
+p{margin:0;max-width:65ch}
+code,.mono{font-family:var(--mono);font-size:.84em}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* Hero: a slow dolly across a dusk scene, drawn in CSS so the page carries no video */
+.hero{position:relative;margin-top:24px;border-radius:6px;overflow:hidden;min-height:420px;display:grid;align-items:end;
+  background:#0D1A17;color:#F2EEE4;isolation:isolate}
+.scene{position:absolute;inset:-8%;z-index:-1;
+  background:
+   radial-gradient(60% 40% at 72% 30%,#E7C27A55,transparent 70%),
+   linear-gradient(180deg,#1B2E3A 0%,#3E4C55 38%,#C98C52 62%,#2A2620 63%,#121513 100%);
+  animation:dolly 22s ease-in-out infinite alternate}
+.scene::before{content:"";position:absolute;left:18%;right:30%;bottom:22%;height:26%;
+  background:linear-gradient(#1A1E1C,#0E100F);clip-path:polygon(0 40%,30% 0,62% 38%,62% 100%,0 100%)}
+.scene::after{content:"";position:absolute;left:24%;bottom:28%;width:9%;height:9%;background:var(--glow);
+  box-shadow:5.5em 0 0 var(--glow);filter:blur(.5px);opacity:.85}
+@keyframes dolly{from{transform:scale(1.04) translateX(-2%)}to{transform:scale(1.14) translateX(2%)}}
+.hero-copy{padding:32px;display:grid;gap:14px;background:linear-gradient(transparent,#0B1210CC 45%)}
+.hero h1{font-size:clamp(44px,8vw,92px)}
+.hero h1 .w{display:inline-block;animation:rise .9s cubic-bezier(.2,.7,.1,1) both}
+.hero h1 .w:nth-child(2){animation-delay:.08s}.hero h1 .w:nth-child(3){animation-delay:.16s}
+@keyframes rise{from{transform:translateY(.35em);opacity:.25;filter:blur(4px)}}
+.hero p{color:#D7D2C6}
+
+.intro{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:24px;margin-block:40px}
+.intro div{display:grid;gap:6px;min-width:0}
+.intro b{font-family:var(--display);font-weight:400;font-size:28px;color:var(--pine)}
+
+section{margin-top:72px}
+.sec-head{display:grid;gap:10px;margin-bottom:28px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.sec-head h2{font-size:clamp(32px,5vw,48px)}
+
+.plate{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:28px;padding-block:28px;border-bottom:1px solid var(--line)}
+@media (max-width:760px){.plate{grid-template-columns:1fr}}
+.plate h3{font-size:30px;margin-bottom:10px}
+.plate .why{color:var(--muted);margin-bottom:14px}
+.recipe{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.recipe li{display:grid;grid-template-columns:84px 1fr;gap:10px;font-size:14px}
+.recipe li span:first-child{font:500 11px/1.9 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.tag{display:inline-block;font:500 11px/1 var(--mono);padding:5px 7px;border:1px solid var(--line);border-radius:3px;margin:0 4px 4px 0;color:var(--ink)}
+.tag.hot{border-color:var(--brass);color:var(--brass)}
+
+.demo{background:var(--surface);border:1px solid var(--line);border-radius:6px;min-height:240px;position:relative;overflow:hidden;
+  display:grid;place-items:center;padding:20px;min-width:0}
+.demo .cap{position:absolute;left:12px;bottom:10px;font:11px var(--mono);color:var(--muted)}
+.scrollbox{height:240px;overflow-y:auto;width:100%;place-self:stretch;scroll-timeline:--box y}
+
+/* 1. Native scroll-driven reveal (view timeline) — readable at rest, enhanced when supported */
+.vt{display:grid;gap:14px;padding-block:40px 120px}
+.vt div{height:64px;border-radius:4px;background:linear-gradient(90deg,var(--pine),var(--brass));opacity:.9}
+@supports (animation-timeline:view()){
+  .vt div{animation:clipin linear both;animation-timeline:view();animation-range:entry 0% cover 40%}
+  @keyframes clipin{from{clip-path:inset(0 60% 0 0 round 4px);transform:translateX(-12px)}to{clip-path:inset(0 0 0 0 round 4px)}}
+}
+
+/* 2. Scroll-scrubbed progress (scroll timeline on the box) */
+.bar{position:sticky;top:0;height:4px;background:var(--brass);transform-origin:left;transform:scaleX(.35)}
+@supports (animation-timeline:scroll()){.bar{animation:grow linear both;animation-timeline:--box}@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}}
+.longcopy{padding:20px 16px;display:grid;gap:14px;color:var(--muted);font-size:14px}
+
+/* 3. Kinetic type */
+.kin{font-family:var(--display);font-size:clamp(34px,5vw,52px);line-height:1;text-align:center}
+.kin span{display:inline-block;transition:transform .5s cubic-bezier(.2,.8,.2,1),color .3s}
+.kin.play span{animation:wave 1.1s cubic-bezier(.2,.8,.2,1) both}
+@keyframes wave{0%{transform:translateY(.6em) rotate(6deg);opacity:.2}100%{transform:none;opacity:1}}
+
+/* 4. Magnetic button */
+.mag{font:500 15px var(--body);padding:16px 28px;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+.mag i{display:inline-block;font-style:normal;transition:transform .35s cubic-bezier(.2,.8,.2,1)}
+
+/* 5. Clip-path image reveal on hover / tap */
+.reveal{width:min(100%,360px);aspect-ratio:4/3;max-width:100%;border-radius:4px;position:relative;overflow:hidden;cursor:pointer;
+  background:linear-gradient(160deg,#30454E,#1A2622)}
+.reveal .lit{position:absolute;inset:0;background:radial-gradient(70% 60% at 60% 40%,#F2D79A,#C07B3E 55%,#3B2618);
+  clip-path:circle(0% at 50% 50%);transition:clip-path .9s cubic-bezier(.7,0,.2,1)}
+.reveal:hover .lit,.reveal.on .lit{clip-path:circle(75% at 50% 50%)}
+.reveal span{position:absolute;left:14px;top:12px;font:11px var(--mono);color:#F2EEE4;z-index:1}
+
+/* 6. Marquee */
+.marq{width:100%;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
+.marq div{display:flex;gap:40px;width:max-content;animation:slide 18s linear infinite;font-family:var(--display);font-size:38px;white-space:nowrap}
+.marq em{color:var(--brass)}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* 7. View transition grid → detail */
+.vtgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+.vtgrid button{aspect-ratio:1;border:0;border-radius:4px;cursor:pointer;font:500 12px var(--mono);color:#F2EEE4;display:grid;place-items:end start;padding:8px}
+.vtdetail{width:100%;display:grid;gap:10px}
+.vtdetail .big{aspect-ratio:16/9;border-radius:6px;display:grid;place-items:end start;padding:14px;color:#F2EEE4;font-family:var(--display);font-size:28px}
+.vtdetail button{justify-self:start;font:500 13px var(--body);background:none;border:1px solid var(--line);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer}
+
+/* Tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:14px}
+th,td{text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700;white-space:nowrap}
+
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:2px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden}
+.rules div{background:var(--surface);padding:18px;display:grid;gap:6px;min-width:0}
+.rules b{font-family:var(--mono);font-size:13px;color:var(--brass)}
+
+.study{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.study article{display:grid;gap:6px;padding-top:14px;border-top:2px solid var(--pine);min-width:0}
+.study h3{font-size:24px}
+.study p{font-size:14px;color:var(--muted)}
+
+.flow{counter-reset:s;display:grid;gap:14px;margin:0;padding:0;list-style:none}
+.flow li{counter-increment:s;display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:start}
+.flow li::before{content:counter(s);font-family:var(--display);font-size:30px;line-height:1;color:var(--brass)}
+.code{margin:20px 0 0;padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:6px;overflow-x:auto;font:13px/1.6 var(--mono);color:var(--ink)}
+.sources{columns:2 280px;column-gap:28px;font-size:14px;padding-left:18px}
+.sources li{break-inside:avoid;margin-bottom:6px}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div class="scene" aria-hidden="true"></div>
+    <div class="hero-copy">
+      <span class="eyebrow" style="color:#C9C3B5">LTGPeak · field manual · Oct 2026</span>
+      <h1><span class="w">Motion</span> <span class="w">that</span> <span class="w">sells&nbsp;a&nbsp;stay</span></h1>
+      <p>Cinematic techniques, modern interactions and edit styles that award-winning hotel, villa and studio sites are shipping right now. Each one comes with a working demo, the stack to build it, and where it fits on a BnB or client site.</p>
+    </div>
+  </header>
+
+  <div class="intro">
+    <div><b>GSAP is free</b><p>All plugins, including ScrollTrigger, SplitText, DrawSVG and MorphSVG, cost nothing now. That removes the old reason to fake scroll scenes.</p></div>
+    <div><b>CSS scrolls itself</b><p><code>animation-timeline: scroll()</code> and <code>view()</code> work in Chrome, Firefox and Safari 26. Simple reveals no longer need JavaScript.</p></div>
+    <div><b>INP judges motion</b><p>Google's 200ms responsiveness bar fails on a large share of sites. Animate <code>transform</code> and <code>opacity</code> only, and lazy-load the heavy stuff.</p></div>
+  </div>
+
+  <section id="interactions">
+    <div class="sec-head">
+      <span class="eyebrow">Part one</span>
+      <h2>Seven techniques, live</h2>
+      <p class="why">Scroll inside the demo boxes, hover, or tap. Every demo here is plain CSS plus a few lines of JS, so you can lift it straight into a template.</p>
+    </div>
+
+    <div class="plate">
+      <div>
+        <h3>Scroll-driven reveal</h3>
+        <p class="why">Images wipe in as they enter the viewport. Use it for the room-by-room gallery on a rental site.</p>
+        <ul class="recipe">
+          <li><span>Stack</span><span>Native CSS <code>animation-timeline: view()</code> + <code>animation-range</code></span></li>
+          <li><span>Fallback</span><span>Wrap in <code>@supports</code>. Without support the content just sits there, fully visible.</span></li>
+          <li><span>Cost</span><span>Zero JS, runs off the main thread</span></li>
+        </ul>
+        <p style="margin-top:12px"><span class="tag hot">no library</span><span class="tag">all browsers 2026</span></p>
+      </div>
+      <div class="demo"><div class="scrollbox"><div class="vt"><div></div><div></div><div></div><div></div><div></div><div></div></div></div><span class="cap">scroll inside ↓</span></div>
+    </div>
+
+    <div class="plate">
+      <div>
+        <h3>Scrubbed scrollytelling</h3>
+        <p class="why">Progress is tied to the scrollbar, so the visitor controls the playback. Apple's product pages scrub a frame sequence this way. For a house, scrub a drone flyover from the driveway to the pool.</p>
+        <ul class="recipe">
+          <li><span>Stack</span><span>GSAP ScrollTrigger <code>pin: true, scrub: 1</code>, drawing a JPG/WebP frame sequence to <code>&lt;canvas&gt;</code></span></li>
+          <li><span>Frames</span><span>Export 120–180 frames at 1600px WebP from the drone clip with ffmpeg. Preload the first 20.</span></li>
+          <li><span>Smooth</span><span>Lenis with <code>lenis.on('scroll', ScrollTrigger.update)</code> on GSAP's ticker</span></li>
+        </ul>
+        <p style="margin-top:12px"><span class="tag hot">GSAP</span><span class="tag">Lenis</span><span class="tag">canvas</span></p>
+      </div>
+      <div class="demo"><div class="scrollbox" id="scrub"><div class="bar"></div><div class="longcopy">
+        <p><b>08:00</b> Light comes in through the east glass. The scene is pinned while the scroll moves the camera.</p>
+        <p><b>12:00</b> The pool section slides in. The headline swaps with a SplitText line reveal.</p>
+        <p><b>17:30</b> Golden hour. The colour grade warms as scroll progress passes 0.6.</p>
+        <p><b>20:00</b> The terrace lights come on. The CTA appears: <em>Check dates</em>.</p>
+        <p><b>23:00</b> Night. The section unpins and normal scroll resumes.</p>
+        <p style="height:80px"></p></div></div><span class="cap">the bar is scroll progress</span></div>
+    </div>
+
+    <div class="plate">
+      <div>
+        <h3>Kinetic type</h3>
+        <p class="why">Headlines enter letter by letter or line by line, sometimes with a variable font whose weight changes on scroll. This is the cheapest way to make a page feel directed.</p>
+        <ul class="recipe">
+          <li><span>Stack</span><span>GSAP SplitText (<code>type: "lines,chars"</code>, <code>mask: "lines"</code>), stagger 0.02–0.04</span></li>
+          <li><span>A11y</span><span>SplitText keeps an <code>aria-label</code> on the parent so screen readers hear one word, not letters</span></li>
+        </ul>
+        <p style="margin-top:12px"><span class="tag hot">GSAP SplitText</span><span class="tag">variable fonts</span></p>
+      </div>
+      <div class="demo"><div class="kin" id="kin" aria-label="Wake up to the ridge">Wake up to the ridge</div><span class="cap">tap to replay</span></div>
+    </div>
+
+    <div class="plate">
+      <div>
+        <h3>Magnetic CTA</h3>
+        <p class="why">The button leans toward the pointer and the label lags slightly behind. Use it only on the main "Book" button so it keeps meaning something.</p>
+        <ul class="recipe">
+          <li><span>Stack</span><span>About 15 lines of vanilla JS, or <code>gsap.quickTo</code> for x and y</span></li>
+          <li><span>Gate</span><span>Run it only under <code>matchMedia('(hover:hover) and (pointer:fine)')</code>. Phones get a normal button.</span></li>
+        </ul>
+        <p style="margin-top:12px"><span class="tag hot">vanilla JS</span><span class="tag">desktop only</span></p>
+      </div>
+      <div class="demo"><button class="mag" id="mag" type="button"><i>Check availability →</i></button><span class="cap">move your cursor near it</span></div>
+    </div>
+
+    <div class="plate">
+      <div>
+        <h3>Clip-path light reveal</h3>
+        <p class="why">A day shot opens into its evening version through an expanding circle. It sells the same room twice. Pair two photos taken from the same tripod spot.</p>
+        <ul class="recipe">
+          <li><span>Stack</span><span>CSS <code>clip-path: circle()</code> transition. For a scroll-scrubbed version, drive it with ScrollTrigger.</span></li>
+          <li><span>Upgrade</span><span>Swap in a WebGL shader dissolve with the Three.js reveal from Codrops' Feb 2026 gallery tutorial</span></li>
+        </ul>
+        <p style="margin-top:12px"><span class="tag hot">CSS</span><span class="tag">Three.js optional</span></p>
+      </div>
+      <div class="demo"><div class="reveal" id="reveal" tabindex="0" role="button" aria-label="Toggle evening view"><span>DAY → DUSK</span><div class="lit"></div></div><span class="cap">hover or tap</span></div>
+    </div>
+
+    <div class="plate">
+      <div>
+        <h3>Editorial marquee</h3>
+        <p class="why">A slow, endless line of serif type between sections. It works as a section break and doubles as a place for amenities or press quotes.</p>
+        <ul class="recipe">
+          <li><span>Stack</span><span>Duplicate the track and run <code>translateX(-50%)</code> on a loop, with a fade mask at the edges</span></li>
+          <li><span>Extra</span><span>Tie the speed to scroll velocity: <code>ScrollTrigger.getVelocity()</code> feeding <code>timeScale</code></span></li>
+        </ul>
+        <p style="margin-top:12px"><span class="tag hot">CSS</span></p>
+      </div>
+      <div class="demo"><div class="marq" aria-hidden="true"><div>
+        <span>Heated plunge pool</span><em>·</em><span>Sleeps eight</span><em>·</em><span>Ridge-line sunsets</span><em>·</em><span>Self check-in</span><em>·</em>
+        <span>Heated plunge pool</span><em>·</em><span>Sleeps eight</span><em>·</em><span>Ridge-line sunsets</span><em>·</em><span>Self check-in</span><em>·</em>
+      </div></div></div>
+    </div>
+
+    <div class="plate">
+      <div>
+        <h3>Shared-element transition</h3>
+        <p class="why">A gallery tile grows into the room's detail view, so the visitor never loses track of where they are. Cross-document view transitions also work between real pages now.</p>
+        <ul class="recipe">
+          <li><span>Stack</span><span><code>document.startViewTransition()</code> + <code>view-transition-name</code>. For multi-page sites, add <code>@view-transition{navigation:auto}</code>.</span></li>
+          <li><span>Alt</span><span>Barba.js + GSAP Flip for full control (Codrops, Jul 2026)</span></li>
+        </ul>
+        <p style="margin-top:12px"><span class="tag hot">View Transitions API</span><span class="tag">GSAP Flip</span></p>
+      </div>
+      <div class="demo" id="vtdemo"></div>
+    </div>
+  </section>
+
+  <section id="cinematic">
+    <div class="sec-head">
+      <span class="eyebrow">Part two</span>
+      <h2>Cinematic layer: video, 3D, splats</h2>
+      <p class="why">These are the bigger moves, roughly ordered by how much they cost to build. Pick one per site.</p>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Technique</th><th>What the visitor sees</th><th>Build with</th><th>Best for</th></tr></thead>
+      <tbody>
+        <tr><td>Poster-first hero loop</td><td>A sharp still frame shows instantly, then a 6–10s muted loop fades in over it</td><td><code>&lt;video muted autoplay loop playsinline poster&gt;</code> with AV1 → HEVC → H.264 sources and a WebP poster as the LCP element</td><td>Every BnB homepage</td></tr>
+        <tr><td>Slow dolly / Ken Burns</td><td>Stills drift and push in like a camera move (the hero above)</td><td>CSS <code>scale</code> + <code>translate</code> keyframes, 15–25s, ease-in-out alternate</td><td>Owners with photos but no video</td></tr>
+        <tr><td>Scroll-scrubbed flyover</td><td>The drone shot moves forward and back with the scroll</td><td>Frame sequence on canvas + ScrollTrigger scrub</td><td>Hero property, land, views</td></tr>
+        <tr><td>Scroll-revealed WebGL gallery</td><td>Photos dissolve in through shaders, with depth layers and parallax tied to scroll speed</td><td>Three.js + GSAP + Lenis (Codrops Feb and Mar 2026)</td><td>Premium villas, portfolio pages</td></tr>
+        <tr><td>Blender camera path</td><td>The camera glides through a 3D model of the house along a set path</td><td>Export the camera curve from Blender and follow it in Three.js with ScrollTrigger (Codrops, Jul 2026)</td><td>New builds, pre-launch rentals</td></tr>
+        <tr><td>Gaussian-splat walkthrough</td><td>A photoreal, free-roam 3D capture of the actual rooms, running at 100+ FPS in the browser</td><td>Capture with a phone, then render with Spark (Three.js), PlayCanvas or GaussianSplats3D</td><td>The wow tour, a direct upgrade on Matterport</td></tr>
+        <tr><td>Interactive 2D characters / icons</td><td>Animated illustrations that react to hover, state and data</td><td>Rive (state machines, data binding) or Lottie (After Effects export)</td><td>Booking widget states, loaders</td></tr>
+        <tr><td>3D hero object</td><td>A rotating object, such as a key or a logo mark, that the visitor can drag</td><td>Spline export or React Three Fiber</td><td>Brand and studio sites more than rentals</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <section id="edits">
+    <div class="sec-head">
+      <span class="eyebrow">Part three</span>
+      <h2>Edit styles for the footage itself</h2>
+      <p class="why">Web video gets treated like film: short, graded, and cut on motion. These are the edits to ask a videographer for, or to cut in CapCut or Premiere yourself.</p>
+    </div>
+    <div class="rules">
+      <div><b>Match-cut on movement</b><p>A door opens in the hallway, and the cut lands mid-swing on the bedroom door. Rooms feel connected.</p></div>
+      <div><b>Speed ramp</b><p>A 120fps gimbal walk slowed to 40%, then snapped back to real time on the reveal.</p></div>
+      <div><b>Golden-hour grade</b><p>One LUT across every clip, warm highlights and teal shadows, so stills, loops and splats all match.</p></div>
+      <div><b>Seamless loop point</b><p>Cut where the end frame matches the start frame, or crossfade 12 frames, so the hero never visibly "restarts".</p></div>
+      <div><b>Vertical + horizontal masters</b><p>Shoot or reframe 9:16 and 16:9 together, and serve each with <code>&lt;source media&gt;</code>.</p></div>
+      <div><b>Detail inserts</b><p>Two-second macros of coffee pouring, linen and keys. They work as hover previews on gallery cards.</p></div>
+    </div>
+  </section>
+
+  <section id="refs">
+    <div class="sec-head">
+      <span class="eyebrow">Part four</span>
+      <h2>Sites to study</h2>
+      <p class="why">Open these and scroll slowly. Note what moves, what triggers it, and what stays still.</p>
+    </div>
+    <div class="study">
+      <article><span class="eyebrow">Hospitality</span><h3>Tengile · MalaMala</h3><p>Awwwards Site of the Day, 3 Oct 2026. Safari lodge, a current reference for slow, image-led pacing.</p></article>
+      <article><span class="eyebrow">Hospitality</span><h3>Tandjung Sari</h3><p>Fleava, Aug 2026. A Bali hotel in a horizontal layout. Shows how sideways scrolling can feel like walking a property.</p></article>
+      <article><span class="eyebrow">Hospitality</span><h3>White Desert</h3><p>Site of the Day, Sep 2026. Antarctic camps. Big landscape video carrying a luxury price point.</p></article>
+      <article><span class="eyebrow">Hospitality</span><h3>Palazzo Sogni · Vander · Faith Ibiza</h3><p>2026 honorable mentions. Good for comparing booking-flow patterns across hotel sites.</p></article>
+      <article><span class="eyebrow">Cinematic</span><h3>Igloo Inc · Lusion</h3><p>One continuous WebGL world where loading, navigation and story all happen in a single scene, with physics-based input.</p></article>
+      <article><span class="eyebrow">Type-led</span><h3>Locomotive · Obys</h3><p>Smooth scroll and poster-scale serif type with almost no 3D. This is the most transferable style for small budgets.</p></article>
+    </div>
+  </section>
+
+  <section id="booking">
+    <div class="sec-head">
+      <span class="eyebrow">Part five</span>
+      <h2>The booking flow under the motion</h2>
+      <p class="why">Cinematics get the visitor to care, and the booking flow decides whether they pay you or Airbnb. Over 65% of rental-site traffic is on phones, so design this part on a phone first.</p>
+    </div>
+    <div class="rules">
+      <div><b>Dates above the fold</b><p>The date picker and guest count are visible without scrolling on every screen, sitting on top of the hero video and not hidden behind a button.</p></div>
+      <div><b>Sticky "Check dates"</b><p>On mobile, a bottom bar is always present. Pinned scroll scenes must never cover it. Tap targets are at least 44×44px.</p></div>
+      <div><b>Live availability</b><p>The calendar syncs in real time with the PMS, Airbnb and VRBO iCal. Stale calendars cause double bookings and refunds.</p></div>
+      <div><b>Total price up front</b><p>Show nightly rate × nights + cleaning + taxes before payment, and keep that sticky price line through checkout.</p></div>
+      <div><b>Guest checkout</b><p>Ask for dates, guests, name, email, phone and card, and nothing else. No account creation. Apple Pay and Google Pay go through Stripe.</p></div>
+      <div><b>Proof near the button</b><p>Put star rating, two short named guest quotes, and "Superhost on Airbnb" next to the CTA, not on a separate reviews page.</p></div>
+      <div><b>Instant confirmation</b><p>Show a confirmation page with check-in details, an add-to-calendar file and a map link, plus an email sent the same second.</p></div>
+      <div><b>Animate the booking too</b><p>Use <code>@starting-style</code> for the calendar popover, a Rive state machine for idle → loading → confirmed, and a view transition from the room to checkout.</p></div>
+      <div><b>Get found on Google</b><p>Add <code>VacationRental</code> JSON-LD: a stable ID, at least 8 images, lat/long to 5 decimals, and occupancy. Google Vacation Rentals then can link guests straight to the direct site.</p></div>
+    </div>
+  </section>
+
+  <section id="pipeline">
+    <div class="sec-head">
+      <span class="eyebrow">Part six</span>
+      <h2>Getting the footage: capture, generate, compress</h2>
+      <p class="why">One shoot day per property can supply every asset the site needs. This is the order to do it in.</p>
+    </div>
+    <ol class="flow">
+      <li><p><b>Gimbal and drone at golden hour.</b> Shoot a 120fps walk-through for speed ramps, one drone push from the driveway (it becomes the scroll scrub), and day and dusk stills from a locked tripod (they become the clip-path reveal).</p></li>
+      <li><p><b>Splat capture with a phone.</b> Scaniverse is free, processes on-device in about a minute and exports <code>.spz</code> directly, which is about 90% smaller than PLY. Polycam uses iPhone LiDAR for blank walls. Walk a slow spiral and vary your height. Capture one room per splat, since there's no streaming level-of-detail yet.</p></li>
+      <li><p><b>Load splats natively.</b> Three.js r186 added a built-in <code>GaussianSplat</code> class with <code>SPZLoader</code> on <code>WebGPURenderer</code>. That's one loader call plus <code>scene.add()</code>. Spark and GaussianSplats3D remain options for older setups.</p></li>
+      <li><p><b>Fill the gaps with AI, labelled.</b> Use Higgsfield or Seedance image-to-video for neighbourhood b-roll, weather and seasons, and branded intros. Never present a generated clip as the actual unit. Label anything illustrative so the listing stays honest.</p></li>
+      <li><p><b>Compress for the web.</b> Make a 6–10s loop in AV1 with an H.264 fallback, a WebP poster under 100KB, and a WebP frame sequence for the scrub.</p></li>
+    </ol>
+    <pre class="code"><code># hero loop: AV1 primary, H.264 fallback, no audio
+ffmpeg -i hero.mov -an -t 8 -vf "scale=1920:-2,fps=30" -c:v libsvtav1 -crf 34 -preset 6 hero.av1.mp4
+ffmpeg -i hero.mov -an -t 8 -vf "scale=1920:-2,fps=30" -c:v libx264 -crf 24 -preset slow -pix_fmt yuv420p -movflags +faststart hero.h264.mp4
+
+# poster = first frame as WebP
+ffmpeg -i hero.mov -frames:v 1 -vf "scale=1920:-2" -c:v libwebp -quality 72 hero-poster.webp
+
+# scroll-scrub frame sequence from the drone clip
+ffmpeg -i drone.mp4 -vf "fps=24,scale=1600:-2" -c:v libwebp -quality 70 frames/%04d.webp</code></pre>
+  </section>
+
+  <section id="platform">
+    <div class="sec-head">
+      <span class="eyebrow">Part seven</span>
+      <h2>Platform features that just landed</h2>
+      <p class="why">These are new browser capabilities that replace libraries or open new effects. All of them work in current Chrome, Firefox and Safari unless noted.</p>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Feature</th><th>What it replaces or unlocks</th><th>Where we'd use it</th></tr></thead>
+      <tbody>
+        <tr><td><code>@starting-style</code></td><td>Entry animations from <code>display:none</code> with no JS timing tricks</td><td>Menus, the booking popover, toasts</td></tr>
+        <tr><td>Anchor positioning</td><td>Popper.js and Floating UI for tooltips and dropdowns</td><td>Amenity tooltips, the date picker</td></tr>
+        <tr><td>Scroll-state queries</td><td>JS that checks whether a header is "stuck" or a carousel slide is snapped</td><td>A header that shrinks when stuck, the active room in a snap gallery</td></tr>
+        <tr><td><code>sibling-index()</code></td><td>Inline <code>--i</code> variables for stagger delays</td><td>Gallery and bento stagger reveals in pure CSS (newest of the group, so check support)</td></tr>
+        <tr><td>Cross-document view transitions</td><td>SPA routers and Barba.js for page-to-page morphs</td><td>Room page → checkout on a plain multi-page site</td></tr>
+        <tr><td>WebGPU + TSL</td><td>Raw GLSL. A single shader runs on WebGPU and falls back to WebGL 2.</td><td>Shader dissolves, depth-of-field, splats. Note that the old EffectComposer doesn't run on it.</td></tr>
+      </tbody>
+    </table></div>
+    <p style="margin-top:20px;color:var(--muted)"><b style="color:var(--ink)">Falling out of style:</b> decorative preloaders that hold back real content, and fading in every element on every page. A short type-led intro is fine when the page is actually ready behind it.</p>
+  </section>
+
+  <section id="rules">
+    <div class="sec-head">
+      <span class="eyebrow">House rules</span>
+      <h2>Ship it without hurting the booking rate</h2>
+    </div>
+    <ol class="flow">
+      <li><p><b>The poster is the LCP.</b> Use a WebP still under 100KB. Video loads after it and never blocks the first paint.</p></li>
+      <li><p><b>Transform and opacity only.</b> Never animate <code>width</code>, <code>top</code> or <code>left</code>, and keep INP under 200ms.</p></li>
+      <li><p><b>Respect reduced motion.</b> Use <code>prefers-reduced-motion</code> or <code>gsap.matchMedia()</code>, and show the still instead of the loop.</p></li>
+      <li><p><b>Cursor effects are desktop only.</b> Gate them on <code>(hover:hover) and (pointer:fine)</code> and don't ship that code to phones.</p></li>
+      <li><p><b>One big moment per page.</b> Pick the scrub, the splat or the WebGL gallery, and keep everything around it quiet.</p></li>
+      <li><p><b>Book button always reachable.</b> Pinned sections must never trap the CTA. Put a sticky "Check dates" bar on mobile.</p></li>
+      <li><p><b>Licensed footage only.</b> Use the owner's own shoot, Pexels or Pixabay (commercial-OK), or clips generated with Higgsfield. Never ripped YouTube or competitor listings.</p></li>
+    </ol>
+  </section>
+
+  <section id="sources">
+    <div class="sec-head"><span class="eyebrow">Sources</span><h2>Where this came from</h2></div>
+    <ul class="sources">
+      <li><a href="https://motionkit.io/blog/web-animation-trends-2026">MotionKit · Web animation trends 2026</a></li>
+      <li><a href="https://www.utsubo.com/blog/web-design-trends-2026-decision-makers-guide">Utsubo · Web design trends 2026</a></li>
+      <li><a href="https://www.skyadesigns.co.uk/web-design-insights/web-design-trend-2026-scroll-storytelling/">Skya · Scroll storytelling</a></li>
+      <li><a href="https://dappasol.com/guides/cinematic-website-examples/">Dappasol · Cinematic website examples</a></li>
+      <li><a href="https://tympanus.net/codrops/2026/02/02/building-a-scroll-revealed-webgl-gallery-with-gsap-three-js-astro-and-barba-js/">Codrops · Scroll-revealed WebGL gallery</a></li>
+      <li><a href="https://tympanus.net/codrops/2026/02/19/creating-a-smooth-horizontal-parallax-gallery-from-dom-to-webgl/">Codrops · Horizontal parallax gallery</a></li>
+      <li><a href="https://tympanus.net/codrops/2026/07/07/building-a-scroll-driven-3d-gallery-using-a-blender-camera-path-with-three-js-and-gsap/">Codrops · Blender camera path gallery</a></li>
+      <li><a href="https://github.com/JosephASG/codrops-cinematic-scroll-animations">GitHub · Cinematic 3D scroll experiences</a></li>
+      <li><a href="https://www.joshwcomeau.com/animation/scroll-driven-animations/">Josh Comeau · Scroll-driven animations</a></li>
+      <li><a href="https://www.frontendhorizon.com/blog/view-transitions-api-and-css-scroll-driven-animations-the-browser-wins-of-2026">Frontend Horizon · View Transitions + scroll CSS</a></li>
+      <li><a href="https://github.com/darkroomengineering/lenis">Lenis smooth scroll</a></li>
+      <li><a href="https://freefrontend.com/scroll-trigger-js/">FreeFrontend · 60+ ScrollTrigger examples</a></li>
+      <li><a href="https://freefrontend.com/split-text-js/">FreeFrontend · SplitText examples</a></li>
+      <li><a href="https://motion.dev/">Motion (formerly Framer Motion)</a></li>
+      <li><a href="https://www.pkgpulse.com/guides/lottie-vs-rive-vs-css-animations-web-animation-formats-2026">PkgPulse · Lottie vs Rive vs CSS</a></li>
+      <li><a href="https://www.utsubo.com/blog/gaussian-splatting-guide">Utsubo · Gaussian splatting guide</a></li>
+      <li><a href="https://github.com/mkkellogg/GaussianSplats3D">GaussianSplats3D (Three.js)</a></li>
+      <li><a href="https://mintec.co/blog/video-lcp-hero-performance-2026/">Mintec · Hero video vs LCP</a></li>
+      <li><a href="https://www.mux.com/articles/add-background-video-website-hls-performance">Mux · Background video performance</a></li>
+      <li><a href="https://www.awwwards.com/websites/hotel-restaurant/">Awwwards · Hotel &amp; Restaurant</a></li>
+      <li><a href="https://homerunner.io/blog/the-vacation-rental-booking-flow-playbook-9-ux-fixes-that-lift-conversion-without-rebuilding-your-site/">HomeRunner · Booking flow playbook</a></li>
+      <li><a href="https://www.lodgify.com/blog/increase-direct-bookings/">Lodgify · Direct bookings guide</a></li>
+      <li><a href="https://websiteforces.com/blog/vacation-rental-website-design-guide/">Website Forces · Rental site design</a></li>
+      <li><a href="https://developers.google.com/search/docs/appearance/structured-data/vacation-rental">Google · Vacation rental structured data</a></li>
+      <li><a href="https://ben3d.ca/blog/how-to-use-threejs-native-gaussian-splats">Ben3D · Three.js native Gaussian splats</a></li>
+      <li><a href="https://radiancefields.com/platforms/scaniverse">Radiance Fields · Scaniverse</a></li>
+      <li><a href="https://www.polyvia3d.com/guides/gaussian-splatting-mobile-capture">Polyvia3D · Mobile splat capture</a></li>
+      <li><a href="https://www.utsubo.com/blog/threejs-2026-what-changed">Utsubo · Three.js in 2026</a></li>
+      <li><a href="https://www.utsubo.com/blog/webgpu-threejs-migration-guide">Utsubo · WebGPU migration</a></li>
+      <li><a href="https://blog.logrocket.com/css-in-2026/">LogRocket · CSS in 2026</a></li>
+      <li><a href="https://nerdy.dev/4-css-features-every-front-end-developer-should-know-in-2026">nerdy.dev · CSS features for 2026</a></li>
+      <li><a href="https://www.heygen.com/blog/best-ai-video-tools-real-estate">HeyGen · AI video for real estate</a></li>
+      <li><a href="https://prst.media/en/ai-real-estate-videos-what-agencies-need-to-know/">YOPRST · AI real estate video caveats</a></li>
+    </ul>
+  </section>
+</div>
+
+<script>
+// Kinetic type: split into chars, replay on tap
+const kin = document.getElementById('kin')
+const text = kin.textContent
+kin.innerHTML = [...text].map((c, i) => `<span aria-hidden="true" style="animation-delay:${i * 0.03}s">${c === ' ' ? '&nbsp;' : c}</span>`).join('')
+const playKin = () => { kin.classList.remove('play'); void kin.offsetWidth; kin.classList.add('play') }
+kin.parentElement.addEventListener('click', playKin)
+setTimeout(playKin, 400)
+
+// Magnetic button, fine pointers only
+const mag = document.getElementById('mag')
+if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  const area = mag.parentElement
+  area.addEventListener('pointermove', (e) => {
+    const r = mag.getBoundingClientRect()
+    const dx = e.clientX - (r.left + r.width / 2), dy = e.clientY - (r.top + r.height / 2)
+    if (Math.hypot(dx, dy) > 160) return reset()
+    mag.style.transform = `translate(${dx * 0.35}px, ${dy * 0.35}px)`
+    mag.firstElementChild.style.transform = `translate(${dx * 0.15}px, ${dy * 0.15}px)`
+  })
+  const reset = () => { mag.style.transform = ''; mag.firstElementChild.style.transform = '' }
+  area.addEventListener('pointerleave', reset)
+}
+
+// Clip reveal toggle for touch + keyboard
+const rev = document.getElementById('reveal')
+const toggle = () => rev.classList.toggle('on')
+rev.addEventListener('click', toggle)
+rev.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle() } })
+
+// View transition demo
+const rooms = [
+  { name: 'Main suite', bg: 'linear-gradient(150deg,#3A5560,#1C2B28)' },
+  { name: 'Pool deck', bg: 'linear-gradient(150deg,#C98C52,#4A3424)' },
+  { name: 'Kitchen', bg: 'linear-gradient(150deg,#6B7A5E,#2A3326)' },
+]
+const vt = document.getElementById('vtdemo')
+const go = (fn) => document.startViewTransition ? document.startViewTransition(fn) : fn()
+const grid = () => {
+  vt.innerHTML = `<div class="vtgrid">${rooms.map((r, i) => `<button type="button" data-i="${i}" style="background:${r.bg};view-transition-name:room${i}">${r.name}</button>`).join('')}</div><span class="cap">tap a room</span>`
+  vt.querySelectorAll('button').forEach((b) => b.addEventListener('click', () => go(() => detail(+b.dataset.i))))
+}
+const detail = (i) => {
+  vt.innerHTML = `<div class="vtdetail"><div class="big" style="background:${rooms[i].bg};view-transition-name:room${i}">${rooms[i].name}</div><button type="button">← All rooms</button></div>`
+  vt.querySelector('button').addEventListener('click', () => go(grid))
+}
+grid()
+</script>
+
+</body></html>

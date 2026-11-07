@@ -1,0 +1,760 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>LTG PEAK</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800;900&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  :root{
+    --navy: #0B1B33;
+    --navy-2: #122747;
+    --navy-3: #1B3560;
+    --white: #FFFFFF;
+    --paper: #F3F5F8;
+    --red: #D6293B;
+    --red-2: #B31F30;
+    --steel: #3E6B9C;
+    --ink: #0B1B33;
+    --muted: #5C6B84;
+    --muted-2: #8B98AC;
+    --line: rgba(11,27,51,0.10);
+    --line-on-navy: rgba(255,255,255,0.14);
+
+    --display: "Big Shoulders Display", "Arial Narrow", sans-serif;
+    --body: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+    --maxw: 1180px;
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+  body{
+    margin:0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  img,svg{ max-width:100%; display:block; }
+
+  h1,h2,h3{
+    font-family: var(--display);
+    font-weight: 800;
+    line-height: 0.92;
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+    margin: 0;
+  }
+  p{ margin:0; }
+  a{ color: inherit; }
+
+  .eyebrow{
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--red);
+    display:flex;
+    align-items:center;
+    gap:0.6em;
+  }
+  .eyebrow::before{
+    content:"";
+    width: 22px; height: 2px;
+    background: var(--red);
+    display:inline-block;
+  }
+  .eyebrow.on-light{ color: var(--red); }
+
+  .wrap{ max-width: var(--maxw); margin:0 auto; padding: 0 28px; }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; scroll-behavior:auto !important; }
+  }
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position: sticky; top:0; z-index: 50;
+    background: rgba(11,27,51,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line-on-navy);
+  }
+  .nav-inner{
+    max-width: var(--maxw); margin:0 auto; padding: 14px 28px;
+    display:flex; align-items:center; justify-content:space-between; gap: 24px;
+  }
+  .brand{
+    display:flex; align-items:baseline; gap:8px;
+    font-family: var(--display); font-weight:800;
+    color: var(--white);
+    font-size: 1.32rem; letter-spacing: 0.01em;
+    text-decoration:none;
+  }
+  .brand .peak-mark{ color: var(--red); }
+  .nav-links{
+    display:flex; align-items:center; gap: 28px;
+    list-style:none; margin:0; padding:0;
+  }
+  .nav-links a{
+    text-decoration:none; color: rgba(255,255,255,0.78);
+    font-size: 0.9rem; font-weight:500;
+    transition: color 0.15s ease;
+  }
+  .nav-links a:hover, .nav-links a:focus-visible{ color: var(--white); }
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    font-family: var(--body); font-weight:600; font-size:0.9rem;
+    padding: 11px 20px; border-radius:3px;
+    text-decoration:none; cursor:pointer; border: 1.5px solid transparent;
+    transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease, color .15s ease;
+  }
+  .btn:active{ transform: translateY(1px); }
+  .btn:focus-visible{ outline: 2px solid var(--red); outline-offset: 2px; }
+  .btn-red{ background: var(--red); color: var(--white); }
+  .btn-red:hover{ background: var(--red-2); }
+  .btn-ghost-light{ border-color: rgba(255,255,255,0.35); color: var(--white); }
+  .btn-ghost-light:hover{ border-color: var(--white); }
+  .btn-navy{ background: var(--navy); color: var(--white); }
+  .btn-navy:hover{ background: var(--navy-3); }
+  .btn-outline{ border-color: var(--navy); color: var(--navy); background:transparent; }
+  .btn-outline:hover{ background: var(--navy); color:var(--white); }
+  .btn-block{ width:100%; }
+  .nav-cta{ display:none; }
+  @media (min-width: 720px){ .nav-cta{ display:inline-flex; } }
+  .nav-toggle{ display:none; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:
+      radial-gradient(1100px 480px at 82% -10%, rgba(214,41,59,0.20), transparent 60%),
+      linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%);
+    color: var(--white);
+    padding: 96px 0 64px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid{
+    display:grid; grid-template-columns: 1.15fr 0.85fr; gap: 56px; align-items:center;
+  }
+  @media (max-width: 860px){ .hero-grid{ grid-template-columns: 1fr; } }
+  .hero h1{
+    font-size: clamp(2.9rem, 6.4vw, 5.4rem);
+    color: var(--white);
+    margin-top: 18px;
+  }
+  .hero h1 .accent{ color: var(--red); }
+  .hero-sub{
+    max-width: 46ch;
+    margin-top: 22px;
+    font-size: 1.08rem;
+    line-height: 1.6;
+    color: rgba(255,255,255,0.78);
+  }
+  .hero-actions{ display:flex; gap:14px; margin-top: 34px; flex-wrap:wrap; }
+  .hero-strip{
+    margin-top: 44px;
+    display:flex; gap: 28px; flex-wrap:wrap;
+    font-family: var(--mono); font-size: 0.78rem; color: rgba(255,255,255,0.55);
+  }
+  .hero-strip b{ color: var(--white); font-weight:500; }
+
+  .peak-art{ position:relative; }
+  .peak-svg{ width:100%; height:auto; }
+  .peak-caption{
+    display:flex; justify-content:space-between; margin-top: 10px;
+    font-family: var(--mono); font-size: 0.7rem; color: rgba(255,255,255,0.45);
+    letter-spacing:0.04em; text-transform:uppercase;
+  }
+
+  .skyline-divider{
+    height: 46px;
+    background: var(--paper);
+    clip-path: polygon(0% 100%, 0% 60%, 6% 30%, 12% 55%, 19% 10%, 26% 48%, 33% 22%, 40% 58%, 48% 0%, 56% 46%, 63% 20%, 70% 52%, 78% 12%, 85% 44%, 92% 24%, 100% 50%, 100% 100%);
+  }
+
+  /* ---------- STATS ---------- */
+  .stats{
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+  }
+  .stats-row{
+    display:grid; grid-template-columns: repeat(3,1fr);
+    gap: 0; padding: 30px 0;
+  }
+  @media (max-width: 720px){ .stats-row{ grid-template-columns: 1fr; gap: 22px; } }
+  .stat{ padding: 0 28px; border-left: 1px solid var(--line); }
+  .stat:first-child{ border-left:none; }
+  @media (max-width: 720px){ .stat{ border-left:none; padding:0; } }
+  .stat-value{ font-family: var(--display); font-weight:800; font-size: 1.9rem; color: var(--navy); }
+  .stat-label{ font-family: var(--mono); font-size: 0.76rem; color: var(--muted); margin-top: 4px; letter-spacing:0.02em; }
+
+  /* ---------- SECTION SCAFFOLD ---------- */
+  section{ padding: 84px 0; }
+  .section-head{ max-width: 640px; margin-bottom: 46px; }
+  .section-head h2{ font-size: clamp(2rem, 4vw, 2.9rem); color: var(--navy); margin-top: 14px; }
+  .section-head p{ margin-top: 16px; color: var(--muted); font-size: 1.02rem; line-height:1.6; }
+
+  /* ---------- SERVICES ---------- */
+  .services{ background: var(--white); }
+  .service-grid{ display:grid; grid-template-columns: repeat(2,1fr); gap: 2px; background: var(--line); border:1px solid var(--line); }
+  @media (max-width: 720px){ .service-grid{ grid-template-columns: 1fr; } }
+  .service{ background: var(--white); padding: 36px; }
+  .service-num{ font-family: var(--mono); color: var(--red); font-size:0.8rem; }
+  .service h3{ font-size: 1.7rem; color: var(--navy); margin-top: 10px; }
+  .service p{ margin-top: 12px; color: var(--muted); line-height:1.6; }
+  .service ul{ margin: 16px 0 0; padding-left: 0; list-style:none; display:flex; flex-direction:column; gap:8px; }
+  .service li{ font-size: 0.92rem; color: var(--ink); display:flex; gap:10px; align-items:flex-start; }
+  .service li::before{ content:"—"; color: var(--red); flex-shrink:0; }
+
+  /* ---------- WORK ---------- */
+  .work{ background: var(--paper); }
+  .filter-row{ display:flex; gap:10px; margin-bottom: 32px; flex-wrap:wrap; }
+  .chip{
+    font-family: var(--mono); font-size: 0.76rem; letter-spacing:0.03em;
+    padding: 8px 16px; border-radius: 999px; border: 1px solid var(--line);
+    background: var(--white); color: var(--muted); cursor:pointer;
+    transition: all 0.15s ease;
+  }
+  .chip[aria-pressed="true"]{ background: var(--navy); color: var(--white); border-color: var(--navy); }
+  .chip:hover{ border-color: var(--navy); }
+
+  .work-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  @media (max-width: 980px){ .work-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media (max-width: 640px){ .work-grid{ grid-template-columns: 1fr; } }
+
+  .card{
+    background: var(--white); border:1px solid var(--line); border-radius: 4px;
+    overflow:hidden; display:flex; flex-direction:column;
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .card:hover{ transform: translateY(-3px); box-shadow: 0 14px 30px -18px rgba(11,27,51,0.35); }
+  .card-media{
+    height: 152px; position:relative;
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-3) 100%);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  .card-media svg{ width: 70%; opacity: 0.9; }
+  .card-tag{
+    position:absolute; top:12px; left:12px;
+    font-family: var(--mono); font-size:0.66rem; letter-spacing:0.06em; text-transform:uppercase;
+    background: rgba(255,255,255,0.12); color:#fff; border:1px solid rgba(255,255,255,0.25);
+    padding: 4px 9px; border-radius:999px;
+  }
+  .card-body{ padding: 20px; display:flex; flex-direction:column; gap:8px; flex:1; }
+  .card-client{ font-family: var(--mono); font-size: 0.72rem; color: var(--red); text-transform:uppercase; letter-spacing:0.04em; }
+  .card-body h3{ font-family: var(--body); font-weight:700; font-size: 1.12rem; color: var(--navy); }
+  .card-body p{ color: var(--muted); font-size: 0.92rem; line-height:1.55; }
+  .card-foot{
+    margin-top:auto; padding-top:12px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .card-turn{ font-family: var(--mono); font-size:0.72rem; color: var(--steel); }
+  .card-link{ font-size:0.86rem; font-weight:600; color: var(--navy); text-decoration:none; }
+  .card-link:hover{ color: var(--red); }
+
+  .work-note{ margin-top: 26px; font-size: 0.82rem; color: var(--muted-2); font-style: italic; }
+
+  /* ---------- ENGAGE (booking / call / brief+pay) ---------- */
+  .engage{ background: var(--navy); color: var(--white); }
+  .engage .section-head h2{ color: var(--white); }
+  .engage .section-head p{ color: rgba(255,255,255,0.68); }
+  .engage-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch; }
+  @media (max-width: 980px){ .engage-grid{ grid-template-columns: 1fr; } }
+
+  .path{
+    background: var(--navy-2); border: 1px solid var(--line-on-navy); border-radius: 6px;
+    padding: 28px; display:flex; flex-direction:column; gap: 14px;
+  }
+  .path-icon{ width:38px; height:38px; }
+  .path h3{ font-family: var(--body); font-weight:700; font-size: 1.2rem; color:#fff; margin-top:6px; }
+  .path p.desc{ color: rgba(255,255,255,0.65); font-size: 0.9rem; line-height:1.55; }
+  .path .grow{ flex:1; }
+
+  .path-list{ list-style:none; margin: 4px 0 0; padding:0; display:flex; flex-direction:column; gap:9px; }
+  .path-list li{ font-size:0.88rem; color: rgba(255,255,255,0.72); display:flex; gap:9px; align-items:flex-start; }
+  .path-list li::before{ content:"—"; color: var(--red); flex-shrink:0; }
+
+  form.mini{ display:flex; flex-direction:column; gap: 10px; margin-top: 4px; }
+  .field label{
+    display:block; font-family: var(--mono); font-size:0.68rem; letter-spacing:0.05em;
+    text-transform:uppercase; color: rgba(255,255,255,0.5); margin-bottom: 5px;
+  }
+  .field input, .field select, .field textarea{
+    width:100%; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.18);
+    color:#fff; padding: 10px 12px; border-radius:3px; font-family: var(--body); font-size:0.92rem;
+  }
+  .field input::placeholder, .field textarea::placeholder{ color: rgba(255,255,255,0.35); }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline: 2px solid var(--red); outline-offset: 1px; border-color: transparent;
+  }
+  .field textarea{ resize:vertical; min-height: 76px; }
+  .field-row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+
+  .confirm-msg{
+    display:none; font-size: 0.86rem; background: rgba(214,41,59,0.14);
+    border:1px solid rgba(214,41,59,0.4); padding: 10px 12px; border-radius: 4px; color:#fff;
+    line-height:1.5;
+  }
+  .confirm-msg.show{ display:block; }
+
+  .tel-link{
+    display:flex; align-items:center; gap:10px; font-family: var(--mono); font-size:1.05rem;
+    color:#fff; text-decoration:none; padding: 12px 14px; background: rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.18); border-radius:4px; margin-top:2px;
+  }
+  .tel-link:hover{ border-color: var(--red); }
+  .tel-sub{ font-size:0.78rem; color: rgba(255,255,255,0.5); }
+
+  .price-line{ display:flex; justify-content:space-between; align-items:baseline; padding-top:8px; border-top:1px dashed rgba(255,255,255,0.18); margin-top:4px; }
+  .price-line span:first-child{ color: rgba(255,255,255,0.6); font-size:0.85rem; }
+  .price-line span:last-child{ font-family: var(--mono); font-size:1rem; }
+
+  /* ---------- QUOTE BAND ---------- */
+  .quoteband{
+    background: var(--white);
+    padding: 70px 0;
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    text-align:center;
+  }
+  .quoteband blockquote{
+    font-family: var(--display); font-weight:800; font-size: clamp(2rem,5vw,3.6rem);
+    color: var(--navy); margin:0;
+  }
+  .quoteband blockquote .accent{ color: var(--red); }
+  .quoteband cite{ display:block; margin-top:16px; font-family: var(--mono); font-style:normal; font-size:0.8rem; color: var(--muted); letter-spacing:0.05em; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ background: var(--navy); color: rgba(255,255,255,0.6); padding: 48px 0 30px; }
+  .foot-top{ display:flex; justify-content:space-between; gap: 32px; flex-wrap:wrap; padding-bottom: 30px; border-bottom:1px solid var(--line-on-navy); }
+  .foot-brand{ font-family: var(--display); font-weight:800; color:#fff; font-size:1.5rem; }
+  .foot-brand .peak-mark{ color: var(--red); }
+  .foot-contact{ display:flex; flex-direction:column; gap:6px; font-size:0.92rem; }
+  .foot-contact a{ text-decoration:none; color: rgba(255,255,255,0.75); }
+  .foot-contact a:hover{ color:#fff; }
+  .foot-bottom{ display:flex; justify-content:space-between; padding-top:22px; font-family: var(--mono); font-size:0.72rem; flex-wrap:wrap; gap:10px; }
+  .foot-flag{ display:flex; gap:4px; }
+  .foot-flag span{ width:14px; height:14px; border-radius:2px; }
+
+  @media (max-width: 720px){
+    .nav-links{ display:none; }
+    .field-row{ grid-template-columns: 1fr; }
+  }
+</style>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand">LTG <span class="peak-mark">PEAK</span></a>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#engage">Book / Quote</a></li>
+    </ul>
+    <a href="#engage" class="btn btn-red nav-cta">Start a project</a>
+  </div>
+</header>
+
+<main id="top">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow">LTG PEAK — Websites &amp; Dashboards</p>
+        <h1>Time is <span class="accent">Quality.</span></h1>
+        <p class="hero-sub">We build clean, fast websites and operations dashboards for any client — usually live within a day or two. No bloated process, no six-week timelines. Just the build, done right, on your clock.</p>
+        <div class="hero-actions">
+          <a href="#engage" class="btn btn-red">Book a meeting</a>
+          <a href="#work" class="btn btn-ghost-light">See recent work</a>
+        </div>
+        <div class="hero-strip">
+          <span><b>Turnaround —</b> 1–2 days typical</span>
+          <span><b>Builds —</b> Websites + Dashboards</span>
+          <span><b>Clients —</b> Any industry</span>
+        </div>
+      </div>
+      <div class="peak-art">
+        <svg class="peak-svg" viewBox="0 0 420 260" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Line chart trending upward toward a peak">
+          <line x1="0" y1="40" x2="420" y2="40" stroke="rgba(255,255,255,0.08)"/>
+          <line x1="0" y1="100" x2="420" y2="100" stroke="rgba(255,255,255,0.08)"/>
+          <line x1="0" y1="160" x2="420" y2="160" stroke="rgba(255,255,255,0.08)"/>
+          <line x1="0" y1="220" x2="420" y2="220" stroke="rgba(255,255,255,0.08)"/>
+          <polygon points="10,220 60,190 110,205 160,140 210,165 260,90 300,120 340,55 380,80 410,30 410,240 10,240" fill="url(#peakfill)"/>
+          <polyline points="10,220 60,190 110,205 160,140 210,165 260,90 300,120 340,55 380,80 410,30" fill="none" stroke="#D6293B" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="410" cy="30" r="6" fill="#D6293B"/>
+          <circle cx="410" cy="30" r="10" fill="none" stroke="#D6293B" stroke-width="1.5" opacity="0.6"/>
+          <defs>
+            <linearGradient id="peakfill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#D6293B" stop-opacity="0.30"/>
+              <stop offset="100%" stop-color="#D6293B" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="peak-caption"><span>Project momentum</span><span>Delivered</span></div>
+      </div>
+    </div>
+  </section>
+  <div class="skyline-divider" aria-hidden="true"></div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="wrap stats-row">
+      <div class="stat">
+        <div class="stat-value">1–2 days</div>
+        <div class="stat-label">TYPICAL TURNAROUND</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">Sites + Dashboards</div>
+        <div class="stat-label">WHAT WE BUILD</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">Same day</div>
+        <div class="stat-label">RESPONSE TIME</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow on-light">What we build</p>
+        <h2>One team, two builds.</h2>
+        <p>Whether you need a client-facing site or an internal tool to run your operation, it's built by the same team, on the same fast timeline.</p>
+      </div>
+      <div class="service-grid">
+        <div class="service">
+          <span class="service-num">01</span>
+          <h3>Websites</h3>
+          <p>Marketing sites, booking flows, ecommerce storefronts, and landing pages built to load fast and convert.</p>
+          <ul>
+            <li>Custom design, no drag-and-drop templates</li>
+            <li>Mobile-first, built for real traffic</li>
+            <li>Live in 1–2 days for most builds</li>
+          </ul>
+        </div>
+        <div class="service">
+          <span class="service-num">02</span>
+          <h3>Dashboards</h3>
+          <p>Internal tools that turn your operational data into something your team can actually act on.</p>
+          <ul>
+            <li>Bookings, inventory, tickets, fleet, or ops data</li>
+            <li>Built around how your team already works</li>
+            <li>Clear, at-a-glance reporting — no spreadsheet archaeology</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORK -->
+  <section class="work" id="work">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow on-light">Recent work</p>
+        <h2>Across clients, across industries.</h2>
+        <p>A sample of recent builds. Filter by type to see websites or dashboards specifically.</p>
+      </div>
+
+      <div class="filter-row" role="group" aria-label="Filter work by type">
+        <button class="chip" data-filter="all" aria-pressed="true">All work</button>
+        <button class="chip" data-filter="website" aria-pressed="false">Websites</button>
+        <button class="chip" data-filter="dashboard" aria-pressed="false">Dashboards</button>
+      </div>
+
+      <div class="work-grid" id="workGrid">
+        <!-- Card: Website -->
+        <article class="card" data-type="website">
+          <div class="card-media">
+            <span class="card-tag">Website</span>
+            <svg viewBox="0 0 100 60"><rect x="0" y="0" width="100" height="60" fill="none"/><rect x="8" y="10" width="84" height="8" rx="2" fill="rgba(255,255,255,0.25)"/><rect x="8" y="24" width="50" height="6" rx="2" fill="rgba(255,255,255,0.15)"/><rect x="8" y="34" width="60" height="6" rx="2" fill="rgba(255,255,255,0.15)"/><rect x="8" y="46" width="24" height="8" rx="2" fill="#D6293B"/></svg>
+          </div>
+          <div class="card-body">
+            <span class="card-client">Harbor &amp; Vine — Restaurant</span>
+            <h3>Menu, online ordering &amp; table booking</h3>
+            <p>Replaced a paper menu and phone-only reservations with a single site handling both.</p>
+            <div class="card-foot">
+              <span class="card-turn">Live in 2 days</span>
+              <a href="#" class="card-link">View →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card: Dashboard -->
+        <article class="card" data-type="dashboard">
+          <div class="card-media">
+            <span class="card-tag">Dashboard</span>
+            <svg viewBox="0 0 100 60"><polyline points="6,45 22,30 38,38 54,18 70,26 94,10" fill="none" stroke="#D6293B" stroke-width="2.5"/><rect x="6" y="48" width="88" height="4" fill="rgba(255,255,255,0.15)"/></svg>
+          </div>
+          <div class="card-body">
+            <span class="card-client">Union Fitness — Studio</span>
+            <h3>Class attendance &amp; membership dashboard</h3>
+            <p>One screen for daily check-ins, class fill-rates, and membership renewals.</p>
+            <div class="card-foot">
+              <span class="card-turn">Live in 3 days</span>
+              <a href="#" class="card-link">View →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card: Website -->
+        <article class="card" data-type="website">
+          <div class="card-media">
+            <span class="card-tag">Website</span>
+            <svg viewBox="0 0 100 60"><rect x="8" y="10" width="38" height="38" rx="2" fill="rgba(255,255,255,0.2)"/><rect x="52" y="10" width="40" height="8" rx="2" fill="rgba(255,255,255,0.25)"/><rect x="52" y="24" width="40" height="6" rx="2" fill="rgba(255,255,255,0.15)"/><rect x="52" y="34" width="26" height="8" rx="2" fill="#D6293B"/></svg>
+          </div>
+          <div class="card-body">
+            <span class="card-client">Coastline HVAC — Home services</span>
+            <h3>Lead-capture site with service area map</h3>
+            <p>Quote-request form routes straight to their crew's phones — no missed leads.</p>
+            <div class="card-foot">
+              <span class="card-turn">Live in 1 day</span>
+              <a href="#" class="card-link">View →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card: Dashboard -->
+        <article class="card" data-type="dashboard">
+          <div class="card-media">
+            <span class="card-tag">Dashboard</span>
+            <svg viewBox="0 0 100 60"><rect x="6" y="8" width="26" height="44" rx="2" fill="rgba(255,255,255,0.15)"/><rect x="37" y="8" width="26" height="44" rx="2" fill="rgba(255,255,255,0.15)"/><rect x="68" y="8" width="26" height="44" rx="2" fill="#D6293B" opacity="0.85"/></svg>
+          </div>
+          <div class="card-body">
+            <span class="card-client">Ridgeline Property Group</span>
+            <h3>Maintenance ticket tracking dashboard</h3>
+            <p>Tenants submit requests; the ops team sees priority, unit, and status in one view.</p>
+            <div class="card-foot">
+              <span class="card-turn">Live in 2 days</span>
+              <a href="#" class="card-link">View →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card: Website -->
+        <article class="card" data-type="website">
+          <div class="card-media">
+            <span class="card-tag">Website</span>
+            <svg viewBox="0 0 100 60"><rect x="8" y="8" width="20" height="20" rx="2" fill="rgba(255,255,255,0.2)"/><rect x="32" y="8" width="20" height="20" rx="2" fill="rgba(255,255,255,0.2)"/><rect x="56" y="8" width="20" height="20" rx="2" fill="#D6293B" opacity="0.85"/><rect x="8" y="32" width="68" height="6" rx="2" fill="rgba(255,255,255,0.15)"/></svg>
+          </div>
+          <div class="card-body">
+            <span class="card-client">Marlowe &amp; Co. — Boutique retail</span>
+            <h3>Storefront &amp; product catalog</h3>
+            <p>A fast, simple catalog site built to hand off — client updates products themselves.</p>
+            <div class="card-foot">
+              <span class="card-turn">Live in 2 days</span>
+              <a href="#" class="card-link">View →</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card: Dashboard -->
+        <article class="card" data-type="dashboard">
+          <div class="card-media">
+            <span class="card-tag">Dashboard</span>
+            <svg viewBox="0 0 100 60"><circle cx="30" cy="30" r="20" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="5"/><circle cx="30" cy="30" r="20" fill="none" stroke="#D6293B" stroke-width="5" stroke-dasharray="80 126" stroke-linecap="round" transform="rotate(-90 30 30)"/><rect x="60" y="14" width="30" height="6" rx="2" fill="rgba(255,255,255,0.2)"/><rect x="60" y="26" width="30" height="6" rx="2" fill="rgba(255,255,255,0.15)"/><rect x="60" y="38" width="30" height="6" rx="2" fill="rgba(255,255,255,0.15)"/></svg>
+          </div>
+          <div class="card-body">
+            <span class="card-client">Apex Logistics — Fleet ops</span>
+            <h3>Fleet &amp; delivery operations dashboard</h3>
+            <p>Live view of driver status, delayed routes, and daily delivery completion rate.</p>
+            <div class="card-foot">
+              <span class="card-turn">Live in 3 days</span>
+              <a href="#" class="card-link">View →</a>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <p class="work-note">Shown for illustration — swap these six slots for your own case studies and links any time.</p>
+    </div>
+  </section>
+
+  <!-- QUOTE BAND -->
+  <div class="quoteband">
+    <div class="wrap">
+      <blockquote>&ldquo;Time is <span class="accent">Quality.</span>&rdquo;</blockquote>
+      <cite>— LTG PEAK</cite>
+    </div>
+  </div>
+
+  <!-- ENGAGE: book / quote call / brief + pay -->
+  <section class="engage" id="engage">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow">Work with us</p>
+        <h2>Three ways to get started.</h2>
+        <p>Talk it through, request a call about pricing, or skip the conversation entirely and send your project straight through.</p>
+      </div>
+
+      <div class="engage-grid">
+        <!-- PATH 1: Book a meeting -->
+        <div class="path">
+          <svg class="path-icon" viewBox="0 0 40 40" fill="none"><rect x="6" y="8" width="28" height="26" rx="3" stroke="#D6293B" stroke-width="2"/><line x1="6" y1="16" x2="34" y2="16" stroke="#D6293B" stroke-width="2"/><line x1="13" y1="4" x2="13" y2="11" stroke="#D6293B" stroke-width="2" stroke-linecap="round"/><line x1="27" y1="4" x2="27" y2="11" stroke="#D6293B" stroke-width="2" stroke-linecap="round"/><circle cx="14" cy="23" r="1.6" fill="#D6293B"/><circle cx="20" cy="23" r="1.6" fill="#D6293B"/><circle cx="26" cy="23" r="1.6" fill="#D6293B"/><circle cx="14" cy="28" r="1.6" fill="#D6293B"/><circle cx="20" cy="28" r="1.6" fill="#D6293B"/></svg>
+          <h3>Book a meeting</h3>
+          <p class="desc">Grab 20 minutes with the team to talk through your project, timeline, and budget.</p>
+          <ul class="path-list">
+            <li>Scope your website or dashboard</li>
+            <li>Walk through timeline &amp; pricing</li>
+            <li>Leave with a start date</li>
+          </ul>
+          <div class="grow"></div>
+          <!-- Replace this href with your real Calendly (or similar) scheduling link -->
+          <a href="https://calendly.com/ltgpeak" target="_blank" rel="noopener" class="btn btn-red btn-block">Open booking calendar</a>
+          <p class="tel-sub">Opens LTG PEAK's calendar in a new tab. 20 min · Free.</p>
+        </div>
+
+        <!-- PATH 2: Request a quote call -->
+        <div class="path">
+          <svg class="path-icon" viewBox="0 0 40 40" fill="none"><path d="M9 6c1 3 2 5 4 7s4 3 7 4l3-3c3 1 6 2 8 3 1 3-1 8-4 8C15 25 6 16 6 4c0-3 2-1 3 2Z" stroke="#D6293B" stroke-width="2" stroke-linejoin="round"/></svg>
+          <h3>Get a quote by phone</h3>
+          <p class="desc">Call now, or leave your number and we'll call you back with a ballpark price.</p>
+
+          <a class="tel-link" href="tel:+10000000000">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 3c1 2.5 1.7 4.2 3.3 6S12 12 14 13c1.8 1.6 3.5 2.3 6 3.3 1.5.6 2-3 1-4.3-1-1.3-3-2-4-2l-2 2c-2-1-4-3-5-5l2-2c0-1-.7-3-2-4C8.7-.6 5.4-.5 6 3Z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+            (000) 000-0000
+          </a>
+          <p class="tel-sub">Or request an automated call-back below.</p>
+
+          <form class="mini" data-kind="Automated quote call-back" onsubmit="return handleMiniForm(event, this)">
+            <div class="field">
+              <label for="cb-name">Name</label>
+              <input id="cb-name" name="Name" type="text" placeholder="Your name" required />
+            </div>
+            <div class="field">
+              <label for="cb-phone">Phone number</label>
+              <input id="cb-phone" name="Phone" type="tel" placeholder="(000) 000-0000" required />
+            </div>
+            <div class="field">
+              <label for="cb-project">What's it for?</label>
+              <select id="cb-project" name="Project type">
+                <option>Website</option>
+                <option>Dashboard</option>
+                <option>Not sure yet</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-outline" style="border-color:rgba(255,255,255,0.35);color:#fff;">Request call-back</button>
+            <div class="confirm-msg" data-confirm>Thanks — request queued. We'll call you back shortly.</div>
+          </form>
+        </div>
+
+        <!-- PATH 3: Submit brief + pay -->
+        <div class="path">
+          <svg class="path-icon" viewBox="0 0 40 40" fill="none"><rect x="7" y="4" width="26" height="32" rx="2" stroke="#D6293B" stroke-width="2"/><line x1="12" y1="12" x2="28" y2="12" stroke="#D6293B" stroke-width="2"/><line x1="12" y1="18" x2="28" y2="18" stroke="#D6293B" stroke-width="2"/><line x1="12" y1="24" x2="21" y2="24" stroke="#D6293B" stroke-width="2"/><circle cx="26" cy="27" r="6" fill="#0B1B33" stroke="#D6293B" stroke-width="2"/><path d="M23.5 27h5M26 24.5v5" stroke="#D6293B" stroke-width="1.6" stroke-linecap="round"/></svg>
+          <h3>Send the brief &amp; pay</h3>
+          <p class="desc">No call needed — tell us what you want built, pay the deposit, and we start.</p>
+
+          <form class="mini" data-kind="Project brief" onsubmit="return handleMiniForm(event, this)">
+            <div class="field-row">
+              <div class="field">
+                <label for="pj-name">Name</label>
+                <input id="pj-name" name="Name" type="text" required />
+              </div>
+              <div class="field">
+                <label for="pj-email">Email</label>
+                <input id="pj-email" name="Email" type="email" required />
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="pj-type">Type</label>
+                <select id="pj-type" name="Project type">
+                  <option>Website</option>
+                  <option>Dashboard</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="pj-budget">Budget</label>
+                <select id="pj-budget" name="Budget">
+                  <option>Under $500</option>
+                  <option>$500–$1,500</option>
+                  <option>$1,500–$5,000</option>
+                  <option>$5,000+</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="pj-details">Project details</label>
+              <textarea id="pj-details" name="Details" placeholder="What do you need built, and for what kind of business?" required></textarea>
+            </div>
+            <div class="price-line">
+              <span>Deposit to start</span>
+              <span>Set on checkout</span>
+            </div>
+            <!-- Replace this href with your real Stripe Payment Link (or similar) -->
+            <a href="#" class="btn btn-red btn-block" onclick="handlePayClick(event, this)">Pay deposit &amp; send brief</a>
+            <div class="confirm-msg" data-confirm>Brief captured. Complete payment to lock in your start date.</div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div>
+        <div class="foot-brand">LTG <span class="peak-mark">PEAK</span></div>
+        <p style="margin-top:8px; font-size:0.9rem; max-width:32ch; color:rgba(255,255,255,0.55);">Websites and dashboards, built fast, for any client.</p>
+      </div>
+      <div class="foot-contact">
+        <a href="mailto:hello@ltgpeak.com">hello@ltgpeak.com</a>
+        <a href="tel:+10000000000">(000) 000-0000</a>
+        <a href="#engage">Book a meeting →</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year"></span> LTG PEAK</span>
+      <div class="foot-flag" aria-hidden="true">
+        <span style="background:#D6293B;"></span><span style="background:#FFFFFF;"></span><span style="background:#3E6B9C;"></span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Filter chips
+  var chips = document.querySelectorAll('.chip');
+  var cards = document.querySelectorAll('#workGrid .card');
+  chips.forEach(function(chip){
+    chip.addEventListener('click', function(){
+      chips.forEach(function(c){ c.setAttribute('aria-pressed','false'); });
+      chip.setAttribute('aria-pressed','true');
+      var f = chip.getAttribute('data-filter');
+      cards.forEach(function(card){
+        var show = (f === 'all') || (card.getAttribute('data-type') === f);
+        card.style.display = show ? '' : 'none';
+      });
+    });
+  });
+
+  // Mini forms -> mailto + inline confirmation (no backend on this page)
+  function handleMiniForm(evt, form){
+    evt.preventDefault();
+    var kind = form.getAttribute('data-kind');
+    var lines = [kind + ' request from LTG PEAK site', ''];
+    Array.prototype.forEach.call(form.elements, function(el){
+      if (el.name) lines.push(el.name + ': ' + el.value);
+    });
+    var body = encodeURIComponent(lines.join('\n'));
+    var subject = encodeURIComponent('LTG PEAK — ' + kind);
+    var confirm = form.querySelector('[data-confirm]');
+    if (confirm) confirm.classList.add('show');
+    window.location.href = 'mailto:hello@ltgpeak.com?subject=' + subject + '&body=' + body;
+    return false;
+  }
+
+  function handlePayClick(evt, link){
+    var form = link.closest('form');
+    var confirm = form.querySelector('[data-confirm]');
+    if (confirm) confirm.classList.add('show');
+    // Replace the href above with a real Stripe Payment Link before sharing this page.
+  }
+</script>
+
+</body></html>

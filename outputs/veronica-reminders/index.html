@@ -1,0 +1,774 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Veronica's Reminders</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: clean phone column. Greeting + quote (top right), dark "Next up" card, 7-day strip, grouped list rows, floating + button, bottom sheet editor. */
+:root{
+  --bg:#f5f6f7; --surface:#ffffff; --ink:#0e1013; --muted:#6a7178; --faint:#9aa0a6; --line:#e6e8ea;
+  --accent:#2e5bff; --accent-soft:#eaf0ff; --hero:#0e1013; --hero-ink:#ffffff; --hero-muted:#9aa3ad;
+  --warn:#d97706; --warn-soft:#fff4e5; --late:#e5484d; --late-soft:#fdecec; --ok:#12a150;
+  --sans:"Geist",-apple-system,"SF Pro Text","Segoe UI",system-ui,sans-serif;
+  --mono:"Geist Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --r:16px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0b0c0e; --surface:#15171a; --ink:#f2f3f5; --muted:#8b9199; --faint:#5d636a; --line:#24272b;
+  --accent:#6b88ff; --accent-soft:#1a2340; --hero:#1c1f24; --hero-ink:#ffffff; --hero-muted:#8b9199;
+  --warn:#f5a524; --warn-soft:#2e2310; --late:#ff6b70; --late-soft:#331a1b; --ok:#3ccf7a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b0c0e; --surface:#15171a; --ink:#f2f3f5; --muted:#8b9199; --faint:#5d636a; --line:#24272b;
+  --accent:#6b88ff; --accent-soft:#1a2340; --hero:#1c1f24; --hero-ink:#ffffff; --hero-muted:#8b9199;
+  --warn:#f5a524; --warn-soft:#2e2310; --late:#ff6b70; --late-soft:#331a1b; --ok:#3ccf7a; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.45;-webkit-font-smoothing:antialiased;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 120px}
+.wrap{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:10px}
+svg{display:block}
+
+/* header */
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.hello{min-width:0}
+.eyebrow{font-size:13px;font-weight:500;color:var(--muted)}
+.hello h1{font-size:28px;font-weight:600;letter-spacing:-.025em;line-height:1.1;margin:4px 0 0}
+.quote{flex:0 1 210px;min-width:0;text-align:right;background:none;border:0;padding:2px 0 0;cursor:pointer}
+.quote p{margin:0;font-size:13px;line-height:1.4;font-weight:500;color:var(--ink);letter-spacing:-.005em;text-wrap:pretty;transition:opacity .3s}
+.quote span{display:block;margin-top:4px;font-size:11px;font-weight:500;color:var(--faint);letter-spacing:.04em;text-transform:uppercase;transition:opacity .3s}
+.quote.fade p,.quote.fade span{opacity:0}
+
+/* next-up hero */
+.hero{background:var(--hero);color:var(--hero-ink);border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-60px;top:-60px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--accent) 0%,transparent 70%);opacity:.35;pointer-events:none}
+.hero .lbl{display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--hero-muted);position:relative}
+.hero .count{font-family:var(--mono);font-size:12px;letter-spacing:0;text-transform:none;background:rgba(255,255,255,.1);color:var(--hero-ink);padding:4px 9px;border-radius:999px}
+.hero h2{margin:0;font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1.2;position:relative;overflow-wrap:anywhere}
+.hero .when{font-size:14px;color:var(--hero-muted);margin-top:4px;font-variant-numeric:tabular-nums}
+.hero .row{display:flex;gap:8px;flex-wrap:wrap;position:relative}
+.hbtn{display:inline-flex;align-items:center;gap:7px;border:0;border-radius:12px;padding:10px 14px;font-size:14px;font-weight:600;text-decoration:none;background:var(--accent);color:#fff}
+.hbtn.sub{background:rgba(255,255,255,.1);color:var(--hero-ink)}
+.hbtn.on{background:rgba(255,255,255,.1);color:var(--hero-ink)}
+
+/* week strip */
+.strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.d{border:0;background:transparent;border-radius:14px;padding:8px 0 9px;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted)}
+.d b{font-size:17px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+.d small{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.04em}
+.d i{width:5px;height:5px;border-radius:50%;background:transparent}
+.d.has i{background:var(--accent)}
+.d.today b{color:var(--accent)}
+.d.sel{background:var(--ink);color:var(--bg)}
+.d.sel b{color:var(--bg)}
+.d.sel.has i{background:var(--bg)}
+.d:not(.sel):hover{background:var(--surface)}
+
+/* list */
+.filter{display:flex;justify-content:space-between;align-items:center;margin-bottom:-8px}
+.filter h3{margin:0;font-size:15px;font-weight:600;letter-spacing:-.01em}
+.filter button{border:0;background:none;color:var(--accent);font-size:14px;font-weight:500;padding:4px 0}
+.group{display:flex;flex-direction:column;gap:8px}
+.ghead{display:flex;justify-content:space-between;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 4px}
+.ghead.late{color:var(--late)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.rowi{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:12px;align-items:center;padding:14px 14px 14px 16px;animation:in .3s ease}
+.rowi + .rowi{border-top:1px solid var(--line)}
+@keyframes in{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.tm{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--ink);line-height:1.2}
+.tm small{display:block;font-size:11px;font-weight:500;color:var(--faint);margin-top:2px}
+.main{min-width:0;border:0;background:none;text-align:left;padding:0}
+.ttl{font-size:15px;font-weight:500;letter-spacing:-.01em;overflow-wrap:anywhere}
+.sub{font-size:13px;color:var(--muted);margin-top:2px;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:center}
+.sub .tag{display:inline-flex;align-items:center;gap:4px}
+.tag.soon{color:var(--warn);font-weight:600}
+.tag.late{color:var(--late);font-weight:600}
+.acts{display:flex;gap:6px;align-items:center}
+.ib{width:36px;height:36px;border-radius:11px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;color:var(--muted);text-decoration:none}
+.ib.bell.on{background:var(--accent-soft);border-color:transparent;color:var(--accent)}
+.ib.bell:not(.on){color:var(--accent);border-color:var(--accent)}
+.chk{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--faint);background:transparent;display:grid;place-items:center;color:transparent;margin-left:4px;transition:all .15s}
+.chk:hover{border-color:var(--ok)}
+.rowi.done .chk{background:var(--ok);border-color:var(--ok);color:#fff}
+.rowi.done .ttl{color:var(--faint);text-decoration:line-through}
+.rowi.done .tm{color:var(--faint)}
+
+.empty{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:28px 20px;text-align:center}
+.empty h4{margin:0;font-size:16px;font-weight:600}
+.empty p{margin:4px 0 16px;color:var(--muted);font-size:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.chip{border:1px solid var(--line);background:var(--bg);border-radius:999px;padding:7px 13px;font-size:13px;font-weight:500}
+.chip:hover{border-color:var(--ink)}
+
+details.donebox summary{cursor:pointer;list-style:none;font-size:13px;font-weight:500;color:var(--muted);padding:4px}
+details.donebox summary::-webkit-details-marker{display:none}
+details.donebox .card{margin-top:8px}
+.linkbtn{border:0;background:none;color:var(--muted);font-size:13px;padding:10px 4px;text-decoration:underline;text-underline-offset:3px}
+
+.info{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted);padding:0 4px}
+.info svg{flex:none;margin-top:1px;color:var(--faint)}
+
+/* FAB */
+.fab{position:fixed;right:calc(max(16px,env(safe-area-inset-right,0px)) + 4px);bottom:calc(20px + env(safe-area-inset-bottom,0px));z-index:15;
+  height:56px;padding:0 22px 0 18px;border-radius:999px;border:0;background:var(--ink);color:var(--bg);display:flex;align-items:center;gap:8px;
+  font-size:15px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.25);transition:transform .15s}
+.fab:active{transform:scale(.96)}
+
+/* sheet */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:20;display:flex;align-items:flex-end;justify-content:center;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.sheet{background:var(--surface);width:100%;max-width:560px;border-radius:24px 24px 0 0;max-height:94%;overflow:auto;
+  padding:10px max(20px,env(safe-area-inset-right,0px)) calc(20px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px));animation:up .3s cubic-bezier(.2,.8,.2,1)}
+@keyframes up{from{transform:translateY(60px)}}
+.grab{width:36px;height:5px;border-radius:3px;background:var(--line);margin:0 auto 14px}
+.shead{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.shead h2{margin:0;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.x{border:0;background:var(--bg);width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--muted)}
+.big-in{width:100%;border:0;background:none;font-size:24px;font-weight:600;letter-spacing:-.02em;padding:6px 0 14px;outline:none;border-bottom:1px solid var(--line)}
+.big-in::placeholder{color:var(--faint)}
+.sec{padding:16px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.sec:last-of-type{border-bottom:0}
+.sl{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.seg{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.seg::-webkit-scrollbar{display:none}
+.seg button{flex:none;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:8px 12px;font-size:14px;font-weight:500}
+.seg button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.inp{width:100%;min-width:0;border:1px solid var(--line);background:var(--bg);border-radius:12px;padding:11px 12px;font-size:16px;font-weight:500;font-variant-numeric:tabular-nums}
+textarea.inp{min-height:64px;resize:vertical;font-weight:400}
+.sw{display:flex;justify-content:space-between;align-items:center;font-size:15px;font-weight:500;padding:4px 0}
+.sw input{appearance:none;-webkit-appearance:none;width:46px;height:28px;border-radius:999px;background:var(--line);position:relative;cursor:pointer;transition:background .2s;flex:none;margin:0}
+.sw input::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .2s}
+.sw input:checked{background:var(--accent)}
+.sw input:checked::after{transform:translateX(18px)}
+.err{color:var(--late);font-size:14px;font-weight:500;margin:8px 0 0}
+.primary{width:100%;border:0;border-radius:14px;padding:15px;background:var(--ink);color:var(--bg);font-size:16px;font-weight:600;margin-top:14px}
+.ghostbtn{width:100%;border:0;background:none;color:var(--muted);font-size:14px;font-weight:500;padding:12px;margin-top:4px}
+.ghostbtn.danger{color:var(--late)}
+.confirm{text-align:center;padding-top:6px}
+.confirm .ok{width:56px;height:56px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin:8px auto 14px}
+.confirm h3{margin:0;font-size:22px;font-weight:600;letter-spacing:-.02em}
+.confirm p{color:var(--muted);font-size:15px;margin:6px 0 18px}
+.confirm .flow{display:flex;justify-content:center;align-items:center;gap:8px;font-size:12px;font-weight:500;color:var(--muted);margin-bottom:18px;flex-wrap:wrap}
+.confirm .flow b{background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:5px 10px;color:var(--ink);font-weight:500}
+.confirm .primary{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;margin-top:0}
+.toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;font-weight:500;z-index:30;max-width:calc(100% - 32px);text-align:center;animation:fade .2s}
+/* notifications card + in-app due banner */
+.notif{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center}
+.notif .nic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--accent-soft);color:var(--accent)}
+.notif.on .nic{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok)}
+.notif.denied .nic,.notif.unsupported .nic{background:var(--warn-soft);color:var(--warn)}
+.notif b{display:block;font-size:15px;font-weight:600;letter-spacing:-.01em}
+.notif span{display:block;font-size:13px;color:var(--muted);margin-top:1px}
+.notif .nbtn{border:0;border-radius:11px;padding:9px 13px;font-size:14px;font-weight:600;background:var(--accent);color:#fff;white-space:nowrap}
+.notif.on .nbtn{background:var(--bg);color:var(--ink);border:1px solid var(--line)}
+@media (max-width:400px){.notif{grid-template-columns:auto minmax(0,1fr)}.notif .nbtn{grid-column:1/-1}}
+.dueban{position:fixed;left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));top:calc(10px + env(safe-area-inset-top,0px));z-index:40;max-width:540px;margin:0 auto;
+  background:var(--hero);color:var(--hero-ink);border-radius:18px;padding:14px 14px 14px 16px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;box-shadow:0 14px 40px rgba(0,0,0,.3);animation:drop .35s cubic-bezier(.2,.8,.2,1)}
+@keyframes drop{from{transform:translateY(-120%)}}
+.dueban .nic{width:36px;height:36px;border-radius:10px;background:var(--accent);display:grid;place-items:center;color:#fff}
+.dueban small{display:block;font-size:12px;color:var(--hero-muted);font-weight:500}
+.dueban b{display:block;font-size:15px;font-weight:600;overflow-wrap:anywhere}
+.dueban button{border:0;border-radius:10px;padding:8px 12px;background:rgba(255,255,255,.12);color:var(--hero-ink);font-weight:600;font-size:13px}
+/* guide */
+.helpbtn{margin-top:10px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px 5px 8px;font-size:13px;font-weight:500;display:inline-flex;align-items:center;gap:6px;color:var(--ink)}
+.helpbtn i{width:18px;height:18px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:700}
+.guide{position:fixed;inset:0;z-index:25;background:var(--bg);overflow:auto;animation:fade .25s;
+  padding:0 max(16px,env(safe-area-inset-right,0px)) calc(32px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.gbar{position:sticky;top:0;z-index:2;background:var(--bg);display:flex;justify-content:space-between;align-items:center;padding:calc(14px + env(safe-area-inset-top,0px)) 0 12px;max-width:560px;margin:0 auto;border-bottom:1px solid var(--line)}
+.gbar b{font-size:15px;font-weight:600}
+.gbar button{border:0;background:var(--ink);color:var(--bg);border-radius:999px;padding:8px 16px;font-size:14px;font-weight:600}
+.gin{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:14px;padding-top:20px}
+.gintro h2{font-size:30px;font-weight:600;letter-spacing:-.03em;line-height:1.1;margin:0}
+.gintro p{color:var(--muted);margin:8px 0 6px;font-size:15px}
+.gstep{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:18px;display:flex;flex-direction:column;gap:14px}
+.gnum{display:flex;gap:12px;align-items:flex-start}
+.gnum span{flex:none;width:28px;height:28px;border-radius:9px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-family:var(--mono);font-size:13px;font-weight:600}
+.gnum h3{margin:2px 0 0;font-size:17px;font-weight:600;letter-spacing:-.015em}
+.gnum p{margin:3px 0 0;font-size:14px;color:var(--muted)}
+.gflow{display:flex;align-items:stretch;gap:6px}
+.gtile{flex:1 1 0;min-width:0;background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:12px 8px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:8px;text-align:center;font-size:12px;font-weight:500;color:var(--muted);line-height:1.3}
+.gtile .ui{color:var(--ink);font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:5px;background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:6px 8px;max-width:100%;text-align:center;line-height:1.2}
+.gtile .ui svg{flex:none}
+.gtile .cap b{color:var(--ink)}
+.gtile .ui.dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.gtile .ui.blue{color:var(--accent);border-color:var(--accent)}
+.gtile .ui.hl{box-shadow:0 0 0 3px var(--accent-soft);border-color:var(--accent)}
+.garrow{flex:none;align-self:center;color:var(--faint)}
+.appicon{width:44px;height:44px;border-radius:11px;background:var(--hero);display:grid;place-items:center;color:#fff;box-shadow:0 4px 10px rgba(0,0,0,.2)}
+.gtip{display:flex;gap:8px;font-size:13px;color:var(--muted);background:var(--bg);border-radius:12px;padding:10px 12px}
+.gtip b{color:var(--ink);font-weight:600}
+.legend2{display:grid;grid-template-columns:auto 1fr;gap:10px 12px;align-items:center;font-size:14px}
+.legend2 .ib,.legend2 .chk{margin:0}
+.gdone{width:100%;border:0;border-radius:14px;padding:16px;background:var(--accent);color:#fff;font-size:16px;font-weight:600;margin-top:6px}
+@media (max-width:400px){.hello h1{font-size:24px}.quote{flex-basis:170px}.rowi{grid-template-columns:54px minmax(0,1fr) auto;gap:10px;padding-left:14px}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="hello">
+      <div class="eyebrow" id="today-label">Today</div>
+      <h1 id="greeting">Hi, Veronica</h1>
+      <button class="helpbtn" id="help-btn" type="button"><i>?</i>How to use</button>
+    </div>
+    <button class="quote" id="quote" type="button" aria-label="Show another quote">
+      <p id="quote-text">Commit to the Lord whatever you do, and he will establish your plans.</p>
+      <span id="quote-who">Proverbs 16:3</span>
+    </button>
+  </header>
+
+  <section class="hero" id="hero" aria-live="polite"></section>
+  <section class="notif" id="notif" hidden></section>
+  <nav class="strip" id="strip" aria-label="This week"></nav>
+  <main id="lists" style="display:flex;flex-direction:column;gap:18px"></main>
+
+  <div class="info">
+    <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 11v6M12 7.5v.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <span id="how-fine"></span>
+  </div>
+</div>
+
+<button class="fab" id="add-btn" type="button">
+  <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+  New reminder
+</button>
+<div id="modal-root"></div>
+
+<script>
+(function(){
+"use strict";
+var NAME="Veronica";
+var QUOTES=[
+  ["Commit to the Lord whatever you do, and he will establish your plans.","Proverbs 16:3"],
+  ["She is clothed with strength and dignity; she can laugh at the days to come.","Proverbs 31:25"],
+  ["Poco a poco se va lejos.","Dicho"],
+  ["Do what you can, with what you have, where you are.","Theodore Roosevelt"],
+  ["This is the day the Lord has made; let us rejoice and be glad in it.","Psalm 118:24"],
+  ["Well done is better than well said.","Benjamin Franklin"],
+  ["Cast all your anxiety on him because he cares for you.","1 Peter 5:7"],
+  ["Small deeds done are better than great deeds planned.","Peter Marshall"],
+  ["Al que madruga, Dios lo ayuda.","Dicho"],
+  ["Whatever you do, work at it with all your heart.","Colossians 3:23"],
+  ["I can do all things through Christ who strengthens me.","Philippians 4:13"],
+  ["Let all that you do be done in love.","1 Corinthians 16:14"],
+  ["Trust in the Lord with all your heart.","Proverbs 3:5"],
+  ["Be strong and courageous. Do not be afraid.","Joshua 1:9"]
+];
+function nextSat(){var d=new Date();d.setHours(0,0,0,0);d.setDate(d.getDate()+((6-d.getDay()+7)%7||7));return ymd(d)}
+function xmasShop(){var n=new Date(),d=new Date(n.getFullYear(),11,13);if(d<n)d=new Date(n.getFullYear()+1,11,13);return ymd(d)}
+var SUGGEST=[
+  {label:"Pick up Luna from dance",title:"Pick up Luna from dance",date:nextSat,time:"12:00",repeat:"weekly"},
+  {label:"Luna has dance Saturday",title:"Luna has dance",date:nextSat,time:"10:00",repeat:"weekly"},
+  {label:"Buy Anthony's Christmas present",title:"Buy Anthony's Christmas present",date:xmasShop,time:"10:00"},
+  {label:"Doctor appointment",title:"Doctor appointment"},
+  {label:"Pay a bill",title:"Pay a bill",repeat:"monthly"},
+  {label:"Church",title:"Church",repeat:"weekly"}
+];
+var LS_KEY="veronica_reminders_v1";
+var ICON={
+  bell:'<svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c-3.2 0-5.5 2.5-5.5 5.8v3.9L4.8 16h14.4l-1.7-2.8V9.3c0-3.3-2.3-5.8-5.5-5.8zM10 19a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>',
+  bellOn:'<svg width="17" height="17" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5c-3.2 0-5.5 2.5-5.5 5.8v3.9L4.8 16h14.4l-1.7-2.8V9.3c0-3.3-2.3-5.8-5.5-5.8z" fill="currentColor"/><path d="M10 19a2 2 0 0 0 4 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>',
+  check:'<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  repeat:'<svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11V9a3 3 0 0 1 3-3h12l-3-3M20 13v2a3 3 0 0 1-3 3H5l3 3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  close:'<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>'
+};
+
+/* ---------- helpers ---------- */
+function $(id){return document.getElementById(id)}
+function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+function pad(n){return String(n).padStart(2,"0")}
+function ymd(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())}
+function uid(){return "r"+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function startOf(d){var x=new Date(d);x.setHours(0,0,0,0);return x}
+function addDays(d,n){var x=new Date(d);x.setDate(x.getDate()+n);return x}
+function whenOf(r){var p=r.date.split("-"),t=(r.time||"09:00").split(":");return new Date(+p[0],+p[1]-1,+p[2],+t[0],+t[1])}
+function fmtTime(r){return whenOf(r).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"})}
+function fmtDay(d){return d.toLocaleDateString([],{weekday:"short",month:"short",day:"numeric"})}
+function untilText(ms){
+  var m=Math.round(ms/60000);if(m<1)return "now";if(m<60)return "in "+m+" min";
+  var h=Math.floor(m/60);if(h<24)return "in "+h+"h "+(m%60)+"m";
+  var d=Math.floor(h/24);return "in "+d+"d "+(h%24)+"h";
+}
+var REPEAT_LABEL={none:"Once",daily:"Daily",weekly:"Weekly",monthly:"Monthly",yearly:"Yearly"};
+function advance(r){
+  var d=whenOf(r);
+  if(r.repeat==="daily")d.setDate(d.getDate()+1);
+  else if(r.repeat==="weekly")d.setDate(d.getDate()+7);
+  else if(r.repeat==="monthly")d.setMonth(d.getMonth()+1);
+  else if(r.repeat==="yearly")d.setFullYear(d.getFullYear()+1);
+  return ymd(d);
+}
+function rollForward(r){
+  if(!r.repeat||r.repeat==="none")return r;
+  var g=0,today=startOf(new Date()),c=Object.assign({},r);
+  while(whenOf(c)<today&&g++<800)c.date=advance(c);
+  return c;
+}
+
+/* ---------- calendar alerts ---------- */
+var inFrame=(function(){try{return window.self!==window.top}catch(e){return true}})();
+function icsEsc(s){return String(s||"").replace(/\\/g,"\\\\").replace(/;/g,"\\;").replace(/,/g,"\\,").replace(/\r?\n/g,"\\n")}
+function icsDate(d){return d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate())+"T"+pad(d.getHours())+pad(d.getMinutes())+"00"}
+function rrule(r){var m={daily:"DAILY",weekly:"WEEKLY",monthly:"MONTHLY",yearly:"YEARLY"}[r.repeat];return m?"RRULE:FREQ="+m:""}
+function buildICS(r){
+  var s=whenOf(r),e=new Date(s.getTime()+30*60000),n=new Date();
+  var stamp=n.getUTCFullYear()+pad(n.getUTCMonth()+1)+pad(n.getUTCDate())+"T"+pad(n.getUTCHours())+pad(n.getUTCMinutes())+"00Z";
+  var L=["BEGIN:VCALENDAR","VERSION:2.0","PRODID:-//Veronica//Reminders//EN","CALSCALE:GREGORIAN","METHOD:PUBLISH",
+    "BEGIN:VEVENT","UID:"+r.id+"@veronica-reminders","DTSTAMP:"+stamp,"DTSTART:"+icsDate(s),"DTEND:"+icsDate(e),
+    "SUMMARY:"+icsEsc(r.title),"DESCRIPTION:"+icsEsc((r.note?r.note+"\n\n":"")+"From Veronica's Reminders")];
+  var rr=rrule(r);if(rr)L.push(rr);
+  var a=r.alerts||{day:true,hour:true,now:true};
+  if(a.day)L.push("BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:Tomorrow: "+icsEsc(r.title),"TRIGGER:-P1D","END:VALARM");
+  if(a.hour)L.push("BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:In 1 hour: "+icsEsc(r.title),"TRIGGER:-PT1H","END:VALARM");
+  if(a.now)L.push("BEGIN:VALARM","ACTION:DISPLAY","DESCRIPTION:Now: "+icsEsc(r.title),"TRIGGER:PT0M","END:VALARM");
+  L.push("END:VEVENT","END:VCALENDAR");
+  return L.join("\r\n");
+}
+function googleURL(r){
+  var s=whenOf(r),e=new Date(s.getTime()+30*60000);
+  var tz=Intl.DateTimeFormat().resolvedOptions().timeZone||"America/New_York";
+  var q="action=TEMPLATE&text="+encodeURIComponent(r.title)+"&dates="+icsDate(s)+"/"+icsDate(e)+"&ctz="+encodeURIComponent(tz)+
+    "&details="+encodeURIComponent((r.note?r.note+"\n\n":"")+"From Veronica's Reminders");
+  var rr=rrule(r);if(rr)q+="&recur="+encodeURIComponent(rr);
+  return "https://calendar.google.com/calendar/render?"+q;
+}
+function openICS(r){
+  var url=URL.createObjectURL(new Blob([buildICS(r)],{type:"text/calendar;charset=utf-8"}));
+  var a=document.createElement("a");a.href=url;a.download=(r.title||"reminder").replace(/[^\w ]+/g,"").slice(0,40)+".ics";
+  document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},60000);
+}
+/* inside Claude: Google Calendar link. Opened as its own page on the iPhone: native Apple Calendar file with alarms. */
+function alertAction(r,node){
+  if(inFrame){node.href=googleURL(r);node.target="_blank";node.rel="noopener"}
+  else node.addEventListener("click",function(e){e.preventDefault();openICS(r)});
+  node.addEventListener("click",function(){
+    if(!r.alerted){var o=items.find(function(x){return x.id===r.id});if(o){o=Object.assign({},o,{alerted:true});store.put(o)}}
+    toast("Opening your calendar. Tap Add to save the alerts.");
+  });
+  return node;
+}
+
+/* ---------- storage ---------- */
+var items=[],sel=null;
+var store={
+  load:function(){try{var raw=localStorage.getItem(LS_KEY);items=raw?JSON.parse(raw):[]}catch(e){items=[]}render()},
+  saveLocal:function(){try{localStorage.setItem(LS_KEY,JSON.stringify(items))}catch(e){}},
+  put:function(r){
+    var i=items.findIndex(function(x){return x.id===r.id});if(i<0)items.push(r);else items[i]=r;
+    store.saveLocal();render();scheduleSync();
+    if(store.col)store.col.doc(r.id).set(r).catch(function(){toast("Couldn't sync. It's still saved on this phone.")});
+  },
+  remove:function(id){
+    items=items.filter(function(x){return x.id!==id});store.saveLocal();render();scheduleSync();
+    if(store.col)store.col.doc(id).delete().catch(function(){});
+  }
+};
+async function connectCloud(){
+  if(!window.claude||typeof window.claude.use!=="function")return;
+  try{
+    var db=await window.claude.use("db"),user=await window.claude.use("user");
+    if(!db||!user)return;
+    var id=await user.id();if(!id)return;
+    var col=db.collection("data/users/"+id+"/reminders"),first=true;
+    col.onSnapshot(function(snap){
+      var cloud=snap.docs.map(function(d){return d.data()});
+      if(first){first=false;var k={};cloud.forEach(function(c){k[c.id]=1});
+        items.forEach(function(l){if(!k[l.id]){col.doc(l.id).set(l).catch(function(){});cloud.push(l)}})}
+      items=cloud;store.saveLocal();render();
+    },function(){});
+    store.col=col;
+  }catch(e){}
+}
+
+/* ---------- home-screen notifications (the app on its own website only) ---------- */
+var API_OK=!inFrame&&/^https?:$/.test(location.protocol)&&!/^(localhost|127\.)/.test(location.hostname);
+var isStandalone=(window.matchMedia&&matchMedia("(display-mode: standalone)").matches)||navigator.standalone===true;
+var isiOS=/iPhone|iPad|iPod/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+var pushSupported=API_OK&&"serviceWorker" in navigator&&"PushManager" in window&&"Notification" in window;
+var swReg=null,pushSub=null;
+function hhKey(){
+  var k=null;try{k=localStorage.getItem("veronica_key")}catch(e){}
+  if(!k){k=Array.from(crypto.getRandomValues(new Uint8Array(16)),function(b){return b.toString(16).padStart(2,"0")}).join("");try{localStorage.setItem("veronica_key",k)}catch(e){}}
+  return k;
+}
+function pushOn(){return !!pushSub&&typeof Notification!=="undefined"&&Notification.permission==="granted"}
+function notifState(){
+  if(!API_OK)return "none";
+  if(pushOn())return "on";
+  if(!pushSupported)return (isiOS&&!isStandalone)?"needs-home":"unsupported";
+  if(Notification.permission==="denied")return "denied";
+  return "off";
+}
+function b64uToBytes(str){var t=str.replace(/-/g,"+").replace(/_/g,"/");while(t.length%4)t+="=";var b=atob(t),u=new Uint8Array(b.length);for(var i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
+async function api(path,opts){var r=await fetch("/api/"+path,Object.assign({headers:{"content-type":"application/json"}},opts||{}));if(!r.ok)throw new Error("api "+r.status);return r.json()}
+async function enableNotifications(){
+  try{
+    var perm=await Notification.requestPermission();
+    if(perm!=="granted"){renderNotif();toast(perm==="denied"?"Notifications are blocked. Follow the steps on the card.":"Notifications weren't turned on");return}
+    if(!swReg)swReg=await navigator.serviceWorker.register("/sw.js");
+    await navigator.serviceWorker.ready;
+    var v=await api("vapid");
+    pushSub=(await swReg.pushManager.getSubscription())||(await swReg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64uToBytes(v.publicKey)}));
+    await syncNow();render();toast("Notifications are on");
+  }catch(e){toast("Couldn't turn on notifications. Check your connection and try again.");renderNotif()}
+}
+async function sendTest(){
+  try{await syncNow();var r=await api("test",{method:"POST",body:JSON.stringify({key:hhKey()})});toast(r.sent?"Test sent. Look at the top of your screen.":"Couldn't reach your phone. Turn notifications off and on again.")}
+  catch(e){toast("Couldn't send a test right now")}
+}
+/* every alert time for the next weeks, so the server can notify even when the app is closed */
+function buildAlarms(){
+  var out=[],now=Date.now(),days={none:0,daily:30,weekly:120,monthly:400,yearly:400};
+  items.forEach(function(r){
+    if(r.done)return;
+    var a=r.alerts||{day:true,hour:true,now:true},c=rollForward(r),limit=now+(days[r.repeat||"none"]||0)*864e5+864e5,g=0;
+    do{
+      var at=whenOf(c).getTime(),t=fmtTime(c),dn=whenOf(c).toLocaleDateString([],{weekday:"long"});
+      if(a.day)out.push({id:r.id+"|"+c.date+"|"+c.time+"|d",at:at-864e5,title:r.title,body:"Tomorrow, "+dn+" at "+t});
+      if(a.hour)out.push({id:r.id+"|"+c.date+"|"+c.time+"|h",at:at-36e5,title:r.title,body:"In 1 hour, at "+t});
+      if(a.now)out.push({id:r.id+"|"+c.date+"|"+c.time+"|n",at:at,title:r.title,body:"It's time"+(r.note?" · "+r.note:"")});
+      if(!r.repeat||r.repeat==="none")break;
+      c=Object.assign({},c,{date:advance(c)});
+    }while(whenOf(c).getTime()<=limit&&g++<400);
+  });
+  return out.filter(function(x){return x.at>now-6e4}).sort(function(x,y){return x.at-y.at}).slice(0,1000);
+}
+var syncT;
+function scheduleSync(){if(!API_OK)return;clearTimeout(syncT);syncT=setTimeout(syncNow,800)}
+async function syncNow(){
+  if(!API_OK)return;
+  try{await api("sync",{method:"POST",body:JSON.stringify({key:hhKey(),reminders:items,alarms:buildAlarms(),subscription:pushSub?pushSub.toJSON():null})})}catch(e){}
+}
+async function initPush(){
+  if(!API_OK)return;
+  if(!items.length){try{var st=await api("state?key="+hhKey());if(st&&st.reminders&&st.reminders.length){items=st.reminders;store.saveLocal()}}catch(e){}}
+  if("serviceWorker" in navigator){try{swReg=await navigator.serviceWorker.register("/sw.js")}catch(e){}}
+  if(pushSupported&&swReg&&Notification.permission==="granted"){try{pushSub=await swReg.pushManager.getSubscription()}catch(e){}}
+  render();syncNow();
+}
+function renderNotif(){
+  var n=$("notif"),st=notifState();
+  if(st==="none"){n.hidden=true;return}
+  n.hidden=false;n.className="notif "+st;n.innerHTML="";
+  var ic=el("div","nic");ic.innerHTML=(st==="on"?ICON.bellOn:ICON.bell).replace(/17/g,"20");n.appendChild(ic);
+  var COPY={
+    on:["Notifications are on","1 day before, 1 hour before and on time. Even when the app is closed.","Send a test",sendTest],
+    off:["Turn on notifications","Get reminders on your lock screen and while you use your phone.","Turn on",enableNotifications],
+    "needs-home":["Add to Home Screen for notifications","iPhone only sends app notifications from the Home Screen icon.","Show me",function(){openGuide()}],
+    denied:["Notifications are blocked","Open Settings → Notifications → Reminders → turn on Allow Notifications.",null,null],
+    unsupported:["Notifications aren't available here","Use the bell on each reminder to add it to your Calendar instead.",null,null]
+  }[st];
+  var tx=el("div");tx.style.minWidth="0";tx.appendChild(el("b",null,COPY[0]));tx.appendChild(el("span",null,COPY[1]));n.appendChild(tx);
+  if(COPY[2]){var b=el("button","nbtn",COPY[2]);b.type="button";b.onclick=COPY[3];n.appendChild(b)}
+}
+/* in-app banner when something is due while she has the app open */
+var lastDue=Date.now();
+function checkDue(){
+  var now=Date.now();
+  items.forEach(function(r){if(r.done)return;var t=whenOf(rollForward(r)).getTime();if(t>lastDue&&t<=now)showDue(r)});
+  lastDue=now;
+}
+function showDue(r){
+  var o=document.querySelector(".dueban");if(o)o.remove();
+  var b=el("div","dueban");b.setAttribute("role","alert");
+  var ic=el("div","nic");ic.innerHTML=ICON.bellOn;b.appendChild(ic);
+  var tx=el("div");tx.style.minWidth="0";tx.appendChild(el("small",null,"It's time · "+fmtTime(rollForward(r))));tx.appendChild(el("b",null,r.title));b.appendChild(tx);
+  var ok=el("button",null,"Got it");ok.type="button";ok.onclick=function(){b.remove()};b.appendChild(ok);
+  document.body.appendChild(b);
+  try{if(navigator.vibrate)navigator.vibrate([200,100,200])}catch(e){}
+  setTimeout(function(){b.remove()},60000);
+}
+
+/* ---------- render ---------- */
+function render(){
+  var now=new Date(),today=startOf(now);
+  var view=items.map(rollForward).sort(function(a,b){return whenOf(a)-whenOf(b)});
+  var open=view.filter(function(r){return !r.done}),done=view.filter(function(r){return r.done});
+  renderHero(open,now);renderStrip(open,today);renderNotif();
+
+  var root=$("lists");root.innerHTML="";
+  var shown=sel?open.filter(function(r){return r.date===sel}):open;
+
+  if(sel){
+    var f=el("div","filter");f.appendChild(el("h3",null,fmtDay(whenOf({date:sel,time:"12:00"}))));
+    var all=el("button",null,"Show all");all.type="button";all.onclick=function(){sel=null;render()};f.appendChild(all);root.appendChild(f);
+  }
+  if(!shown.length){
+    var em=el("div","empty");
+    em.appendChild(el("h4",null,sel?"Nothing on this day":"All clear"));
+    em.appendChild(el("p",null,sel?"Tap New reminder to add something.":"Tap one to start, or add your own."));
+    var ch=el("div","chips");SUGGEST.forEach(function(s){var c=el("button","chip",s.label);c.type="button";c.onclick=function(){openForm({title:s.title,date:sel||(s.date?s.date():undefined),time:s.time,repeat:s.repeat})};ch.appendChild(c)});
+    em.appendChild(ch);root.appendChild(em);
+  }
+  var groups=[],map={};
+  shown.forEach(function(r){
+    var d=whenOf(r),key,label,late=false;
+    if(d<today){key="late";label="Overdue";late=true}
+    else{key=r.date;var dd=startOf(d),diff=Math.round((dd-today)/864e5);
+      label=diff===0?"Today":diff===1?"Tomorrow":d.toLocaleDateString([],{weekday:"long",month:"short",day:"numeric"})}
+    if(!map[key]){map[key]={label:label,late:late,list:[]};groups.push(map[key])}
+    map[key].list.push(r);
+  });
+  groups.forEach(function(g){
+    var w=el("section","group"),h=el("div","ghead"+(g.late?" late":""));
+    h.appendChild(el("span",null,g.label));h.appendChild(el("span",null,String(g.list.length)));w.appendChild(h);
+    var c=el("div","card");g.list.forEach(function(r){c.appendChild(row(r,now))});w.appendChild(c);root.appendChild(w);
+  });
+  if(done.length&&!sel){
+    var det=el("details","donebox");det.appendChild(el("summary",null,"Completed · "+done.length));
+    var dc=el("div","card");done.slice(-15).reverse().forEach(function(r){dc.appendChild(row(r,now))});det.appendChild(dc);
+    var clr=el("button","linkbtn","Clear completed");clr.type="button";clr.onclick=function(){done.forEach(function(r){store.remove(r.id)})};det.appendChild(clr);
+    root.appendChild(det);
+  }
+}
+function renderHero(open,now){
+  var h=$("hero");h.innerHTML="";
+  var next=open.find(function(r){return whenOf(r)>=now});
+  var lbl=el("div","lbl");lbl.appendChild(el("span",null,"Next up"));
+  if(!next){
+    h.appendChild(lbl);
+    var t=el("h2",null,"You're all clear");h.appendChild(t);
+    var s=el("div","when",open.length?"Only overdue items left. Check them off below.":"Nothing scheduled yet.");s.style.marginTop="-8px";h.appendChild(s);
+    return;
+  }
+  lbl.appendChild(el("span","count",untilText(whenOf(next)-now)));h.appendChild(lbl);
+  var box=el("div");box.style.position="relative";
+  box.appendChild(el("h2",null,next.title));
+  box.appendChild(el("div","when",fmtDay(whenOf(next))+" · "+fmtTime(next)+(next.note?" · "+next.note:"")));
+  h.appendChild(box);
+  var rw=el("div","row");
+  if(pushOn()){
+    var on=el("span","hbtn on");on.innerHTML=ICON.bellOn+"<span>Notifications on</span>";rw.appendChild(on);
+  }else{
+    var ab=alertAction(next,el("a","hbtn"+(next.alerted?" on":"")));ab.href=ab.href||"#";
+    ab.innerHTML=(next.alerted?ICON.bellOn:ICON.bell)+"<span></span>";ab.querySelector("span").textContent=next.alerted?"Alert added":"Add phone alert";
+    rw.appendChild(ab);
+  }
+  var dn=el("button","hbtn sub");dn.type="button";dn.innerHTML=ICON.check+"<span>Mark done</span>";dn.onclick=function(){complete(next)};rw.appendChild(dn);
+  h.appendChild(rw);
+}
+function renderStrip(open,today){
+  var s=$("strip");s.innerHTML="";var has={};open.forEach(function(r){has[r.date]=1});
+  for(var i=0;i<7;i++){
+    var d=addDays(today,i),k=ymd(d);
+    var b=el("button","d"+(i===0?" today":"")+(has[k]?" has":"")+(sel===k?" sel":""));b.type="button";
+    b.setAttribute("aria-pressed",sel===k?"true":"false");b.setAttribute("aria-label",fmtDay(d));
+    b.appendChild(el("small",null,i===0?"Today":d.toLocaleDateString([],{weekday:"short"})));
+    b.appendChild(el("b",null,String(d.getDate())));b.appendChild(el("i"));
+    (function(k){b.onclick=function(){sel=sel===k?null:k;render()}})(k);
+    s.appendChild(b);
+  }
+}
+function complete(r){
+  var orig=items.find(function(x){return x.id===r.id});if(!orig)return;
+  if(!r.done&&r.repeat&&r.repeat!=="none"){var nx=Object.assign({},orig,{date:advance(r),alerted:orig.alerted});store.put(nx);toast("Done. Next one "+fmtDay(whenOf(nx)))}
+  else{store.put(Object.assign({},orig,{done:!r.done}));if(!r.done)toast("Nice work, "+NAME)}
+}
+function row(r,now){
+  var d=whenOf(r),w=el("div","rowi"+(r.done?" done":""));
+  var tm=el("div","tm",fmtTime(r).replace(/\s?(AM|PM)$/i,""));tm.appendChild(el("small",null,(fmtTime(r).match(/AM|PM/i)||[""])[0]));
+  var m=el("button","main");m.type="button";m.setAttribute("aria-label","Edit "+r.title);
+  m.appendChild(el("div","ttl",r.title));
+  var sub=el("div","sub"),any=false;
+  if(r.repeat&&r.repeat!=="none"){var t=el("span","tag");t.innerHTML=ICON.repeat;t.appendChild(document.createTextNode(REPEAT_LABEL[r.repeat]));sub.appendChild(t);any=true}
+  if(!r.done&&d<now){sub.appendChild(el("span","tag late",fmtDay(d)));any=true}
+  else if(!r.done&&d-now<=864e5){sub.appendChild(el("span","tag soon",untilText(d-now)));any=true}
+  if(r.note){sub.appendChild(el("span",null,r.note));any=true}
+  if(any)m.appendChild(sub);
+  m.onclick=function(){openForm(items.find(function(x){return x.id===r.id}))};
+  var acts=el("div","acts");
+  if(!r.done&&!pushOn()){
+    var b=alertAction(r,el("a","ib bell"+(r.alerted?" on":"")));b.innerHTML=r.alerted?ICON.bellOn:ICON.bell;
+    b.setAttribute("aria-label",r.alerted?"Alert added. Add again":"Add phone alert");if(!b.getAttribute("href"))b.href="#";acts.appendChild(b);
+  }
+  var c=el("button","chk");c.type="button";c.innerHTML=ICON.check;c.setAttribute("aria-label",r.done?"Mark not done":"Mark done");
+  c.onclick=function(){complete(r)};acts.appendChild(c);
+  w.appendChild(tm);w.appendChild(m);w.appendChild(acts);return w;
+}
+
+/* ---------- sheet ---------- */
+function closeModal(){$("modal-root").innerHTML="";document.body.style.overflow=""}
+function shell(){
+  var root=$("modal-root");root.innerHTML="";document.body.style.overflow="hidden";
+  var scrim=el("div","scrim");scrim.addEventListener("click",function(e){if(e.target===scrim)closeModal()});
+  root.appendChild(scrim);return scrim;
+}
+function seg(id,opts,val){
+  var s=el("div","seg");s.id=id;s.setAttribute("role","group");
+  opts.forEach(function(o){var b=el("button",null,o[1]);b.type="button";b.dataset.v=o[0];b.setAttribute("aria-pressed",o[0]===val?"true":"false");
+    b.onclick=function(){s.querySelectorAll("button").forEach(function(x){x.setAttribute("aria-pressed","false")});b.setAttribute("aria-pressed","true");if(s.onpick)s.onpick(o[0])};s.appendChild(b)});
+  s.value=function(){var p=s.querySelector('[aria-pressed="true"]');return p?p.dataset.v:null};
+  return s;
+}
+function openForm(r){
+  r=r||{};var editing=!!r.id,today=startOf(new Date());
+  var scrim=shell(),f=el("form","sheet");f.setAttribute("role","dialog");f.setAttribute("aria-modal","true");f.setAttribute("aria-label",editing?"Edit reminder":"New reminder");
+  f.appendChild(el("div","grab"));
+  var hd=el("div","shead");hd.appendChild(el("h2",null,editing?"Edit reminder":"New reminder"));
+  var x=el("button","x");x.type="button";x.innerHTML=ICON.close;x.setAttribute("aria-label","Close");x.onclick=closeModal;hd.appendChild(x);f.appendChild(hd);
+
+  var ti=el("input","big-in");ti.id="f-title";ti.maxLength=90;ti.autocomplete="off";ti.placeholder="e.g. Pick up Luna from dance";ti.value=r.title||"";f.appendChild(ti);
+
+  var s1=el("div","sec");s1.appendChild(el("div","sl","When"));
+  var dIn=el("input","inp");dIn.type="date";dIn.id="f-date";dIn.value=r.date||ymd(addDays(today,1));
+  var tIn=el("input","inp");tIn.type="time";tIn.id="f-time";tIn.value=r.time||"09:00";
+  var quick=seg("f-quick",[["0","Today"],["1","Tomorrow"],["7","Next week"]],null);
+  function syncQuick(){quick.querySelectorAll("button").forEach(function(b){b.setAttribute("aria-pressed",ymd(addDays(today,+b.dataset.v))===dIn.value?"true":"false")})}
+  quick.onpick=function(v){dIn.value=ymd(addDays(today,+v))};dIn.addEventListener("change",syncQuick);syncQuick();
+  s1.appendChild(quick);var pr=el("div","pair");pr.appendChild(dIn);pr.appendChild(tIn);s1.appendChild(pr);f.appendChild(s1);
+
+  var s2=el("div","sec");s2.appendChild(el("div","sl","Repeat"));
+  var rep=seg("f-repeat",[["none","Once"],["daily","Daily"],["weekly","Weekly"],["monthly","Monthly"],["yearly","Yearly"]],r.repeat||"none");
+  s2.appendChild(rep);f.appendChild(s2);
+
+  var a=r.alerts||{day:true,hour:true,now:true};
+  var s3=el("div","sec");s3.appendChild(el("div","sl","Alert me"));
+  [["day","1 day before"],["hour","1 hour before"],["now","When it's time"]].forEach(function(o){
+    var l=el("label","sw");l.appendChild(el("span",null,o[1]));var c=el("input");c.type="checkbox";c.id="a-"+o[0];c.checked=!!a[o[0]];l.appendChild(c);s3.appendChild(l)});
+  f.appendChild(s3);
+
+  var s4=el("div","sec");s4.appendChild(el("div","sl","Notes"));
+  var nt=el("textarea","inp");nt.id="f-note";nt.maxLength=300;nt.placeholder="Address, what to bring, a phone number";nt.value=r.note||"";s4.appendChild(nt);f.appendChild(s4);
+
+  var err=el("div","err");err.hidden=true;f.appendChild(err);
+  var sv=el("button","primary",editing?"Save changes":"Save reminder");sv.type="submit";f.appendChild(sv);
+  if(editing){
+    var del=el("button","ghostbtn danger","Delete reminder");del.type="button";var armed=false;
+    del.onclick=function(){if(!armed){armed=true;del.textContent="Tap again to delete";return}store.remove(r.id);closeModal();toast("Deleted")};
+    f.appendChild(del);
+  }
+  scrim.appendChild(f);
+  if(!r.title)setTimeout(function(){ti.focus()},80);
+
+  f.addEventListener("submit",function(e){
+    e.preventDefault();
+    var t=ti.value.trim();
+    if(!t){err.textContent="Add a name for the reminder.";err.hidden=false;ti.focus();return}
+    if(!dIn.value||!tIn.value){err.textContent="Pick a day and a time.";err.hidden=false;return}
+    var repeat=rep.value()||"none";
+    var changed=editing&&(r.date!==dIn.value||r.time!==tIn.value||r.repeat!==repeat);
+    var rec={id:r.id||uid(),title:t,date:dIn.value,time:tIn.value,repeat:repeat,note:nt.value.trim(),
+      alerts:{day:$("a-day").checked,hour:$("a-hour").checked,now:$("a-now").checked},
+      done:false,alerted:editing&&!changed?!!r.alerted:false,created:r.created||Date.now()};
+    store.put(rec);
+    if(editing&&!changed){closeModal();toast("Saved");return}
+    showConfirm(rec,changed);
+  });
+}
+function showConfirm(r,changed){
+  var scrim=shell(),sh=el("div","sheet confirm");
+  sh.appendChild(el("div","grab"));
+  var ok=el("div","ok");ok.innerHTML=ICON.bellOn.replace(/17/g,"26");sh.appendChild(ok);
+  sh.appendChild(el("h3",null,changed?"Time changed":"Saved"));
+  var st=notifState();
+  sh.appendChild(el("p",null,st==="on"?"Your iPhone will notify you about \u201C"+r.title+"\u201D:":st==="off"?"Turn on notifications so your iPhone reminds you about \u201C"+r.title+"\u201D.":"One more tap so your iPhone reminds you about \u201C"+r.title+"\u201D."));
+  var fl=el("div","flow"),a=r.alerts;
+  [a.day&&"1 day before",a.hour&&"1 hour before",a.now&&"On time"].filter(Boolean).forEach(function(s,i,arr){fl.appendChild(el("b",null,s));if(i<arr.length-1)fl.appendChild(el("span",null,"→"))});
+  if(fl.childNodes.length)sh.appendChild(fl);
+  if(st==="on"){
+    var dn=el("button","primary","Done");dn.type="button";dn.onclick=closeModal;sh.appendChild(dn);
+    scrim.appendChild(sh);return;
+  }
+  if(st==="off"){
+    var on=el("button","primary");on.type="button";on.innerHTML=ICON.bell+"<span>Turn on notifications</span>";on.onclick=function(){closeModal();enableNotifications()};sh.appendChild(on);
+  }else{
+    var b=alertAction(r,el("a","primary"));if(!b.getAttribute("href"))b.href="#";
+    b.innerHTML=ICON.bell+"<span>Add to my iPhone calendar</span>";b.addEventListener("click",function(){setTimeout(closeModal,400)});sh.appendChild(b);
+  }
+  var later=el("button","ghostbtn","Later");later.type="button";later.onclick=closeModal;sh.appendChild(later);
+  scrim.appendChild(sh);
+}
+
+/* ---------- toast + header ---------- */
+var tt;
+function toast(msg){var o=document.querySelector(".toast");if(o)o.remove();var t=el("div","toast",msg);t.setAttribute("role","status");document.body.appendChild(t);clearTimeout(tt);tt=setTimeout(function(){t.remove()},2600)}
+function header(){
+  var n=new Date(),h=n.getHours();
+  $("greeting").textContent=(h<12?"Good morning":h<17?"Good afternoon":"Good evening")+", "+NAME;
+  $("today-label").textContent=n.toLocaleDateString([],{weekday:"long",month:"long",day:"numeric"});
+}
+var qi=Math.floor(startOf(new Date()).getTime()/864e5)%QUOTES.length;
+function showQuote(){$("quote-text").textContent=QUOTES[qi][0];$("quote-who").textContent=QUOTES[qi][1]}
+$("quote").addEventListener("click",function(){var q=$("quote");q.classList.add("fade");setTimeout(function(){qi=(qi+1)%QUOTES.length;showQuote();q.classList.remove("fade")},280)});
+
+$("how-fine").textContent=API_OK
+  ?"Notifications come from this app once they're on. Always open it from your Home Screen icon, that's where your reminders live."
+  :inFrame
+  ?"Tap the bell to save a reminder to Google Calendar. Set Google Calendar's default notifications to 1 day before and at event time, and your iPhone alerts you even when this app is closed."
+  :"Tap the bell to save a reminder to your iPhone Calendar with the alerts you picked. They work even when this app is closed.";
+
+/* ---------- tutorial ---------- */
+var ARROW='<svg class="garrow" width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var SHARE='<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M8 7l4-4 4 4M6 11H5v10h14V11h-1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+var PLUSBOX='<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+function flow(tiles){return '<div class="gflow">'+tiles.map(function(t){var m=t.match(/^(<span class="(?:ui|appicon)[^"]*">[\s\S]*?<\/span>)([\s\S]*)$/);return '<div class="gtile">'+(m?m[1]+'<div class="cap">'+m[2]+'</div>':t)+'</div>'}).join(ARROW)+'</div>'}
+function step(n,title,text,body){return '<section class="gstep"><div class="gnum"><span>'+n+'</span><div><h3>'+title+'</h3><p>'+text+'</p></div></div>'+body+'</section>'}
+function openGuide(){
+  var g=el("div","guide");g.setAttribute("role","dialog");g.setAttribute("aria-modal","true");g.setAttribute("aria-label","How to use");
+  var cal=inFrame
+    ? step(4,"One-time Google Calendar setup","Do this once so every reminder alerts you 1 day before and on time.",
+        flow(['<span class="ui">Google Calendar</span>Open the app','<span class="ui">☰ Settings</span>Pick your calendar','<span class="ui hl">Default notifications</span>Add <b>1 day before</b> and <b>at time of event</b>']))
+    : "";
+  var push=API_OK;
+  var n=inFrame?5:4;
+  g.innerHTML=
+   '<div class="gbar"><b>How to use</b><button type="button" id="g-close">Done</button></div>'+
+   '<div class="gin">'+
+   '<div class="gintro"><h2>Hi Veronica.<br>Here’s your app in 1 minute.</h2><p>Add what you have to do. Your iPhone reminds you the day before, an hour before, and when it’s time.</p></div>'+
+   step(1,"Put it on your Home Screen","Open this link in Safari, then do this once. It becomes an app icon.",
+     flow(['<span class="ui hl">'+SHARE+' Share</span>Tap Share at the bottom (or ••• then Share)',
+           '<span class="ui hl">'+PLUSBOX+' Add to Home Screen</span>Scroll down and tap it',
+           '<span class="appicon">'+ICON.bellOn+'</span>Tap <b>Add</b>. Open it from your Home Screen'])+
+     '<div class="gtip"><span>💡</span><span>If the link opens inside another app (Messages, Claude), tap <b>•••</b> and choose <b>Open in Safari</b> first.</span></div>')+
+   (push
+    ? step(2,"Turn on notifications","Do this once, from the Home Screen icon.",
+        flow(['<span class="appicon">'+ICON.bellOn+'</span>Open the app from your Home Screen',
+              '<span class="ui blue">Turn on</span>Tap it on the notifications card',
+              '<span class="ui hl">Allow</span>Your iPhone asks. Tap Allow'])+
+        '<div class="gtip"><span>🔔</span><span>Now you get a notification <b>1 day before</b>, <b>1 hour before</b> and <b>on time</b>, on your lock screen and while you use your phone. Tap <b>Send a test</b> to see one.</span></div>')+
+      step(3,"Add a reminder","Tap the black button at the bottom right.",
+        flow(['<span class="ui dark">+ New reminder</span>Bottom right','<span class="ui">What, day, time</span>Type it and pick when','<span class="ui dark">Save reminder</span>That\u2019s it. Alerts are set']))
+    : step(2,"Add a reminder","Tap the black button at the bottom right.",
+     flow(['<span class="ui dark">+ New reminder</span>Bottom right','<span class="ui">What, day, time</span>Type it and pick when','<span class="ui dark">Save reminder</span>Done']))+
+   step(3,"Turn on the phone alert","Right after saving, tap the blue button. This is what makes your phone remind you.",
+     flow(['<span class="ui blue">'+ICON.bell+' Add to calendar</span>Tap the bell',
+           inFrame?'<span class="ui hl">Save</span>Google Calendar opens. Tap Save':'<span class="ui hl">Add</span>Your Calendar opens. Tap Add',
+           '<span class="ui">1 day · 1 hr · now</span>Your iPhone alerts you'])))+
+   cal+
+   step(n,"Read your day","Everything important is at the top.",
+     '<div class="legend2">'+
+       '<span class="ui" style="background:var(--hero);color:#fff;border-radius:9px;padding:6px 9px;font-size:12px;font-weight:600">Next up</span><span>Your very next reminder and how long until it.</span>'+
+       '<span class="ui" style="border:1px solid var(--line);border-radius:9px;padding:6px 9px;font-size:12px;font-weight:600;display:inline-flex;gap:5px;align-items:center">19 <i style="width:5px;height:5px;border-radius:50%;background:var(--accent);display:inline-block"></i></span><span>A dot under a day means something’s scheduled. Tap the day to see only that day.</span>'+
+       (push
+        ? '<span class="ib bell on">'+ICON.bellOn+'</span><span>The card under Next up shows if notifications are on.</span>'
+        : '<span class="ib bell">'+ICON.bell+'</span><span>Blue outline: alert <b>not added yet</b>. Tap it.</span>'+
+          '<span class="ib bell on">'+ICON.bellOn+'</span><span>Filled: alert is added.</span>')+
+       '<span class="chk"></span><span>Tap the circle when it’s done. Repeating ones move to the next date.</span>'+
+     '</div>')+
+   step(n+1,"Change or delete","Tap the name of any reminder to edit it. Delete is at the bottom.",
+     (push
+      ? '<div class="gtip"><span>✓</span><span>Notifications update by themselves when you change or delete a reminder.</span></div>'
+      : '<div class="gtip"><span>⚠️</span><span>If you change the <b>day or time</b>, tap the bell again so your calendar gets the new time. You can delete the old one in Calendar.</span></div>'))+
+   step(n+2,"Your daily quote","A new one shows up every day. Tap it anytime to see another.","")+
+   '<button class="gdone" type="button" id="g-done">Start using my app</button>'+
+   '</div>';
+  document.body.appendChild(g);document.body.style.overflow="hidden";
+  function close(){g.remove();document.body.style.overflow="";try{localStorage.setItem("veronica_guide_seen","1")}catch(e){}}
+  $("g-close").onclick=close;$("g-done").onclick=close;
+}
+$("help-btn").addEventListener("click",openGuide);
+(function(){var seen=null;try{seen=localStorage.getItem("veronica_guide_seen")}catch(e){}if(!seen)openGuide()})();
+
+$("add-btn").addEventListener("click",function(){openForm(sel?{date:sel}:null)});
+document.addEventListener("keydown",function(e){if(e.key==="Escape")closeModal()});
+header();showQuote();store.load();connectCloud();initPush();
+setInterval(checkDue,20000);
+document.addEventListener("visibilitychange",function(){if(!document.hidden){lastDue=Date.now();render();scheduleSync()}});
+setInterval(function(){header();render()},60000);
+})();
+</script>
+
+</body></html>

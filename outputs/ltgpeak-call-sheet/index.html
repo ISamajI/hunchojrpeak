@@ -1,0 +1,315 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>LTGPEAK Call Sheet</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800;900&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: sticky scoreboard on top, a 4-step call play strip, then a filterable stack of lead cards with a priority stripe and one-tap outcome buttons. */
+:root{
+  --bg:#F3F5FA; --surface:#FFFFFF; --ink:#0D1530; --muted:#5A6482; --line:#DCE1EE;
+  --blue:#1F49E0; --blue-soft:#E4EAFD; --amber:#8A5100; --amber-soft:#FBEFD9;
+  --red:#C8243A; --red-soft:#FBE3E7; --green:#127A4B; --green-soft:#DDF3E8; --gray-soft:#ECEEF4;
+  --navy:#0B1640; --on-navy:#FFFFFF; --on-navy-muted:#AEB8DA;
+  --display:"Archivo","Arial Narrow",Arial,sans-serif;
+  --body:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#080D20; --surface:#111934; --ink:#EEF1FA; --muted:#98A2C3; --line:#232D50;
+  --blue:#7C9BFF; --blue-soft:#1A2754; --amber:#F2B65C; --amber-soft:#33250F;
+  --red:#FF7A8C; --red-soft:#3A1520; --green:#5BD69A; --green-soft:#0F2E21; --gray-soft:#1A2240;
+  --navy:#050A1C; --on-navy:#FFFFFF; --on-navy-muted:#8E99C0; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#080D20; --surface:#111934; --ink:#EEF1FA; --muted:#98A2C3; --line:#232D50;
+  --blue:#7C9BFF; --blue-soft:#1A2754; --amber:#F2B65C; --amber-soft:#33250F;
+  --red:#FF7A8C; --red-soft:#3A1520; --green:#5BD69A; --green-soft:#0F2E21; --gray-soft:#1A2240;
+  --navy:#050A1C; --on-navy:#FFFFFF; --on-navy-muted:#8E99C0; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--navy)}
+.wrap{max-width:1040px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+/* Scoreboard */
+.board{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--navy);color:var(--on-navy)}
+.board .wrap{padding-block:14px;display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px}
+.brand{display:flex;flex-direction:column;gap:2px;min-width:0}
+.brand b{font-family:var(--display);font-weight:900;font-size:22px;letter-spacing:.02em;line-height:1}
+.brand b i{font-style:normal;color:#FF4D63}
+.brand span{font-size:12px;color:var(--on-navy-muted);letter-spacing:.08em;text-transform:uppercase}
+.stats{display:flex;gap:18px;flex-wrap:wrap;margin-left:auto}
+.stat{display:flex;flex-direction:column;align-items:flex-start}
+.stat strong{font-family:var(--display);font-size:24px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.stat small{font-size:11px;color:var(--on-navy-muted);text-transform:uppercase;letter-spacing:.08em}
+.stat.hot strong{color:#7FE3AE}
+.meter{flex-basis:100%;height:6px;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden;display:flex}
+.meter i{display:block;height:100%;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.meter .m-called{background:#6F8BFF}.meter .m-hot{background:#7FE3AE}
+
+/* Play strip */
+h2{font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:28px 0 12px}
+.play{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.step{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 14px 14px;min-width:0}
+.step .n{font-family:var(--display);font-weight:900;font-size:13px;color:var(--blue);letter-spacing:.06em}
+.step h3{margin:2px 0 6px;font-family:var(--display);font-size:17px;font-weight:800}
+.step p{margin:0;font-size:14px;color:var(--muted)}
+.step p q{color:var(--ink)}
+.step:not(:last-child)::after{content:"→";position:absolute;right:-11px;top:50%;transform:translateY(-50%);width:20px;height:20px;border-radius:50%;background:var(--blue);color:#fff;font-size:12px;display:grid;place-items:center;z-index:1}
+.es-line{margin-top:10px;font-size:13px;color:var(--muted)}
+.es-line b{color:var(--ink)}
+@media (max-width:760px){.play{grid-template-columns:1fr 1fr}.step:nth-child(2)::after{display:none}}
+@media (max-width:460px){.play{grid-template-columns:1fr}.step::after{display:none}}
+
+/* Filters */
+.filters{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0 14px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.search{flex:1 1 200px;min-width:0;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:7px 14px;font:inherit;font-size:14px}
+select.search{flex:0 1 auto}
+.count{font-size:13px;color:var(--muted);margin-bottom:10px}
+
+/* Lead cards */
+.list{display:flex;flex-direction:column;gap:10px;padding-bottom:40px}
+.lead{display:grid;grid-template-columns:6px minmax(0,1fr);background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;animation:rise .35s ease both}
+@keyframes rise{from{transform:translateY(6px)}to{transform:none}}
+.settled .lead{animation:none}
+@media (prefers-reduced-motion:reduce){.lead{animation:none}.meter i{transition:none}}
+.stripe{background:var(--line)}
+.lead[data-p="Hot"] .stripe{background:var(--red)}
+.lead[data-p="Warm"] .stripe{background:var(--amber)}
+.lead[data-o="demo"] .stripe,.lead[data-o="interested"] .stripe{background:var(--green)}
+.body{padding:14px 16px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 18px}
+.top{min-width:0}
+.title{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px}
+.title h4{margin:0;font-family:var(--display);font-weight:800;font-size:18px;line-height:1.2}
+.rank{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.meta{font-size:13px;color:var(--muted);margin-top:2px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.tag{font-size:11.5px;font-weight:600;padding:3px 8px;border-radius:6px;letter-spacing:.02em}
+.t-hot{background:var(--red-soft);color:var(--red)}
+.t-warm{background:var(--amber-soft);color:var(--amber)}
+.t-later{background:var(--gray-soft);color:var(--muted)}
+.t-noweb{background:var(--red-soft);color:var(--red)}
+.t-social{background:var(--amber-soft);color:var(--amber)}
+.t-es{background:var(--blue-soft);color:var(--blue)}
+.t-old{background:transparent;color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue);text-decoration:none}
+.t-stars{background:var(--gray-soft);color:var(--ink);font-variant-numeric:tabular-nums}
+.dial{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.phone{font-family:var(--mono);font-weight:600;font-size:18px;color:var(--ink);text-decoration:none;white-space:nowrap;user-select:all}
+.dial-actions{display:flex;gap:6px}
+.mini{border:1px solid var(--line);background:transparent;border-radius:8px;padding:4px 10px;font-size:12px;font-weight:600;color:var(--muted);text-decoration:none}
+.say{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.say div{background:var(--bg);border-radius:8px;padding:10px 12px;font-size:14px;min-width:0}
+.say small{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.outcomes{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:6px}
+.oc{border:1px solid var(--line);background:transparent;border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600;color:var(--muted);transition:background .15s,color .15s,border-color .15s}
+.oc:hover{border-color:var(--ink);color:var(--ink)}
+.oc[aria-pressed="true"]{color:#fff;border-color:transparent}
+.oc[data-v="noanswer"][aria-pressed="true"],.oc[data-v="voicemail"][aria-pressed="true"]{background:var(--muted)}
+.oc[data-v="callback"][aria-pressed="true"]{background:var(--amber)}
+.oc[data-v="interested"][aria-pressed="true"]{background:var(--blue)}
+.oc[data-v="demo"][aria-pressed="true"]{background:var(--green)}
+.oc[data-v="no"][aria-pressed="true"]{background:var(--red)}
+:root[data-theme="dark"] .oc[aria-pressed="true"]{color:#080D20}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .oc[aria-pressed="true"]{color:#080D20}}
+.note{grid-column:1/-1;display:flex;gap:8px;align-items:flex-start}
+.note textarea{flex:1;min-width:0;min-height:38px;resize:vertical;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:8px 10px;font:inherit;font-size:14px}
+.note span{font-size:12px;color:var(--muted);white-space:nowrap;padding-top:10px}
+@media (max-width:640px){.body{grid-template-columns:1fr}.dial{align-items:flex-start}.say{grid-template-columns:1fr}}
+.state{background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:28px;text-align:center;color:var(--muted)}
+.state b{display:block;color:var(--ink);font-family:var(--display);font-size:18px;margin-bottom:4px}
+.foot{text-align:center;font-family:var(--display);font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--muted);padding-bottom:32px}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:13px;font-weight:600}
+</style>
+
+<header class="board">
+  <div class="wrap">
+    <div class="brand"><b>LTG<i>PEAK</i> CALL SHEET</b><span>Mercer County · 4★ and up · no website or one that needs work</span></div>
+    <div class="stats">
+      <div class="stat"><strong id="s-total">0</strong><small>Leads</small></div>
+      <div class="stat"><strong id="s-called">0</strong><small>Called</small></div>
+      <div class="stat"><strong id="s-cb">0</strong><small>Call back</small></div>
+      <div class="stat hot"><strong id="s-int">0</strong><small>Interested</small></div>
+      <div class="stat hot"><strong id="s-demo">0</strong><small>Demos</small></div>
+    </div>
+    <div class="meter" aria-hidden="true"><i class="m-hot" id="m-hot" style="width:0"></i><i class="m-called" id="m-called" style="width:0"></i></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <h2>The play · 60 seconds</h2>
+  <div class="play">
+    <div class="step"><span class="n">1 · OPEN</span><h3>Get the owner</h3><p><q>Hey, is this the owner? I'm [your name] with LTGPEAK. We build websites for local spots around Trenton.</q></p></div>
+    <div class="step"><span class="n">2 · HOOK</span><h3>Read their line</h3><p>Every card has a "Say this" line built from their own Google reviews. Lead with it.</p></div>
+    <div class="step"><span class="n">3 · OFFER</span><h3>Free demo</h3><p><q>We'll build you a demo site in 24 hours. If you don't love it, you owe nothing.</q></p></div>
+    <div class="step"><span class="n">4 · CLOSE</span><h3>Get the details</h3><p><q>What's the best number or Instagram to send it to? Can you text me a few photos and your logo?</q></p></div>
+  </div>
+  <p class="es-line"><b>ES leads:</b> "Le hacemos un demo gratis de su página web en 24 horas, en inglés y español. Si no le gusta, no paga nada."</p>
+
+  <h2>Leads</h2>
+  <div class="filters">
+    <div class="chips" id="f-pri" role="group" aria-label="Priority">
+      <button class="chip" data-v="all" aria-pressed="true">All</button>
+      <button class="chip" data-v="Hot" aria-pressed="false">Hot</button>
+      <button class="chip" data-v="Warm" aria-pressed="false">Warm</button>
+      <button class="chip" data-v="Later" aria-pressed="false">Later</button>
+    </div>
+    <div class="chips" id="f-kind" role="group" aria-label="Type">
+      <button class="chip" data-v="all" aria-pressed="true">Every type</button>
+      <button class="chip" data-v="Beauty" aria-pressed="false">Barbers &amp; salons</button>
+      <button class="chip" data-v="Food" aria-pressed="false">Food</button>
+      <button class="chip" data-v="Trades" aria-pressed="false">Auto &amp; trades</button>
+      <button class="chip" data-v="Shops" aria-pressed="false">Shops</button>
+    </div>
+    <div class="chips" id="f-web" role="group" aria-label="Website">
+      <button class="chip" data-v="all" aria-pressed="true">Any website</button>
+      <button class="chip" data-v="No website" aria-pressed="false">No website</button>
+      <button class="chip" data-v="Social/booking link only" aria-pressed="false">Social link only</button>
+      <button class="chip" data-v="Needs update" aria-pressed="false">Needs update</button>
+    </div>
+    <select class="search" id="f-out" aria-label="Call status">
+      <option value="all">Any status</option>
+      <option value="todo">Still to call</option>
+      <option value="callback">Call back</option>
+      <option value="interested">Interested</option>
+      <option value="demo">Demo booked</option>
+      <option value="done">Called (any result)</option>
+    </select>
+    <input class="search" id="f-q" type="search" placeholder="Search name, street or town" aria-label="Search">
+  </div>
+  <div class="count" id="count"></div>
+  <div class="list" id="list"><div class="state"><b>Loading leads…</b>Pulling the shared list.</div></div>
+  <p class="foot">Time is Quality</p>
+</main>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const OUTCOMES=[["noanswer","No answer"],["voicemail","Left voicemail"],["callback","Call back"],["interested","Interested"],["demo","Demo booked"],["no","Not interested"]];
+const leads=new Map();
+const f={pri:"all",kind:"all",web:"all",out:"all",q:""};
+const PO={Hot:0,Warm:1,Later:2};
+const cmp=(a,b)=>(PO[a[1].priority]-PO[b[1].priority])||(b[1].reviews-a[1].reviews);
+let db=null, readOnly=false;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+try{const saved=JSON.parse(localStorage.getItem("ltg-call-filters")||"null");if(saved)Object.assign(f,saved)}catch(e){}
+function saveFilters(){try{localStorage.setItem("ltg-call-filters",JSON.stringify(f))}catch(e){}}
+
+function toast(msg){const t=$("#toast");t.textContent=msg;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,1800)}
+function ago(ts){if(!ts)return"";const m=Math.round((Date.now()-ts)/60000);if(m<1)return"just now";if(m<60)return m+"m ago";const h=Math.round(m/60);if(h<24)return h+"h ago";return Math.round(h/24)+"d ago"}
+
+function match(l){
+  if(f.pri!=="all"&&l.priority!==f.pri)return false;
+  if(f.kind!=="all"&&l.kind!==f.kind)return false;
+  if(f.web!=="all"&&l.webStatus!==f.web)return false;
+  const o=l.outcome||"new";
+  if(f.out==="todo"&&!(o==="new"||o==="noanswer"||o==="voicemail"))return false;
+  if(f.out==="done"&&o==="new")return false;
+  if(["callback","interested","demo"].includes(f.out)&&o!==f.out)return false;
+  if(f.q){const q=f.q.toLowerCase();if(!(`${l.name} ${l.address} ${l.town} ${l.category}`.toLowerCase().includes(q)))return false}
+  return true;
+}
+
+function card(id,l,rank){
+  const o=l.outcome||"new";
+  const maps="https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(l.name+" "+l.address);
+  const pt=l.priority==="Hot"?"t-hot":l.priority==="Warm"?"t-warm":"t-later";
+  const web=l.webStatus==="No website"?`<span class="tag t-noweb">No website</span>`:l.webStatus==="Needs update"?`<a class="tag t-old" href="${esc(l.website)}" target="_blank" rel="noopener">Needs update ↗</a>`:`<a class="tag t-social" href="${esc(l.website)}" target="_blank" rel="noopener">Social link only ↗</a>`;
+  return `<article class="lead" data-id="${esc(id)}" data-p="${esc(l.priority)}" data-o="${esc(o)}">
+    <div class="stripe"></div>
+    <div class="body">
+      <div class="top">
+        <div class="title"><span class="rank">#${rank}</span><h4>${esc(l.name)}</h4></div>
+        <div class="meta">${esc(l.category)} · ${esc(l.address)}</div>
+        <div class="tags"><span class="tag ${pt}">${esc(l.priority)}</span>${web}<span class="tag t-stars">${l.rating??"–"}★ · ${l.reviews} reviews</span>${l.spanish?'<span class="tag t-es">ES</span>':""}</div>
+      </div>
+      <div class="dial">
+        <a class="phone" href="tel:${esc(l.phone.replace(/[^0-9+]/g,""))}">${esc(l.phone)}</a>
+        <div class="dial-actions"><button class="mini" data-copy="${esc(l.phone)}">Copy</button><a class="mini" href="${maps}" target="_blank" rel="noopener">Map ↗</a></div>
+      </div>
+      <div class="say"><div><small>Say this</small>${esc(l.opener)}</div><div><small>Pitch</small>${esc(l.pitch)}</div></div>
+      <div class="outcomes" role="group" aria-label="Call result">${OUTCOMES.map(([v,t])=>`<button class="oc" data-v="${v}" aria-pressed="${o===v}" ${readOnly?"disabled":""}>${t}</button>`).join("")}</div>
+      <div class="note"><textarea id="note-${esc(id)}" placeholder="Notes: who you talked to, best time, Instagram…" ${readOnly?"disabled":""}>${esc(l.note)}</textarea><span>${l.updatedAt?"Updated "+ago(l.updatedAt):""}</span></div>
+    </div></article>`;
+}
+
+function stats(){
+  const all=[...leads.values()];
+  const called=all.filter(l=>(l.outcome||"new")!=="new").length;
+  const n=k=>all.filter(l=>l.outcome===k).length;
+  const hot=n("interested")+n("demo");
+  $("#s-total").textContent=all.length;$("#s-called").textContent=called;$("#s-cb").textContent=n("callback");
+  $("#s-int").textContent=n("interested");$("#s-demo").textContent=n("demo");
+  const pct=x=>all.length?(x/all.length*100)+"%":"0";
+  $("#m-hot").style.width=pct(hot);$("#m-called").style.width=pct(called-hot);
+}
+
+function render(){
+  stats();
+  const list=$("#list");
+  if(!leads.size){list.innerHTML=`<div class="state"><b>No leads on the board yet</b>Ask Claude for a new call list and it will load here.</div>`;$("#count").textContent="";return}
+  const active=document.activeElement&&document.activeElement.id?.startsWith("note-")?document.activeElement.id:null;
+  if(active)return; // don't wipe a note mid-typing; next change re-renders
+  const ordered=[...leads.entries()].sort(cmp);
+  const rankOf=new Map(ordered.map(([id],i)=>[id,i+1]));
+  const rows=ordered.filter(([,l])=>match(l));
+  $("#count").textContent=`Showing ${rows.length} of ${leads.size}`;
+  list.innerHTML=rows.length?rows.map(([id,l])=>card(id,l,rankOf.get(id))).join(""):`<div class="state"><b>Nothing matches</b>Loosen a filter to see more leads.</div>`;
+  if(!list.classList.contains("settled"))setTimeout(()=>list.classList.add("settled"),400);
+}
+
+// one write at a time per lead
+const queues={};
+function write(id,patch){
+  if(!db||readOnly)return;
+  const run=()=>db.collection("leads").doc(id).update(patch).catch(e=>{
+    if(e&&e.code==="invalid_argument"){readOnly=true;toast("You can view this list but not change it");render()}
+    else toast("Couldn't save. Try again in a moment");
+  });
+  queues[id]=(queues[id]||Promise.resolve()).then(run);
+}
+
+document.addEventListener("click",e=>{
+  const chip=e.target.closest(".chip");
+  if(chip){const g={"f-pri":"pri","f-kind":"kind","f-web":"web"}[chip.parentElement.id];f[g]=chip.dataset.v;
+    chip.parentElement.querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed",c===chip));saveFilters();render();return}
+  const oc=e.target.closest(".oc");
+  if(oc&&!oc.disabled){const id=oc.closest(".lead").dataset.id;const l=leads.get(id);const v=l.outcome===oc.dataset.v?"new":oc.dataset.v;
+    leads.set(id,{...l,outcome:v,updatedAt:Date.now()});write(id,{outcome:v,updatedAt:Date.now()});render();return}
+  const cp=e.target.closest("[data-copy]");
+  if(cp){const txt=cp.dataset.copy;
+    navigator.clipboard.writeText(txt).then(()=>toast("Copied "+txt)).catch(()=>{const ph=cp.closest(".dial").querySelector(".phone");const r=document.createRange();r.selectNodeContents(ph);const s=getSelection();s.removeAllRanges();s.addRange(r);toast("Number selected")})}
+});
+document.addEventListener("focusout",e=>{
+  const ta=e.target.closest&&e.target.closest(".note textarea");if(!ta)return;
+  const id=ta.closest(".lead").dataset.id;const l=leads.get(id);
+  if(ta.value!==(l.note||"")){leads.set(id,{...l,note:ta.value,updatedAt:Date.now()});write(id,{note:ta.value,updatedAt:Date.now()});toast("Note saved")}
+  setTimeout(render,0);
+});
+$("#f-out").addEventListener("change",e=>{f.out=e.target.value;saveFilters();render()});
+$("#f-q").addEventListener("input",e=>{f.q=e.target.value.trim();render()});
+function syncControls(){
+  document.querySelectorAll("#f-pri .chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.v===f.pri));
+  document.querySelectorAll("#f-kind .chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.v===f.kind));
+  document.querySelectorAll("#f-web .chip").forEach(c=>c.setAttribute("aria-pressed",c.dataset.v===f.web));
+  $("#f-out").value=f.out;$("#f-q").value=f.q;
+}
+syncControls();
+
+(async()=>{
+  db=window.claude?.use ? await window.claude.use("db").catch(()=>null) : null;
+  if(!db){$("#list").innerHTML=`<div class="state"><b>Sign in to load the list</b>Open this page in Claude while signed in to see and update the shared call list.</div>`;return}
+  try{const user=await window.claude.use("user");if(user){const can=await user.can("data.write");if(can===false)readOnly=true}}catch(e){}
+  const timer=setTimeout(()=>{if(!leads.size)$("#list").innerHTML=`<div class="state"><b>Can't reach the list yet</b>Check your connection. It will load as soon as it gets through.</div>`},10000);
+  db.collection("leads").onSnapshot(snap=>{
+    if(!snap.metadata.fromCache)clearTimeout(timer);
+    for(const ch of snap.docChanges()){if(ch.type==="removed")leads.delete(ch.doc.id);else leads.set(ch.doc.id,ch.doc.data())}
+    render();
+  },err=>{clearTimeout(timer);$("#list").innerHTML=`<div class="state"><b>The list stopped syncing</b>Reload the page to reconnect.</div>`});
+})();
+</script>
+
+</body></html>

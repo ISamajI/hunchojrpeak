@@ -1,0 +1,477 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>LTGPEAK Caption Library</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap');
+
+  :root {
+    --bg: #F5F7FC;
+    --surface: #FFFFFF;
+    --surface-alt: #EDF1FB;
+    --ink: #0B1B3A;
+    --ink-muted: #5B6478;
+    --blue: #1F49E0;
+    --blue-soft: #E7ECFC;
+    --amber: #8A5100;
+    --amber-soft: #F7ECDD;
+    --border: #D8DEEE;
+    --navy: #0B1B3A;
+    --navy-ink: #EDF1FA;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0B1524;
+      --surface: #121F35;
+      --surface-alt: #16233C;
+      --ink: #EDF1FA;
+      --ink-muted: #9AA6C0;
+      --blue: #7C97FF;
+      --blue-soft: #1B2A4D;
+      --amber: #E3A75B;
+      --amber-soft: #2C2212;
+      --border: #24314E;
+      --navy: #070E1C;
+      --navy-ink: #EDF1FA;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0B1524;
+    --surface: #121F35;
+    --surface-alt: #16233C;
+    --ink: #EDF1FA;
+    --ink-muted: #9AA6C0;
+    --blue: #7C97FF;
+    --blue-soft: #1B2A4D;
+    --amber: #E3A75B;
+    --amber-soft: #2C2212;
+    --border: #24314E;
+    --navy: #070E1C;
+    --navy-ink: #EDF1FA;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Instrument Sans', system-ui, sans-serif;
+    margin: 0;
+  }
+
+  .masthead {
+    background: var(--navy);
+    color: var(--navy-ink);
+    padding: 2.75rem 1.5rem 2.25rem;
+  }
+  .masthead-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+  }
+  .wordmark {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+  .tagline {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #B9C4E6;
+  }
+
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2.25rem 1.5rem 5rem;
+  }
+
+  .intro {
+    max-width: 62ch;
+    color: var(--ink-muted);
+    font-size: 1.02rem;
+    line-height: 1.6;
+    margin: 0 0 2.75rem;
+  }
+  .intro strong { color: var(--ink); font-weight: 600; }
+
+  .pillar {
+    margin-bottom: 2.75rem;
+  }
+  .pillar-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.65rem;
+    margin-bottom: 0.9rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.6rem;
+  }
+  .pillar-name {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: 1.15rem;
+    letter-spacing: -0.005em;
+  }
+  .pillar-why {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--ink-muted);
+    letter-spacing: 0.02em;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.35rem 1.5rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+  .card + .card { margin-top: 1rem; }
+
+  .card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-bottom: 0.85rem;
+  }
+  .format-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--blue);
+    background: var(--blue-soft);
+    padding: 0.28rem 0.55rem;
+    border-radius: 3px;
+  }
+  .visual-note {
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    font-style: italic;
+    text-align: right;
+  }
+
+  .caption-text {
+    font-size: 0.97rem;
+    line-height: 1.65;
+    white-space: pre-wrap;
+    margin: 0 0 0.85rem;
+  }
+
+  .hashtags {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--blue);
+    line-height: 1.6;
+  }
+
+  .needs-input {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.66rem;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--amber);
+    background: var(--amber-soft);
+    padding: 0.22rem 0.5rem;
+    border-radius: 3px;
+    margin-top: 0.7rem;
+  }
+
+  footer {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 1.5rem 3rem;
+    color: var(--ink-muted);
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 560px) {
+    .card-top { flex-direction: column; align-items: flex-start; }
+    .visual-note { text-align: left; }
+  }
+</style>
+
+<header class="masthead">
+  <div class="masthead-inner">
+    <p class="wordmark">LTGPEAK</p>
+    <p class="tagline">Time is Quality</p>
+  </div>
+</header>
+
+<main>
+  <p class="intro">
+    Twelve ready-to-post captions, grouped by the content pillar they push — speed, proof, price transparency,
+    local reach. Copy one straight into Instagram, swap the bracketed line if a card has one, and pair it with
+    whatever pillar's visual note suggests. <strong>Two cards need a real detail from you</strong> before they go
+    out — flagged in amber.
+  </p>
+
+  <section class="pillar">
+    <div class="pillar-head">
+      <span class="pillar-name">Speed &amp; Turnaround</span>
+      <span class="pillar-why">the core differentiator — lead with it often</span>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="format-tag">Reel</span>
+        <span class="visual-note">timelapse: blank canvas → live site</span>
+      </div>
+      <p class="caption-text">Your website. Built in the time it takes to binge one season of something.
+
+We started this build at 9am. It was live by the next afternoon — real pages, real booking, real payment setup. No 6-week "we'll get to it" timeline.
+
+Time is Quality. That's not a tagline, that's the turnaround.
+
+📩 Book a quote call — link in bio.</p>
+      <p class="hashtags">#SmallBusinessWebsite #WebsiteDesign #FastTurnaround #LTGPEAK</p>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="format-tag">Single post</span>
+        <span class="visual-note">bold type card, no photo needed</span>
+      </div>
+      <p class="caption-text">Every day your business doesn't have a working website is a day you're losing to the guy who does.
+
+We don't do 6-week timelines. Most sites are live in 1-2 days — because a fast build isn't a shortcut, it's the process working right.
+
+Time is Quality.
+
+📩 DM "QUOTE" or book a call — link in bio.</p>
+      <p class="hashtags">#SmallBusinessTips #WebsiteDesign #LTGPEAK</p>
+    </div>
+  </section>
+
+  <section class="pillar">
+    <div class="pillar-head">
+      <span class="pillar-name">Client Proof</span>
+      <span class="pillar-why">real work, tag the client, borrow their reach</span>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="format-tag">Carousel</span>
+        <span class="visual-note">slide 1: site hero shot · slide 2–3: booking flow · slide 4: mobile view</span>
+      </div>
+      <p class="caption-text">Meet @sarinails — the magic doesn't stop at the nail table anymore. ✨
+
+We built Sari a full booking site so clients can see her work, pick a time, and pay a deposit without a single DM back and forth.
+
+Swipe to see it in action 👉
+
+Want a site that works while you sleep? Link in bio.</p>
+      <p class="hashtags">#ClientSpotlight #NailTech #BookingSite #LTGPEAK</p>
+    </div>
+  </section>
+
+  <section class="pillar">
+    <div class="pillar-head">
+      <span class="pillar-name">Brand Statement</span>
+      <span class="pillar-why">no client, no product — just the tagline doing work</span>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="format-tag">Single post</span>
+        <span class="visual-note">navy background, tagline as the whole graphic</span>
+      </div>
+      <p class="caption-text">Time is Quality.
+
+Not "fast and cheap." Not "quality takes time." We built LTGPEAK on the idea that a business that's ready now shouldn't have to wait six weeks for a website to catch up.
+
+That's the whole business model. ⏱️
+
+📩 Link in bio to book a quote call.</p>
+      <p class="hashtags">#LTGPEAK #TimeIsQuality</p>
+    </div>
+  </section>
+
+  <section class="pillar">
+    <div class="pillar-head">
+      <span class="pillar-name">Pricing Transparency</span>
+      <span class="pillar-why">kills the "how much does this cost" friction</span>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="format-tag">Carousel</span>
+        <span class="visual-note">one tier per slide: Starter → Showcase → Booking+Backend → Premium → add-ons</span>
+      </div>
+      <p class="caption-text">"How much does a website even cost?" — asked every small business owner ever.
+
+Here's our actual pricing. No "contact us for a quote" games. Swipe through ➡️
+
+Starter to Premium, plus add-ons for booking, dashboards, SEO, and social ads if you want the full package.
+
+📩 Book a free quote call — link in bio.</p>
+      <p class="hashtags">#WebsitePricing #SmallBusinessTips #LTGPEAK</p>
+    </div>
+  </section>
+
+  <section class="pillar">
+    <div class="pillar-head">
+      <span class="pillar-name">Local Reach</span>
+      <span class="pillar-why">turns followers into a referral engine</span>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="format-tag">Single post</span>
+        <span class="visual-note">split-screen: outdated Facebook page vs. a real site</span>
+      </div>
+      <p class="caption-text">Tag a local business that's still running on a Facebook page and a prayer. 👇
+
+We'll build them something real — live in 1-2 days, booking built in, no tech headache on their end.
+
+📩 Or just send them our page. Link in bio to book.</p>
+      <p class="hashtags">#SupportLocal #SmallBusinessWebsite #LTGPEAK</p>
+    </div>
+  </section>
+
+  <section class="pillar">
+    <div class="pillar-head">
+      <span class="pillar-name">Behind the Scenes</span>
+      <span class="pillar-why">builds trust that the fast claim is a real process</span>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="format-tag">Reel</span>
+        <span class="visual-note">sped-up screen recording of an active build, trending audio</span>
+      </div>
+      <p class="caption-text">POV: it's hour three of a build and the site's already starting to look real. 👀
+
+This is what "live in 1-2 days" actually looks like behind the screen — no template dragged around for weeks, just heads-down work until it's done.
+
+Swipe to see today's build ➡️</p>
+      <p class="hashtags">#WebDesign #BehindTheScenes #SmallBusinessWebsite #LTGPEAK</p>
+    </div>
+  </section>
+
+  <section class="pillar">
+    <div class="pillar-head">
+      <span class="pillar-name">Referral Push</span>
+      <span class="pillar-why">your first clients came through personal networks — formalize that</span>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="format-tag">Single post</span>
+        <span class="visual-note">simple graphic, tagline-style</span>
+      </div>
+      <p class="caption-text">Know a business owner who needs a website? Send them our way.
+
+If they book with us, you get [set the referral perk] — because word of mouth built this business and we don't forget that.
+
+📩 Link in bio, or just tag them below.</p>
+      <p class="hashtags">#Referral #SmallBusiness #LTGPEAK</p>
+      <span class="needs-input">Needs input — pick the referral perk</span>
+    </div>
+  </section>
+
+  <section class="pillar">
+    <div class="pillar-head">
+      <span class="pillar-name">Direct CTA</span>
+      <span class="pillar-why">spells out the process so booking feels low-risk</span>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="format-tag">Single post</span>
+        <span class="visual-note">4-step numbered graphic</span>
+      </div>
+      <p class="caption-text">Still thinking about it? Here's what booking a quote call actually looks like:
+
+1️⃣ Pick a time — link in bio
+2️⃣ Tell us what you need
+3️⃣ Get a real price, no games
+4️⃣ Site's live in 1-2 days
+
+That's it. That's the process.
+
+📩 Link in bio.</p>
+      <p class="hashtags">#LTGPEAK #BookNow</p>
+    </div>
+  </section>
+
+  <section class="pillar">
+    <div class="pillar-head">
+      <span class="pillar-name">Add-On Spotlight</span>
+      <span class="pillar-why">upsells booking, dashboards, SEO, social ads</span>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="format-tag">Single post</span>
+        <span class="visual-note">phone mockup showing a live booking notification</span>
+      </div>
+      <p class="caption-text">Your website shouldn't just sit there looking pretty. It should work for you.
+
+We build in booking calendars, payment collection, and dashboards that show you new bookings the second they come in — right from your phone. 📱
+
+Ask about adding this to your current site.
+
+📩 Link in bio.</p>
+      <p class="hashtags">#WebsiteFeatures #SmallBusinessTools #LTGPEAK</p>
+    </div>
+  </section>
+
+  <section class="pillar">
+    <div class="pillar-head">
+      <span class="pillar-name">Testimonial</span>
+      <span class="pillar-why">borrowed trust — save this template for your next happy client</span>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="format-tag">Single post</span>
+        <span class="visual-note">quote card on brand navy, client's site as background</span>
+      </div>
+      <p class="caption-text">"[Drop in the client's actual words here]" — [Client name], [Business]
+
+This is why we do it. 🙌
+
+📩 Ready for a site like this? Link in bio.</p>
+      <p class="hashtags">#ClientLove #SmallBusinessWebsite #LTGPEAK</p>
+      <span class="needs-input">Needs input — real client quote</span>
+    </div>
+  </section>
+
+  <section class="pillar">
+    <div class="pillar-head">
+      <span class="pillar-name">Meet the Team</span>
+      <span class="pillar-why">humanizes the brand — you're not a faceless agency</span>
+    </div>
+
+    <div class="card">
+      <div class="card-top">
+        <span class="format-tag">Single post</span>
+        <span class="visual-note">simple team photo or 3-name graphic</span>
+      </div>
+      <p class="caption-text">Behind LTGPEAK: a small team that actually answers your messages. 👋
+
+Jus handles your demos, Jan keeps the pricing fair, and builds move fast because nobody's waiting on a big agency chain of command.
+
+📩 Ready to work with real people? Link in bio.</p>
+      <p class="hashtags">#MeetTheTeam #SmallBusinessWebsite #LTGPEAK</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  Built for LTGPEAK — pull one card a week and you've got a quarter covered. Swap the visual note for whatever you actually shoot; the caption stands on its own either way.
+</footer>
+
+</body></html>

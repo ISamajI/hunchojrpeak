@@ -1,0 +1,319 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Food Evidence Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Public+Sans:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: single reading column like a nutrition label, with a sticky section bar and evidence chips on every claim */
+:root {
+  --bg: #f6f8f4;
+  --surface: #ffffff;
+  --fg: #1c2a22;
+  --muted: #56655c;
+  --line: #d5ddd6;
+  --accent: #2f6b46;
+  --good: #2f6b46;   --good-bg: #e2efe5;
+  --mid: #8a6411;    --mid-bg: #f6ecd2;
+  --weak: #6b5a7a;   --weak-bg: #ece6f1;
+  --bad: #b23a2a;    --bad-bg: #f7e1dc;
+  --font-display: "Young Serif", Georgia, "Times New Roman", serif;
+  --font-body: "Public Sans", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121a15; --surface: #18221c; --fg: #e3ebe5; --muted: #9fb0a5; --line: #2c3a31; --accent: #7cc796;
+    --good: #7cc796; --good-bg: #1e3326; --mid: #e3b955; --mid-bg: #33291a; --weak: #c4aed6; --weak-bg: #2a2333;
+    --bad: #f08a78; --bad-bg: #3a201b; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121a15; --surface: #18221c; --fg: #e3ebe5; --muted: #9fb0a5; --line: #2c3a31; --accent: #7cc796;
+  --good: #7cc796; --good-bg: #1e3326; --mid: #e3b955; --mid-bg: #33291a; --weak: #c4aed6; --weak-bg: #2a2333;
+  --bad: #f08a78; --bad-bg: #3a201b; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 64px; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  background: var(--bg); color: var(--fg);
+  font: 16px/1.6 var(--font-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 760px; margin: 0 auto; padding-block: 40px 64px; display: grid; gap: 48px; }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: clamp(2.2rem, 7vw, 3.4rem); }
+h2 { font-size: clamp(1.6rem, 4.5vw, 2.1rem); }
+h3 { font-size: 1.2rem; }
+p { margin: 0; max-width: 65ch; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+.eyebrow { font: 500 0.75rem/1 var(--font-data); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+header { display: grid; gap: 16px; }
+.lede { font-size: 1.125rem; color: var(--muted); }
+.thesis {
+  border: 2px solid var(--fg); border-radius: 4px; padding: 16px 20px; background: var(--surface);
+  display: grid; gap: 4px;
+}
+.thesis strong { font-family: var(--font-display); font-weight: 400; font-size: 1.25rem; }
+
+nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--bg); border-bottom: 1px solid var(--line);
+  margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+  padding: 10px max(16px, env(safe-area-inset-left, 0px));
+}
+nav ul { list-style: none; margin: 0 auto; padding: 0; max-width: 760px; display: flex; gap: 8px; flex-wrap: wrap; }
+nav a {
+  display: inline-block; text-decoration: none; color: var(--fg); font-weight: 600; font-size: 0.875rem;
+  padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface);
+}
+nav a:hover { border-color: var(--accent); }
+
+section { display: grid; gap: 24px; }
+.sub { display: grid; gap: 12px; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 0.875rem; color: var(--muted); }
+.chip {
+  display: inline-block; font: 500 0.7rem/1 var(--font-data); letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 4px 7px; border-radius: 3px; white-space: nowrap; vertical-align: middle;
+}
+.chip.strong { color: var(--good); background: var(--good-bg); }
+.chip.mod { color: var(--mid); background: var(--mid-bg); }
+.chip.weak { color: var(--weak); background: var(--weak-bg); }
+.chip.check { color: var(--muted); background: transparent; border: 1px dashed var(--muted); }
+
+.mech { display: grid; gap: 0; border-top: 1px solid var(--line); }
+.mech > div { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.mech h3 { font-size: 1.05rem; }
+.mech p { grid-column: 1 / -1; color: var(--muted); font-size: 0.95rem; }
+
+.foods { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.foods li { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 12px 14px; display: grid; gap: 4px; align-content: start; min-width: 0; }
+.foods b { font-weight: 700; }
+.foods span { color: var(--muted); font-size: 0.9rem; }
+
+.swaps { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.swaps li { display: grid; grid-template-columns: 1fr auto 1fr; gap: 12px; align-items: center; padding: 10px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: 4px; }
+.swaps .from { color: var(--bad); text-decoration: line-through; text-decoration-thickness: 1px; }
+.swaps .to { color: var(--good); font-weight: 600; }
+.swaps .arrow { color: var(--muted); font-family: var(--font-data); }
+
+.myths { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+
+.tablebox { overflow-x: auto; border: 1px solid var(--line); border-radius: 4px; background: var(--surface); }
+table { width: 100%; border-collapse: collapse; font-size: 0.95rem; min-width: 520px; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font: 500 0.72rem/1.2 var(--font-data); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+td.num { font-family: var(--font-data); font-size: 0.85rem; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td.limit { font-weight: 600; }
+.bad-head { border-left: 4px solid var(--bad); padding-left: 12px; }
+.good-head { border-left: 4px solid var(--good); padding-left: 12px; }
+
+.fine { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; list-style: none; margin: 0; padding: 0; }
+.fine li { border: 1px dashed var(--line); border-radius: 4px; padding: 12px 14px; display: grid; gap: 4px; }
+.fine span { color: var(--muted); font-size: 0.9rem; }
+
+.note { background: var(--surface); border: 1px solid var(--line); border-radius: 4px; padding: 16px 20px; display: grid; gap: 10px; font-size: 0.95rem; }
+.note ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+.sources { font-size: 0.875rem; color: var(--muted); }
+.sources ul { margin: 8px 0 0; padding-left: 1.2em; display: grid; gap: 4px; }
+.sources a { word-break: break-word; }
+
+@media (max-width: 480px) {
+  .swaps li { grid-template-columns: 1fr; gap: 2px; }
+  .swaps .arrow { display: none; }
+}
+</style>
+
+<nav aria-label="Sections">
+  <ul>
+    <li><a href="#lose">Lose weight</a></li>
+    <li><a href="#healthy">Eat more</a></li>
+    <li><a href="#limit">Limit</a></li>
+    <li><a href="#myths">Wrongly blamed</a></li>
+  </ul>
+</nav>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Research summary · November 2026</span>
+    <h1>Food Evidence Guide</h1>
+    <p class="lede">What the research says about foods that help you lose weight, foods that keep you healthy, and foods worth cutting back on.</p>
+    <div class="thesis">
+      <strong>Weight loss comes from eating fewer calories than you burn.</strong>
+      <p>No food burns fat on its own. The foods that help are the ones that fill you up for few calories, so the deficit is easier to keep.</p>
+    </div>
+    <div class="legend">
+      Evidence:
+      <span class="chip strong">Strong</span>
+      <span class="chip mod">Moderate</span>
+      <span class="chip weak">Weak</span>
+      <span class="chip check">Not yet checked</span>
+    </div>
+  </header>
+
+  <section id="lose">
+    <h2 class="good-head">Foods for losing weight</h2>
+
+    <div class="sub">
+      <span class="eyebrow">Why some foods help</span>
+      <div class="mech">
+        <div>
+          <h3>Protein</h3><span class="chip mod">Moderate</span>
+          <p>Keeps you fuller and helps you keep muscle while you lose fat. A meta-analysis of 24 trials found slightly more fat lost and about 0.4 kg less muscle lost.</p>
+        </div>
+        <div>
+          <h3>Bulky, watery foods</h3><span class="chip strong">Strong</span>
+          <p>Vegetables, broth soups and fruit fill you up for few calories. In a year-long trial, people who ate soup twice a day lost about 50% more weight than people eating snack foods with the same calories.</p>
+        </div>
+        <div>
+          <h3>Fiber</h3><span class="chip weak">Weak</span>
+          <p>People who eat more fiber gain less weight over time, but trials of fiber foods alone mostly show no weight loss. It helps by making meals bulkier, not on its own.</p>
+        </div>
+        <div>
+          <h3>Less ultra-processed food</h3><span class="chip mod">Moderate</span>
+          <p>A 2025 trial found people lost about 2% of body weight in 8 weeks on a minimally processed diet, versus 1% on an ultra-processed one. It was one small study.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub">
+      <span class="eyebrow">Eat more of these</span>
+      <ul class="foods">
+        <li><b>Beans, lentils, chickpeas</b><span>Protein and fiber. About 1 serving a day added 0.34 kg extra loss in trials.</span></li>
+        <li><b>Eggs</b><span>Lots of protein for the calories; filling at breakfast.</span></li>
+        <li><b>Plain Greek yogurt, cottage cheese</b><span>Protein-dense and low in calories when unsweetened.</span></li>
+        <li><b>Chicken and fish</b><span>High protein for few calories.</span></li>
+        <li><b>Tofu, tempeh, edamame</b><span>Plant protein plus fiber.</span></li>
+        <li><b>Leafy greens, broccoli, cauliflower</b><span>Very few calories for a lot of food.</span></li>
+        <li><b>Berries, apples, pears</b><span>Fiber and water; linked to less weight gain.</span></li>
+        <li><b>Oats</b><span>Thick fiber that keeps you full longer than refined cereal.</span></li>
+        <li><b>Boiled or baked potatoes</b><span>Top of 38 foods for fullness in an older study. Fries don't count.</span></li>
+        <li><b>Broth-based soups</b><span>Before a meal, cut how much people ate by about 20%.</span></li>
+        <li><b>Nuts, about 1 oz a day</b><span>Trials show no weight gain at this amount.</span></li>
+      </ul>
+      <p class="sources">Beans, nuts, soups and potatoes have studies behind them. Eggs, yogurt, oats, chicken, fish and tofu are based on the protein and fiber evidence above <span class="chip check">Not yet checked</span></p>
+    </div>
+
+    <div class="sub">
+      <span class="eyebrow">Easy swaps</span>
+      <ul class="swaps">
+        <li><span class="from">Soda or juice</span><span class="arrow">→</span><span class="to">Water or whole fruit</span></li>
+        <li><span class="from">Pastries or sugary cereal</span><span class="arrow">→</span><span class="to">Oats with berries and yogurt</span></li>
+        <li><span class="from">Fries or chips</span><span class="arrow">→</span><span class="to">Baked or boiled potato</span></li>
+        <li><span class="from">Crackers or crisps</span><span class="arrow">→</span><span class="to">A handful of nuts, or veggies with hummus</span></li>
+        <li><span class="from">Sweetened yogurt</span><span class="arrow">→</span><span class="to">Plain Greek yogurt with fruit</span></li>
+        <li><span class="from">Straight to the main meal</span><span class="arrow">→</span><span class="to">Broth soup or big salad first</span></li>
+      </ul>
+    </div>
+
+    <div class="sub">
+      <span class="eyebrow">Weight-loss myths</span>
+      <ul class="myths">
+        <li>Celery, grapefruit and apple cider vinegar don't burn fat.</li>
+        <li>Nuts don't make you fat at normal portions.</li>
+        <li>Carbs aren't automatically fattening. How potatoes are cooked matters more than the potato.</li>
+        <li>High-fiber foods alone won't cause weight loss without eating fewer calories overall.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="healthy">
+    <h2 class="good-head">Healthiest foods overall</h2>
+    <p>Not eating enough whole grains, fruit, nuts and vegetables is linked to more deaths worldwide than most single "bad" foods. Targets are rough population estimates from the Global Burden of Disease diet study.</p>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>Food</th><th>Why</th><th>Rough target</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td><b>Whole grains</b></td><td>Low intake is the biggest diet-linked death risk</td><td class="num">~125 g/day</td><td><span class="chip strong">Strong</span></td></tr>
+          <tr><td><b>Vegetables</b></td><td>Fiber, potassium; lower heart risk</td><td class="num">~360 g/day</td><td><span class="chip strong">Strong</span></td></tr>
+          <tr><td><b>Fruit</b></td><td>Second-biggest risk when low</td><td class="num">~250 g/day</td><td><span class="chip strong">Strong</span></td></tr>
+          <tr><td><b>Nuts and seeds</b></td><td>Lower heart risk</td><td class="num">~21 g/day</td><td><span class="chip strong">Strong</span></td></tr>
+          <tr><td><b>Beans and lentils</b></td><td>Fiber and plant protein</td><td class="num">~60 g/day</td><td><span class="chip mod">Moderate</span></td></tr>
+          <tr><td><b>Fish, esp. oily</b></td><td>Omega-3s; lower heart disease</td><td class="num">2 servings/wk</td><td><span class="chip mod">Moderate</span></td></tr>
+          <tr><td><b>Olive oil</b></td><td>Linked to ~19% lower death risk when it replaces butter or margarine</td><td class="num">~1 tbsp/day</td><td><span class="chip mod">Moderate</span></td></tr>
+          <tr><td><b>Fermented foods</b></td><td>Possible gut benefit</td><td class="num">A few/week</td><td><span class="chip weak">Weak</span></td></tr>
+          <tr><td><b>Fiber overall</b></td><td>Feeds gut bacteria</td><td class="num">24 g+/day</td><td><span class="chip strong">Strong</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="sub">
+      <span class="eyebrow">Diet patterns</span>
+      <ul class="myths">
+        <li><b>Mediterranean</b> has the best evidence, including a randomized trial showing fewer heart attacks and strokes.</li>
+        <li><b>DASH</b> lowers blood pressure.</li>
+        <li><b>MIND</b> is aimed at the brain. Early studies looked good, but a trial found no clear benefit.</li>
+        <li>The exact diet matters less than the shared basics: mostly plants, whole grains, beans, nuts, fish and healthy oils.</li>
+      </ul>
+    </div>
+    <div class="sub">
+      <span class="eyebrow">Overhyped</span>
+      <p>Goji, acai, spirulina and turmeric are fine to eat but no better than ordinary fruit and vegetables. Coconut oil raises LDL ("bad") cholesterol. <span class="chip check">Not yet checked</span></p>
+    </div>
+  </section>
+
+  <section id="limit">
+    <h2 class="bad-head">Foods to limit</h2>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th>Food</th><th>Main risk</th><th>Limit</th><th>Evidence</th></tr></thead>
+        <tbody>
+          <tr><td><b>Sugary drinks</b></td><td>Diabetes, weight gain</td><td class="limit">Rarely. Added sugar under ~50 g/day (WHO)</td><td><span class="chip strong">Strong</span></td></tr>
+          <tr><td><b>Processed meat</b><br><span class="sources">bacon, deli meat, hot dogs</span></td><td>Colorectal cancer, rated a definite cause by the WHO cancer agency</td><td class="limit">Occasionally</td><td><span class="chip strong">Strong</span></td></tr>
+          <tr><td><b>Trans fats</b><br><span class="sources">"partially hydrogenated oil"</span></td><td>Heart disease</td><td class="limit">As close to zero as possible</td><td><span class="chip strong">Strong</span></td></tr>
+          <tr><td><b>Salt</b></td><td>Blood pressure, stroke</td><td class="limit">Under 5 g/day (~1 tsp)</td><td><span class="chip strong">Strong</span></td></tr>
+          <tr><td><b>Alcohol</b></td><td>Several cancers, liver disease</td><td class="limit">Less is better; none is safest</td><td><span class="chip strong">Strong</span></td></tr>
+          <tr><td><b>Ultra-processed foods</b></td><td>Linked to obesity, diabetes, heart disease</td><td class="limit">Cut sugary drinks and processed meat first</td><td><span class="chip mod">Moderate</span></td></tr>
+          <tr><td><b>Saturated fat</b></td><td>Raises LDL cholesterol</td><td class="limit">Under 10% of calories (WHO)</td><td><span class="chip mod">Moderate</span></td></tr>
+          <tr><td><b>Red meat</b> (unprocessed)</td><td>Weaker link to colorectal cancer</td><td class="limit">Moderate amounts</td><td><span class="chip weak">Weak</span></td></tr>
+          <tr><td><b>Fried foods, white bread, pastries</b></td><td>Weight gain, diabetes</td><td class="limit">Occasionally</td><td><span class="chip mod">Moderate</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="myths">
+    <h2>Wrongly blamed</h2>
+    <p>These foods get a worse reputation than the evidence supports. <span class="chip check">Not yet checked</span></p>
+    <ul class="fine">
+      <li><b>Eggs</b><span>About 1 a day shows no clear heart risk for most people. The signal is stronger in people with diabetes.</span></li>
+      <li><b>Potatoes</b><span>Plain boiled or baked are fine. The risk is mostly from fries and chips.</span></li>
+      <li><b>Whole-fat dairy</b><span>Mostly neutral. Yogurt may be slightly helpful.</span></li>
+      <li><b>Whole fruit</b><span>Natural fruit sugar is fine and fruit lowers disease risk. Keep juice small.</span></li>
+      <li><b>Seed oils</b><span>Swapping butter for them lowers LDL. The real concern is frying oil that's reused.</span></li>
+    </ul>
+  </section>
+
+  <aside class="note" aria-label="Caveats">
+    <h3>Before you rely on this</h3>
+    <ul>
+      <li>Most diet research follows people's habits over time, so it shows links, not proof of cause.</li>
+      <li>Items marked <span class="chip check">Not yet checked</span> came from background knowledge, not a source checked during this research.</li>
+      <li>This is general information, not medical advice. If you have a health condition, talk to a doctor or dietitian.</li>
+    </ul>
+  </aside>
+
+  <footer class="sources">
+    <span class="eyebrow">Main sources</span>
+    <ul>
+      <li><a href="https://www.who.int/news-room/fact-sheets/detail/healthy-diet" target="_blank" rel="noopener">WHO healthy diet fact sheet</a> (sugar, salt, fat limits)</li>
+      <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC6899507" target="_blank" rel="noopener">Global Burden of Disease diet study, Lancet</a></li>
+      <li><a href="https://www.paho.org/en/news/26-10-2015-iarc-evaluates-consumption-red-meat-and-processed-meat" target="_blank" rel="noopener">IARC on red and processed meat</a></li>
+      <li><a href="https://pubmed.ncbi.nlm.nih.gov/41270766/" target="_blank" rel="noopener">Lancet series on ultra-processed food, 2025</a></li>
+      <li><a href="https://www.ucl.ac.uk/news/2025/aug/less-processed-diet-may-be-more-beneficial-weight-loss" target="_blank" rel="noopener">UPDATE trial, minimally vs ultra-processed diet, 2025</a></li>
+      <li><a href="https://pubmed.ncbi.nlm.nih.gov/23097268/" target="_blank" rel="noopener">High-protein diet meta-analysis</a></li>
+      <li><a href="https://pubmed.ncbi.nlm.nih.gov/17556681/" target="_blank" rel="noopener">One-year soup trial</a></li>
+      <li><a href="https://pubmed.ncbi.nlm.nih.gov/27030531/" target="_blank" rel="noopener">Pulses and weight loss meta-analysis</a></li>
+      <li><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8308485/" target="_blank" rel="noopener">Nuts and body weight review</a></li>
+      <li><a href="https://www.who.int/azerbaijan/news/item/04-01-2023-no-level-of-alcohol-consumption-is-safe-for-our-health" target="_blank" rel="noopener">WHO on alcohol</a></li>
+    </ul>
+  </footer>
+</div>
+
+</body></html>

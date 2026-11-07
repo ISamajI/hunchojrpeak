@@ -1,0 +1,457 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found]){display:none!important}</style></head><body>
+<title>The Weekly Battle</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+  :root{
+    --bg:#f7f4ef;
+    --surface:#ffffff;
+    --surface-2:#faf7f2;
+    --ink:#191512;
+    --ink-dim:#6b6259;
+    --ink-faint:#a89e90;
+    --line:#e6e0d6;
+    --henry:#2f5fff;
+    --henry-soft:rgba(47,95,255,.12);
+    --claudia:#ff4d6d;
+    --claudia-soft:rgba(255,77,109,.12);
+    --gold:#c98a1f;
+    --body-fill:#e7e1d5;
+    --shadow:rgba(20,15,10,.08);
+    --font-display:'Bebas Neue', 'Arial Narrow', sans-serif;
+    --font-body:'Work Sans', 'Segoe UI', sans-serif;
+    --font-mono:'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#15130f; --surface:#1d1a15; --surface-2:#211d17;
+      --ink:#f3efe6; --ink-dim:#b9ae9d; --ink-faint:#726657;
+      --line:#332d24; --henry:#6a8bff; --henry-soft:rgba(106,139,255,.18);
+      --claudia:#ff7089; --claudia-soft:rgba(255,112,137,.18);
+      --gold:#e0aa3f; --body-fill:#2a251d; --shadow:rgba(0,0,0,.4);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#15130f; --surface:#1d1a15; --surface-2:#211d17;
+    --ink:#f3efe6; --ink-dim:#b9ae9d; --ink-faint:#726657;
+    --line:#332d24; --henry:#6a8bff; --henry-soft:rgba(106,139,255,.18);
+    --claudia:#ff7089; --claudia-soft:rgba(255,112,137,.18);
+    --gold:#e0aa3f; --body-fill:#2a251d; --shadow:rgba(0,0,0,.4);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg); color:var(--ink); font-family:var(--font-body);
+    -webkit-font-smoothing:antialiased;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+  }
+
+  .wrap{max-width:960px; margin:0 auto; padding:28px 20px 60px; display:flex; flex-direction:column; gap:24px;}
+
+  .masthead{display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap;}
+  .masthead h1{
+    font-family:var(--font-display); font-weight:400; letter-spacing:.02em;
+    font-size:clamp(2.2rem, 6vw, 3.2rem); margin:0; line-height:.95; text-wrap:balance;
+  }
+  .masthead .sub{font-size:.85rem; color:var(--ink-dim); font-family:var(--font-mono);}
+
+  .meter-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:18px;
+    padding:20px 22px; box-shadow:0 1px 2px var(--shadow);
+  }
+  .meter-top{display:flex; justify-content:space-between; align-items:flex-end; gap:12px; margin-bottom:10px;}
+  .meter-name{display:flex; align-items:center; gap:8px; font-weight:600;}
+  .meter-name .dot{width:10px; height:10px; border-radius:50%; flex:none;}
+  .meter-score{font-family:var(--font-mono); font-variant-numeric:tabular-nums; font-size:1.1rem; font-weight:700;}
+  .meter-bar{
+    position:relative; height:14px; border-radius:999px; overflow:hidden; background:var(--line);
+    display:flex;
+  }
+  .meter-bar .fill-h{background:var(--henry); transition:width .4s ease;}
+  .meter-bar .fill-c{background:var(--claudia); transition:width .4s ease;}
+  .meter-foot{display:flex; justify-content:space-between; margin-top:8px; font-size:.72rem; color:var(--ink-faint); font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.06em;}
+  .lead-badge{
+    display:inline-flex; align-items:center; gap:5px; font-family:var(--font-mono); font-size:.68rem;
+    letter-spacing:.05em; text-transform:uppercase; color:var(--gold); margin-left:8px;
+  }
+
+  .cards{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  @media (max-width:720px){ .cards{grid-template-columns:1fr;} }
+
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:18px;
+    padding:18px 18px 20px; display:flex; flex-direction:column; gap:14px;
+    box-shadow:0 1px 2px var(--shadow);
+  }
+  .card-head{display:flex; align-items:center; justify-content:space-between; gap:8px;}
+  .who{display:flex; align-items:center; gap:8px;}
+  .who .avatar{
+    width:34px; height:34px; border-radius:50%; background:var(--accent-soft);
+    color:var(--accent); display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-size:1.1rem;
+  }
+  .who .name{font-weight:600; font-size:1.02rem;}
+  .who .today{font-size:.68rem; color:var(--ink-faint); font-family:var(--font-mono);}
+  .today.logged{color:var(--accent);}
+
+  .view-toggle{
+    display:inline-flex; border:1px solid var(--line); border-radius:999px; padding:2px;
+    background:var(--surface-2); font-family:var(--font-mono); font-size:.68rem; letter-spacing:.05em;
+  }
+  .view-toggle button{
+    border:none; background:none; padding:5px 12px; border-radius:999px; cursor:pointer;
+    color:var(--ink-dim); font-family:inherit; text-transform:uppercase;
+  }
+  .view-toggle button.active{background:var(--accent); color:#fff;}
+
+  .diagram-row{display:flex; gap:14px; align-items:flex-start;}
+  .diagram{width:112px; flex:none;}
+  .diagram svg{width:100%; height:auto; display:block; overflow:visible;}
+  .skin{fill:var(--body-fill); stroke:var(--line); stroke-width:1;}
+  .muscle{fill:none; stroke:var(--accent); stroke-opacity:.4; stroke-width:1.4; cursor:pointer; transition:fill .25s ease, fill-opacity .25s ease;}
+  .muscle.active{fill:var(--accent); fill-opacity:.82; stroke-opacity:.9;}
+
+  .groups{display:flex; flex-wrap:wrap; gap:6px; flex:1;}
+  .group-btn{
+    font-family:var(--font-body); font-size:.74rem; font-weight:500; padding:6px 11px;
+    border-radius:999px; border:1px solid var(--line); background:var(--surface-2);
+    color:var(--ink-dim); cursor:pointer; transition:background .2s ease, color .2s ease, border-color .2s ease;
+  }
+  .group-btn:hover{border-color:var(--accent);}
+  .group-btn.active{background:var(--accent); border-color:var(--accent); color:#fff;}
+  .group-btn:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+
+  .week-strip{display:flex; align-items:center; gap:6px; padding-top:2px; border-top:1px solid var(--line); margin-top:2px;}
+  .week-strip .wlabel{font-family:var(--font-mono); font-size:.62rem; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.05em; margin-right:4px;}
+  .week-strip .day{
+    width:16px; height:16px; border-radius:5px; background:var(--line); position:relative; flex:none;
+  }
+  .week-strip .day.hit{background:var(--accent);}
+  .week-strip .day.today{box-shadow:0 0 0 2px var(--accent-soft);}
+  .week-strip .dlabel{font-family:var(--font-mono); font-size:.55rem; text-align:center; color:var(--ink-faint); position:absolute; top:18px; left:0; right:0;}
+
+  footer{text-align:center; font-family:var(--font-mono); font-size:.66rem; color:var(--ink-faint);}
+</style>
+
+<div class="wrap">
+  <div class="masthead">
+    <h1>The Weekly Battle</h1>
+    <div class="sub" id="weekLabel">WEEK OF —</div>
+  </div>
+
+  <div class="meter-card">
+    <div class="meter-top">
+      <div class="meter-name"><span class="dot" style="background:var(--henry)"></span>Henry<span class="lead-badge" id="leadHenry" hidden>🏆 LEADING</span></div>
+      <div class="meter-name">Claudia<span class="lead-badge" id="leadClaudia" hidden>🏆 LEADING</span><span class="dot" style="background:var(--claudia)"></span></div>
+    </div>
+    <div class="meter-bar"><div class="fill-h" id="fillHenry" style="width:50%"></div><div class="fill-c" id="fillClaudia" style="width:50%"></div></div>
+    <div class="meter-foot">
+      <span id="scoreHenry">0 groups this week</span>
+      <span id="scoreClaudia">0 groups this week</span>
+    </div>
+  </div>
+
+  <div class="cards" id="cards"></div>
+
+  <footer>Tap a muscle group to log it for today. Tap again to undo. Resets every Monday.</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var GROUPS = [
+    {id:'chest', label:'Chest', view:'front'},
+    {id:'shoulders', label:'Shoulders', view:'front'},
+    {id:'biceps', label:'Biceps', view:'front'},
+    {id:'forearms', label:'Forearms', view:'front'},
+    {id:'abs', label:'Abs', view:'front'},
+    {id:'quads', label:'Quads', view:'front'},
+    {id:'traps', label:'Traps', view:'back'},
+    {id:'lats', label:'Lats', view:'back'},
+    {id:'triceps', label:'Triceps', view:'back'},
+    {id:'lowerBack', label:'Lower Back', view:'back'},
+    {id:'glutes', label:'Glutes', view:'back'},
+    {id:'hamstrings', label:'Hamstrings', view:'back'},
+    {id:'calves', label:'Calves', view:'both'}
+  ];
+
+  var BODY_OUTLINE =
+    '<circle class="skin" cx="100" cy="28" r="20"/>' +
+    '<rect class="skin" x="92" y="46" width="16" height="10" rx="3"/>' +
+    '<rect class="skin" x="60" y="54" width="80" height="130" rx="26"/>' +
+    '<rect class="skin" x="28" y="60" width="26" height="72" rx="13"/>' +
+    '<rect class="skin" x="26" y="128" width="22" height="66" rx="11"/>' +
+    '<circle class="skin" cx="37" cy="200" r="10"/>' +
+    '<rect class="skin" x="146" y="60" width="26" height="72" rx="13"/>' +
+    '<rect class="skin" x="152" y="128" width="22" height="66" rx="11"/>' +
+    '<circle class="skin" cx="163" cy="200" r="10"/>' +
+    '<rect class="skin" x="62" y="180" width="34" height="92" rx="15"/>' +
+    '<rect class="skin" x="64" y="268" width="28" height="82" rx="12"/>' +
+    '<rect class="skin" x="60" y="348" width="34" height="12" rx="6"/>' +
+    '<rect class="skin" x="104" y="180" width="34" height="92" rx="15"/>' +
+    '<rect class="skin" x="108" y="268" width="28" height="82" rx="12"/>' +
+    '<rect class="skin" x="106" y="348" width="34" height="12" rx="6"/>';
+
+  var FRONT_MUSCLES =
+    '<circle class="muscle" data-group="shoulders" cx="41" cy="66" r="12"/>' +
+    '<circle class="muscle" data-group="shoulders" cx="159" cy="66" r="12"/>' +
+    '<rect class="muscle" data-group="chest" x="66" y="62" width="30" height="24" rx="10"/>' +
+    '<rect class="muscle" data-group="chest" x="104" y="62" width="30" height="24" rx="10"/>' +
+    '<rect class="muscle" data-group="abs" x="66" y="90" width="30" height="17" rx="6"/>' +
+    '<rect class="muscle" data-group="abs" x="104" y="90" width="30" height="17" rx="6"/>' +
+    '<rect class="muscle" data-group="abs" x="66" y="110" width="30" height="17" rx="6"/>' +
+    '<rect class="muscle" data-group="abs" x="104" y="110" width="30" height="17" rx="6"/>' +
+    '<rect class="muscle" data-group="abs" x="66" y="130" width="30" height="17" rx="6"/>' +
+    '<rect class="muscle" data-group="abs" x="104" y="130" width="30" height="17" rx="6"/>' +
+    '<rect class="muscle" data-group="abs" x="66" y="150" width="30" height="17" rx="6"/>' +
+    '<rect class="muscle" data-group="abs" x="104" y="150" width="30" height="17" rx="6"/>' +
+    '<rect class="muscle" data-group="biceps" x="31" y="66" width="18" height="40" rx="8"/>' +
+    '<rect class="muscle" data-group="biceps" x="151" y="66" width="18" height="40" rx="8"/>' +
+    '<rect class="muscle" data-group="forearms" x="28" y="132" width="18" height="54" rx="8"/>' +
+    '<rect class="muscle" data-group="forearms" x="154" y="132" width="18" height="54" rx="8"/>' +
+    '<rect class="muscle" data-group="quads" x="65" y="186" width="9" height="76" rx="4"/>' +
+    '<rect class="muscle" data-group="quads" x="76" y="186" width="9" height="76" rx="4"/>' +
+    '<rect class="muscle" data-group="quads" x="87" y="186" width="9" height="76" rx="4"/>' +
+    '<rect class="muscle" data-group="quads" x="106" y="186" width="9" height="76" rx="4"/>' +
+    '<rect class="muscle" data-group="quads" x="117" y="186" width="9" height="76" rx="4"/>' +
+    '<rect class="muscle" data-group="quads" x="128" y="186" width="9" height="76" rx="4"/>' +
+    '<rect class="muscle" data-group="calves" x="68" y="272" width="20" height="68" rx="8"/>' +
+    '<rect class="muscle" data-group="calves" x="112" y="272" width="20" height="68" rx="8"/>';
+
+  var BACK_MUSCLES =
+    '<rect class="muscle" data-group="traps" x="88" y="52" width="24" height="16" rx="6"/>' +
+    '<rect class="muscle" data-group="lats" x="60" y="84" width="28" height="62" rx="14"/>' +
+    '<rect class="muscle" data-group="lats" x="112" y="84" width="28" height="62" rx="14"/>' +
+    '<rect class="muscle" data-group="triceps" x="31" y="66" width="18" height="40" rx="8"/>' +
+    '<rect class="muscle" data-group="triceps" x="151" y="66" width="18" height="40" rx="8"/>' +
+    '<rect class="muscle" data-group="lowerBack" x="90" y="148" width="8" height="34" rx="4"/>' +
+    '<rect class="muscle" data-group="lowerBack" x="102" y="148" width="8" height="34" rx="4"/>' +
+    '<rect class="muscle" data-group="glutes" x="64" y="176" width="32" height="28" rx="12"/>' +
+    '<rect class="muscle" data-group="glutes" x="104" y="176" width="32" height="28" rx="12"/>' +
+    '<rect class="muscle" data-group="hamstrings" x="65" y="208" width="14" height="58" rx="7"/>' +
+    '<rect class="muscle" data-group="hamstrings" x="81" y="208" width="14" height="58" rx="7"/>' +
+    '<rect class="muscle" data-group="hamstrings" x="105" y="208" width="14" height="58" rx="7"/>' +
+    '<rect class="muscle" data-group="hamstrings" x="121" y="208" width="14" height="58" rx="7"/>' +
+    '<rect class="muscle" data-group="calves" x="66" y="274" width="11" height="48" rx="5"/>' +
+    '<rect class="muscle" data-group="calves" x="79" y="274" width="11" height="48" rx="5"/>' +
+    '<rect class="muscle" data-group="calves" x="110" y="274" width="11" height="48" rx="5"/>' +
+    '<rect class="muscle" data-group="calves" x="123" y="274" width="11" height="48" rx="5"/>';
+
+  function svgFor(view){
+    return '<svg viewBox="0 0 200 366" aria-hidden="true">' + BODY_OUTLINE + (view === 'front' ? FRONT_MUSCLES : BACK_MUSCLES) + '</svg>';
+  }
+
+  var PEOPLE = [
+    {id:'henry', name:'Henry', initial:'H', accent:'var(--henry)', accentSoft:'var(--henry-soft)'},
+    {id:'claudia', name:'Claudia', initial:'C', accent:'var(--claudia)', accentSoft:'var(--claudia-soft)'}
+  ];
+
+  function pad(n){ return String(n).padStart(2, '0'); }
+  function ymd(d){ return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate()); }
+  function mondayOf(d){
+    var day = (d.getDay() + 6) % 7;
+    var m = new Date(d);
+    m.setDate(d.getDate() - day);
+    m.setHours(0, 0, 0, 0);
+    return m;
+  }
+  var DAY_LABELS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+  var todayId = ymd(new Date());
+  var monday = mondayOf(new Date());
+  var mondayId = ymd(monday);
+  var sunday = new Date(monday); sunday.setDate(monday.getDate() + 6);
+  var sundayId = ymd(sunday);
+
+  document.getElementById('weekLabel').textContent =
+    'WEEK OF ' + monday.toLocaleDateString(undefined, {month:'short', day:'numeric'});
+
+  // ---- in-memory fallback store (used when db capability is unavailable) ----
+  var memStore = {henry:{}, claudia:{}};
+
+  var state = {
+    henry: {view:'front', today:new Set(), week:{}},
+    claudia: {view:'front', today:new Set(), week:{}}
+  };
+
+  var els = {};
+
+  function buildCard(person){
+    var card = document.createElement('div');
+    card.className = 'card';
+    card.style.setProperty('--accent', person.accent);
+    card.style.setProperty('--accent-soft', person.accentSoft);
+
+    var groupsHtml = GROUPS.map(function(g){
+      return '<button type="button" class="group-btn" data-group="' + g.id + '" data-view="' + g.view + '">' + g.label + '</button>';
+    }).join('');
+
+    var daysHtml = DAY_LABELS.map(function(_, i){
+      return '<div class="day" data-dayidx="' + i + '"></div>';
+    }).join('');
+
+    card.innerHTML =
+      '<div class="card-head">' +
+        '<div class="who"><span class="avatar">' + person.initial + '</span>' +
+          '<div><div class="name">' + person.name + '</div><div class="today" data-role="today">Nothing logged today</div></div>' +
+        '</div>' +
+        '<div class="view-toggle" data-role="viewtoggle">' +
+          '<button type="button" data-view="front" class="active">Front</button>' +
+          '<button type="button" data-view="back">Back</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="diagram-row">' +
+        '<div class="diagram" data-role="diagram">' + svgFor('front') + '</div>' +
+        '<div class="groups">' + groupsHtml + '</div>' +
+      '</div>' +
+      '<div class="week-strip"><span class="wlabel">This week</span>' + daysHtml + '</div>';
+
+    document.getElementById('cards').appendChild(card);
+
+    els[person.id] = {
+      card: card,
+      diagram: card.querySelector('[data-role="diagram"]'),
+      today: card.querySelector('[data-role="today"]'),
+      viewBtns: card.querySelectorAll('[data-role="viewtoggle"] button'),
+      groupBtns: card.querySelectorAll('.group-btn'),
+      days: card.querySelectorAll('.day')
+    };
+
+    els[person.id].viewBtns.forEach(function(btn){
+      btn.addEventListener('click', function(){ setView(person.id, btn.getAttribute('data-view')); });
+    });
+    els[person.id].groupBtns.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var view = btn.getAttribute('data-view');
+        if (view !== 'both') setView(person.id, view);
+        toggleGroup(person.id, btn.getAttribute('data-group'));
+      });
+    });
+
+    // Clicking directly on a muscle shape in the diagram toggles its WHOLE
+    // group too — not just the one shape under the pointer.
+    els[person.id].diagram.addEventListener('click', function(evt){
+      var shape = evt.target.closest ? evt.target.closest('.muscle') : null;
+      if (!shape) return;
+      toggleGroup(person.id, shape.getAttribute('data-group'));
+    });
+  }
+
+  function setView(personId, view){
+    var s = state[personId];
+    if (s.view === view) return;
+    s.view = view;
+    els[personId].diagram.innerHTML = svgFor(view);
+    render(personId);
+    els[personId].viewBtns.forEach(function(b){ b.classList.toggle('active', b.getAttribute('data-view') === view); });
+  }
+
+  function render(personId){
+    var s = state[personId];
+    var muscles = els[personId].diagram.querySelectorAll('.muscle');
+    muscles.forEach(function(m){
+      m.classList.toggle('active', s.today.has(m.getAttribute('data-group')));
+    });
+    els[personId].groupBtns.forEach(function(b){
+      b.classList.toggle('active', s.today.has(b.getAttribute('data-group')));
+    });
+    var count = s.today.size;
+    els[personId].today.textContent = count === 0 ? 'Nothing logged today' : count + ' group' + (count === 1 ? '' : 's') + ' logged today';
+    els[personId].today.classList.toggle('logged', count > 0);
+
+    var todayIdx = (new Date().getDay() + 6) % 7;
+    els[personId].days.forEach(function(dayEl, i){
+      var count = (s.week[weekDayId(i)] || []).length;
+      dayEl.classList.toggle('hit', count > 0);
+      dayEl.classList.toggle('today', i === todayIdx);
+      dayEl.title = DAY_LABELS[i] + (count ? ' — ' + count + ' logged' : ' — rest day');
+    });
+
+    updateMeter();
+  }
+
+  function weekDayId(i){
+    var d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    return ymd(d);
+  }
+
+  function weekTotal(personId){
+    var s = state[personId];
+    var total = 0;
+    Object.keys(s.week).forEach(function(k){ total += (s.week[k] || []).length; });
+    return total;
+  }
+
+  function updateMeter(){
+    var h = weekTotal('henry');
+    var c = weekTotal('claudia');
+    var total = h + c;
+    var hPct = total === 0 ? 50 : Math.round((h / total) * 100);
+    document.getElementById('fillHenry').style.width = hPct + '%';
+    document.getElementById('fillClaudia').style.width = (100 - hPct) + '%';
+    document.getElementById('scoreHenry').textContent = h + ' group' + (h === 1 ? '' : 's') + ' this week';
+    document.getElementById('scoreClaudia').textContent = c + ' group' + (c === 1 ? '' : 's') + ' this week';
+    document.getElementById('leadHenry').hidden = !(h > c);
+    document.getElementById('leadClaudia').hidden = !(c > h);
+  }
+
+  // ---- persistence ----
+  var db = null;
+
+  function applyDayDoc(personId, dateId, groups){
+    state[personId].week[dateId] = groups;
+    if (dateId === todayId) state[personId].today = new Set(groups);
+    render(personId);
+  }
+
+  async function toggleGroup(personId, groupId){
+    var s = state[personId];
+    var groups = new Set(s.today);
+    if (groups.has(groupId)) groups.delete(groupId); else groups.add(groupId);
+    var arr = Array.from(groups);
+
+    applyDayDoc(personId, todayId, arr); // optimistic
+
+    if (db) {
+      try {
+        await db.doc('battle/' + personId + '/days/' + todayId).set({date: todayId, groups: arr});
+      } catch (e) { /* last-writer-wins; a stray failure just waits for the next toggle or snapshot */ }
+    } else {
+      memStore[personId][todayId] = arr;
+    }
+  }
+
+  function subscribePerson(personId){
+    if (!db) {
+      // fallback: seed from memory store only
+      Object.keys(memStore[personId]).forEach(function(dateId){
+        if (dateId >= mondayId && dateId <= sundayId) applyDayDoc(personId, dateId, memStore[personId][dateId]);
+      });
+      return;
+    }
+    db.collection('battle/' + personId + '/days')
+      .where('date', '>=', mondayId)
+      .where('date', '<=', sundayId)
+      .onSnapshot(function(snap){
+        snap.docs.forEach(function(doc){
+          var data = doc.data() || {};
+          applyDayDoc(personId, doc.id, data.groups || []);
+        });
+      }, function(){ /* degrade quietly; optimistic local state still renders */ });
+  }
+
+  PEOPLE.forEach(buildCard);
+  PEOPLE.forEach(function(p){ render(p.id); });
+
+  (async function init(){
+    try { db = await window.claude.use('db'); } catch (e) { db = null; }
+    PEOPLE.forEach(function(p){ subscribePerson(p.id); });
+  })();
+})();
+</script>
+
+</body></html>

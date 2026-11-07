@@ -1,0 +1,2232 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Don't Press The Button</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;800&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one reading column of steps (like a level select), the arena's own palette: teal tiles, hazard yellow, and red only for the button. */
+:root {
+  --bg: #e9f4f1;
+  --surface: #ffffff;
+  --ink: #142028;
+  --muted: #4b5f66;
+  --line: #cfe2dd;
+  --tile: #78cdbe;
+  --tile-soft: #d3efe9;
+  --hazard: #f5c828;
+  --hazard-ink: #4a3a00;
+  --danger: #e32626;
+  --danger-dark: #9e1414;
+  --code-bg: #142028;
+  --code-fg: #e6f0ee;
+  --code-muted: #8aa3a9;
+  --ok: #1e8a5a;
+  --font-display: "Fredoka", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "Nunito", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", Consolas, "Courier New", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0e191d; --surface: #15242a; --ink: #e6f0ee; --muted: #9db3b8; --line: #25393f;
+    --tile: #4fa898; --tile-soft: #173430; --hazard: #f5c828; --hazard-ink: #f5c828;
+    --danger: #ff4d4d; --danger-dark: #b31d1d; --code-bg: #091115; --code-fg: #e6f0ee; --code-muted: #7d969c; --ok: #4cc98f;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0e191d; --surface: #15242a; --ink: #e6f0ee; --muted: #9db3b8; --line: #25393f;
+  --tile: #4fa898; --tile-soft: #173430; --hazard: #f5c828; --hazard-ink: #f5c828;
+  --danger: #ff4d4d; --danger-dark: #b31d1d; --code-bg: #091115; --code-fg: #e6f0ee; --code-muted: #7d969c; --ok: #4cc98f;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--font-body); font-size: 17px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 860px; margin: 0 auto; padding-block: 24px 80px; }
+h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.15; text-wrap: balance; margin: 0; }
+h2 { font-size: 2rem; font-weight: 700; }
+h3 { font-size: 1.35rem; font-weight: 600; }
+h4 { font-size: 1.05rem; font-weight: 600; }
+p, li { max-width: 68ch; }
+a { color: inherit; text-decoration-color: var(--tile); text-underline-offset: 3px; text-decoration-thickness: 2px; }
+a:focus-visible, button:focus-visible, summary:focus-visible, input:focus-visible { outline: 3px solid var(--hazard); outline-offset: 2px; border-radius: 6px; }
+code { font-family: var(--font-mono); font-size: 0.88em; background: var(--tile-soft); padding: 1px 6px; border-radius: 5px; overflow-wrap: anywhere; }
+kbd { font-family: var(--font-mono); font-size: 0.82em; border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 6px; padding: 0 6px; background: var(--surface); white-space: nowrap; }
+.label { font-family: var(--font-display); font-weight: 600; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 32px; align-items: center; padding-block: 24px 40px; }
+.hero h1 { font-size: clamp(2.6rem, 7vw, 4.4rem); font-weight: 700; letter-spacing: -0.01em; }
+.hero h1 .no { color: var(--danger); }
+.hero p { font-size: 1.12rem; color: var(--muted); margin: 16px 0 0; }
+.stage { display: grid; justify-items: center; gap: 18px; }
+.sign {
+  background: #faf5e6; color: #c81919; border: 4px solid #2a2f3a; border-radius: 10px;
+  font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; padding: 8px 18px; text-align: center;
+  min-height: 3.2em; display: grid; place-items: center; width: min(100%, 300px); line-height: 1.1;
+}
+.sign small { display: block; font-size: 0.6em; color: #2a2f3a; font-weight: 500; }
+.big-button { position: relative; width: 200px; height: 130px; border: 0; background: none; cursor: pointer; padding: 0; }
+.big-button .pedestal { position: absolute; left: 0; right: 0; bottom: 0; height: 56px; border-radius: 50%;
+  background: repeating-linear-gradient(-45deg, var(--hazard) 0 14px, #2a2f3a 14px 28px); box-shadow: inset 0 -8px 0 rgba(0,0,0,.25); }
+.big-button .cap { position: absolute; left: 30px; right: 30px; bottom: 34px; height: 76px; border-radius: 50% / 40%;
+  background: radial-gradient(ellipse at 40% 30%, #ff8a8a 0 12%, #eb2828 40%, #a31010 100%);
+  box-shadow: 0 12px 0 #7a0c0c; transition: transform .12s ease-in, box-shadow .12s ease-in; }
+.big-button.pressed .cap { transform: translateY(12px); box-shadow: 0 2px 0 #7a0c0c; }
+@media (prefers-reduced-motion: reduce) { .big-button .cap { transition: none; } }
+.stage .hint { font-size: 0.85rem; color: var(--muted); margin: 0; }
+
+/* Level picker */
+.levels { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-block: 8px 48px; }
+.level-card { display: grid; gap: 6px; padding: 18px; border-radius: 14px; background: var(--surface); border: 2px solid var(--line); text-decoration: none; }
+.level-card:hover { border-color: var(--tile); }
+.level-card .num { font-family: var(--font-display); font-weight: 700; font-size: 1.6rem; }
+.level-card p { margin: 0; color: var(--muted); font-size: 0.95rem; }
+.level-card .steps { font-size: 0.82rem; color: var(--muted); }
+
+/* Levels and steps */
+.level { margin-top: 56px; display: grid; gap: 20px; }
+.level-head { display: grid; gap: 6px; padding-bottom: 12px; border-bottom: 4px solid var(--tile); }
+.level-head p { margin: 0; color: var(--muted); }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; display: grid; gap: 12px; }
+.step-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.step-top > div { display: grid; gap: 4px; min-width: 0; }
+.step.done { border-color: var(--ok); }
+.step.done h3::after { content: "  ✓"; color: var(--ok); }
+.done-toggle { display: inline-flex; gap: 8px; align-items: center; font-size: 0.9rem; font-weight: 600; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.done-toggle input { width: 18px; height: 18px; accent-color: var(--ok); }
+.step ol, .step ul { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
+.step p { margin: 0; }
+.why { border-left: 4px solid var(--hazard); padding: 8px 14px; background: var(--tile-soft); border-radius: 0 10px 10px 0; font-size: 0.95rem; }
+.warn { border-left: 4px solid var(--danger); padding: 8px 14px; background: var(--tile-soft); border-radius: 0 10px 10px 0; font-size: 0.95rem; }
+.props { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+.props th, .props td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.props th { font-weight: 800; white-space: nowrap; }
+.props td code { white-space: nowrap; }
+.table-scroll { overflow-x: auto; }
+.swatch { display: inline-block; width: 0.9em; height: 0.9em; border-radius: 3px; vertical-align: -0.1em; margin-right: 6px; border: 1px solid rgba(0,0,0,.25); }
+
+/* Explorer tree */
+.tree { font-family: var(--font-mono); font-size: 0.85rem; background: var(--tile-soft); border-radius: 12px; padding: 14px 16px; line-height: 1.75; overflow-x: auto; white-space: pre; }
+.tree .s { color: var(--muted); }
+.tree .k { font-weight: 600; }
+
+/* Code blocks */
+details.code { border-radius: 12px; overflow: hidden; border: 1px solid var(--line); background: var(--code-bg); }
+details.code summary { cursor: pointer; list-style: none; display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; padding: 10px 14px; color: var(--code-fg); font-family: var(--font-mono); font-size: 0.88rem; }
+details.code summary::-webkit-details-marker { display: none; }
+details.code summary .where { color: var(--code-muted); }
+details.code summary::before { content: "▸"; color: var(--hazard); margin-right: -2px; }
+details.code[open] summary::before { content: "▾"; }
+details.code summary .grow { flex: 1; min-width: 0; }
+.copy { font-family: var(--font-display); font-weight: 600; font-size: 0.85rem; border: 0; border-radius: 8px; padding: 5px 12px; background: var(--hazard); color: #2a2200; cursor: pointer; }
+details.code pre { margin: 0; padding: 14px 16px 18px; overflow-x: auto; max-height: 520px; overflow-y: auto; border-top: 1px solid rgba(255,255,255,.08); }
+details.code code { background: none; padding: 0; color: var(--code-fg); font-size: 0.8rem; line-height: 1.55; white-space: pre; overflow-wrap: normal; }
+
+.balance { border-collapse: collapse; width: 100%; font-size: 0.9rem; font-variant-numeric: tabular-nums; }
+.balance th, .balance td { padding: 7px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+.balance thead th { font-family: var(--font-display); font-weight: 600; }
+.balance tbody th { font-weight: 600; color: var(--muted); }
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { font-size: 0.82rem; font-weight: 700; padding: 3px 10px; border-radius: 999px; background: var(--tile-soft); }
+.timeline { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 14px; font-size: 0.95rem; }
+.timeline .t { font-family: var(--font-mono); font-size: 0.82rem; color: var(--muted); padding-top: 2px; white-space: nowrap; }
+.grid2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.mini { background: var(--tile-soft); border-radius: 12px; padding: 14px; display: grid; gap: 6px; min-width: 0; }
+.mini p { margin: 0; font-size: 0.95rem; }
+footer { margin-top: 64px; color: var(--muted); font-size: 0.9rem; border-top: 1px solid var(--line); padding-top: 18px; display: grid; gap: 6px; }
+
+@media (max-width: 720px) {
+  .hero { grid-template-columns: minmax(0, 1fr); gap: 20px; }
+  .levels, .grid2 { grid-template-columns: minmax(0, 1fr); }
+  h2 { font-size: 1.65rem; }
+  .step { padding: 16px; }
+  body { font-size: 16px; }
+}
+</style>
+
+<div class="wrap">
+
+<header class="hero">
+  <div>
+    <span class="label">Your first Roblox game · Windows · Roblox Studio 2026</span>
+    <h1>DON'T <span class="no">PRESS</span> THE BUTTON!</h1>
+    <p>A step-by-step build of a small multiplayer party game. One giant red button, 20 seconds of temptation, then chaos: floods, vanishing floors and a very large ball. Survivors get coins and unlock trails.</p>
+  </div>
+  <div class="stage">
+    <div class="sign" id="hero-sign" aria-live="polite">DO NOT PRESS<small>(seriously)</small></div>
+    <button class="big-button" id="hero-button" type="button" aria-label="The big red button. Please do not press it.">
+      <span class="pedestal"></span><span class="cap"></span>
+    </button>
+    <p class="hint">You can press this one. Nothing bad happens here.</p>
+  </div>
+</header>
+
+<nav class="levels" aria-label="Choose your level">
+  <a class="level-card" href="#level-1">
+    <span class="label">Level 1 · Beginner</span>
+    <span class="num">Make it playable</span>
+    <p>Learn Studio, build the button and sign, paste in the scripts, test with friends.</p>
+    <span class="steps">Steps 1–7 · about 2–3 hours</span>
+  </a>
+  <a class="level-card" href="#level-2">
+    <span class="label">Level 2 · Builder</span>
+    <span class="num">Make it yours</span>
+    <p>Tune the difficulty, add your own event, make it look and sound great.</p>
+    <span class="steps">Steps 8–10</span>
+  </a>
+  <a class="level-card" href="#level-3">
+    <span class="label">Level 3 · Creator</span>
+    <span class="num">Ship it</span>
+    <p>Publish, save coins between visits, plan cosmetics, high scores and new events.</p>
+    <span class="steps">Steps 11–14</span>
+  </a>
+</nav>
+
+<!-- ================================================================ LEVEL 1 -->
+<section class="level" id="level-1" aria-labelledby="l1">
+  <div class="level-head">
+    <span class="label">Level 1 · Beginner</span>
+    <h2 id="l1">Make it playable</h2>
+    <p>By the end you can press Play and run full rounds with friends in Studio. Tick each step off as you go; your ticks are remembered in this browser.</p>
+  </div>
+
+  <article class="step" data-step="1">
+    <div class="step-top"><div><span class="label">Step 1</span><h3>Open Roblox Studio and learn the screen</h3></div>
+      <label class="done-toggle"><input type="checkbox" id="done-1">Done</label></div>
+    <ol>
+      <li>Go to <a href="https://create.roblox.com" target="_blank" rel="noopener">create.roblox.com</a>, download Roblox Studio for Windows (Windows 10 or 11), install it and sign in with your Roblox account.</li>
+      <li>On the start screen, choose the <strong>Baseplate</strong> template. You get a big grey floor and a sky. (The exact wording on the start screen changes now and then; look for “Baseplate”.)</li>
+      <li>Save straight away with <kbd>Ctrl</kbd>+<kbd>S</kbd> and call it <strong>DON'T PRESS THE BUTTON!</strong> Save often.</li>
+    </ol>
+    <h4>The five things you will use most</h4>
+    <div class="table-scroll"><table class="props">
+      <tr><th>Top bar tabs</th><td><strong>Home, Model, Avatar, UI, Script, Plugins.</strong> Almost everything in Level 1 is on <strong>Home</strong>: Part, Move/Scale/Rotate, Color, Material, Anchor, Group.</td></tr>
+      <tr><th>Play controls</th><td>In the <strong>top-left</strong> of the window (not on a tab). A dropdown picks the mode (<strong>Test</strong>, <strong>Test Here</strong>, <strong>Run</strong>, <strong>Server &amp; Clients</strong>) and the Play button starts it.</td></tr>
+      <tr><th>Explorer</th><td>A list of every object in your game, in folders. You will add scripts here.</td></tr>
+      <tr><th>Properties</th><td>The settings of whatever you selected: size, colour, position…</td></tr>
+      <tr><th>Output</th><td>Messages and errors from your scripts. <strong>Keep it open.</strong> Red text means something broke, and it tells you the script and line.</td></tr>
+    </table></div>
+    <p class="why">Can't see Explorer, Properties or Output? Open them from the <strong>Window</strong> menu (Output is also on the <strong>Script</strong> tab). If the toolbar shows only icons, right-click an empty part of the toolbar and turn on <strong>Show labels</strong>.</p>
+    <h4>Moving the camera</h4>
+    <p>Hold the <strong>right mouse button</strong> and drag to look around. <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> fly, <kbd>Q</kbd>/<kbd>E</kbd> go down/up, the scroll wheel zooms, and <kbd>F</kbd> jumps to whatever you selected.</p>
+  </article>
+
+  <article class="step" data-step="2">
+    <div class="step-top"><div><span class="label">Step 2</span><h3>The arena (and practising with Parts)</h3></div>
+      <label class="done-toggle"><input type="checkbox" id="done-2">Done</label></div>
+    <p>The arena is a 10 × 10 grid of floor tiles floating 50 studs up in the sky, with lava underneath and four walls around it. A script called <code>ArenaBuilder</code> builds it from the numbers in <code>GameConfig</code> when the game starts, so the events always line up with the floor. Building 100 tiles by hand would take ages, and one wrong tile would break the vanishing-floor event.</p>
+    <div class="grid2">
+      <div class="mini"><span class="label">Arena</span><p>Floor top at height <strong>50</strong>, 80 × 80 studs, walls 40 tall, lava 25 below.</p></div>
+      <div class="mini"><span class="label">Lobby</span><p>A yellow platform on the ground around <strong>0, 1, 110</strong>. Everyone waits and respawns here. The Baseplate's own grey SpawnLocation sits under the arena, so the script switches it off for you.</p></div>
+    </div>
+    <h4>Practise the tools by decorating the lobby</h4>
+    <ol>
+      <li><strong>Home → Part</strong> adds a block in front of the camera.</li>
+      <li>Use <strong>Move</strong> (drag the arrows), <strong>Scale</strong> (drag the balls) and <strong>Rotate</strong> (drag the rings). Or type exact numbers into <strong>Position</strong>, <strong>Size</strong> and <strong>Orientation</strong> in Properties. That's what the next step does.</li>
+      <li>Change <strong>Color</strong> and <strong>Material</strong> on the Home tab.</li>
+      <li>Click <strong>Anchor</strong>. Anchored parts never fall or get pushed. <strong>Anchor everything you build.</strong></li>
+      <li>Build something near <code>0, 0, 110</code> on the Baseplate: an archway, a bench, a “WAIT HERE” sign. Keep the area right around <code>0, 1, 110</code> clear, because the lobby platform and spawn go there.</li>
+    </ol>
+    <p class="why">Rename things in Explorer by double-clicking the name (or select it and press <kbd>F2</kbd>). Names matter: scripts look for objects by their exact name, capital letters included.</p>
+  </article>
+
+  <article class="step" data-step="3">
+    <div class="step-top"><div><span class="label">Step 3</span><h3>Build the giant red button and the sign</h3></div>
+      <label class="done-toggle"><input type="checkbox" id="done-3">Done</label></div>
+    <p>This is the star of the game, so you build it yourself. Insert a Part for each piece and copy the Properties below.</p>
+    <h4>a. The pedestal (yellow base)</h4>
+    <div class="table-scroll"><table class="props">
+      <tr><th>Name</th><td><code>Pedestal</code></td></tr>
+      <tr><th>Shape</th><td><code>Cylinder</code></td></tr>
+      <tr><th>Size</th><td><code>3, 14, 14</code></td></tr>
+      <tr><th>Orientation</th><td><code>0, 0, 90</code></td></tr>
+      <tr><th>Position</th><td><code>0, 51.5, 0</code></td></tr>
+      <tr><th>Color</th><td><span class="swatch" style="background:rgb(245,200,40)"></span><code>245, 200, 40</code></td></tr>
+      <tr><th>Material</th><td><code>SmoothPlastic</code></td></tr>
+      <tr><th>Anchored</th><td>✓ ticked</td></tr>
+    </table></div>
+    <p class="why">Roblox cylinders lie on their side, and the first Size number is their height. Orientation <code>0, 0, 90</code> stands it upright.</p>
+    <h4>b. The cap (the part you press)</h4>
+    <div class="table-scroll"><table class="props">
+      <tr><th>Name</th><td><code>Cap</code> (exactly. The script looks for this name.)</td></tr>
+      <tr><th>Shape / Orientation</th><td><code>Cylinder</code> · <code>0, 0, 90</code></td></tr>
+      <tr><th>Size</th><td><code>3, 8, 8</code></td></tr>
+      <tr><th>Position</th><td><code>0, 54.5, 0</code></td></tr>
+      <tr><th>Color</th><td><span class="swatch" style="background:rgb(235,40,40)"></span><code>235, 40, 40</code></td></tr>
+      <tr><th>Anchored</th><td>✓ ticked</td></tr>
+    </table></div>
+    <h4>c. Group them into one Model</h4>
+    <ol>
+      <li>In Explorer, click <code>Pedestal</code>, then hold <kbd>Ctrl</kbd> and click <code>Cap</code>.</li>
+      <li>Press <kbd>Ctrl</kbd>+<kbd>G</kbd> (or <strong>Home → Group</strong>). Rename the new Model to <code>TheButton</code>.</li>
+      <li>With <code>TheButton</code> selected, find <strong>PrimaryPart</strong> in Properties, click it, then click <code>Pedestal</code> in Explorer.</li>
+      <li>Hover over <code>Cap</code> in Explorer, click the <strong>+</strong> and add a <strong>ProximityPrompt</strong>. That's the “Press E” pop-up (players tap it on phones). The script sets its text for you.</li>
+    </ol>
+    <h4>d. The “DO NOT PRESS” sign</h4>
+    <ol>
+      <li>Insert a Part: Name <code>Sign</code>, Size <code>30, 12, 1</code>, Position <code>0, 66, -39</code>, Color <span class="swatch" style="background:rgb(250,245,230)"></span><code>250, 245, 230</code>, Anchored ✓. It floats against the north wall, above the floor.</li>
+      <li>Click <strong>+</strong> on <code>Sign</code> → <strong>SurfaceGui</strong>. Set <strong>Face</strong> = <code>Back</code> (the side that faces into the arena), <strong>SizingMode</strong> = <code>PixelsPerStud</code>, <strong>LightInfluence</strong> = <code>0</code>.</li>
+      <li>Click <strong>+</strong> on the SurfaceGui → <strong>TextLabel</strong>. Set <strong>Size</strong> = <code>{1, 0},{1, 0}</code> (fills the sign), <strong>BackgroundTransparency</strong> = <code>1</code>, <strong>Text</strong> = <code>DO NOT PRESS</code>, <strong>TextScaled</strong> ✓, <strong>Font</strong> = <code>FredokaOne</code>, <strong>TextColor3</strong> = <span class="swatch" style="background:rgb(200,25,25)"></span><code>200, 25, 25</code>.</li>
+      <li>Optional: <strong>+</strong> on the TextLabel → <strong>UIStroke</strong>, Thickness <code>3</code>, for a bold outline.</li>
+    </ol>
+    <p class="why">You can't see the walls yet because they appear when you press Play. If the text faces the wrong way in Play mode, change <strong>Face</strong> to <code>Front</code>. If you skip the sign, ArenaBuilder puts up a plain one in the same spot.</p>
+  </article>
+
+  <article class="step" data-step="4">
+    <div class="step-top"><div><span class="label">Step 4</span><h3>The countdown and round system (scripts, part 1)</h3></div>
+      <label class="done-toggle"><input type="checkbox" id="done-4">Done</label></div>
+    <p>Now the brain. There are three kinds of script, and putting them in the right place is most of the battle:</p>
+    <div class="table-scroll"><table class="props">
+      <tr><th>Script</th><td>Runs on the <strong>server</strong>, the one computer that runs the game for everyone. Rules, timers and coins live here. Put it in <strong>ServerScriptService</strong>.</td></tr>
+      <tr><th>LocalScript</th><td>Runs on <strong>each player's</strong> device. Only for what that player sees (the on-screen text). Put it in <strong>StarterPlayer → StarterPlayerScripts</strong>.</td></tr>
+      <tr><th>ModuleScript</th><td>A box of code that other scripts <code>require</code>. It does nothing on its own.</td></tr>
+    </table></div>
+    <h4>Where everything goes (the finished Explorer)</h4>
+<div class="tree" role="img" aria-label="Explorer layout: ReplicatedStorage holds GameConfig and RoundLogic; ServerScriptService holds RoundManager, ArenaBuilder, CoinManager, Cosmetics and an Events folder with three event modules; StarterPlayerScripts holds HUD; Workspace holds TheButton and Sign."><span class="k">Workspace</span>
+  ├─ TheButton        <span class="s">Model  (Pedestal, Cap + ProximityPrompt)</span>
+  └─ Sign             <span class="s">Part   (SurfaceGui → TextLabel)</span>
+<span class="k">ReplicatedStorage</span>
+  ├─ GameConfig       <span class="s">ModuleScript   step 4</span>
+  └─ RoundLogic       <span class="s">ModuleScript   step 4</span>
+<span class="k">ServerScriptService</span>
+  ├─ RoundManager     <span class="s">Script         step 4</span>
+  ├─ ArenaBuilder     <span class="s">ModuleScript   step 4</span>
+  ├─ CoinManager      <span class="s">ModuleScript   step 6</span>
+  ├─ Cosmetics        <span class="s">ModuleScript   step 6</span>
+  └─ Events           <span class="s">Folder         step 5</span>
+       ├─ DisappearingFloor   <span class="s">ModuleScript</span>
+       ├─ RisingFlood         <span class="s">ModuleScript</span>
+       └─ RollingBall         <span class="s">ModuleScript</span>
+<span class="k">StarterPlayer</span>
+  └─ StarterPlayerScripts
+       └─ HUD         <span class="s">LocalScript    step 4</span></div>
+    <h4>How to add each script</h4>
+    <ol>
+      <li>Hover the service in Explorer (for example <strong>ReplicatedStorage</strong>), click <strong>+</strong>, and choose the script type from the table above.</li>
+      <li>Rename it to the exact name shown (double-click the name).</li>
+      <li>Double-click the script to open it. Press <kbd>Ctrl</kbd>+<kbd>A</kbd> to select the “Hello world” line, then paste the code with <kbd>Ctrl</kbd>+<kbd>V</kbd>. Each block below has a <strong>Copy</strong> button.</li>
+    </ol>
+    <div class="warn"><strong>Don't press Play until the end of Step 6.</strong> RoundManager waits for every other script. If one is missing, Output shows <code>Infinite yield possible on …WaitForChild("CoinManager")</code>. That's normal halfway through.</div>
+
+    <details class="code"><summary><span class="grow">GameConfig <span class="where">· ModuleScript · ReplicatedStorage · 124 lines</span></span><button class="copy" type="button" data-copy="c-gameconfig">Copy</button></summary>
+<pre id="c-gameconfig"><code>-- GameConfig (ModuleScript in ReplicatedStorage)
+-- Every number you might want to tweak lives here. Change a value, press Play, see what happens.
+-- You never need to touch the other scripts just to rebalance the game.
+
+local GameConfig = {}
+
+---------------------------------------------------------------------
+-- ROUND TIMING (seconds)
+---------------------------------------------------------------------
+GameConfig.MinPlayers = 1            -- 1 lets you test alone. Use 2+ when you publish.
+GameConfig.IntermissionTime = 10     -- lobby countdown before each round
+GameConfig.ButtonPhaseTime = 20      -- how long players have to decide
+GameConfig.ResultsTime = 5           -- how long the results screen stays up
+GameConfig.AutoPressWhenTimeUp = true -- if nobody presses, the button presses itself
+
+---------------------------------------------------------------------
+-- DIFFICULTY
+-- &quot;Escalating&quot; = starts Chill, becomes Normal, then Chaos as rounds go on.
+-- Or lock it to one level: &quot;Chill&quot;, &quot;Normal&quot; or &quot;Chaos&quot;.
+---------------------------------------------------------------------
+GameConfig.DifficultyMode = &quot;Escalating&quot;
+GameConfig.EscalationRounds = {
+	Normal = 4, -- from round 4
+	Chaos = 9,  -- from round 9
+}
+
+GameConfig.Difficulties = {
+	Chill = {
+		Order = 1,
+		EventTime = 20,
+		RewardMultiplier = 1,
+		Flood = { RiseTime = 18, MaxHeight = 16, DamagePerSecond = 15 },
+		Floor = { TilesPerWave = 3, WaveInterval = 2, WarnTime = 1.5, KeepTiles = 30 },
+		Ball = { Size = 14, Speed = 22, Count = 1 },
+	},
+	Normal = {
+		Order = 2,
+		EventTime = 25,
+		RewardMultiplier = 1.5,
+		Flood = { RiseTime = 15, MaxHeight = 21, DamagePerSecond = 25 },
+		Floor = { TilesPerWave = 5, WaveInterval = 1.5, WarnTime = 1, KeepTiles = 14 },
+		Ball = { Size = 20, Speed = 30, Count = 1 },
+	},
+	Chaos = {
+		Order = 3,
+		EventTime = 30,
+		RewardMultiplier = 2.5,
+		Flood = { RiseTime = 11, MaxHeight = 26, DamagePerSecond = 40 },
+		Floor = { TilesPerWave = 8, WaveInterval = 1, WarnTime = 0.6, KeepTiles = 6 },
+		Ball = { Size = 26, Speed = 40, Count = 2 },
+	},
+}
+
+---------------------------------------------------------------------
+-- EVENTS
+-- Name must match a ModuleScript inside ServerScriptService &gt; Events.
+-- Settings: which table in each difficulty (Flood / Floor / Ball) the event reads.
+-- UnlockRound: the event can&#x27;t be picked before this round number.
+-- Weight: bigger = picked more often.
+---------------------------------------------------------------------
+GameConfig.Events = {
+	{ Name = &quot;DisappearingFloor&quot;, Settings = &quot;Floor&quot;, DisplayName = &quot;THE FLOOR IS LEAVING!&quot;, UnlockRound = 1, Weight = 1 },
+	{ Name = &quot;RisingFlood&quot;, Settings = &quot;Flood&quot;, DisplayName = &quot;FLOOD! CLIMB!&quot;, UnlockRound = 1, Weight = 1 },
+	{ Name = &quot;RollingBall&quot;, Settings = &quot;Ball&quot;, DisplayName = &quot;GIANT BALL INCOMING!&quot;, UnlockRound = 3, Weight = 1 },
+}
+
+---------------------------------------------------------------------
+-- REWARDS (coins, before the difficulty multiplier)
+---------------------------------------------------------------------
+GameConfig.Rewards = {
+	Participation = 1, -- everyone who was in the arena
+	Survive = 10,      -- still alive when the event ends
+	PresserBonus = 5,  -- pressed the button AND survived
+}
+
+-- Cosmetic trails unlock automatically when your coin total reaches the number.
+GameConfig.Cosmetics = {
+	{ Name = &quot;Bronze Trail&quot;, Coins = 50, Color = Color3.fromRGB(205, 127, 50) },
+	{ Name = &quot;Silver Trail&quot;, Coins = 150, Color = Color3.fromRGB(200, 210, 225) },
+	{ Name = &quot;Gold Trail&quot;, Coins = 400, Color = Color3.fromRGB(255, 200, 40) },
+	{ Name = &quot;Rainbow Trail&quot;, Coins = 1000, Rainbow = true },
+}
+
+---------------------------------------------------------------------
+-- SAVING
+-- Saving only works in Studio after you publish, then: File &gt; Experience Settings &gt;
+-- Security &gt; &quot;Enable Studio Access to API Services&quot;. The game still runs without it.
+-- Careful: once it&#x27;s on, coins you earn while testing in Studio go into the REAL saves.
+---------------------------------------------------------------------
+GameConfig.SaveData = true
+GameConfig.DataStoreName = &quot;DontPressTheButton_v1&quot;
+
+---------------------------------------------------------------------
+-- ARENA (built by ArenaBuilder, so events always line up)
+---------------------------------------------------------------------
+GameConfig.Arena = {
+	Center = Vector3.new(0, 50, 0), -- floats in the sky; lava waits below
+	TileSize = 8,
+	TilesPerSide = 10,              -- 10 x 10 tiles = 80 x 80 studs
+	WallHeight = 40,
+	LobbySpawn = Vector3.new(0, 1, 110),
+	ApplyLighting = true,           -- set false if you want to design the Lighting yourself
+}
+
+---------------------------------------------------------------------
+-- COLOURS (cartoony &quot;toy diorama&quot;: calm colours everywhere, RED means danger)
+---------------------------------------------------------------------
+GameConfig.Colors = {
+	ButtonCap = Color3.fromRGB(235, 40, 40),
+	Pedestal = Color3.fromRGB(245, 200, 40),
+	SignBoard = Color3.fromRGB(250, 245, 230),
+	SignText = Color3.fromRGB(200, 25, 25),
+	TileA = Color3.fromRGB(120, 205, 190),
+	TileB = Color3.fromRGB(150, 225, 210),
+	TileWarning = Color3.fromRGB(255, 160, 40),
+	Wall = Color3.fromRGB(255, 255, 255),
+	Water = Color3.fromRGB(40, 150, 240),
+	Ball = Color3.fromRGB(255, 120, 30),
+	Lava = Color3.fromRGB(255, 90, 20),
+	LobbyFloor = Color3.fromRGB(255, 214, 120),
+	Steps = Color3.fromRGB(80, 120, 240),
+}
+
+return GameConfig</code></pre></details>
+    <p>Every number you might want to change lives here: timers, difficulty, events, rewards, colours. In Level 2 you'll play with it.</p>
+
+    <details class="code"><summary><span class="grow">RoundLogic <span class="where">· ModuleScript · ReplicatedStorage · 152 lines</span></span><button class="copy" type="button" data-copy="c-roundlogic">Copy</button></summary>
+<pre id="c-roundlogic"><code>-- RoundLogic (ModuleScript in ReplicatedStorage)
+-- Small &quot;thinking&quot; functions with no parts or players in them.
+-- Keeping them separate means they are easy to read and easy to test.
+
+local RoundLogic = {}
+
+-- Which difficulty should this round use?
+function RoundLogic.GetDifficultyName(config, roundNumber)
+	local mode = config.DifficultyMode
+	if mode ~= &quot;Escalating&quot; then
+		return mode
+	end
+	if roundNumber &gt;= config.EscalationRounds.Chaos then
+		return &quot;Chaos&quot;
+	elseif roundNumber &gt;= config.EscalationRounds.Normal then
+		return &quot;Normal&quot;
+	end
+	return &quot;Chill&quot;
+end
+
+-- Events that are unlocked by this round.
+function RoundLogic.GetAvailableEvents(config, roundNumber)
+	local available = {}
+	for _, event in ipairs(config.Events) do
+		if roundNumber &gt;= event.UnlockRound then
+			table.insert(available, event)
+		end
+	end
+	return available
+end
+
+-- Pick a random unlocked event, avoiding a repeat of last round when possible.
+-- randomNumber is a function returning a number from 0 to 1 (math.random works).
+function RoundLogic.PickEvent(config, roundNumber, lastEventName, randomNumber)
+	randomNumber = randomNumber or math.random
+	local choices = {}
+	for _, event in ipairs(RoundLogic.GetAvailableEvents(config, roundNumber)) do
+		if event.Name ~= lastEventName then
+			table.insert(choices, event)
+		end
+	end
+	if #choices == 0 then
+		choices = RoundLogic.GetAvailableEvents(config, roundNumber)
+	end
+	if #choices == 0 then
+		return nil
+	end
+
+	local totalWeight = 0
+	for _, event in ipairs(choices) do
+		totalWeight = totalWeight + event.Weight
+	end
+	local roll = randomNumber() * totalWeight
+	for _, event in ipairs(choices) do
+		roll = roll - event.Weight
+		if roll &lt; 0 then
+			return event
+		end
+	end
+	return choices[#choices]
+end
+
+-- How many coins does one player get this round?
+function RoundLogic.CalculateReward(config, difficultyName, survived, pressedButton)
+	local rewards = config.Rewards
+	local coins = rewards.Participation
+	if survived then
+		coins = coins + rewards.Survive
+		if pressedButton then
+			coins = coins + rewards.PresserBonus
+		end
+	end
+	local multiplier = config.Difficulties[difficultyName].RewardMultiplier
+	return math.floor(coins * multiplier + 0.5)
+end
+
+-- The best cosmetic a coin total has unlocked (or nil).
+function RoundLogic.GetBestCosmetic(config, coins)
+	local best = nil
+	for _, cosmetic in ipairs(config.Cosmetics) do
+		if coins &gt;= cosmetic.Coins and (best == nil or cosmetic.Coins &gt; best.Coins) then
+			best = cosmetic
+		end
+	end
+	return best
+end
+
+-- Checks the config for typos and impossible values. Returns a list of problems.
+function RoundLogic.ValidateConfig(config)
+	local problems = {}
+	local function check(condition, message)
+		if not condition then
+			table.insert(problems, message)
+		end
+	end
+
+	check(config.MinPlayers &gt;= 1, &quot;MinPlayers must be at least 1&quot;)
+	check(config.IntermissionTime &gt; 0, &quot;IntermissionTime must be above 0&quot;)
+	check(config.ButtonPhaseTime &gt; 0, &quot;ButtonPhaseTime must be above 0&quot;)
+	check(config.ResultsTime &gt;= 0, &quot;ResultsTime can&#x27;t be negative&quot;)
+
+	local mode = config.DifficultyMode
+	check(mode == &quot;Escalating&quot; or config.Difficulties[mode] ~= nil, &quot;Unknown DifficultyMode: &quot; .. tostring(mode))
+	if mode == &quot;Escalating&quot; then
+		check(config.EscalationRounds.Normal &lt; config.EscalationRounds.Chaos, &quot;EscalationRounds.Normal must come before Chaos&quot;)
+		check(config.Difficulties.Chill and config.Difficulties.Normal and config.Difficulties.Chaos,
+			&quot;Escalating mode needs Chill, Normal and Chaos difficulties&quot;)
+	end
+
+	for name, difficulty in pairs(config.Difficulties) do
+		check(difficulty.EventTime &gt; 0, name .. &quot;.EventTime must be above 0&quot;)
+		check(difficulty.RewardMultiplier &gt; 0, name .. &quot;.RewardMultiplier must be above 0&quot;)
+		check(difficulty.Flood.RiseTime &gt; 0, name .. &quot;.Flood.RiseTime must be above 0&quot;)
+		check(difficulty.Flood.MaxHeight &gt; 0 and difficulty.Flood.MaxHeight &lt; config.Arena.WallHeight,
+			name .. &quot;.Flood.MaxHeight must be between 0 and the wall height&quot;)
+		check(difficulty.Floor.WaveInterval &gt; difficulty.Floor.WarnTime,
+			name .. &quot;.Floor.WaveInterval must be longer than WarnTime&quot;)
+		check(difficulty.Floor.KeepTiles &gt;= 1, name .. &quot;.Floor.KeepTiles must be at least 1&quot;)
+		check(difficulty.Ball.Size &gt; 0 and difficulty.Ball.Size &lt; config.Arena.TileSize * config.Arena.TilesPerSide / 2,
+			name .. &quot;.Ball.Size is too big for the arena&quot;)
+		check(difficulty.Ball.Count &gt;= 1, name .. &quot;.Ball.Count must be at least 1&quot;)
+	end
+
+	local seen = {}
+	local hasRoundOneEvent = false
+	for _, event in ipairs(config.Events) do
+		check(not seen[event.Name], &quot;Event listed twice: &quot; .. tostring(event.Name))
+		seen[event.Name] = true
+		check(event.Weight &gt; 0, event.Name .. &quot; needs a Weight above 0&quot;)
+		check(event.UnlockRound &gt;= 1, event.Name .. &quot; UnlockRound must be at least 1&quot;)
+		for difficultyName, difficulty in pairs(config.Difficulties) do
+			check(difficulty[event.Settings] ~= nil,
+				event.Name .. &quot; reads settings &#x27;&quot; .. tostring(event.Settings) .. &quot;&#x27; but &quot; .. difficultyName .. &quot; has none&quot;)
+		end
+		if event.UnlockRound &lt;= 1 then
+			hasRoundOneEvent = true
+		end
+	end
+	check(hasRoundOneEvent, &quot;At least one event must unlock on round 1&quot;)
+
+	for i, cosmetic in ipairs(config.Cosmetics) do
+		check(cosmetic.Coins &gt; 0, cosmetic.Name .. &quot; needs a coin price above 0&quot;)
+		check(cosmetic.Rainbow or cosmetic.Color, cosmetic.Name .. &quot; needs a Color (or Rainbow = true)&quot;)
+		if i &gt; 1 then
+			check(cosmetic.Coins &gt; config.Cosmetics[i - 1].Coins, &quot;Cosmetics must be listed cheapest first&quot;)
+		end
+	end
+
+	return problems
+end
+
+return RoundLogic</code></pre></details>
+    <p>Small “thinking” functions: which difficulty, which event, how many coins. It also checks GameConfig for typos and prints a clear warning.</p>
+
+    <details class="code"><summary><span class="grow">RoundManager <span class="where">· Script · ServerScriptService · 323 lines</span></span><button class="copy" type="button" data-copy="c-roundmanager">Copy</button></summary>
+<pre id="c-roundmanager"><code>-- RoundManager (Script in ServerScriptService)
+-- The &quot;brain&quot; of the game. It runs this loop forever:
+--   lobby countdown -&gt; teleport into arena -&gt; 20s &quot;don&#x27;t press&quot; -&gt; random event -&gt; rewards -&gt; back to lobby
+
+local Players = game:GetService(&quot;Players&quot;)
+local ReplicatedStorage = game:GetService(&quot;ReplicatedStorage&quot;)
+local ServerScriptService = game:GetService(&quot;ServerScriptService&quot;)
+local TweenService = game:GetService(&quot;TweenService&quot;)
+
+local GameConfig = require(ReplicatedStorage:WaitForChild(&quot;GameConfig&quot;))
+local RoundLogic = require(ReplicatedStorage:WaitForChild(&quot;RoundLogic&quot;))
+local ArenaBuilder = require(ServerScriptService:WaitForChild(&quot;ArenaBuilder&quot;))
+local CoinManager = require(ServerScriptService:WaitForChild(&quot;CoinManager&quot;))
+local Cosmetics = require(ServerScriptService:WaitForChild(&quot;Cosmetics&quot;))
+local eventsFolder = ServerScriptService:WaitForChild(&quot;Events&quot;)
+
+-- Catch config typos right away, with a clear message in the Output window.
+local problems = RoundLogic.ValidateConfig(GameConfig)
+if #problems &gt; 0 then
+	for _, problem in ipairs(problems) do
+		warn(&quot;[GameConfig] &quot; .. problem)
+	end
+	error(&quot;GameConfig has &quot; .. #problems .. &quot; problem(s). Fix them (see the warnings above) and press Play again.&quot;)
+end
+
+-- The server uses this RemoteEvent to tell every player&#x27;s screen to shake, flash or show a banner.
+local fxRemote = ReplicatedStorage:FindFirstChild(&quot;GameFX&quot;)
+if not fxRemote then
+	fxRemote = Instance.new(&quot;RemoteEvent&quot;)
+	fxRemote.Name = &quot;GameFX&quot;
+	fxRemote.Parent = ReplicatedStorage
+end
+
+local button = ArenaBuilder.Build()
+local cap = button:FindFirstChild(&quot;Cap&quot;)
+local prompt = cap:FindFirstChildOfClass(&quot;ProximityPrompt&quot;)
+CoinManager.Setup()
+Cosmetics.Setup(fxRemote)
+
+local FALL_DEPTH = 15 -- this far below the floor = you fell, you&#x27;re out
+
+local roundNumber = 0
+local lastEventName = nil
+local participants = {} -- [player] = true while they are alive in the arena
+local diedConnections = {}
+local presser = nil
+local buttonArmed = false
+local stopEvent = nil -- the running event&#x27;s stop function (endRound always calls it)
+local PRESS_DISTANCE = 15 -- studs; stops cheaters pressing from across the arena
+
+---------------------------------------------------------------------
+-- Helpers
+---------------------------------------------------------------------
+-- Players read these attributes to update their screen (see the HUD LocalScript).
+local function setStatus(phase, text, timeLeft)
+	ReplicatedStorage:SetAttribute(&quot;Phase&quot;, phase)
+	ReplicatedStorage:SetAttribute(&quot;Status&quot;, text)
+	ReplicatedStorage:SetAttribute(&quot;TimeLeft&quot;, timeLeft or 0)
+end
+
+local function anyoneLeft()
+	return next(participants) ~= nil
+end
+
+local function eliminate(player)
+	if participants[player] then
+		participants[player] = nil
+		if player.Parent then
+			fxRemote:FireClient(player, &quot;Banner&quot;, &quot;ELIMINATED!&quot;)
+		end
+	end
+end
+
+-- Everyone still alive in the arena, with the parts events usually need.
+local function getAlive()
+	local alive = {}
+	for player in pairs(participants) do
+		local character = player.Character
+		local humanoid = character and character:FindFirstChildOfClass(&quot;Humanoid&quot;)
+		local root = character and character:FindFirstChild(&quot;HumanoidRootPart&quot;)
+		if humanoid and root and humanoid.Health &gt; 0 then
+			table.insert(alive, { Player = player, Character = character, Humanoid = humanoid, Root = root })
+		end
+	end
+	return alive
+end
+
+-- Counts down to a fixed finish time (so it never drifts). Stops early (and returns true) if stopWhen() becomes true.
+-- makeText(timeLeft) returns the status text, e.g. &quot;Next round in 5...&quot;
+local function countdown(seconds, phase, makeText, stopWhen)
+	local finish = os.clock() + seconds
+	local shown = nil
+	while true do
+		local timeLeft = math.ceil(finish - os.clock())
+		if timeLeft &lt;= 0 then
+			break
+		end
+		if timeLeft ~= shown then
+			shown = timeLeft
+			setStatus(phase, makeText(timeLeft), timeLeft)
+		end
+		if stopWhen and stopWhen() then
+			return true
+		end
+		task.wait(0.1)
+	end
+	return stopWhen ~= nil and stopWhen() == true
+end
+
+local function playPressAnimation()
+	local home = cap.CFrame
+	local down = TweenService:Create(cap, TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {
+		CFrame = home - Vector3.new(0, 1.8, 0),
+	})
+	down:Play()
+	task.delay(0.4, function()
+		TweenService:Create(cap, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { CFrame = home }):Play()
+	end)
+	local sound = cap:FindFirstChildOfClass(&quot;Sound&quot;) -- add one from the Toolbox if you like
+	if sound then
+		sound:Play()
+	end
+end
+
+local function endRound()
+	if stopEvent then
+		pcall(stopEvent)
+		stopEvent = nil
+	end
+	buttonArmed = false
+	prompt.Enabled = false
+	for _, connection in ipairs(diedConnections) do
+		connection:Disconnect()
+	end
+	diedConnections = {}
+	participants = {}
+	presser = nil
+	ArenaBuilder.Reset()
+end
+
+---------------------------------------------------------------------
+-- Things that can happen at any moment
+---------------------------------------------------------------------
+prompt.Triggered:Connect(function(player)
+	local root = player.Character and player.Character:FindFirstChild(&quot;HumanoidRootPart&quot;)
+	local closeEnough = root and (root.Position - cap.Position).Magnitude &lt;= PRESS_DISTANCE
+	if buttonArmed and participants[player] and closeEnough then
+		buttonArmed = false
+		prompt.Enabled = false
+		presser = player
+	end
+end)
+
+Players.PlayerRemoving:Connect(function(player)
+	participants[player] = nil
+end)
+
+-- Anyone who falls off the arena is out. (The lava kills too, but this check usually gets there first.)
+task.spawn(function()
+	while true do
+		task.wait(0.25)
+		for _, info in ipairs(getAlive()) do
+			if info.Root.Position.Y &lt; ArenaBuilder.FloorY - FALL_DEPTH then
+				info.Humanoid.Health = 0
+				eliminate(info.Player)
+			end
+		end
+	end
+end)
+
+---------------------------------------------------------------------
+-- One full round
+---------------------------------------------------------------------
+local function runRound()
+	while #Players:GetPlayers() &lt; GameConfig.MinPlayers do
+		setStatus(&quot;Waiting&quot;, &quot;Waiting for players (&quot; .. #Players:GetPlayers() .. &quot;/&quot; .. GameConfig.MinPlayers .. &quot;)&quot;, 0)
+		task.wait(1)
+	end
+	countdown(GameConfig.IntermissionTime, &quot;Intermission&quot;, function(timeLeft)
+		return &quot;Next round in &quot; .. timeLeft .. &quot;...&quot;
+	end)
+
+	-- 1. Teleport everyone with a living character into the arena
+	ArenaBuilder.Reset()
+	local roundPlayers = {}
+	for _, player in ipairs(Players:GetPlayers()) do
+		local character = player.Character
+		local humanoid = character and character:FindFirstChildOfClass(&quot;Humanoid&quot;)
+		if humanoid and humanoid.Health &gt; 0 and character:FindFirstChild(&quot;HumanoidRootPart&quot;) then
+			character:PivotTo(CFrame.new(ArenaBuilder.GetRandomSpot(3)))
+			participants[player] = true
+			table.insert(roundPlayers, player)
+			table.insert(diedConnections, humanoid.Died:Connect(function()
+				eliminate(player)
+			end))
+		end
+	end
+	if not anyoneLeft() then
+		return
+	end
+	roundNumber = roundNumber + 1 -- only rounds somebody actually played count
+	local difficultyName = RoundLogic.GetDifficultyName(GameConfig, roundNumber)
+	local difficulty = GameConfig.Difficulties[difficultyName]
+	ReplicatedStorage:SetAttribute(&quot;Round&quot;, roundNumber)
+	ReplicatedStorage:SetAttribute(&quot;Difficulty&quot;, difficultyName)
+
+	-- 2. The button phase: 20 seconds of temptation
+	buttonArmed = true
+	prompt.Enabled = true
+	countdown(GameConfig.ButtonPhaseTime, &quot;Button&quot;, function(timeLeft)
+		return &quot;DON&#x27;T PRESS THE BUTTON! &quot; .. timeLeft
+	end, function()
+		return presser ~= nil or not anyoneLeft()
+	end)
+	buttonArmed = false
+	prompt.Enabled = false
+	if not anyoneLeft() then
+		for _, player in ipairs(roundPlayers) do
+			if player.Parent then
+				CoinManager.AddCoins(player, GameConfig.Rewards.Participation)
+			end
+		end
+		return
+	end
+
+	if presser == nil and not GameConfig.AutoPressWhenTimeUp then
+		setStatus(&quot;Results&quot;, &quot;Nobody pressed it. Boring... but safe.&quot;, 0)
+		for _, player in ipairs(roundPlayers) do
+			if player.Parent then
+				CoinManager.AddCoins(player, GameConfig.Rewards.Participation)
+			end
+		end
+		task.wait(GameConfig.ResultsTime)
+		return
+	end
+
+	-- 3. Somebody pressed it (or the button got impatient)
+	local presserName = presser and presser.Name
+	playPressAnimation()
+	fxRemote:FireAllClients(&quot;Flash&quot;)
+	fxRemote:FireAllClients(&quot;Shake&quot;, 0.8, 0.6)
+	local event = RoundLogic.PickEvent(GameConfig, roundNumber, lastEventName)
+	lastEventName = event.Name
+	if presserName then
+		setStatus(&quot;Pressed&quot;, presserName .. &quot; PRESSED THE BUTTON!&quot;, 0)
+	else
+		setStatus(&quot;Pressed&quot;, &quot;Nobody pressed it... so it pressed ITSELF!&quot;, 0)
+	end
+	task.wait(2)
+	fxRemote:FireAllClients(&quot;Banner&quot;, event.DisplayName)
+	ArenaBuilder.LiftButton(30)
+
+	-- 4. Run the event
+	local eventModule = eventsFolder:FindFirstChild(event.Name)
+	if not eventModule then
+		error(&quot;No ModuleScript named &#x27;&quot; .. event.Name .. &quot;&#x27; inside ServerScriptService &gt; Events&quot;)
+	end
+	local context = {
+		Settings = difficulty[event.Settings],
+		Arena = ArenaBuilder,
+		Folder = ArenaBuilder.GetEventFolder(),
+		GetAlive = getAlive,
+		FX = function(...)
+			fxRemote:FireAllClients(...)
+		end,
+	}
+	local ok, result = pcall(function()
+		return require(eventModule).Start(context)
+	end)
+	if ok then
+		stopEvent = result
+	else
+		warn(&quot;[RoundManager] &quot; .. event.Name .. &quot; crashed when starting: &quot; .. tostring(result))
+	end
+	countdown(difficulty.EventTime, &quot;Event&quot;, function(timeLeft)
+		return event.DisplayName .. &quot;  &quot; .. timeLeft
+	end, function()
+		return not anyoneLeft()
+	end)
+	if stopEvent then
+		pcall(stopEvent)
+		stopEvent = nil
+	end
+
+	-- 5. Rewards
+	local survivorCount = 0
+	for _, player in ipairs(roundPlayers) do
+		if player.Parent then
+			local survived = participants[player] == true
+			local coins = RoundLogic.CalculateReward(GameConfig, difficultyName, survived, player == presser)
+			CoinManager.AddCoins(player, coins)
+			if survived then
+				survivorCount = survivorCount + 1
+				CoinManager.AddSurvived(player)
+				fxRemote:FireClient(player, &quot;Banner&quot;, &quot;YOU SURVIVED! +&quot; .. coins .. &quot; coins&quot;)
+			else
+				fxRemote:FireClient(player, &quot;Banner&quot;, &quot;Better luck next time. +&quot; .. coins .. &quot; coins&quot;)
+			end
+		end
+	end
+	setStatus(&quot;Results&quot;, survivorCount .. &quot; of &quot; .. #roundPlayers .. &quot; survived!&quot;, 0)
+	task.wait(GameConfig.ResultsTime)
+
+	-- 6. Survivors go back to the lobby (eliminated players already respawned there)
+	for player in pairs(participants) do
+		if player.Character then
+			player.Character:PivotTo(CFrame.new(ArenaBuilder.GetLobbySpot()))
+		end
+	end
+end
+
+---------------------------------------------------------------------
+-- Run rounds forever. If a round ever crashes, log it and start a fresh one.
+---------------------------------------------------------------------
+while true do
+	local ok, err = pcall(runRound)
+	if not ok then
+		warn(&quot;[RoundManager] Round crashed: &quot; .. tostring(err))
+		setStatus(&quot;Waiting&quot;, &quot;Oops! Restarting the round...&quot;, 0)
+		task.wait(2)
+	end
+	endRound()
+end</code></pre></details>
+    <p>The game loop: lobby countdown → teleport into the arena → 20 seconds of “don't press” → random event → rewards → back to the lobby. If nobody presses, the button gets impatient and presses itself.</p>
+
+    <details class="code"><summary><span class="grow">ArenaBuilder <span class="where">· ModuleScript · ServerScriptService · 356 lines</span></span><button class="copy" type="button" data-copy="c-arenabuilder">Copy</button></summary>
+<pre id="c-arenabuilder"><code>-- ArenaBuilder (ModuleScript in ServerScriptService)
+-- Builds the arena floor, walls, lava and lobby from GameConfig, so the events always line up.
+-- If you built your own button (&quot;TheButton&quot;) or lobby (&quot;Lobby&quot;), it keeps yours.
+
+local Lighting = game:GetService(&quot;Lighting&quot;)
+local ReplicatedStorage = game:GetService(&quot;ReplicatedStorage&quot;)
+
+local GameConfig = require(ReplicatedStorage:WaitForChild(&quot;GameConfig&quot;))
+
+local ArenaBuilder = {}
+
+local settings = GameConfig.Arena
+local colors = GameConfig.Colors
+local arenaWidth = settings.TileSize * settings.TilesPerSide
+
+-- Handy numbers other scripts use
+ArenaBuilder.Center = settings.Center
+ArenaBuilder.FloorY = settings.Center.Y -- the top of the floor tiles
+ArenaBuilder.Width = arenaWidth
+
+local arenaFolder, tilesFolder, eventFolder
+local tiles = {}
+local buttonHomePivot
+local liftCount = 0 -- goes up on every Reset so an old lift stops moving the button
+
+local function makePart(properties)
+	local part = Instance.new(&quot;Part&quot;)
+	part.Anchored = true
+	part.TopSurface = Enum.SurfaceType.Smooth
+	part.BottomSurface = Enum.SurfaceType.Smooth
+	part.Material = Enum.Material.SmoothPlastic
+	for key, value in pairs(properties) do
+		if key ~= &quot;Parent&quot; then
+			part[key] = value
+		end
+	end
+	part.Parent = properties.Parent -- set Parent last (faster and avoids flicker)
+	return part
+end
+
+local function getOrMakeFolder(parent, name)
+	local folder = parent:FindFirstChild(name)
+	if not folder then
+		folder = Instance.new(&quot;Folder&quot;)
+		folder.Name = name
+		folder.Parent = parent
+	end
+	return folder
+end
+
+local function buildFloor()
+	local half = arenaWidth / 2
+	local size = settings.TileSize
+	for row = 1, settings.TilesPerSide do
+		for column = 1, settings.TilesPerSide do
+			local x = settings.Center.X - half + (column - 0.5) * size
+			local z = settings.Center.Z - half + (row - 0.5) * size
+			local isEven = (row + column) % 2 == 0
+			local tile = makePart({
+				Name = &quot;Tile_&quot; .. row .. &quot;_&quot; .. column,
+				Size = Vector3.new(size, 2, size),
+				Position = Vector3.new(x, ArenaBuilder.FloorY - 1, z),
+				Color = isEven and colors.TileA or colors.TileB,
+				CastShadow = false, -- cheaper on phones
+				Parent = tilesFolder,
+			})
+			tile:SetAttribute(&quot;HomeColor&quot;, tile.Color)
+			table.insert(tiles, tile)
+		end
+	end
+end
+
+local function buildWalls()
+	local wallsFolder = getOrMakeFolder(arenaFolder, &quot;Walls&quot;)
+	local half = arenaWidth / 2
+	local height = settings.WallHeight
+	local y = ArenaBuilder.FloorY + height / 2 - 2
+	local c = settings.Center
+	local wallData = {
+		{ Vector3.new(c.X, y, c.Z - half - 1), Vector3.new(arenaWidth + 4, height, 2) },
+		{ Vector3.new(c.X, y, c.Z + half + 1), Vector3.new(arenaWidth + 4, height, 2) },
+		{ Vector3.new(c.X - half - 1, y, c.Z), Vector3.new(2, height, arenaWidth) },
+		{ Vector3.new(c.X + half + 1, y, c.Z), Vector3.new(2, height, arenaWidth) },
+	}
+	for i, data in ipairs(wallData) do
+		makePart({
+			Name = &quot;Wall&quot; .. i,
+			Position = data[1],
+			Size = data[2],
+			Color = colors.Wall,
+			Transparency = 0.15,
+			Parent = wallsFolder,
+		})
+	end
+end
+
+local function buildLava()
+	local lava = makePart({
+		Name = &quot;Lava&quot;,
+		Size = Vector3.new(arenaWidth + 60, 2, arenaWidth + 60),
+		Position = Vector3.new(settings.Center.X, ArenaBuilder.FloorY - 25, settings.Center.Z),
+		Color = colors.Lava,
+		Material = Enum.Material.Neon,
+		Parent = arenaFolder,
+	})
+	lava.Touched:Connect(function(hit)
+		local humanoid = hit.Parent and hit.Parent:FindFirstChildOfClass(&quot;Humanoid&quot;)
+		if humanoid then
+			humanoid.Health = 0
+		end
+	end)
+end
+
+local function buildLobbyIfMissing()
+	if workspace:FindFirstChild(&quot;Lobby&quot;) then
+		return
+	end
+	local lobby = Instance.new(&quot;Folder&quot;)
+	lobby.Name = &quot;Lobby&quot;
+	makePart({
+		Name = &quot;LobbyFloor&quot;,
+		Size = Vector3.new(60, 1, 60),
+		Position = settings.LobbySpawn - Vector3.new(0, 1, 0),
+		Color = colors.LobbyFloor,
+		Parent = lobby,
+	})
+	local lobbySpawn = Instance.new(&quot;SpawnLocation&quot;)
+	lobbySpawn.Name = &quot;LobbySpawn&quot;
+	lobbySpawn.Anchored = true
+	lobbySpawn.Size = Vector3.new(12, 1, 12)
+	lobbySpawn.Position = settings.LobbySpawn
+	lobbySpawn.Color = colors.Steps
+	lobbySpawn.Duration = 0 -- no force-field bubble (it would block flood damage)
+	lobbySpawn.Parent = lobby
+	lobby.Parent = workspace
+end
+
+-- The Baseplate template has its own SpawnLocation right under the arena. Switch off
+-- every spawn that isn&#x27;t in the Lobby, so players always (re)spawn in the lobby.
+local function disableOtherSpawns()
+	local lobby = workspace:FindFirstChild(&quot;Lobby&quot;)
+	for _, item in ipairs(workspace:GetDescendants()) do
+		if item:IsA(&quot;SpawnLocation&quot;) and not (lobby and item:IsDescendantOf(lobby)) then
+			item.Enabled = false
+		end
+	end
+end
+
+local function buildSignIfMissing()
+	if workspace:FindFirstChild(&quot;Sign&quot;) then
+		return
+	end
+	local c = settings.Center
+	local sign = makePart({
+		Name = &quot;Sign&quot;,
+		Size = Vector3.new(30, 12, 1),
+		Position = Vector3.new(c.X, ArenaBuilder.FloorY + 16, c.Z - arenaWidth / 2 + 1),
+		Color = colors.SignBoard,
+		Parent = workspace,
+	})
+	local gui = Instance.new(&quot;SurfaceGui&quot;)
+	gui.Face = Enum.NormalId.Back -- the side facing into the arena
+	gui.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
+	gui.LightInfluence = 0
+	local label = Instance.new(&quot;TextLabel&quot;)
+	label.Size = UDim2.fromScale(1, 1)
+	label.BackgroundTransparency = 1
+	label.Text = &quot;DO NOT PRESS&quot;
+	label.TextScaled = true
+	label.Font = Enum.Font.FredokaOne
+	label.TextColor3 = colors.SignText
+	label.Parent = gui
+	gui.Parent = sign
+end
+
+local function buildButtonIfMissing()
+	local button = workspace:FindFirstChild(&quot;TheButton&quot;)
+	if not button then
+		warn(&quot;[ArenaBuilder] No &#x27;TheButton&#x27; model found, building a basic one for you.&quot;)
+		button = Instance.new(&quot;Model&quot;)
+		button.Name = &quot;TheButton&quot;
+		local c = settings.Center
+		local pedestal = makePart({
+			Name = &quot;Pedestal&quot;,
+			Shape = Enum.PartType.Cylinder,
+			Size = Vector3.new(3, 14, 14),
+			CFrame = CFrame.new(c.X, ArenaBuilder.FloorY + 1.5, c.Z) * CFrame.Angles(0, 0, math.rad(90)),
+			Color = colors.Pedestal,
+			Parent = button,
+		})
+		makePart({
+			Name = &quot;Cap&quot;,
+			Shape = Enum.PartType.Cylinder,
+			Size = Vector3.new(3, 8, 8),
+			CFrame = CFrame.new(c.X, ArenaBuilder.FloorY + 4.5, c.Z) * CFrame.Angles(0, 0, math.rad(90)),
+			Color = colors.ButtonCap,
+			Parent = button,
+		})
+		button.PrimaryPart = pedestal
+		button.Parent = workspace
+	end
+
+	local cap = button:FindFirstChild(&quot;Cap&quot;)
+	if not cap then
+		error(&quot;[ArenaBuilder] Your TheButton model needs a Part named &#x27;Cap&#x27; (the red part you press).&quot;)
+	end
+	for _, part in ipairs(button:GetDescendants()) do
+		if part:IsA(&quot;BasePart&quot;) then
+			part.Anchored = true -- in case one was missed: unanchored parts fall when Play starts
+			part:SetAttribute(&quot;HomeCanCollide&quot;, part.CanCollide)
+		end
+	end
+
+	local prompt = cap:FindFirstChildOfClass(&quot;ProximityPrompt&quot;)
+	if not prompt then
+		prompt = Instance.new(&quot;ProximityPrompt&quot;)
+		prompt.Parent = cap
+	end
+	prompt.ActionText = &quot;PRESS IT?&quot;
+	prompt.ObjectText = &quot;DO NOT PRESS&quot;
+	prompt.HoldDuration = 0
+	prompt.MaxActivationDistance = 12
+	prompt.RequiresLineOfSight = false
+	prompt.Enabled = false
+
+	buttonHomePivot = button:GetPivot()
+	return button
+end
+
+local function applyLighting()
+	-- LightingStyle / PrioritizeLightingQuality can&#x27;t be set from a script:
+	-- set them by hand in Lighting&#x27;s Properties (Soft + off is best for phones).
+	Lighting.ClockTime = 14
+	Lighting.Brightness = 3
+	Lighting.Ambient = Color3.fromRGB(110, 110, 125)
+	Lighting.OutdoorAmbient = Color3.fromRGB(140, 150, 170)
+	Lighting.EnvironmentDiffuseScale = 0.6
+	Lighting.EnvironmentSpecularScale = 0.3
+
+	local atmosphere = Lighting:FindFirstChildOfClass(&quot;Atmosphere&quot;) or Instance.new(&quot;Atmosphere&quot;)
+	atmosphere.Density = 0.25
+	atmosphere.Offset = 0.1
+	atmosphere.Color = Color3.fromRGB(199, 225, 255)
+	atmosphere.Decay = Color3.fromRGB(255, 230, 200)
+	atmosphere.Haze = 0.8
+	atmosphere.Glare = 0
+	atmosphere.Parent = Lighting
+
+	local bloom = Lighting:FindFirstChildOfClass(&quot;BloomEffect&quot;) or Instance.new(&quot;BloomEffect&quot;)
+	bloom.Intensity = 0.6
+	bloom.Size = 24
+	bloom.Threshold = 1.6
+	bloom.Parent = Lighting
+
+	local grade = Lighting:FindFirstChildOfClass(&quot;ColorCorrectionEffect&quot;) or Instance.new(&quot;ColorCorrectionEffect&quot;)
+	grade.Contrast = 0.15
+	grade.Saturation = 0.25
+	grade.Parent = Lighting
+end
+
+function ArenaBuilder.Build()
+	arenaFolder = getOrMakeFolder(workspace, &quot;Arena&quot;)
+	tilesFolder = getOrMakeFolder(arenaFolder, &quot;FloorTiles&quot;)
+	eventFolder = getOrMakeFolder(arenaFolder, &quot;EventStuff&quot;)
+	if #tilesFolder:GetChildren() == 0 then
+		buildFloor()
+		buildWalls()
+		buildLava()
+	else
+		for _, tile in ipairs(tilesFolder:GetChildren()) do
+			table.insert(tiles, tile)
+		end
+	end
+	buildLobbyIfMissing()
+	disableOtherSpawns()
+	buildSignIfMissing()
+	local button = buildButtonIfMissing()
+	if settings.ApplyLighting then
+		applyLighting()
+	end
+	return button
+end
+
+function ArenaBuilder.GetTiles()
+	return tiles
+end
+
+-- Where event scripts put the things they create, so cleanup is one line.
+function ArenaBuilder.GetEventFolder()
+	return eventFolder
+end
+
+-- Put every tile back and delete everything the last event created.
+function ArenaBuilder.Reset()
+	for _, tile in ipairs(tiles) do
+		tile.Transparency = 0
+		tile.CanCollide = true
+		tile.Material = Enum.Material.SmoothPlastic
+		tile.Color = tile:GetAttribute(&quot;HomeColor&quot;) or colors.TileA
+	end
+	eventFolder:ClearAllChildren()
+	liftCount = liftCount + 1
+	local button = workspace:FindFirstChild(&quot;TheButton&quot;)
+	if button and buttonHomePivot then
+		button:PivotTo(buttonHomePivot)
+		for _, part in ipairs(button:GetDescendants()) do
+			if part:IsA(&quot;BasePart&quot;) and part:GetAttribute(&quot;HomeCanCollide&quot;) ~= nil then
+				part.CanCollide = part:GetAttribute(&quot;HomeCanCollide&quot;)
+			end
+		end
+	end
+end
+
+-- A random standing spot on the arena floor, not too close to the button in the middle.
+function ArenaBuilder.GetRandomSpot(heightAboveFloor)
+	local c = settings.Center
+	local limit = arenaWidth / 2 - 6
+	local x, z
+	repeat
+		x = (math.random() * 2 - 1) * limit
+		z = (math.random() * 2 - 1) * limit
+	until math.abs(x) &gt; 10 or math.abs(z) &gt; 10
+	return Vector3.new(c.X + x, ArenaBuilder.FloorY + (heightAboveFloor or 3), c.Z + z)
+end
+
+-- The button floats up out of the way during events. It turns non-solid first,
+-- so nobody can stand on it and ride it up to safety.
+function ArenaBuilder.LiftButton(height)
+	local button = workspace:FindFirstChild(&quot;TheButton&quot;)
+	if not (button and buttonHomePivot) then
+		return
+	end
+	for _, part in ipairs(button:GetDescendants()) do
+		if part:IsA(&quot;BasePart&quot;) then
+			part.CanCollide = false
+		end
+	end
+	liftCount = liftCount + 1
+	local myLift = liftCount
+	task.spawn(function()
+		for i = 1, 20 do
+			if liftCount ~= myLift then
+				return -- the arena was reset, stop moving the button
+			end
+			button:PivotTo(buttonHomePivot + Vector3.new(0, height * i / 20, 0))
+			task.wait(0.05)
+		end
+	end)
+end
+
+function ArenaBuilder.GetLobbySpot()
+	local offset = Vector3.new((math.random() * 2 - 1) * 15, 3, (math.random() * 2 - 1) * 15)
+	return settings.LobbySpawn + offset
+end
+
+return ArenaBuilder</code></pre></details>
+    <p>Builds the floor, walls, lava, lobby and lighting, and resets everything between rounds. It keeps your hand-built <code>TheButton</code> and <code>Sign</code> (and anchors the button in case you forgot). If you skipped Step 3, it builds basic ones for you.</p>
+
+    <details class="code"><summary><span class="grow">HUD <span class="where">· LocalScript · StarterPlayer → StarterPlayerScripts · 153 lines</span></span><button class="copy" type="button" data-copy="c-hud">Copy</button></summary>
+<pre id="c-hud"><code>-- HUD (LocalScript in StarterPlayer &gt; StarterPlayerScripts)
+-- Runs on each player&#x27;s own computer/phone. It builds the on-screen text and plays screen effects.
+-- It only DISPLAYS things; the server decides everything (so nobody can cheat coins from here).
+
+local Players = game:GetService(&quot;Players&quot;)
+local ReplicatedStorage = game:GetService(&quot;ReplicatedStorage&quot;)
+local RunService = game:GetService(&quot;RunService&quot;)
+local TweenService = game:GetService(&quot;TweenService&quot;)
+
+local player = Players.LocalPlayer
+local fxRemote = ReplicatedStorage:WaitForChild(&quot;GameFX&quot;)
+
+local FONT = Enum.Font.FredokaOne
+local SHAKE_ENABLED = true -- set false if screen shake makes anyone feel sick
+
+---------------------------------------------------------------------
+-- Build the screen (Scale sizes so it fits phones and big monitors)
+---------------------------------------------------------------------
+local gui = Instance.new(&quot;ScreenGui&quot;)
+gui.Name = &quot;HUD&quot;
+gui.ResetOnSpawn = false -- keep it when your character respawns
+
+local function makeLabel(name, position, size)
+	local label = Instance.new(&quot;TextLabel&quot;)
+	label.Name = name
+	label.AnchorPoint = Vector2.new(0.5, 0.5)
+	label.Position = position
+	label.Size = size
+	label.BackgroundTransparency = 1
+	label.Font = FONT
+	label.TextScaled = true
+	label.TextColor3 = Color3.fromRGB(255, 255, 255)
+	label.Text = &quot;&quot;
+	local stroke = Instance.new(&quot;UIStroke&quot;)
+	stroke.Thickness = 3
+	stroke.Color = Color3.fromRGB(20, 24, 36)
+	stroke.Parent = label
+	local limit = Instance.new(&quot;UITextSizeConstraint&quot;)
+	limit.MinTextSize = 16
+	limit.MaxTextSize = 64
+	limit.Parent = label
+	label.Parent = gui
+	return label
+end
+
+local status = makeLabel(&quot;Status&quot;, UDim2.fromScale(0.5, 0.06), UDim2.fromScale(0.6, 0.07))
+status.BackgroundTransparency = 0.35
+status.BackgroundColor3 = Color3.fromRGB(20, 24, 36)
+local corner = Instance.new(&quot;UICorner&quot;)
+corner.CornerRadius = UDim.new(0.3, 0)
+corner.Parent = status
+
+local timer = makeLabel(&quot;Timer&quot;, UDim2.fromScale(0.5, 0.16), UDim2.fromScale(0.2, 0.1))
+local info = makeLabel(&quot;Info&quot;, UDim2.fromScale(0.5, 0.96), UDim2.fromScale(0.4, 0.04))
+local banner = makeLabel(&quot;Banner&quot;, UDim2.fromScale(0.5, 0.4), UDim2.fromScale(0.8, 0.12))
+banner.TextColor3 = Color3.fromRGB(255, 220, 60)
+banner.Visible = false
+
+local flash = Instance.new(&quot;Frame&quot;)
+flash.Name = &quot;Flash&quot;
+flash.Size = UDim2.fromScale(1, 1)
+flash.BackgroundColor3 = Color3.fromRGB(255, 40, 40)
+flash.BackgroundTransparency = 1
+flash.BorderSizePixel = 0
+flash.ZIndex = 0
+flash.Parent = gui
+
+gui.Parent = player:WaitForChild(&quot;PlayerGui&quot;)
+
+---------------------------------------------------------------------
+-- Show what the server is telling us
+---------------------------------------------------------------------
+local function updateStatus()
+	status.Text = ReplicatedStorage:GetAttribute(&quot;Status&quot;) or &quot;Loading...&quot;
+	local timeLeft = ReplicatedStorage:GetAttribute(&quot;TimeLeft&quot;) or 0
+	timer.Text = timeLeft &gt; 0 and tostring(timeLeft) or &quot;&quot;
+	-- the last 5 seconds of the button phase turn red
+	local phase = ReplicatedStorage:GetAttribute(&quot;Phase&quot;)
+	if phase == &quot;Button&quot; and timeLeft &lt;= 5 then
+		timer.TextColor3 = Color3.fromRGB(255, 70, 70)
+	else
+		timer.TextColor3 = Color3.fromRGB(255, 255, 255)
+	end
+end
+
+local function updateInfo()
+	local round = ReplicatedStorage:GetAttribute(&quot;Round&quot;)
+	local difficulty = ReplicatedStorage:GetAttribute(&quot;Difficulty&quot;)
+	if round then
+		info.Text = &quot;Round &quot; .. round .. &quot;  |  &quot; .. tostring(difficulty)
+	end
+end
+
+ReplicatedStorage:GetAttributeChangedSignal(&quot;Status&quot;):Connect(updateStatus)
+ReplicatedStorage:GetAttributeChangedSignal(&quot;TimeLeft&quot;):Connect(updateStatus)
+ReplicatedStorage:GetAttributeChangedSignal(&quot;Round&quot;):Connect(updateInfo)
+ReplicatedStorage:GetAttributeChangedSignal(&quot;Difficulty&quot;):Connect(updateInfo)
+updateStatus()
+updateInfo()
+
+---------------------------------------------------------------------
+-- Screen effects
+---------------------------------------------------------------------
+local bannerToken = 0
+local function showBanner(text)
+	bannerToken = bannerToken + 1
+	local myToken = bannerToken
+	banner.Text = text
+	banner.Visible = true
+	task.delay(2.5, function()
+		if bannerToken == myToken then -- a newer banner replaces this one
+			banner.Visible = false
+		end
+	end)
+end
+
+local function playFlash()
+	flash.BackgroundTransparency = 0.4
+	TweenService:Create(flash, TweenInfo.new(0.6), { BackgroundTransparency = 1 }):Play()
+end
+
+local function shake(strength, duration)
+	if not SHAKE_ENABLED then
+		return
+	end
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass(&quot;Humanoid&quot;)
+	if not humanoid then
+		return
+	end
+	local started = os.clock()
+	local connection
+	connection = RunService.RenderStepped:Connect(function()
+		local progress = (os.clock() - started) / duration
+		if progress &gt;= 1 or humanoid.Parent == nil then
+			humanoid.CameraOffset = Vector3.new(0, 0, 0)
+			connection:Disconnect()
+			return
+		end
+		local amount = strength * (1 - progress) -- fades out
+		humanoid.CameraOffset = Vector3.new((math.random() * 2 - 1) * amount, (math.random() * 2 - 1) * amount, 0)
+	end)
+end
+
+fxRemote.OnClientEvent:Connect(function(kind, a, b)
+	if kind == &quot;Banner&quot; then
+		showBanner(a)
+	elseif kind == &quot;Flash&quot; then
+		playFlash()
+	elseif kind == &quot;Shake&quot; then
+		shake(a or 0.5, b or 0.5)
+	end
+end)</code></pre></details>
+    <p>Draws the status bar, the big countdown and the banners, and plays the red flash and screen shake. It only displays things, so nobody can cheat coins from their own computer.</p>
+  </article>
+
+  <article class="step" data-step="5">
+    <div class="step-top"><div><span class="label">Step 5</span><h3>Three random events (scripts, part 2)</h3></div>
+      <label class="done-toggle"><input type="checkbox" id="done-5">Done</label></div>
+    <p>In <strong>ServerScriptService</strong>, click <strong>+</strong> → <strong>Folder</strong> and name it <code>Events</code>. Inside it, add three ModuleScripts. Each event has a <code>Start</code> function that sets up the chaos and returns a “stop” function.</p>
+    <div class="grid2">
+      <div class="mini"><span class="label">Disappearing Floor</span><p>Tiles flash orange, then vanish. Lava below. Some tiles always survive.</p></div>
+      <div class="mini"><span class="label">Rising Flood</span><p>Water rises and two staircases appear. Climb or drown slowly.</p></div>
+      <div class="mini"><span class="label">Giant Rolling Ball</span><p>Unlocks on round 3. It aims at someone, pauses, then charges. Side-step it!</p></div>
+      <div class="mini"><span class="label">The button escapes</span><p>During every event the button floats up out of reach, so nobody can hide on it.</p></div>
+    </div>
+    <details class="code"><summary><span class="grow">DisappearingFloor <span class="where">· ModuleScript · Events · 47 lines</span></span><button class="copy" type="button" data-copy="c-floor">Copy</button></summary>
+<pre id="c-floor"><code>-- DisappearingFloor (ModuleScript inside ServerScriptService &gt; Events)
+-- Tiles flash orange, then vanish. Don&#x27;t be standing on them. The lava is waiting.
+
+local ReplicatedStorage = game:GetService(&quot;ReplicatedStorage&quot;)
+
+local GameConfig = require(ReplicatedStorage:WaitForChild(&quot;GameConfig&quot;))
+
+local DisappearingFloor = {}
+
+function DisappearingFloor.Start(context)
+	local settings = context.Settings
+	local remaining = {}
+	for _, tile in ipairs(context.Arena.GetTiles()) do
+		table.insert(remaining, tile)
+	end
+
+	local running = true
+	task.spawn(function()
+		while running do
+			local count = math.min(settings.TilesPerWave, #remaining - settings.KeepTiles)
+			if count &gt; 0 then
+				local wave = {}
+				for _ = 1, count do
+					local tile = table.remove(remaining, math.random(1, #remaining))
+					tile.Color = GameConfig.Colors.TileWarning
+					tile.Material = Enum.Material.Neon
+					table.insert(wave, tile)
+				end
+				task.wait(settings.WarnTime)
+				if not running then
+					break
+				end
+				for _, tile in ipairs(wave) do
+					tile.Transparency = 1
+					tile.CanCollide = false
+				end
+			end
+			task.wait(settings.WaveInterval - settings.WarnTime)
+		end
+	end)
+
+	return function()
+		running = false
+	end
+end
+
+return DisappearingFloor</code></pre></details>
+    <details class="code"><summary><span class="grow">RisingFlood <span class="where">· ModuleScript · Events · 79 lines</span></span><button class="copy" type="button" data-copy="c-flood">Copy</button></summary>
+<pre id="c-flood"><code>-- RisingFlood (ModuleScript inside ServerScriptService &gt; Events)
+-- Water fills the arena. Two staircases appear: climb before the water reaches you!
+
+local TweenService = game:GetService(&quot;TweenService&quot;)
+local ReplicatedStorage = game:GetService(&quot;ReplicatedStorage&quot;)
+
+local GameConfig = require(ReplicatedStorage:WaitForChild(&quot;GameConfig&quot;))
+
+local RisingFlood = {}
+
+local STEP_HEIGHTS = { 4, 8, 12, 16, 20, 24, 28 } -- a 7-stud jump easily goes up 4
+
+local function makeStep(folder, position)
+	local step = Instance.new(&quot;Part&quot;)
+	step.Name = &quot;Step&quot;
+	step.Anchored = true
+	step.Size = Vector3.new(8, 1, 8)
+	step.Position = position
+	step.Color = GameConfig.Colors.Steps
+	step.Material = Enum.Material.SmoothPlastic
+	step.Parent = folder
+end
+
+function RisingFlood.Start(context)
+	local settings = context.Settings
+	local arena = context.Arena
+	local center = arena.Center
+	local floorY = arena.FloorY
+	local half = arena.Width / 2
+
+	-- One staircase along the north wall, a mirrored one along the south wall.
+	for i, height in ipairs(STEP_HEIGHTS) do
+		local offsetX = -half + 6 + (i - 1) * 10
+		local y = floorY + height - 0.5
+		makeStep(context.Folder, Vector3.new(center.X + offsetX, y, center.Z - half + 6))
+		makeStep(context.Folder, Vector3.new(center.X - offsetX, y, center.Z + half - 6))
+	end
+
+	local water = Instance.new(&quot;Part&quot;)
+	water.Name = &quot;FloodWater&quot;
+	water.Anchored = true
+	water.CanCollide = false
+	water.Material = Enum.Material.Glass
+	water.Color = GameConfig.Colors.Water
+	water.Transparency = 0.35
+	water.Size = Vector3.new(arena.Width, 1, arena.Width)
+	water.Position = Vector3.new(center.X, floorY + 0.5, center.Z)
+	water.Parent = context.Folder
+
+	local rise = TweenService:Create(water, TweenInfo.new(settings.RiseTime, Enum.EasingStyle.Linear), {
+		Size = Vector3.new(arena.Width, settings.MaxHeight, arena.Width),
+		Position = Vector3.new(center.X, floorY + settings.MaxHeight / 2, center.Z),
+	})
+	rise:Play()
+
+	local running = true
+	task.spawn(function()
+		while running do
+			local elapsed = task.wait(0.25)
+			if not running then
+				break
+			end
+			local waterTop = water.Position.Y + water.Size.Y / 2
+			for _, info in ipairs(context.GetAlive()) do
+				-- the root part is about waist height, so this means &quot;waist-deep or worse&quot;
+				if info.Root.Position.Y &lt; waterTop then
+					info.Humanoid:TakeDamage(settings.DamagePerSecond * elapsed)
+				end
+			end
+		end
+	end)
+
+	return function()
+		running = false
+		rise:Cancel()
+	end
+end
+
+return RisingFlood</code></pre></details>
+    <details class="code"><summary><span class="grow">RollingBall <span class="where">· ModuleScript · Events · 97 lines</span></span><button class="copy" type="button" data-copy="c-ball">Copy</button></summary>
+<pre id="c-ball"><code>-- RollingBall (ModuleScript inside ServerScriptService &gt; Events)
+-- A giant ball picks a victim, pauses, then charges in a straight line. Side-step it!
+
+local ReplicatedStorage = game:GetService(&quot;ReplicatedStorage&quot;)
+
+local GameConfig = require(ReplicatedStorage:WaitForChild(&quot;GameConfig&quot;))
+
+local RollingBall = {}
+
+local AIM_PAUSE = 0.6 -- seconds the ball &quot;thinks&quot; before each charge (your chance to dodge)
+
+local function runBall(context, ball, isRunning)
+	local settings = context.Settings
+	local arena = context.Arena
+	local radius = settings.Size / 2
+	local limit = arena.Width / 2 - radius
+	local center = arena.Center
+	local y = arena.FloorY + radius
+	local position = ball.Position
+	local spin = CFrame.new()
+
+	while isRunning() do
+		-- 1. pick a target and aim
+		local alive = context.GetAlive()
+		local direction
+		if #alive &gt; 0 then
+			local target = alive[math.random(1, #alive)].Root.Position
+			direction = Vector3.new(target.X - position.X, 0, target.Z - position.Z)
+		end
+		if direction == nil or direction.Magnitude &lt; 1 then
+			local angle = math.random() * math.pi * 2
+			direction = Vector3.new(math.cos(angle), 0, math.sin(angle))
+		end
+		direction = direction.Unit
+		task.wait(AIM_PAUSE)
+
+		-- 2. charge until we hit a wall
+		local hitWall = false
+		while isRunning() and not hitWall do
+			local elapsed = task.wait()
+			local nextPosition = position + direction * settings.Speed * elapsed
+			local offsetX = nextPosition.X - center.X
+			local offsetZ = nextPosition.Z - center.Z
+			if math.abs(offsetX) &gt; limit or math.abs(offsetZ) &gt; limit then
+				hitWall = true
+				offsetX = math.clamp(offsetX, -limit, limit)
+				offsetZ = math.clamp(offsetZ, -limit, limit)
+			end
+			position = Vector3.new(center.X + offsetX, y, center.Z + offsetZ)
+
+			-- make it look like it&#x27;s rolling
+			local rollAxis = Vector3.new(direction.Z, 0, -direction.X)
+			spin = CFrame.fromAxisAngle(rollAxis, settings.Speed * elapsed / radius) * spin
+			ball.CFrame = CFrame.new(position) * spin
+
+			for _, info in ipairs(context.GetAlive()) do
+				if (info.Root.Position - position).Magnitude &lt; radius + 1.5 then
+					info.Humanoid.Health = 0
+				end
+			end
+		end
+		if hitWall then
+			context.FX(&quot;Shake&quot;, 0.6, 0.4)
+		end
+	end
+end
+
+function RollingBall.Start(context)
+	local settings = context.Settings
+	local running = true
+	local function isRunning()
+		return running
+	end
+
+	for i = 1, settings.Count do
+		local ball = Instance.new(&quot;Part&quot;)
+		ball.Name = &quot;GiantBall&quot; .. i
+		ball.Shape = Enum.PartType.Ball
+		ball.Size = Vector3.new(settings.Size, settings.Size, settings.Size)
+		ball.Anchored = true -- the script moves it, so physics can&#x27;t fling it out of the arena
+		ball.CanCollide = false
+		ball.Color = GameConfig.Colors.Ball
+		ball.Material = Enum.Material.SmoothPlastic
+		-- start in a corner, away from the middle
+		local corner = (i % 2 == 1) and 1 or -1
+		local start = context.Arena.Center + Vector3.new(corner, 0, corner) * (context.Arena.Width / 2 - settings.Size / 2)
+		ball.Position = Vector3.new(start.X, context.Arena.FloorY + settings.Size / 2, start.Z)
+		ball.Parent = context.Folder
+		task.spawn(runBall, context, ball, isRunning)
+	end
+
+	return function()
+		running = false
+	end
+end
+
+return RollingBall</code></pre></details>
+  </article>
+
+  <article class="step" data-step="6">
+    <div class="step-top"><div><span class="label">Step 6</span><h3>Survival, coins and rewards (scripts, part 3)</h3></div>
+      <label class="done-toggle"><input type="checkbox" id="done-6">Done</label></div>
+    <p>Two more ModuleScripts in <strong>ServerScriptService</strong>. After these, press Play!</p>
+    <div class="table-scroll"><table class="props">
+      <tr><th>Everyone in the arena</th><td>1 coin</td></tr>
+      <tr><th>Survived the event</th><td>+10 coins</td></tr>
+      <tr><th>Pressed it <em>and</em> survived</th><td>+5 “brave” bonus</td></tr>
+      <tr><th>Harder difficulty</th><td>× 1 (Chill), × 1.5 (Normal), × 2.5 (Chaos)</td></tr>
+      <tr><th>Trails</th><td>Bronze at 50 coins, Silver 150, Gold 400, Rainbow 1000. They switch on automatically.</td></tr>
+    </table></div>
+    <details class="code"><summary><span class="grow">CoinManager <span class="where">· ModuleScript · ServerScriptService · 168 lines</span></span><button class="copy" type="button" data-copy="c-coins">Copy</button></summary>
+<pre id="c-coins"><code>-- CoinManager (ModuleScript in ServerScriptService)
+-- Shows Coins and Survived on the leaderboard and saves them between visits.
+
+local DataStoreService = game:GetService(&quot;DataStoreService&quot;)
+local Players = game:GetService(&quot;Players&quot;)
+local ReplicatedStorage = game:GetService(&quot;ReplicatedStorage&quot;)
+
+local GameConfig = require(ReplicatedStorage:WaitForChild(&quot;GameConfig&quot;))
+
+local CoinManager = {}
+
+local AUTOSAVE_SECONDS = 120
+local LOAD_TRIES = 3
+
+local store = nil
+local loadedOk = {} -- [player] = true once their saved data loaded safely
+local saving = {} -- [player] = true while a save is running (so we never save twice at once)
+
+local function keyFor(player)
+	return &quot;player_&quot; .. player.UserId
+end
+
+local function getStat(player, statName)
+	local leaderstats = player:FindFirstChild(&quot;leaderstats&quot;)
+	return leaderstats and leaderstats:FindFirstChild(statName)
+end
+
+local function loadData(player)
+	local ok, data
+	for try = 1, LOAD_TRIES do
+		ok, data = pcall(function()
+			return store:GetAsync(keyFor(player))
+		end)
+		if ok then
+			return true, data
+		end
+		task.wait(try) -- wait a little longer each time
+	end
+	return false, data
+end
+
+local function onPlayerAdded(player)
+	-- Load first, THEN show the stats, so the numbers never jump from 0 to the saved amount.
+	local saved = nil
+	if store then
+		local ok, data = loadData(player)
+		if ok then
+			saved = data
+			loadedOk[player] = true
+		else
+			-- Never save over data we couldn&#x27;t read, or we might wipe someone&#x27;s coins.
+			warn(&quot;[CoinManager] Couldn&#x27;t load data for &quot; .. player.Name .. &quot;, progress won&#x27;t save this visit: &quot; .. tostring(data))
+		end
+	end
+	if player.Parent == nil then
+		loadedOk[player] = nil
+		return -- they left while we were loading
+	end
+
+	-- &quot;leaderstats&quot; is a special name: Roblox shows these values on the player list.
+	local leaderstats = Instance.new(&quot;Folder&quot;)
+	leaderstats.Name = &quot;leaderstats&quot;
+	local coins = Instance.new(&quot;IntValue&quot;)
+	coins.Name = &quot;Coins&quot;
+	coins.Parent = leaderstats
+	local survived = Instance.new(&quot;IntValue&quot;)
+	survived.Name = &quot;Survived&quot;
+	survived.Parent = leaderstats
+	if type(saved) == &quot;table&quot; then
+		coins.Value = tonumber(saved.Coins) or 0
+		survived.Value = tonumber(saved.Survived) or 0
+	end
+	leaderstats.Parent = player
+end
+
+local function save(player)
+	if not (store and loadedOk[player]) or saving[player] then
+		return
+	end
+	local coins = getStat(player, &quot;Coins&quot;)
+	local survived = getStat(player, &quot;Survived&quot;)
+	if not (coins and survived) then
+		return
+	end
+	local data = { Coins = coins.Value, Survived = survived.Value }
+	saving[player] = true
+	local ok, err = pcall(function()
+		store:UpdateAsync(keyFor(player), function(old)
+			-- Coins only ever go up. If the stored number is already higher (another server
+			-- saved more recently), keep it: returning nil means &quot;don&#x27;t change anything&quot;.
+			-- (If you add a shop where coins get SPENT, this check must change. See Level 3.)
+			if type(old) == &quot;table&quot; and (tonumber(old.Coins) or 0) &gt; data.Coins then
+				return nil
+			end
+			return data
+		end)
+	end)
+	saving[player] = nil
+	if not ok then
+		warn(&quot;[CoinManager] Save failed for &quot; .. player.Name .. &quot;: &quot; .. tostring(err))
+	end
+end
+
+function CoinManager.Setup()
+	if GameConfig.SaveData then
+		local ok, result = pcall(function()
+			return DataStoreService:GetDataStore(GameConfig.DataStoreName)
+		end)
+		if ok then
+			store = result
+		else
+			warn(&quot;[CoinManager] Saving is off (turn on API access in Experience Settings &gt; Security): &quot; .. tostring(result))
+		end
+	end
+
+	Players.PlayerAdded:Connect(onPlayerAdded)
+	for _, player in ipairs(Players:GetPlayers()) do
+		task.spawn(onPlayerAdded, player)
+	end
+
+	Players.PlayerRemoving:Connect(function(player)
+		while saving[player] do
+			task.wait(0.1) -- an autosave is running; wait, then save the final numbers
+		end
+		save(player)
+		loadedOk[player] = nil -- so the shutdown save below skips them
+	end)
+
+	-- When the server shuts down, save everyone still here, then wait for every save to finish.
+	game:BindToClose(function()
+		for _, player in ipairs(Players:GetPlayers()) do
+			task.spawn(save, player)
+		end
+		while next(saving) ~= nil do
+			task.wait(0.1)
+		end
+	end)
+
+	task.spawn(function()
+		while true do
+			task.wait(AUTOSAVE_SECONDS)
+			for _, player in ipairs(Players:GetPlayers()) do
+				task.spawn(save, player)
+			end
+		end
+	end)
+end
+
+function CoinManager.AddCoins(player, amount)
+	local coins = getStat(player, &quot;Coins&quot;)
+	if coins then
+		coins.Value = coins.Value + amount
+	end
+end
+
+function CoinManager.AddSurvived(player)
+	local survived = getStat(player, &quot;Survived&quot;)
+	if survived then
+		survived.Value = survived.Value + 1
+	end
+end
+
+function CoinManager.GetCoins(player)
+	local coins = getStat(player, &quot;Coins&quot;)
+	return coins and coins.Value or 0
+end
+
+return CoinManager</code></pre></details>
+    <p>Puts <strong>Coins</strong> and <strong>Survived</strong> on the player list. It also saves them, once you turn saving on in Step 11. Until then the game still runs and Output shows one friendly warning.</p>
+    <details class="code"><summary><span class="grow">Cosmetics <span class="where">· ModuleScript · ServerScriptService · 110 lines</span></span><button class="copy" type="button" data-copy="c-cosmetics">Copy</button></summary>
+<pre id="c-cosmetics"><code>-- Cosmetics (ModuleScript in ServerScriptService)
+-- Gives each player the best trail their coins have unlocked (see GameConfig.Cosmetics).
+
+local Players = game:GetService(&quot;Players&quot;)
+local ReplicatedStorage = game:GetService(&quot;ReplicatedStorage&quot;)
+
+local GameConfig = require(ReplicatedStorage:WaitForChild(&quot;GameConfig&quot;))
+local RoundLogic = require(ReplicatedStorage:WaitForChild(&quot;RoundLogic&quot;))
+
+local Cosmetics = {}
+
+local equipped = {} -- [player] = name of the trail they have on
+
+local function getCoins(player)
+	local leaderstats = player:FindFirstChild(&quot;leaderstats&quot;)
+	local coins = leaderstats and leaderstats:FindFirstChild(&quot;Coins&quot;)
+	return coins and coins.Value or 0
+end
+
+local function makeColorSequence(cosmetic)
+	if cosmetic.Rainbow then
+		return ColorSequence.new({
+			ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 60, 60)),
+			ColorSequenceKeypoint.new(0.25, Color3.fromRGB(255, 200, 40)),
+			ColorSequenceKeypoint.new(0.5, Color3.fromRGB(60, 220, 90)),
+			ColorSequenceKeypoint.new(0.75, Color3.fromRGB(60, 140, 255)),
+			ColorSequenceKeypoint.new(1, Color3.fromRGB(190, 80, 255)),
+		})
+	end
+	return ColorSequence.new(cosmetic.Color)
+end
+
+local function applyTrail(character, cosmetic)
+	local root = character:WaitForChild(&quot;HumanoidRootPart&quot;, 5)
+	if not root then
+		return
+	end
+	local old = root:FindFirstChild(&quot;CosmeticTrail&quot;)
+	if old then
+		old:Destroy()
+	end
+	if not cosmetic then
+		return
+	end
+
+	-- A Trail draws between two Attachments as the character moves.
+	local top = root:FindFirstChild(&quot;TrailTop&quot;) or Instance.new(&quot;Attachment&quot;)
+	top.Name = &quot;TrailTop&quot;
+	top.Position = Vector3.new(0, 1, 0)
+	top.Parent = root
+	local bottom = root:FindFirstChild(&quot;TrailBottom&quot;) or Instance.new(&quot;Attachment&quot;)
+	bottom.Name = &quot;TrailBottom&quot;
+	bottom.Position = Vector3.new(0, -1, 0)
+	bottom.Parent = root
+
+	local trail = Instance.new(&quot;Trail&quot;)
+	trail.Name = &quot;CosmeticTrail&quot;
+	trail.Attachment0 = top
+	trail.Attachment1 = bottom
+	trail.Color = makeColorSequence(cosmetic)
+	trail.Transparency = NumberSequence.new(0.2, 1)
+	trail.Lifetime = 0.6
+	trail.Parent = root
+end
+
+-- quiet = true: equip without the &quot;unlocked&quot; banner (used when someone joins with old coins)
+local function refresh(player, fxRemote, quiet)
+	local best = RoundLogic.GetBestCosmetic(GameConfig, getCoins(player))
+	local bestName = best and best.Name or nil
+	if bestName == equipped[player] then
+		return
+	end
+	equipped[player] = bestName
+	if player.Character then
+		task.spawn(applyTrail, player.Character, best)
+	end
+	if best and fxRemote and not quiet then
+		fxRemote:FireClient(player, &quot;Banner&quot;, &quot;TRAIL UNLOCKED: &quot; .. best.Name)
+	end
+end
+
+local function onPlayerAdded(player, fxRemote)
+	player.CharacterAdded:Connect(function(character)
+		local best = RoundLogic.GetBestCosmetic(GameConfig, getCoins(player))
+		applyTrail(character, best)
+	end)
+	local leaderstats = player:WaitForChild(&quot;leaderstats&quot;, 10)
+	local coins = leaderstats and leaderstats:WaitForChild(&quot;Coins&quot;, 10)
+	if not coins then
+		return
+	end
+	refresh(player, fxRemote, true) -- coins are already loaded here (CoinManager loads before showing stats)
+	coins.Changed:Connect(function()
+		refresh(player, fxRemote)
+	end)
+end
+
+function Cosmetics.Setup(fxRemote)
+	Players.PlayerAdded:Connect(function(player)
+		onPlayerAdded(player, fxRemote)
+	end)
+	for _, player in ipairs(Players:GetPlayers()) do
+		task.spawn(onPlayerAdded, player, fxRemote)
+	end
+	Players.PlayerRemoving:Connect(function(player)
+		equipped[player] = nil
+	end)
+end
+
+return Cosmetics</code></pre></details>
+  </article>
+
+  <article class="step" data-step="7">
+    <div class="step-top"><div><span class="label">Step 7</span><h3>Test it: alone first, then with “players”</h3></div>
+      <label class="done-toggle"><input type="checkbox" id="done-7">Done</label></div>
+    <h4>Solo test</h4>
+    <p>Pick <strong>Test</strong> in the top-left dropdown and press Play. Here's what should happen:</p>
+    <div class="timeline">
+      <span class="t">0:00</span><span>You spawn in the lobby. Top of screen: “Next round in 10…”. The arena floats in the sky.</span>
+      <span class="t">0:10</span><span>You're teleported into the arena. “DON'T PRESS THE BUTTON! 20”. Walk to the button and a <strong>Press</strong> prompt appears.</span>
+      <span class="t">≤ 0:30</span><span>Press it (or wait and it presses itself). Red flash, screen shake, a banner names the event, and the button floats away.</span>
+      <span class="t">+20–30 s</span><span>Survive! Then “1 of 1 survived!” and coins appear on the player list (top right).</span>
+      <span class="t">+5 s</span><span>Back to the lobby. Round 2 starts.</span>
+    </div>
+    <p>Press <strong>Stop</strong> to finish. Anything you change while playing is thrown away when you stop.</p>
+    <h4>Multiplayer test</h4>
+    <ol>
+      <li>Choose <strong>Server &amp; Clients</strong> in the dropdown and set the number of players to <strong>2</strong> or <strong>3</strong>.</li>
+      <li>Press Play. Studio opens one server window and one window per player.</li>
+      <li>In one player window, press the button. The other windows should say “Player1 PRESSED THE BUTTON!”.</li>
+      <li>When you're done, click <strong>End Session</strong> to close every window.</li>
+    </ol>
+    <h4>Checklist: tick these off in your test</h4>
+    <ul>
+      <li>The countdown goes 20 → 1 and stops early when someone presses.</li>
+      <li>Only players in the arena, standing near the button, can press it.</li>
+      <li>Falling into the lava, drowning or getting squashed sends you back to the lobby, and you sit out the rest of the round.</li>
+      <li>Survivors get more coins than eliminated players. The presser gets the bonus only if they survive.</li>
+      <li>Round 3 or later: the giant ball can appear.</li>
+      <li>After each round the floor is whole again and the button is back.</li>
+      <li>Output has no red errors.</li>
+    </ul>
+  </article>
+</section>
+
+<!-- ================================================================ LEVEL 2 -->
+<section class="level" id="level-2" aria-labelledby="l2">
+  <div class="level-head">
+    <span class="label">Level 2 · Builder</span>
+    <h2 id="l2">Make it yours</h2>
+    <p>The game has three difficulty levels and you choose how they're used. Everything here is done by changing numbers or adding one file.</p>
+  </div>
+
+  <article class="step" data-step="8">
+    <div class="step-top"><div><span class="label">Step 8</span><h3>Choose the difficulty and tune the game</h3></div>
+      <label class="done-toggle"><input type="checkbox" id="done-8">Done</label></div>
+    <p>Open <code>GameConfig</code> and change <code>DifficultyMode</code>:</p>
+    <div class="chips"><span class="chip">"Escalating": Chill → Normal (round 4) → Chaos (round 9)</span><span class="chip">"Chill"</span><span class="chip">"Normal"</span><span class="chip">"Chaos"</span></div>
+    <p>Here's what each level does with the current numbers. The test suite computes this table from the real config, and it fails if any level becomes impossible or too safe:</p>
+    <div class="table-scroll"><table class="balance"><thead><tr><th scope="col">Setting</th><th scope="col">Chill</th><th scope="col">Normal</th><th scope="col">Chaos</th></tr></thead><tbody><tr><th scope="row">Event length (s)</th><td>20</td><td>25</td><td>30</td></tr><tr><th scope="row">Coin multiplier</th><td>x1</td><td>x1.5</td><td>x2.5</td></tr><tr><th scope="row">Flood: dry steps (of 7)</th><td>4</td><td>3</td><td>2</td></tr><tr><th scope="row">Flood: floor-campers drown at</th><td>10.0s</td><td>6.1s</td><td>3.8s</td></tr><tr><th scope="row">Floor: tiles gone by the end</th><td>30 / 100</td><td>80 / 100</td><td>94 / 100</td></tr><tr><th scope="row">Ball: speed vs walk speed</th><td>1.4x (1 balls)</td><td>1.9x (1 balls)</td><td>2.5x (2 balls)</td></tr><tr><th scope="row">Ball: seconds to cross arena</th><td>3.0s</td><td>2.0s</td><td>1.4s</td></tr><tr><th scope="row">Coins: survive / brave survive</th><td>11 / 16</td><td>17 / 24</td><td>28 / 40</td></tr><tr><th scope="row">Rounds to Bronze / Gold (all survived)</th><td>5 / 37</td><td>3 / 24</td><td>2 / 15</td></tr></tbody></table></div>
+    <h4>Experiments to try (change one, press Play, see what happens)</h4>
+    <ul>
+      <li><code>ButtonPhaseTime = 5</code> for a frantic decision.</li>
+      <li><code>AutoPressWhenTimeUp = false</code>. Now if nobody presses, everyone gets a boring but safe round.</li>
+      <li><code>Chaos.Ball.Count = 4</code>. Good luck.</li>
+      <li><code>Weight = 5</code> on your favourite event so it shows up more often.</li>
+      <li><code>MinPlayers = 2</code> before you publish, so rounds wait for a friend.</li>
+    </ul>
+    <p class="why">Made a typo? RoundLogic checks the config when the game starts and lists every problem in Output, for example <code>[GameConfig] Unknown DifficultyMode: Chaoss</code>.</p>
+  </article>
+
+  <article class="step" data-step="9">
+    <div class="step-top"><div><span class="label">Step 9</span><h3>Add your own event: Moon Mode</h3></div>
+      <label class="done-toggle"><input type="checkbox" id="done-9">Done</label></div>
+    <p>A new event is one ModuleScript plus one line in the config. Moon Mode lowers gravity <em>and</em> reuses the vanishing floor, so everyone does slow-motion leaps over the gaps.</p>
+    <ol>
+      <li>In <strong>Events</strong>, add a ModuleScript called <code>MoonFloor</code> and paste the code below.</li>
+      <li>In <code>GameConfig.Events</code>, add this line under the other three:<br><code>{ Name = "MoonFloor", Settings = "Floor", DisplayName = "MOON MODE! (the floor is STILL leaving)", UnlockRound = 5, Weight = 1 },</code></li>
+      <li>Play until round 5. To test it straight away, set <code>UnlockRound = 1</code> and a big <code>Weight</code>, then change them back.</li>
+    </ol>
+    <details class="code"><summary><span class="grow">MoonFloor <span class="where">· ModuleScript · Events · 25 lines</span></span><button class="copy" type="button" data-copy="c-moon">Copy</button></summary>
+<pre id="c-moon"><code>-- MoonFloor (Level 2 bonus event: ModuleScript inside ServerScriptService &gt; Events)
+-- Low gravity AND the floor disappears. Shows how a new event can reuse an old one.
+-- To turn it on, add this line to GameConfig.Events:
+--   { Name = &quot;MoonFloor&quot;, Settings = &quot;Floor&quot;, DisplayName = &quot;MOON MODE! (the floor is STILL leaving)&quot;, UnlockRound = 5, Weight = 1 },
+
+local DisappearingFloor = require(script.Parent:WaitForChild(&quot;DisappearingFloor&quot;))
+
+local MoonFloor = {}
+
+local MOON_GRAVITY = 50 -- normal Roblox gravity is 196.2
+
+function MoonFloor.Start(context)
+	local normalGravity = workspace.Gravity
+	workspace.Gravity = MOON_GRAVITY
+	context.FX(&quot;Banner&quot;, &quot;Gravity is broken!&quot;)
+
+	local stopFloor = DisappearingFloor.Start(context)
+
+	return function()
+		stopFloor()
+		workspace.Gravity = normalGravity
+	end
+end
+
+return MoonFloor</code></pre></details>
+    <p class="why">Every event follows the same pattern: <code>Start(context)</code> gets the difficulty settings, the arena and the list of living players, and returns a function that stops the event. Put anything you create in <code>context.Folder</code> and it's cleaned up for you after the round.</p>
+  </article>
+
+  <article class="step" data-step="10">
+    <div class="step-top"><div><span class="label">Step 10</span><h3>Make it look and sound great</h3></div>
+      <label class="done-toggle"><input type="checkbox" id="done-10">Done</label></div>
+    <p>The look is a bright toy diorama: calm teal, white and yellow everywhere, so the <strong>red button</strong> and orange danger tiles are the only scary colours on screen.</p>
+    <h4>Lighting (two settings only you can change)</h4>
+    <ol>
+      <li>Click <strong>Lighting</strong> in Explorer. In Properties set <strong>LightingStyle</strong> = <code>Soft</code> and turn <strong>PrioritizeLightingQuality</strong> off. Scripts can't set these, and this choice runs smoothly on phones. (The old <em>Technology</em> setting is gone.)</li>
+      <li><code>ArenaBuilder</code> sets the rest when the game starts: time of day 14:00, soft haze, bloom so Neon glows, and a little extra colour. Set <code>Arena.ApplyLighting = false</code> in GameConfig if you'd rather design the lighting yourself.</li>
+    </ol>
+    <h4>Sound</h4>
+    <ol>
+      <li>Open the <strong>Toolbox</strong> (Window menu), choose audio, and search for “button click” or “buzzer”.</li>
+      <li>Drag the sound onto <code>Cap</code> in Explorer. RoundManager plays any Sound inside Cap when the button is pressed.</li>
+      <li>Only use audio that's marked free to use in your experience.</li>
+    </ol>
+    <h4>Ideas for more juice later</h4>
+    <ul>
+      <li>A ParticleEmitter burst from the cap on press (Rate 0, then <code>:Emit(25)</code>).</li>
+      <li>Make the last 5 seconds of the countdown pulse bigger.</li>
+      <li>Confetti for survivors.</li>
+      <li>A different sky colour for each event.</li>
+    </ul>
+    <p class="why">Keeping phones happy: everything that doesn't move is Anchored, floor tiles don't cast shadows, and there's no blur or depth-of-field. Keep particle emitters to about 6 at once.</p>
+  </article>
+</section>
+
+<!-- ================================================================ LEVEL 3 -->
+<section class="level" id="level-3" aria-labelledby="l3">
+  <div class="level-head">
+    <span class="label">Level 3 · Creator</span>
+    <h2 id="l3">Ship it</h2>
+    <p>Getting real players, keeping their coins, and growing the game.</p>
+  </div>
+
+  <article class="step" data-step="11">
+    <div class="step-top"><div><span class="label">Step 11</span><h3>Publish and turn on saving</h3></div>
+      <label class="done-toggle"><input type="checkbox" id="done-11">Done</label></div>
+    <ol>
+      <li><strong>File → Publish</strong> (publish to Roblox). Add a name, description and genre. New games are <strong>private</strong>: only you can play until you release it.</li>
+      <li><strong>File → Experience Settings → Security</strong> → turn on <strong>Enable Studio Access to API Services</strong> → Save.</li>
+      <li>Press Play, earn some coins, Stop, then Play again. Your coins should still be there.</li>
+    </ol>
+    <p class="warn">Studio uses the same saved data as the real game. Coins you earn while testing are real saves. To start fresh, change <code>DataStoreName</code> in GameConfig (for example to <code>_v2</code>).</p>
+    <p class="why">The save code is careful. If loading someone's coins fails, it won't save over them that visit. It also saves when players leave, every 2 minutes, and when the server shuts down.</p>
+  </article>
+
+  <article class="step" data-step="12">
+    <div class="step-top"><div><span class="label">Step 12</span><h3>Let people play</h3></div>
+      <label class="done-toggle"><input type="checkbox" id="done-12">Done</label></div>
+    <ul>
+      <li><strong>Test with friends first.</strong> After publishing, the Creator Dashboard lets you invite a few testers before going public.</li>
+      <li><strong>Going public</strong> means File → Publish, then answering the Content Maturity question. Roblox requires an account at least 2 days old and an <strong>age check</strong> (face scan or ID). By default a newly released game is shown to age-checked players 16 and over.</li>
+      <li><strong>Ask a parent or guardian to help with this step.</strong> The age-check rules decide who can play, and they change from time to time.</li>
+      <li>Before releasing: set <code>MinPlayers = 2</code>, make a thumbnail (a screenshot of the button with panicked players is perfect), and play a few rounds on a phone.</li>
+    </ul>
+  </article>
+
+  <article class="step" data-step="13">
+    <div class="step-top"><div><span class="label">Step 13</span><h3>Cosmetics, shop and high scores (plan)</h3></div>
+      <label class="done-toggle"><input type="checkbox" id="done-13">Done</label></div>
+    <div class="grid2">
+      <div class="mini"><span class="label">Coin shop</span><p>Today trails unlock automatically at coin totals. Next: a shop where you <em>spend</em> coins. Save “owned” items in the same DataStore, and always check prices on the server. Heads up: the save code currently refuses to save a <em>lower</em> coin total (it protects against old servers), so a shop needs that check changed. Look for the comment in CoinManager.</p></div>
+      <div class="mini"><span class="label">Game Passes</span><p>For a permanent Robux cosmetic (for example a VIP crown), create a Game Pass in the Creator Dashboard after publishing. Check ownership on the server with <code>UserOwnsGamePassAsync</code>.</p></div>
+      <div class="mini"><span class="label">Developer Products</span><p>For things bought again and again, like coin packs. These need a <code>ProcessReceipt</code> function in <em>one</em> server Script, and it must save which purchases it already gave out.</p></div>
+      <div class="mini"><span class="label">High scores</span><p>A lobby leaderboard of “most rounds survived” using an OrderedDataStore, shown on a SurfaceGui board.</p></div>
+    </div>
+  </article>
+
+  <article class="step" data-step="14">
+    <div class="step-top"><div><span class="label">Step 14</span><h3>More ridiculous events (easiest first)</h3></div>
+      <label class="done-toggle"><input type="checkbox" id="done-14">Done</label></div>
+    <p>The button should get sillier as rounds go on. Give each new event a higher <code>UnlockRound</code>.</p>
+    <div class="table-scroll"><table class="props">
+      <tr><th>1. Low Gravity</th><td>Change <code>workspace.Gravity</code> and put it back in the stop function. Moon Mode already does this.</td></tr>
+      <tr><th>2. Lights Out</th><td>Tween Lighting dark, with flashes. Lighting only, no parts.</td></tr>
+      <tr><th>3. Slippery Floor</th><td>Set tile Material to <code>Ice</code> and raise everyone's <code>WalkSpeed</code>.</td></tr>
+      <tr><th>4. Big Heads</th><td>Scale the players' heads. Harmless, very funny.</td></tr>
+      <tr><th>5. Meteor Shower</th><td>Drop parts from the sky at random spots, with a shadow warning first.</td></tr>
+      <tr><th>6. Lava Zones</th><td>Random tiles turn into glowing lava for a few seconds.</td></tr>
+      <tr><th>7. Sweeper Beam</th><td>A long bar spins around the middle. Jump it!</td></tr>
+      <tr><th>8. Two at once</th><td>From round 10, run two events together (start both, stop both).</td></tr>
+    </table></div>
+  </article>
+</section>
+
+<!-- ================================================================ HELP -->
+<section class="level" id="help" aria-labelledby="lh">
+  <div class="level-head">
+    <span class="label">When something goes wrong</span>
+    <h2 id="lh">Troubleshooting</h2>
+  </div>
+  <article class="step">
+    <div class="table-scroll"><table class="props">
+      <tr><th>Infinite yield possible on WaitForChild("…")</th><td>A script or object with that exact name is missing or misspelled. Check the Explorer tree in Step 4.</td></tr>
+      <tr><th>GameConfig has N problem(s)</th><td>Read the <code>[GameConfig]</code> warnings just above it. Each one names the setting to fix.</td></tr>
+      <tr><th>Your TheButton model needs a Part named 'Cap'</th><td>Rename the red part to exactly <code>Cap</code>.</td></tr>
+      <tr><th>Nothing happens at all</th><td>Is RoundManager a <strong>Script</strong> (not a LocalScript or ModuleScript) inside <strong>ServerScriptService</strong>?</td></tr>
+      <tr><th>No text on screen</th><td>HUD must be a <strong>LocalScript</strong> in StarterPlayer → StarterPlayerScripts.</td></tr>
+      <tr><th>Saving is off (turn on API access…)</th><td>Normal until Step 11. The game still works.</td></tr>
+      <tr><th>The button falls or gets pushed</th><td>Tick <strong>Anchored</strong> on Pedestal and Cap.</td></tr>
+      <tr><th>Attempt to index nil with …</th><td>The script looked for something that isn't there, usually a name typo. Output gives the script name and line number.</td></tr>
+    </table></div>
+  </article>
+</section>
+
+<footer>
+  <span class="label">How this was tested</span>
+  <p>Before this guide was written, the game's code ran through three automated test suites. <strong>Static checks</strong> confirm every script compiles, avoids deprecated Roblox APIs and keeps client and server code apart. <strong>Config and logic tests</strong> run the reward maths, event picking and balance across all three difficulties. A <strong>multiplayer simulation</strong> runs the real scripts in a fake Roblox engine: up to 6 players pressing, drowning, falling, leaving and rejoining over 12+ rounds, plus saving and the on-screen HUD. A separate reviewer then read all the code looking for problems the simulation can't see, and each one found was fixed and given its own test.</p>
+  <p>The simulation can't replace a real playtest, so Step 7 is still the real check. Studio's menus shift slightly between updates. If a label here doesn't match your screen, look for the nearest match.</p>
+</footer>
+</div>
+
+<script>
+(function () {
+  // Hero button: press it, see what you've done.
+  var events = ["THE FLOOR IS LEAVING!", "FLOOD! CLIMB!", "GIANT BALL INCOMING!", "MOON MODE!", "…the button is disappointed in you"];
+  var button = document.getElementById("hero-button");
+  var sign = document.getElementById("hero-sign");
+  var presses = 0;
+  button.addEventListener("click", function () {
+    button.classList.add("pressed");
+    setTimeout(function () { button.classList.remove("pressed"); }, 220);
+    sign.textContent = presses === 0 ? "YOU PRESSED IT." : events[(presses - 1) % events.length];
+    presses += 1;
+  });
+
+  // Copy buttons
+  document.querySelectorAll(".copy").forEach(function (btn) {
+    btn.addEventListener("click", function (event) {
+      event.preventDefault(); // don't toggle the <details>
+      var pre = document.getElementById(btn.getAttribute("data-copy"));
+      var text = pre.textContent;
+      function done(label) { btn.textContent = label; setTimeout(function () { btn.textContent = "Copy"; }, 1600); }
+      function fallback() {
+        var details = pre.closest("details"); if (details) details.open = true;
+        var range = document.createRange(); range.selectNodeContents(pre);
+        var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+        done("Selected: press Ctrl+C");
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { done("Copied!"); }, fallback);
+      } else { fallback(); }
+    });
+  });
+
+  // Progress ticks, remembered in this browser only
+  var KEY = "dptb-guide-done";
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch (e) { saved = {}; }
+  document.querySelectorAll(".done-toggle input").forEach(function (box) {
+    var step = box.closest(".step");
+    box.checked = !!saved[box.id];
+    step.classList.toggle("done", box.checked);
+    box.addEventListener("change", function () {
+      saved[box.id] = box.checked;
+      step.classList.toggle("done", box.checked);
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+    });
+  });
+})();
+</script>
+
+</body></html>

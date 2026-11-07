@@ -1,0 +1,310 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Chris Mormando Hit List</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column like a case file, with wide tables and card grids breaking out to 1080px */
+:root {
+  --bg: #f5f3f1;
+  --surface: #ffffff;
+  --fg: #1f1a19;
+  --muted: #645b58;
+  --rule: #ddd6d2;
+  --accent: #8e1d15;
+  --accent-soft: #f3e3e0;
+  --good: #2e6b3f;
+  --warn: #9a6a12;
+  --display: "Anton", "Impact", "Arial Narrow", sans-serif;
+  --body: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #161314; --surface: #1f1b1c; --fg: #ece6e3; --muted: #a89d99; --rule: #3a3233;
+  --accent: #e2675d; --accent-soft: #3a2220; --good: #7fc394; --warn: #e2b55a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #161314; --surface: #1f1b1c; --fg: #ece6e3; --muted: #a89d99; --rule: #3a3233;
+  --accent: #e2675d; --accent-soft: #3a2220; --good: #7fc394; --warn: #e2b55a; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font: 17px/1.6 var(--body); }
+.wrap { max-width: 1080px; margin: 0 auto; padding-block: 40px 80px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.col { max-width: 700px; }
+h1, h2 { font-family: var(--display); font-weight: 400; letter-spacing: .01em; text-wrap: balance; line-height: 1.05; margin: 0; }
+h1 { font-size: clamp(44px, 9vw, 92px); text-transform: uppercase; }
+h2 { font-size: clamp(28px, 4.4vw, 40px); text-transform: uppercase; }
+h3 { font-size: 19px; margin: 0; font-weight: 600; }
+p { margin: 0; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.muted { color: var(--muted); }
+.small { font-size: 15px; }
+section { display: grid; gap: 18px; padding-top: 56px; margin-top: 56px; border-top: 1px solid var(--rule); }
+header { display: grid; gap: 18px; }
+.lede { font-size: 20px; max-width: 680px; }
+.slate { display: flex; flex-wrap: wrap; gap: 8px 22px; font: 13px/1.4 var(--mono); color: var(--muted); }
+.slate b { color: var(--fg); font-weight: 500; }
+
+.callout { background: var(--accent-soft); border-left: 3px solid var(--accent); padding: 16px 18px; display: grid; gap: 6px; max-width: 700px; }
+.callout strong { color: var(--accent); }
+
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1px; background: var(--rule); border: 1px solid var(--rule); }
+.stat { background: var(--surface); padding: 18px; display: grid; gap: 4px; align-content: start; }
+.stat .n { font: 400 34px/1 var(--display); }
+.stat .l { font-size: 14px; color: var(--muted); }
+
+.tbl { overflow-x: auto; border: 1px solid var(--rule); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 15px; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font: 500 11px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+tr:last-child td { border-bottom: 0; }
+td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+th.num { text-align: right; }
+.tag { display: inline-block; font: 500 11px/1.6 var(--mono); padding: 0 7px; border: 1px solid currentColor; border-radius: 3px; white-space: nowrap; }
+.tag.good { color: var(--good); } .tag.warn { color: var(--warn); } .tag.bad { color: var(--accent); }
+
+.lessons { display: grid; gap: 14px; max-width: 760px; counter-reset: l; padding: 0; margin: 0; list-style: none; }
+.lessons li { display: grid; grid-template-columns: 36px 1fr; gap: 12px; }
+.lessons li::before { counter-increment: l; content: counter(l); font: 400 26px/1.1 var(--display); color: var(--accent); }
+
+.hits { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.hit { background: var(--surface); border: 1px solid var(--rule); padding: 18px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.hit .meta { display: flex; flex-wrap: wrap; gap: 6px; }
+.hit .hook { font-style: italic; border-left: 2px solid var(--rule); padding-left: 10px; }
+.hit .rank { font: 500 12px/1 var(--mono); color: var(--accent); letter-spacing: .08em; }
+
+.two { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; }
+.two > div { display: grid; gap: 10px; align-content: start; min-width: 0; }
+ul.plain { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+
+.weeks { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.week { border-top: 3px solid var(--fg); padding-top: 12px; display: grid; gap: 8px; align-content: start; }
+.week .eyebrow { color: var(--fg); }
+.sources { font-size: 14px; columns: 2 300px; column-gap: 32px; padding-left: 18px; margin: 0; }
+.sources li { break-inside: avoid; margin-bottom: 6px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">LTGP · client research · Oct 31, 2026</div>
+  <h1>Chris “Chris Boy” Mormando</h1>
+  <p class="lede">What his platforms show right now, what goes viral for actors, and a ranked hit list built to get <em>Judge No Book</em> seen and bought.</p>
+  <div class="slate">
+    <span><b>Instagram</b> @therealchrisboy · ~130K</span>
+    <span><b>TikTok</b> @therealchrisboy · 405</span>
+    <span><b>Show</b> Gravesend (Prime Video), Gaetano</span>
+    <span><b>Film</b> Judge No Book · 105 min · crime drama</span>
+  </div>
+  <div class="callout">
+    <strong>Lock the title first.</strong>
+    <p class="small">The brief calls the film “Don't Judge a Book by Its Color.” Every public listing uses something else: festivals say <b>Judge No Book</b>, and IMDb says <b>Judge No Book by it's Color</b> (with the apostrophe typo). Three names split search traffic and hashtags. Pick one with Chris, fix IMDb, and use only that name everywhere.</p>
+  </div>
+</header>
+
+<section>
+  <div class="eyebrow">01 · Who he is</div>
+  <h2>The story is the asset</h2>
+  <div class="two">
+    <div>
+      <p>He was born and raised in Bensonhurst, Brooklyn, and started acting in his early 40s. He's 56 now. On the <i>Burn Down</i> podcast he describes getting into trouble and going to jail before he found acting. That is a public, on-the-record comeback story, and it is the strongest hook he has.</p>
+      <p>He plays <b>Gaetano</b>, a series lead on <i>Gravesend</i> (Prime Video). Season 3, Part 1 dropped Sept 25, 2026, with William DeMeo and Shaq attached. That gives him an audience he can borrow right now.</p>
+    </div>
+    <div>
+      <h3>Credits worth leaning on</h3>
+      <ul class="plain small">
+        <li>TV: <i>For Life</i> (ABC), <i>Lilyhammer</i>, <i>The Marvelous Mrs. Maisel</i>, <i>FBI: Most Wanted</i>, <i>The Equalizer</i> (2025)</li>
+        <li>Stunt work: <i>Babygirl</i>, <i>No Hard Feelings</i>, <i>The Report</i></li>
+        <li>Has worked with 50 Cent, Chazz Palminteri, Andrew Dice Clay, Armand Assante, and Steven Van Zandt (per the Burn Down episode notes)</li>
+        <li>Next: <i>The Landfill</i>, a 10-episode crime series set in Staten Island, Brooklyn, and Jersey (announced on <i>Wiseguys</i>)</li>
+        <li>Sells acting classes and life coaching through his IG bio</li>
+      </ul>
+    </div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Judge No Book</th><th>What we know</th></tr></thead>
+    <tbody>
+      <tr><td>Logline</td><td>After surviving an attempted murder in the same diner where his father was killed, a man trying to outrun a legacy of violence is pulled back into the criminal world to protect his mother and daughter.</td></tr>
+      <tr><td>Made by</td><td>Chris wrote it, directed it (Joshua Williams co-directed), produced it, and plays the lead. Shot in 17 days in 2023 across Brooklyn and New Jersey.</td></tr>
+      <tr><td>Festivals</td><td>World premiere as Opening Night of Festival of Cinema NYC, Aug 7, 2026. Also screened at Syracuse International Film Festival, Oct 3, 2026.</td></tr>
+      <tr><td>Where to buy</td><td><span class="tag bad">none found</span> No distributor or buy link turned up anywhere. Fans can't buy the film yet, so this is the top blocker.</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="eyebrow">02 · Platform audit</div>
+  <h2>Big following, quiet feed</h2>
+  <div class="stats">
+    <div class="stat"><span class="n">~130K</span><span class="l">Instagram followers, 646 posts</span></div>
+    <div class="stat"><span class="n">~135</span><span class="l">avg likes on his last 8 reels (≈0.1% of followers)</span></div>
+    <div class="stat"><span class="n">2,735</span><span class="l">likes on Gravesend's S3 announcement, about 20× his average</span></div>
+    <div class="stat"><span class="n">9,582</span><span class="l">views on the “prison to actor” podcast clip, his biggest TikTok moment</span></div>
+  </div>
+  <p class="col">On Instagram, roughly 0.1% of his followers engage with a typical post. Most of his audience either isn't seeing his posts or has gone quiet. The fix is content that earns shares and watch time. Instagram has said shares (sends) are among its strongest ranking signals, and TikTok rewards watch-through and rewatches.</p>
+
+  <div class="tbl"><table>
+    <thead><tr><th>Post</th><th>Platform · date</th><th class="num">Likes</th><th class="num">Comm.</th><th>Read</th></tr></thead>
+    <tbody>
+      <tr><td>Gravesend S3 Part 1 announcement (@gravesendseries)</td><td>IG · Sep 15</td><td class="num">2,735</td><td class="num">370</td><td><span class="tag good">show audience</span></td></tr>
+      <tr><td>Charlene &amp; Gaetano scene on the Verrazzano (@shaquita_official)</td><td>IG · Sep 29</td><td class="num">997</td><td class="num">112</td><td><span class="tag good">his character wins</span></td></tr>
+      <tr><td>“Me and my wifey… we know how to jam”</td><td>IG · Sep 28</td><td class="num">298</td><td class="num">84</td><td><span class="tag good">his best own post</span></td></tr>
+      <tr><td>Training Day scene repost</td><td>IG · Oct 2</td><td class="num">151</td><td class="num">22</td><td><span class="tag warn">repost</span></td></tr>
+      <tr><td>“Blessed and proud of work I've done”</td><td>IG · Oct 19</td><td class="num">149</td><td class="num">48</td><td><span class="tag warn">generic</span></td></tr>
+      <tr><td>Wise-guy monologue clip</td><td>IG · Oct 2</td><td class="num">148</td><td class="num">13</td><td><span class="tag warn">no context</span></td></tr>
+      <tr><td>Untouchables / Capone scene repost</td><td>IG · Aug 26</td><td class="num">126</td><td class="num">22</td><td><span class="tag warn">repost</span></td></tr>
+      <tr><td>“Little Preview to Judge No Book”</td><td>IG · Oct 1</td><td class="num">112</td><td class="num">32</td><td><span class="tag bad">film underexposed</span></td></tr>
+      <tr><td>Joe Pesci repost</td><td>IG · Sep 19</td><td class="num">108</td><td class="num">34</td><td><span class="tag warn">repost</span></td></tr>
+      <tr><td>Judge No Book festival post (@yofifest)</td><td>IG · Oct 18</td><td class="num">98</td><td class="num">16</td><td><span class="tag bad">film underexposed</span></td></tr>
+      <tr><td>“When no one hears a word I say” (wife skit)</td><td>IG · Sep 3</td><td class="num">87</td><td class="num">16</td><td><span class="tag warn">weak hook</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="tbl"><table>
+    <thead><tr><th>TikTok mentions of Chris</th><th>Account</th><th class="num">Views</th><th>Read</th></tr></thead>
+    <tbody>
+      <tr><td>“Shares his journey from prison to actor and filmmaker”</td><td>The Burn Down</td><td class="num">9,582</td><td><span class="tag good">story clip</span></td></tr>
+      <tr><td>Fan meme: Chris with Joe Pesci / Casino</td><td>jpesh13</td><td class="num">3,692</td><td><span class="tag good">fan-made</span></td></tr>
+      <tr><td><i>The Landfill</i> announcement from <i>Wiseguys</i></td><td>christinedebratto4</td><td class="num">732</td><td><span class="tag good">mob-podcast reach</span></td></tr>
+      <tr><td>Full Burn Down episode promo</td><td>The Burn Down</td><td class="num">415</td><td><span class="tag warn">long-form</span></td></tr>
+      <tr><td>“Calling all Italians in Syracuse” screening promo</td><td>Michelle DiBernardo</td><td class="num">252</td><td><span class="tag warn">local</span></td></tr>
+      <tr><td>Festival of Cinema NYC red carpet</td><td>Films Gone Wild</td><td class="num">7–83</td><td><span class="tag bad">no hook</span></td></tr>
+    </tbody>
+  </table></div>
+  <p class="small muted col">How we got this: public post pages, viewed while logged out on Oct 31, 2026. Instagram hides the reels grid and view counts from logged-out visitors, so this table covers Aug–Oct 2026 posts only. His all-time top posts are still unknown. His own TikTok (405 followers, 1.6K likes) wouldn't load its videos, and his YouTube channel showed no stats. <b>Ask Chris for Instagram Insights access</b> so we can pull all-time top posts, reach, and where his followers live.</p>
+
+  <h3>What the numbers say</h3>
+  <ol class="lessons">
+    <li><p><b>His story beats reposts.</b> The prison-to-actor clip got about 10× the views of anything else about him. Reposted classic mob scenes (Pesci, Capone, Denzel) all stall around 100–150 likes, because they're someone else's moment.</p></li>
+    <li><p><b>Gaetano is bigger than Chris right now.</b> Gravesend content pulls 7–20× his own posts. Every post should send Gravesend fans to Chris, then to the film.</p></li>
+    <li><p><b>Real life beats acting-for-camera.</b> His best post is him and his wife jamming. It got the most comments because it shows who he really is.</p></li>
+    <li><p><b>Other people's channels travel further.</b> Podcasts, co-stars, and fans got him more reach than his own feed. Collab posts (one post that shows on both accounts) and clips cut from podcasts are the cheapest growth he has.</p></li>
+    <li><p><b>The film has had almost no exposure.</b> The trailer preview and festival posts are among his weakest. They have no hook, no story, and no place to buy.</p></li>
+  </ol>
+</section>
+
+<section>
+  <div class="eyebrow">03 · What goes viral for actors</div>
+  <h2>Patterns to copy</h2>
+  <div class="tbl"><table>
+    <thead><tr><th>Format</th><th>Why it works</th><th>Chris's version</th></tr></thead>
+    <tbody>
+      <tr><td>Origin / comeback story clip</td><td>Late-bloomer and second-chance stories get shared as inspiration, well beyond film fans</td><td>“I was 40, I'd done time, and I'd never acted”</td></tr>
+      <tr><td>Fan edits</td><td>Fans now act as unofficial trailers, and some studios pay edit creators. NPR reports that TikTok activity keeps films selling after opening weekend.</td><td>Release a free clip pack from Judge No Book and Gaetano, and run an edit contest</td></tr>
+      <tr><td>Meme-able lines</td><td>Focus Features leaned into fan memes for <i>Conclave</i> and reposted them</td><td>Cut his most quotable line into 3–5 second sound clips</td></tr>
+      <tr><td>Creator reviewers and reactors</td><td>Indie horror broke through on reaction videos. <i>Skinamarink</i>'s hashtag passed 24M views.</td><td>Seed screeners to mob-movie and crime TikTok reviewers</td></tr>
+      <tr><td>In-world stunts</td><td><i>Buddy</i> (2026) built a TikTok account near 1M followers in costume, and its top video hit 10.9M views</td><td>The diner from the film: show up, sit in the booth, film people's reactions</td></tr>
+      <tr><td>Scrappy behind-the-scenes</td><td>“How we made this on nothing” earns respect from filmmakers and fans alike</td><td>“We shot a 105-minute feature in 17 days” series</td></tr>
+      <tr><td>Mob-podcast circuit</td><td>The <i>Wiseguys</i> and <i>Burn Down</i> style podcasts carry a loyal crime-story audience with constant clip output</td><td>One podcast a week, and get the raw footage to clip ourselves</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <div class="eyebrow">04 · The hit list</div>
+  <h2>Ranked by impact on the film</h2>
+  <p class="col muted small">Top three first. Each card lists the opening line on screen, where it runs, and what it drives.</p>
+  <div class="hits">
+    <article class="hit"><span class="rank">#1 · FILM</span><h3>“From a cell to the director's chair”</h3><p class="hook">“At 40 I'd been locked up and never acted. At 56 I wrote, directed, and starred in my own movie.”</p><p class="small">A 45-second story cut that ends on a Judge No Book shot and “link in bio.” Pin it on every platform. <b>Confirm with Chris how much of the prison story he wants public.</b></p><div class="meta"><span class="tag">IG Reel</span><span class="tag">TikTok</span><span class="tag">Shorts</span></div></article>
+    <article class="hit"><span class="rank">#2 · FILM</span><h3>The diner scene, in pieces</h3><p class="hook">“This is the diner where my father was killed. They tried me here too.”</p><p class="small">A 5-part cliffhanger series built from the opening scene, with each episode ending on the next question. Series drive follows and rewatches.</p><div class="meta"><span class="tag">TikTok</span><span class="tag">IG Reel</span></div></article>
+    <article class="hit"><span class="rank">#3 · BRIDGE</span><h3>Gaetano reacts to Gaetano</h3><p class="hook">“Watching myself on Gravesend with my wife. She has notes.”</p><p class="small">Chris and his wife (@nikkichikki74) react to his Gravesend scenes. It combines the show audience with his best-performing format. Make it a collab post with @gravesendseries. Only use clips Amazon or the show account have already posted.</p><div class="meta"><span class="tag">IG Collab</span><span class="tag">TikTok</span></div></article>
+    <article class="hit"><span class="rank">#4 · FILM</span><h3>17 Days</h3><p class="hook">“Day 1 of 17. No money, no permits, all Brooklyn.”</p><p class="small">A behind-the-scenes series on shooting the feature. Talks to indie filmmakers and aspiring actors, who also buy his classes.</p><div class="meta"><span class="tag">TikTok</span><span class="tag">YouTube</span></div></article>
+    <article class="hit"><span class="rank">#5 · FILM</span><h3>“Judge No Book” street test</h3><p class="hook">“What do you think I do for a living?”</p><p class="small">Strangers in Bensonhurst guess what Chris does from how he looks, then hear the real story. This plays on the title, and street interviews travel in every language.</p><div class="meta"><span class="tag">TikTok</span><span class="tag">IG Reel</span></div></article>
+    <article class="hit"><span class="rank">#6 · COMMUNITY</span><h3>Fan edit contest</h3><p class="hook">“Best edit wins a signed poster and a walk-on in The Landfill.”</p><p class="small">Release a clip pack from the trailer and stills. Fan edits act as free trailers, and every entry carries the film name.</p><div class="meta"><span class="tag">TikTok</span><span class="tag">IG</span></div></article>
+    <article class="hit"><span class="rank">#7 · REACH</span><h3>Mob-podcast run</h3><p class="hook">“The real ones told me this would never get made.”</p><p class="small">One podcast a week (Wiseguys, The Burn Down, and similar). Get the raw files and cut 5 clips per episode. Each clip ends on the film.</p><div class="meta"><span class="tag">YouTube</span><span class="tag">TikTok</span></div></article>
+    <article class="hit"><span class="rank">#8 · BRIDGE</span><h3>Co-star duets</h3><p class="hook">“Shaq asked me how a Brooklyn guy talks.”</p><p class="small">Short bits with Gravesend cast (Shaquita Smith, William DeMeo) and Judge No Book cast. Collab posts put him in front of their followers. Only tell this story if it really happened.</p><div class="meta"><span class="tag">IG Collab</span></div></article>
+    <article class="hit"><span class="rank">#9 · COMMUNITY</span><h3>Started at 40</h3><p class="hook">“You're not too old. I started at 40.”</p><p class="small">A weekly 60-second acting tip for late starters. Builds a loyal community and feeds his paid classes.</p><div class="meta"><span class="tag">IG</span><span class="tag">TikTok</span><span class="tag">YouTube</span></div></article>
+    <article class="hit"><span class="rank">#10 · LOCAL</span><h3>Italian-American heritage nights</h3><p class="hook">“Calling every Italian family in [city].”</p><p class="small">Screenings with Italian-American clubs and social halls. The Syracuse promo already used this angle. Film the crowd for content.</p><div class="meta"><span class="tag">Events</span><span class="tag">FB</span></div></article>
+    <article class="hit"><span class="rank">#11 · FILM</span><h3>One line, everywhere</h3><p class="hook">His most quotable line from the film, cut as a 4-second sound.</p><p class="small">Upload it as an original sound on TikTok and Reels so other people can use it in their own videos.</p><div class="meta"><span class="tag">TikTok sound</span><span class="tag">Reels audio</span></div></article>
+    <article class="hit"><span class="rank">#12 · REACH</span><h3>Reviewer screeners</h3><p class="hook">“I sent my mob movie to 20 crime TikTokers. Here's what they said.”</p><p class="small">Send private screener links to mob-movie and true-crime creators, then repost their reactions. That makes two pieces of content from one screener.</p><div class="meta"><span class="tag">Creators</span></div></article>
+    <article class="hit"><span class="rank">#13 · STOP</span><h3>Cut the scene reposts</h3><p class="hook">No more reposted Pesci, Capone, or Denzel scenes without Chris in frame.</p><p class="small">If he loves a scene, have him recreate it or break it down on camera. Otherwise it trains the algorithm that his audience doesn't engage.</p><div class="meta"><span class="tag bad">stop doing</span></div></article>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">05 · Communities and going global</div>
+  <h2>Build the block, then the world</h2>
+  <div class="two">
+    <div>
+      <h3>Communities to own</h3>
+      <ul class="plain">
+        <li><b>Gravesend fans:</b> the biggest warm audience he has right now</li>
+        <li><b>Mob-movie and crime-story fans:</b> the podcast circuit, Goodfellas and Casino meme pages</li>
+        <li><b>Italian-American families:</b> clubs, feasts, Little Italy, Bensonhurst</li>
+        <li><b>Late starters and second chances:</b> aspiring actors over 35, and people rebuilding their lives (only if Chris is comfortable with the prison story)</li>
+        <li><b>Indie filmmakers:</b> the “17 Days” audience</li>
+      </ul>
+      <p class="small">Home base: an Instagram broadcast channel (“Chris Boy's Block”) for first looks, and an email list on the film's landing page. We own the list. No algorithm can take it away.</p>
+    </div>
+    <div>
+      <h3>Going global</h3>
+      <ul class="plain">
+        <li><b>Distribution first:</b> get a sales agent or aggregator so the film can be bought on digital stores. Without a buy button, viral reach doesn't turn into sales.</li>
+        <li><b>Subtitles:</b> burned-in captions on every clip, with Italian, Spanish, and Portuguese versions of the top performers. Crime drama travels well in Italy and Latin America.</li>
+        <li><b>Italy angle:</b> “Brooklyn Italian makes his own mob movie” pitched to Italian press and Italian-American outlets</li>
+        <li><b>International festivals:</b> apply to more festivals abroad to get laurels and local press</li>
+        <li><b>Landing page:</b> trailer, “get notified when it drops,” and press kit. LTGP can build and host it.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">06 · First 30 days</div>
+  <h2>Launch sprint</h2>
+  <div class="weeks">
+    <div class="week"><span class="eyebrow">Week 1 · Fix the base</span><p class="small">Lock the title and fix IMDb. Get Insights access. Rewrite the bio with the film first and one link. Launch the landing page with an email waitlist. Make highlights for Film, Gravesend, and Classes.</p></div>
+    <div class="week"><span class="eyebrow">Week 2 · Story drop</span><p class="small">Post Hit #1 and pin it everywhere. Start the 17 Days series. Post Hit #3 as a collab with Gravesend. Pitch 5 podcasts.</p></div>
+    <div class="week"><span class="eyebrow">Week 3 · Film push</span><p class="small">Run the diner cliffhanger series. Upload the original sound. Open the fan-edit contest. Send screeners to 20 creators.</p></div>
+    <div class="week"><span class="eyebrow">Week 4 · Community</span><p class="small">Open the broadcast channel. Book the first heritage-night screening. Post subtitled versions of the top 3 clips. Review numbers and double down on what worked.</p></div>
+  </div>
+  <div class="tbl"><table>
+    <thead><tr><th>Measure</th><th>Today</th><th>30-day target</th></tr></thead>
+    <tbody>
+      <tr><td>Avg likes per IG reel</td><td class="num">~135</td><td>1,000+ (back to ~1% of followers)</td></tr>
+      <tr><td>Best single video views</td><td class="num">9.6K</td><td>250K+ on one story or film clip</td></tr>
+      <tr><td>TikTok followers (@therealchrisboy)</td><td class="num">405</td><td>10K</td></tr>
+      <tr><td>Film waitlist emails</td><td class="num">0</td><td>2,500</td></tr>
+      <tr><td>Fan edits using film clips</td><td class="num">0</td><td>50</td></tr>
+    </tbody>
+  </table></div>
+  <p class="small muted col">The targets are our estimates for planning. They aren't benchmarks from a source. Reset them once Insights gives us his real baseline.</p>
+</section>
+
+<section>
+  <div class="eyebrow">07 · Before we start</div>
+  <h2>Confirm with Chris</h2>
+  <ul class="plain col">
+    <li>Which title is final: Judge No Book, Judge No Book by Its Color, or Don't Judge a Book by Its Color?</li>
+    <li>Is he comfortable leading with the prison story, and how much detail can we use?</li>
+    <li>Is there a distributor, sales agent, or release date? Where will people buy the film?</li>
+    <li>Instagram Insights and TikTok access (shared login or a manager role)</li>
+    <li>Which film footage, music, and Gravesend clips we're cleared to use</li>
+    <li>Is <i>The Landfill</i> confirmed, and can we tease it?</li>
+  </ul>
+</section>
+
+<section>
+  <div class="eyebrow">Sources</div>
+  <ol class="sources">
+    <li><a href="https://www.instagram.com/therealchrisboy/" target="_blank" rel="noopener">Instagram @therealchrisboy</a> (profile and reel pages, Oct 31, 2026)</li>
+    <li><a href="https://www.tiktok.com/discover/Christopher-Mormando" target="_blank" rel="noopener">TikTok: Christopher Mormando discover page</a></li>
+    <li><a href="https://www.tiktok.com/@therealchrisboy" target="_blank" rel="noopener">TikTok @therealchrisboy</a></li>
+    <li><a href="https://www.themoviedb.org/person/2699709" target="_blank" rel="noopener">TMDB: Christopher Mormando</a></li>
+    <li><a href="https://www.imdb.com/name/nm2722220/" target="_blank" rel="noopener">IMDb: Christopher Mormando</a> · <a href="https://www.imdb.com/title/tt20064104/" target="_blank" rel="noopener">title page</a></li>
+    <li><a href="https://filmfreeway.com/christophermormando" target="_blank" rel="noopener">FilmFreeway: Christopher Mormando</a></li>
+    <li><a href="https://www.broadwayworld.com/article/JUDGE-NO-BOOK-to-Open-Festival-of-Cinema-NYCs-10th-Anniversary-Edition-20260728" target="_blank" rel="noopener">BroadwayWorld: Judge No Book opens Festival of Cinema NYC</a></li>
+    <li><a href="https://www.waer.org/news/2026-10-02/filmmaker-brings-his-first-movie-to-the-syracuse-international-film-festival" target="_blank" rel="noopener">WAER: Filmmaker brings his first movie to Syracuse IFF</a></li>
+    <li><a href="https://breakingbread1.podbean.com/e/breaking-bread-with-chris-mormando/" target="_blank" rel="noopener">Breaking Bread podcast with Chris Mormando</a></li>
+    <li><a href="https://www.npr.org/2026/04/18/nx-s1-5787983/new-data-show-tiktok-engagement-as-a-key-indicator-of-long-term-box-office-success" target="_blank" rel="noopener">NPR: TikTok sustains the buzz after opening weekend</a></li>
+    <li><a href="https://www.eventmarketer.com/article/film-tv-marketing-stunts-summer-2026/" target="_blank" rel="noopener">Event Marketer: Film and TV stunts that went viral, summer 2026</a></li>
+    <li><a href="https://aspectmag.substack.com/p/tiktok-film-edits-combine-passion" target="_blank" rel="noopener">Aspect: TikTok film edits combine passion and promotion</a></li>
+    <li><a href="https://filmcane.com/blog/how-to-go-viral-on-tiktok-with-your-film" target="_blank" rel="noopener">Filmcane: Going viral on TikTok with your film</a></li>
+    <li><a href="https://www.tasteray.com/articles/movie-campaigns" target="_blank" rel="noopener">Movie campaigns in 2026 (Conclave memes example)</a></li>
+  </ol>
+</section>
+</div>
+
+</body></html>

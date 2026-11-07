@@ -1,0 +1,323 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Lean Grind Flow</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Barlow:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+:root{--bg:#F3F5F2;--panel:#FFFFFF;--ink:#16233A;--mute:#5B6878;--line:#C9D1CB;--t0:#2F6B4F;--t1:#2C5DA8;--t2:#B7791F;--t3:#C8323C;--soft:#E6ECE7;--hi:#FFF6D6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1720;--panel:#17222E;--ink:#E8EEF2;--mute:#9AA8B5;--line:#2E3C4A;--t0:#5FB38A;--t1:#6E9BE3;--t2:#E0A84A;--t3:#EB6670;--soft:#1D2A37;--hi:#3A3320}}
+:root[data-theme="dark"]{--bg:#0F1720;--panel:#17222E;--ink:#E8EEF2;--mute:#9AA8B5;--line:#2E3C4A;--t0:#5FB38A;--t1:#6E9BE3;--t2:#E0A84A;--t3:#EB6670;--soft:#1D2A37;--hi:#3A3320}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 Barlow,system-ui,sans-serif;padding-block:32px 56px;padding-inline:16px}
+.wrap{max-width:1120px;margin:0 auto}
+h1{font:800 clamp(38px,7vw,64px)/.95 "Barlow Condensed",Impact,sans-serif;margin:0;text-transform:uppercase}
+.sub{color:var(--mute);margin:8px 0 0;max-width:62ch}
+.mono{font:500 11px "JetBrains Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin:18px 0 0}
+.legend span{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mute)}
+.legend i{width:14px;height:14px;border-radius:3px;background:var(--c)}
+.phase{margin-top:44px}
+.phase-head{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--ink);padding-bottom:6px;margin-bottom:18px;flex-wrap:wrap}
+.phase-head .mono{color:var(--mute)}
+.phase-head h2{font:800 30px/1 "Barlow Condensed",sans-serif;margin:0;text-transform:uppercase}
+.phase-head p{margin:0;color:var(--mute);font-size:14px;flex-basis:100%}
+.node{background:var(--panel);border:2px solid var(--ink);border-radius:10px;padding:10px 16px;font-weight:600}
+.node small{display:block;font-weight:400;color:var(--mute);font-size:13px}
+.q{border-style:dashed}
+.row{display:flex;gap:12px;align-items:stretch;flex-wrap:wrap}
+.to{align-self:center;font:700 18px "JetBrains Mono",monospace;color:var(--mute)}
+/* intake */
+.intake{display:grid;grid-template-columns:1fr auto 1.1fr auto 1.4fr;gap:10px;align-items:center}
+.fork{display:grid;gap:8px}
+.fork .node{font-size:14px}
+.yes{border-color:var(--t0)}.no{border-color:var(--t3)}
+.lbl{font:500 10px "JetBrains Mono",monospace;text-transform:uppercase;letter-spacing:.08em;margin-right:6px}
+.yes .lbl{color:var(--t0)}.no .lbl{color:var(--t3)}
+/* ladder */
+.picker{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;align-items:center}
+.picker button{font:600 13px Barlow,sans-serif;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:999px;padding:6px 12px;cursor:pointer}
+.picker button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.picker button:focus-visible{outline:2px solid var(--t1);outline-offset:2px}
+.ladder{display:grid;gap:10px}
+.step{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:stretch}
+.step .node{transition:background .2s}
+.out{border:1px solid var(--line);border-left:5px solid var(--c);background:var(--panel);border-radius:8px;padding:8px 12px;font-size:14px}
+.out .lbl{color:var(--c)}
+.dn{color:var(--mute);font-size:14px;padding:8px 12px;border:1px dashed var(--line);border-radius:8px}
+.lit{background:var(--hi)!important;box-shadow:0 0 0 2px var(--ink)}
+.why{margin:12px 0 0;font-size:14px;color:var(--mute);min-height:1.5em}
+.why b{color:var(--ink)}
+/* lanes */
+.lanes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.lane{background:var(--panel);border:1px solid var(--line);border-top:6px solid var(--c);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:10px;transition:box-shadow .2s}
+.lane.lit{background:var(--panel)!important;box-shadow:0 0 0 3px var(--c)}
+.lane .mono{color:var(--c)}
+.lane h3{font:800 26px/1 "Barlow Condensed",sans-serif;margin:0;text-transform:uppercase}
+.lane h4{font:500 10px "JetBrains Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:4px 0 0}
+.lane p{margin:0;font-size:14px}
+.flow{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.flow li{background:var(--soft);border-radius:6px;padding:6px 10px;font-size:13.5px;position:relative}
+.flow li+li{margin-top:14px}
+.flow li+li::before{content:"";position:absolute;top:-12px;left:18px;width:2px;height:10px;background:var(--c)}
+.bul{margin:0;padding-left:18px;font-size:13.5px}
+.bul li+li{margin-top:2px}
+.ex{font-size:13px;color:var(--mute);font-style:italic}
+.cost{margin-top:auto;padding-top:8px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:8px;font:500 12px "JetBrains Mono",monospace;color:var(--mute)}
+.meter{display:flex;gap:3px}.meter i{width:14px;height:8px;border-radius:2px;background:var(--line)}.meter i.on{background:var(--c)}
+.esc{margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:14px}
+.esc .pill{border-radius:999px;padding:3px 10px;font-weight:600;color:#fff;background:var(--c)}
+:root[data-theme="dark"] .esc .pill{color:#0F1720}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .esc .pill{color:#0F1720}}
+/* branches */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:14px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:500 11px "JetBrains Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);background:var(--soft)}
+tr:last-child td{border-bottom:0}
+td b{font-weight:700}
+.chip{display:inline-block;font:500 11px "JetBrains Mono",monospace;padding:1px 7px;border-radius:4px;color:var(--c);border:1px solid var(--c);margin:1px 2px 1px 0;white-space:nowrap}
+/* gate */
+.gate{display:grid;grid-template-columns:1fr auto 1.2fr auto 1fr;gap:10px;align-items:center}
+.checks{display:grid;gap:6px}
+.check{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:6px 12px;font-size:14px}
+.check::before{content:"✓ ";color:var(--t0);font-weight:700}
+.loop{border:2px dashed var(--t3);border-radius:10px;padding:10px 14px;font-size:14px;background:var(--panel)}
+.loop b{color:var(--t3)}
+.ship{background:var(--ink);color:var(--bg)}
+.ship small{color:inherit;opacity:.75}
+/* savers */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.col{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px}
+.col h3{font:800 20px "Barlow Condensed",sans-serif;text-transform:uppercase;margin:0 0 8px}
+.col.bad h3{color:var(--t3)}.col.good h3{color:var(--t0)}
+.col ul{margin:0;padding-left:18px;font-size:14px}.col li+li{margin-top:4px}
+.you{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:14px}
+.card b{display:block;font-size:15px;margin-bottom:2px}
+.card code{font:500 12px "JetBrains Mono",monospace;background:var(--soft);padding:1px 5px;border-radius:4px}
+@media (max-width:900px){.lanes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:760px){.intake,.gate{grid-template-columns:1fr}.to{transform:rotate(90deg);justify-self:center}.step{grid-template-columns:1fr}.lanes,.vs{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <span class="mono" style="color:var(--mute)">Akamaru system · operating playbook</span>
+  <h1>Lean Grind</h1>
+  <p class="sub">Work hard, spend light. Every task runs through five phases: take it in, route it to the cheapest tier that can win, run that tier's play, pass the quality gate, then ship and stop.</p>
+  <div class="legend">
+    <span style="--c:var(--t0)"><i></i>Tier 0 · Just answer</span>
+    <span style="--c:var(--t1)"><i></i>Tier 1 · Solo</span>
+    <span style="--c:var(--t2)"><i></i>Tier 2 · One specialist</span>
+    <span style="--c:var(--t3)"><i></i>Tier 3 · Full squad</span>
+  </div>
+
+  <!-- PHASE 1 -->
+  <section class="phase">
+    <div class="phase-head"><span class="mono">Phase 1</span><h2>Intake</h2><p>Get the task straight before spending anything on it.</p></div>
+    <div class="intake">
+      <div class="node">Task comes in<small>Best: what, who it's for, deadline, an example</small></div>
+      <span class="to">→</span>
+      <div class="node q">Is the ask clear enough to start?<small>Would a wrong guess waste real work?</small></div>
+      <span class="to">→</span>
+      <div class="fork">
+        <div class="node yes"><span class="lbl">Clear</span>Pick sensible defaults, say them in one line, start</div>
+        <div class="node no"><span class="lbl">Unclear</span>Ask ONE question, the one that changes the build</div>
+        <div class="node"><span class="lbl" style="color:var(--t1)">Always</span>Check memory and past artifacts. Update what exists before building new.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 2 -->
+  <section class="phase">
+    <div class="phase-head"><span class="mono">Phase 2</span><h2>Routing</h2><p>Answer top to bottom. The first "yes" that sends you somewhere is your tier. Tap an example to see its path.</p></div>
+    <div class="picker" role="group" aria-label="Example tasks">
+      <button id="ex-a" data-path="0" aria-pressed="false">"What's a good pre-game meal?"</button>
+      <button id="ex-b" data-path="1" aria-pressed="false">Fix a typo on the shop site</button>
+      <button id="ex-c" data-path="2" aria-pressed="false">Research 5 NJ restaurants to pitch</button>
+      <button id="ex-d" data-path="3" aria-pressed="false">Launch a new LTGPEAK client site</button>
+    </div>
+    <div class="ladder">
+      <div class="step" data-q="1">
+        <div class="node q">1. Does it need tools, files or the web?</div>
+        <div class="out" style="--c:var(--t0)" data-hit="0"><span class="lbl">No</span>→ Tier 0, just answer</div>
+        <div class="dn" data-pass="1 2 3">Yes → keep going</div>
+      </div>
+      <div class="step" data-q="2">
+        <div class="node q">2. Is it live, for a client, or tied to money?</div>
+        <div class="out" style="--c:var(--t3)" data-hit="3"><span class="lbl">Yes</span>→ Tier 3, full squad</div>
+        <div class="dn" data-pass="1 2">No → keep going</div>
+      </div>
+      <div class="step" data-q="3">
+        <div class="node q">3. Can it be finished right here in a few steps?</div>
+        <div class="out" style="--c:var(--t1)" data-hit="1"><span class="lbl">Yes</span>→ Tier 1, solo</div>
+        <div class="dn" data-pass="2">No → keep going</div>
+      </div>
+      <div class="step" data-q="4">
+        <div class="node q">4. Does one Akamaru branch clearly own it?</div>
+        <div class="out" style="--c:var(--t2)" data-hit="2"><span class="lbl">Yes</span>→ Tier 2, one specialist</div>
+        <div class="dn">No → Tier 1, and pull in a branch only for the piece that needs it</div>
+      </div>
+    </div>
+    <p class="why" id="why" aria-live="polite">Pick an example above.</p>
+  </section>
+
+  <!-- PHASE 3 -->
+  <section class="phase">
+    <div class="phase-head"><span class="mono">Phase 3</span><h2>Run the play</h2><p>Each tier has its own steps, token savers and a clear signal for when to step up.</p></div>
+    <div class="lanes">
+      <article class="lane" id="lane0" style="--c:var(--t0)">
+        <span class="mono">Tier 0</span><h3>Just answer</h3>
+        <p>Questions, advice, ideas, short drafts, quick math.</p>
+        <p class="ex">e.g. a pre-game meal, a caption idea, what a credit score means</p>
+        <h4>Play</h4>
+        <ol class="flow"><li>Read the question</li><li>Answer in chat</li><li>Offer one next step only if useful</li></ol>
+        <h4>Save tokens</h4>
+        <ul class="bul"><li>No tools, no files, no task list</li><li>No headers for short answers</li></ul>
+        <h4>Step up if</h4>
+        <ul class="bul"><li>The answer depends on current facts, then search once</li></ul>
+        <div class="cost"><span>cheapest</span><span class="meter"><i class="on"></i><i></i><i></i><i></i></span></div>
+      </article>
+      <article class="lane" id="lane1" style="--c:var(--t1)">
+        <span class="mono">Tier 1</span><h3>Solo</h3>
+        <p>Most real work: edit a file, fix a bug, tweak a page, write a post.</p>
+        <p class="ex">e.g. change Redline Auto's hours, add a drill to HunchoStrat</p>
+        <h4>Play</h4>
+        <ol class="flow"><li>Find the exact spot (search, not full reads)</li><li>Make the smallest edit that works</li><li>Check it once</li><li>Deliver with a 1–3 sentence note</li></ol>
+        <h4>Save tokens</h4>
+        <ul class="bul"><li>Batch reads and searches together</li><li>Edit lines, never regenerate whole files</li><li>Never re-read a file just edited</li></ul>
+        <h4>Step up if</h4>
+        <ul class="bul"><li>It needs deep research or a full rebuild</li></ul>
+        <div class="cost"><span>light</span><span class="meter"><i class="on"></i><i class="on"></i><i></i><i></i></span></div>
+      </article>
+      <article class="lane" id="lane2" style="--c:var(--t2)">
+        <span class="mono">Tier 2</span><h3>One specialist</h3>
+        <p>A bigger job one branch clearly owns.</p>
+        <p class="ex">e.g. Jiraiya researches restaurants, Kakashi writes the pitch</p>
+        <h4>Play</h4>
+        <ol class="flow"><li>Write one complete brief</li><li>Send it to ONE top-level agent</li><li>Skim the result, fix small gaps myself</li><li>Deliver</li></ol>
+        <h4>Brief must include</h4>
+        <ul class="bul"><li>Goal and who it's for</li><li>Files, links, constraints</li><li>What "done" looks like</li></ul>
+        <h4>Step up if</h4>
+        <ul class="bul"><li>The output is going live or to a client</li></ul>
+        <div class="cost"><span>medium</span><span class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></div>
+      </article>
+      <article class="lane" id="lane3" style="--c:var(--t3)">
+        <span class="mono">Tier 3</span><h3>Full squad</h3>
+        <p>High stakes: client sites going live, new apps, anything with money.</p>
+        <p class="ex">e.g. a new LTGPEAK client launch, the Redline booking system</p>
+        <h4>Play</h4>
+        <ol class="flow"><li>Planner (Kabuto) maps the build</li><li>Henry approves the plan</li><li>Executor (Anko) builds it</li><li>Itachi reviews once</li><li>Fix findings, ship</li></ol>
+        <h4>Guardrails</h4>
+        <ul class="bul"><li>One branch's squad per task, not several</li><li>Plan is short: steps, files, risks</li></ul>
+        <div class="cost"><span>heavy</span><span class="meter"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></div>
+      </article>
+    </div>
+    <div class="esc"><strong>Escalation ladder:</strong>
+      <span class="pill" style="--c:var(--t0)">T0</span>→<span class="pill" style="--c:var(--t1)">T1</span>→<span class="pill" style="--c:var(--t2)">T2</span>→<span class="pill" style="--c:var(--t3)">T3</span>
+      <span style="color:var(--mute)">Step up one rung at a time. Never skip straight to full squad.</span></div>
+  </section>
+
+  <!-- BRANCHES -->
+  <section class="phase">
+    <div class="phase-head"><span class="mono">Reference</span><h2>Who takes what</h2><p>When a task hits Tier 2 or 3, this is where it goes.</p></div>
+    <div class="tablewrap"><table>
+      <thead><tr><th>Branch</th><th>Takes</th><th>Usual tier</th><th>Full squad</th></tr></thead>
+      <tbody>
+        <tr><td><b>Akamaru</b></td><td>Quick tasks, admin, drafting, scheduling</td><td><span class="chip" style="--c:var(--t0)">T0</span><span class="chip" style="--c:var(--t1)">T1</span></td><td>Rarely needed</td></tr>
+        <tr><td><b>Orochimaru</b></td><td>Websites, dashboards, apps, client builds</td><td><span class="chip" style="--c:var(--t1)">T1</span><span class="chip" style="--c:var(--t3)">T3</span></td><td>Kabuto → Anko → Kimimaro</td></tr>
+        <tr><td><b>Itachi</b></td><td>Bug, security and quality review before launch</td><td><span class="chip" style="--c:var(--t2)">T2</span></td><td>Final check on every T3 build</td></tr>
+        <tr><td><b>Jiraiya</b></td><td>Market, competitor, tool and topic research</td><td><span class="chip" style="--c:var(--t2)">T2</span></td><td>Only for big reports</td></tr>
+        <tr><td><b>Kakashi</b></td><td>Proposals, pitches, outreach, quotes, follow-ups</td><td><span class="chip" style="--c:var(--t1)">T1</span><span class="chip" style="--c:var(--t2)">T2</span></td><td>For real client contracts</td></tr>
+        <tr><td><b>Tsunade</b></td><td>What to work on first, what to drop</td><td><span class="chip" style="--c:var(--t0)">T0</span><span class="chip" style="--c:var(--t2)">T2</span></td><td>Rarely needed</td></tr>
+        <tr><td><b>Clavo Dulce</b></td><td>Metrics, reports, lightweight dashboards</td><td><span class="chip" style="--c:var(--t2)">T2</span></td><td>For recurring trackers</td></tr>
+        <tr><td><b>Shikamaru</b></td><td>Stuck problems where the next step isn't obvious</td><td><span class="chip" style="--c:var(--t2)">T2</span></td><td>Ino → Choji → Mirari</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- PHASE 4 -->
+  <section class="phase">
+    <div class="phase-head"><span class="mono">Phase 4</span><h2>Quality gate</h2><p>One check, one fix loop. No endless polishing.</p></div>
+    <div class="gate">
+      <div class="node">Work finished</div>
+      <span class="to">→</span>
+      <div class="checks">
+        <div class="check">Did everything that was asked</div>
+        <div class="check">It actually works (ran it, opened it)</div>
+        <div class="check">Delivered where Henry will find it</div>
+      </div>
+      <span class="to">→</span>
+      <div class="loop"><b>Fails?</b> Fix it once. Still failing? Step up one tier, or tell Henry what's blocking and stop.</div>
+    </div>
+  </section>
+
+  <!-- PHASE 5 -->
+  <section class="phase">
+    <div class="phase-head"><span class="mono">Phase 5</span><h2>Ship &amp; stop</h2></div>
+    <div class="row">
+      <div class="node ship" style="flex:1 1 260px">Deliver it<small>File, artifact or reply, wherever it belongs</small></div>
+      <span class="to">→</span>
+      <div class="node" style="flex:1 1 260px">Say what got done<small>1–3 sentences, no step-by-step recap</small></div>
+      <span class="to">→</span>
+      <div class="node" style="flex:1 1 260px">Stop<small>Extra polish only when Henry asks</small></div>
+    </div>
+  </section>
+
+  <!-- SAVERS -->
+  <section class="phase">
+    <div class="phase-head"><span class="mono">Scouting report</span><h2>Where tokens leak</h2></div>
+    <div class="vs">
+      <div class="col bad"><h3>Wasters</h3><ul>
+        <li>Running planner, executor and reviewer on small tasks</li>
+        <li>Reading whole files to change one line</li>
+        <li>Rewriting a full page for a small change</li>
+        <li>Running the same search again</li>
+        <li>Vague briefs that make agents start from zero</li>
+        <li>Several review passes on the same work</li>
+        <li>Long recaps of what was already delivered</li>
+        <li>One giant chat that holds every project</li>
+      </ul></div>
+      <div class="col good"><h3>Savers</h3><ul>
+        <li>Smallest tier first, step up only when needed</li>
+        <li>Search for the exact line, then edit it</li>
+        <li>Edit in place, keep what works</li>
+        <li>Research once, act on it</li>
+        <li>Complete briefs: goal, files, what done looks like</li>
+        <li>One review, fix, ship</li>
+        <li>Short replies</li>
+        <li>A new chat per project</li>
+      </ul></div>
+    </div>
+  </section>
+
+  <section class="phase">
+    <div class="phase-head"><span class="mono">Your side</span><h2>Henry's calls</h2></div>
+    <div class="you">
+      <div class="card"><b>Say the mode</b><code>lean mode</code> for quick stuff, <code>full squad</code> for big builds</div>
+      <div class="card"><b>Load the first message</b>What, who it's for, deadline, an example or link</div>
+      <div class="card"><b>One chat per project</b>Old context from other projects costs tokens every turn</div>
+      <div class="card"><b>Check the meter</b>Run <code>/explain-usage</code> to see where tokens went</div>
+    </div>
+  </section>
+</div>
+
+<script>
+(function(){
+  var why={0:'<b>"Pre-game meal"</b> needs no tools or files → stops at question 1 → Tier 0.',
+    1:'<b>Shop site typo</b> needs files, isn\'t a launch, and takes a few steps → stops at question 3 → Tier 1.',
+    2:'<b>Restaurant research</b> needs the web, isn\'t live yet, is too big for a few steps, and Jiraiya owns it → Tier 2.',
+    3:'<b>New client site</b> needs files and is going live for a client → stops at question 2 → Tier 3.'};
+  var btns=document.querySelectorAll('.picker button');
+  function clear(){document.querySelectorAll('.lit').forEach(function(e){e.classList.remove('lit')});}
+  btns.forEach(function(b){b.addEventListener('click',function(){
+    var p=b.dataset.path,on=b.getAttribute('aria-pressed')!=='true';
+    btns.forEach(function(x){x.setAttribute('aria-pressed','false')});clear();
+    if(!on){document.getElementById('why').textContent='Pick an example above.';return;}
+    b.setAttribute('aria-pressed','true');
+    document.querySelectorAll('[data-hit="'+p+'"]').forEach(function(e){e.classList.add('lit')});
+    document.querySelectorAll('[data-pass]').forEach(function(e){if(e.dataset.pass.split(' ').indexOf(p)>-1)e.classList.add('lit')});
+    document.getElementById('lane'+p).classList.add('lit');
+    document.getElementById('why').innerHTML=why[p];
+  });});
+})();
+</script>
+
+</body></html>

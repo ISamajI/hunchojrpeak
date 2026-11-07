@@ -1,0 +1,633 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Peak Uptime</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#eef1f8; --panel:#ffffff; --panel2:#f5f7fc; --line:#d9deec;
+  --ink:#0d1530; --ink2:#4a5373; --ink3:#7d86a3;
+  --accent:#1f49e0; --accent-soft:#e2e8fd;
+  --up:#0f9d62; --up-soft:#dcf5ea; --warn:#b76a00; --warn-soft:#fdefd8; --down:#d42a3c; --down-soft:#fde2e5;
+  --spark:#1f49e0; --grid:#e6e9f3; --shadow:0 1px 2px rgba(13,21,48,.06),0 8px 24px -12px rgba(13,21,48,.18);
+  --display:"Archivo",system-ui,sans-serif; --body:"Instrument Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ground:#070c1d; --panel:#0e1530; --panel2:#121b3b; --line:#1f2a52;
+  --ink:#eef1fb; --ink2:#a4acc9; --ink3:#6a739a;
+  --accent:#5b7fff; --accent-soft:#18245a;
+  --up:#35d68f; --up-soft:#0d3326; --warn:#f2a43a; --warn-soft:#3a2a10; --down:#ff5c6c; --down-soft:#3d1520;
+  --spark:#7b98ff; --grid:#18214a; --shadow:0 1px 0 rgba(255,255,255,.03) inset,0 10px 30px -14px rgba(0,0,0,.6);
+}}
+:root[data-theme="dark"]{
+  --ground:#070c1d; --panel:#0e1530; --panel2:#121b3b; --line:#1f2a52;
+  --ink:#eef1fb; --ink2:#a4acc9; --ink3:#6a739a;
+  --accent:#5b7fff; --accent-soft:#18245a;
+  --up:#35d68f; --up-soft:#0d3326; --warn:#f2a43a; --warn-soft:#3a2a10; --down:#ff5c6c; --down-soft:#3d1520;
+  --spark:#7b98ff; --grid:#18214a; --shadow:0 1px 0 rgba(255,255,255,.03) inset,0 10px 30px -14px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;padding-inline:16px;padding-block:20px 60px}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* header */
+.top{display:flex;align-items:center;gap:16px;flex-wrap:wrap;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:14px}
+.radar{width:48px;height:48px;border-radius:50%;position:relative;background:radial-gradient(circle,var(--accent-soft) 0 60%,transparent 61%);border:1.5px solid var(--accent);overflow:hidden;flex:none}
+.radar::before{content:"";position:absolute;inset:0;background:conic-gradient(from 0deg,transparent 0 290deg,color-mix(in srgb,var(--accent) 55%,transparent) 360deg);animation:sweep 3.2s linear infinite}
+.radar::after{content:"";position:absolute;left:50%;top:50%;width:6px;height:6px;margin:-3px;border-radius:50%;background:var(--accent)}
+@keyframes sweep{to{transform:rotate(360deg)}}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(26px,4.4vw,38px);letter-spacing:-.02em;line-height:1;margin:0}
+h1 span{color:var(--accent)}
+.sub{color:var(--ink2);font-size:13px;margin-top:4px}
+.beat{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:8px 14px 8px 12px;font-size:13px}
+.beat i{width:9px;height:9px;border-radius:50%;background:var(--ink3);flex:none}
+.beat.live i{background:var(--up);box-shadow:0 0 0 0 var(--up);animation:ping 2s infinite}
+.beat.stale i{background:var(--warn)}
+@keyframes ping{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--up) 60%,transparent)}100%{box-shadow:0 0 0 10px transparent}}
+
+/* summary */
+.summary{display:grid;grid-template-columns:1.3fr repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.sum{background:var(--panel);padding:16px 18px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.sum label{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+.sum .big{font-family:var(--display);font-weight:900;font-size:34px;line-height:1;letter-spacing:-.02em}
+.sum .note{font-size:12.5px;color:var(--ink2)}
+.verdict .big{font-size:26px}
+.verdict.allgood .big{color:var(--up)} .verdict.bad .big{color:var(--down)} .verdict.meh .big{color:var(--warn)}
+@media (max-width:760px){.summary{grid-template-columns:1fr 1fr}.verdict{grid-column:1/-1}}
+
+/* toolbar */
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 12px;font-size:13px;color:var(--ink2);transition:.15s}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+.chip b{font-family:var(--mono);font-weight:500;margin-left:4px;opacity:.75}
+.btn{border:0;border-radius:10px;padding:10px 16px;font-weight:600;background:var(--accent);color:#fff;display:inline-flex;gap:8px;align-items:center;transition:transform .12s,filter .12s}
+.btn:hover{filter:brightness(1.08)} .btn:active{transform:scale(.97)}
+.btn.ghost{background:transparent;color:var(--ink2);border:1px solid var(--line)}
+.btn.danger{background:transparent;color:var(--down);border:1px solid var(--line)}
+
+/* examples banner */
+.examples{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--warn-soft);color:var(--ink);border-radius:12px;padding:10px 14px;font-size:13.5px}
+
+/* sites */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:14px}
+@media (max-width:420px){.grid{grid-template-columns:1fr}}
+.site{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden;box-shadow:var(--shadow);animation:rise .45s both}
+.site::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--st)}
+.site.new{animation:rise .45s both,flash 1.2s}
+@keyframes rise{from{transform:translateY(8px);opacity:.4}to{transform:none;opacity:1}}
+@keyframes flash{0%{box-shadow:0 0 0 3px var(--accent)}100%{box-shadow:var(--shadow)}}
+.site[data-s="up"]{--st:var(--up);--st-soft:var(--up-soft)}
+.site[data-s="slow"]{--st:var(--warn);--st-soft:var(--warn-soft)}
+.site[data-s="down"]{--st:var(--down);--st-soft:var(--down-soft)}
+.site[data-s="unknown"]{--st:var(--ink3);--st-soft:var(--panel2)}
+.head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.name{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:-.01em;line-height:1.15;overflow-wrap:anywhere}
+.url{font-family:var(--mono);font-size:12.5px;color:var(--accent);text-decoration:none;overflow-wrap:anywhere}
+.url:hover{text-decoration:underline}
+.pill{flex:none;display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:var(--st-soft);color:var(--st);font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.pill i{width:7px;height:7px;border-radius:50%;background:var(--st)}
+.site[data-s="up"] .pill i{animation:ping 2.4s infinite}
+.site[data-s="down"] .pill i{animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:.2}}
+.tag{font-size:11px;background:var(--warn-soft);color:var(--warn);padding:2px 7px;border-radius:6px;font-weight:600;margin-left:6px;vertical-align:2px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--panel2);border-radius:9px;padding:8px 10px;min-width:0}
+.stat label{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+.stat span{font-family:var(--mono);font-size:15px;font-weight:600;white-space:nowrap}
+.stat .s7{display:block;font-family:var(--mono);font-size:11px;color:var(--ink3)}
+.spark{width:100%;height:54px;display:block}
+.spark text{font-family:var(--mono);font-size:9px;fill:var(--ink3)}
+.strip{display:flex;gap:2px;height:14px}
+.strip b{flex:1;border-radius:2px;background:var(--line)}
+.strip b.ok{background:var(--up)} .strip b.sl{background:var(--warn)} .strip b.dn{background:var(--down)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--ink2)}
+.meta b{color:var(--ink);font-weight:600}
+.due{color:var(--warn);font-weight:600} .overdue{color:var(--down);font-weight:600}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:12px;color:var(--ink3);border-top:1px dashed var(--line);padding-top:10px}
+.icon{background:none;border:1px solid transparent;border-radius:8px;padding:4px 8px;color:var(--ink2);font-size:12.5px}
+.icon:hover{border-color:var(--line);color:var(--ink)}
+.err{font-family:var(--mono);font-size:12px;color:var(--down);background:var(--down-soft);padding:6px 8px;border-radius:7px;overflow-wrap:anywhere}
+
+.empty{background:var(--panel);border:1.5px dashed var(--line);border-radius:14px;padding:36px 20px;text-align:center;color:var(--ink2)}
+.empty h3{font-family:var(--display);color:var(--ink);margin:0 0 6px;font-size:20px}
+
+/* how it works */
+.how{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;font-size:13.5px;color:var(--ink2);display:grid;grid-template-columns:auto 1fr;gap:6px 14px}
+.how strong{color:var(--ink);font-family:var(--display)}
+.quote{font-family:var(--display);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:12px;color:var(--ink3);text-align:center}
+
+/* dialog */
+dialog{border:1px solid var(--line);border-radius:16px;background:var(--panel);color:var(--ink);padding:0;width:min(520px,calc(100vw - 32px));box-shadow:0 30px 80px -20px rgba(0,0,0,.5)}
+dialog::backdrop{background:rgba(7,12,29,.55);backdrop-filter:blur(3px)}
+form.f{padding:20px;display:flex;flex-direction:column;gap:12px}
+form.f h2{font-family:var(--display);margin:0;font-size:22px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media (max-width:480px){.row{grid-template-columns:1fr}}
+.fld{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--ink2);font-weight:500}
+.fld input,.fld select,.fld textarea{background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:9px 11px;font-size:14.5px;min-width:0}
+.acts{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:4px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,120px);background:var(--ink);color:var(--ground);padding:10px 16px;border-radius:10px;font-size:14px;transition:transform .3s,visibility .3s;z-index:9;visibility:hidden}
+.toast.on{visibility:visible}
+.toast.on{transform:translate(-50%,0)}
+.problem{display:flex;gap:10px;align-items:flex-start;background:var(--warn-soft);border-radius:12px;padding:12px 14px;font-size:13.5px}
+.problem b{font-family:var(--display)}
+.site[data-s="blocked"]{--st:var(--warn);--st-soft:var(--warn-soft)}
+.site[data-s="paused"]{--st:var(--ink3);--st-soft:var(--panel2)}
+.inc{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.inc h2{font-family:var(--display);font-size:17px;margin:0;padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.inc h2 small{font-family:var(--body);font-weight:500;font-size:12.5px;color:var(--ink3)}
+.inc ol{list-style:none;margin:0;padding:0}
+.inc li{display:grid;grid-template-columns:auto 1fr auto;gap:4px 12px;padding:11px 18px;border-bottom:1px solid var(--line);font-size:13.5px;align-items:center}
+.inc li:last-child{border-bottom:0}
+.inc li i{width:9px;height:9px;border-radius:50%;background:var(--up)}
+.inc li.open i{background:var(--down);animation:blink 1s steps(2) infinite}
+.inc li .when{font-family:var(--mono);font-size:12px;color:var(--ink3);text-align:right}
+.inc li .why{grid-column:2/-1;color:var(--ink2);font-size:12.5px;overflow-wrap:anywhere}
+.inc .none{padding:16px 18px;color:var(--ink2);font-size:13.5px}
+.check{display:flex;gap:8px;align-items:center;font-size:13.5px;color:var(--ink2)}
+.offline{background:var(--down-soft);color:var(--ink);border-radius:12px;padding:10px 14px;font-size:13.5px}
+/* tabs */
+.tabs{display:flex;gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:4px;width:max-content;max-width:100%}
+.tab{border:0;background:transparent;border-radius:9px;padding:8px 16px;font-weight:600;color:var(--ink2);display:flex;gap:8px;align-items:center}
+.tab[aria-selected="true"]{background:var(--accent);color:#fff}
+.tab .count{font-family:var(--mono);font-size:11.5px;min-width:20px;padding:1px 6px;border-radius:999px;background:var(--down);color:#fff;text-align:center}
+.tab[aria-selected="true"] .count{background:#fff;color:var(--accent)}
+.view{display:flex;flex-direction:column;gap:22px}
+/* requests */
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.flow div{background:var(--panel);padding:12px 14px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.flow label{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+.flow b{font-family:var(--display);font-size:26px;line-height:1.1}
+.flow span{font-size:12px;color:var(--ink2)}
+.flow .hot b{color:var(--accent)}
+@media (max-width:700px){.flow{grid-template-columns:repeat(2,1fr)}.flow div:first-child{grid-column:1/-1}}
+.reqs{display:flex;flex-direction:column;gap:12px}
+.req{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow);position:relative;overflow:hidden;animation:rise .4s both}
+.req::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--rs)}
+.req[data-st="new"],.req[data-st="revise"]{--rs:var(--ink3);--rs-soft:var(--panel2)}
+.req[data-st="working"]{--rs:var(--accent);--rs-soft:var(--accent-soft)}
+.req[data-st="review"],.req[data-st="needs_info"]{--rs:var(--warn);--rs-soft:var(--warn-soft)}
+.req[data-st="approved"]{--rs:var(--accent);--rs-soft:var(--accent-soft)}
+.req[data-st="live"]{--rs:var(--up);--rs-soft:var(--up-soft)}
+.req[data-st="rejected"],.req[data-st="failed"],.req[data-st="manual"]{--rs:var(--down);--rs-soft:var(--down-soft)}
+.rhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap}
+.rtitle{font-family:var(--display);font-weight:700;font-size:17px;line-height:1.2}
+.rsite{font-size:12.5px;color:var(--ink2)}
+.rpill{flex:none;padding:4px 10px;border-radius:999px;background:var(--rs-soft);color:var(--rs);font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;display:inline-flex;gap:6px;align-items:center}
+.req[data-st="working"] .rpill::before{content:"";width:10px;height:10px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:sweep .8s linear infinite}
+.rbody{font-size:14px;white-space:pre-wrap;overflow-wrap:anywhere}
+.rmeta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:var(--ink3)}
+.rush{color:var(--down);font-weight:700}
+.thumbs{display:flex;gap:8px;flex-wrap:wrap}
+.thumbs img{width:72px;height:72px;object-fit:cover;border-radius:8px;border:1px solid var(--line);background:var(--panel2)}
+.claude{background:var(--panel2);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;font-size:13.5px}
+.claude h4{margin:0;font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink3)}
+.claude ul{margin:0;padding-left:18px}
+.claude.ask{background:var(--warn-soft)}
+.thread{display:flex;flex-direction:column;gap:6px;font-size:12.5px;color:var(--ink2)}
+.thread p{margin:0}
+.thread b{color:var(--ink)}
+.racts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.btn.ok{background:var(--up)} .btn.sm{padding:7px 12px;font-size:13.5px}
+.reply{display:flex;gap:8px;flex-wrap:wrap}
+.reply textarea{flex:1 1 240px;background:var(--panel2);border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:14px;min-height:40px}
+.drop{border:1.5px dashed var(--line);border-radius:10px;padding:12px;text-align:center;color:var(--ink2);font-size:13px;cursor:pointer}
+.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.pending{display:flex;gap:8px;flex-wrap:wrap}
+.pending span{position:relative}
+.pending img{width:64px;height:64px;object-fit:cover;border-radius:8px;border:1px solid var(--line)}
+.pending button{position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;border:0;background:var(--ink);color:var(--ground);font-size:12px;line-height:1}
+.hint{font-size:12px;color:var(--ink3)}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="radar" aria-hidden="true"></div>
+      <div>
+        <h1>PEAK <span>UPTIME</span></h1>
+        <div class="sub">LTGPEAK hosting watch — every client site, one glance</div>
+      </div>
+    </div>
+    <div class="beat" id="beat"><i></i><span id="beatText">Connecting…</span></div>
+  </header>
+
+  <div class="tabs" role="tablist" aria-label="Dashboard sections">
+    <button class="tab" role="tab" id="tabUptime" aria-selected="true" type="button">Uptime</button>
+    <button class="tab" role="tab" id="tabReq" aria-selected="false" type="button">Change requests <span class="count" id="reqBadge" hidden>0</span></button>
+  </div>
+
+  <div class="problem" id="problem" hidden><span aria-hidden="true">⚠</span><span><b>Monitor needs attention.</b> <span id="problemText"></span></span></div>
+  <div class="offline" id="offline" hidden>Couldn't reach the dashboard's storage — showing nothing saved yet. Reload to try again.</div>
+
+  <div class="view" id="viewUptime">
+  <section class="summary" aria-label="Summary">
+    <div class="sum verdict" id="verdict"><label>Status</label><div class="big" id="vText">—</div><div class="note" id="vNote">&nbsp;</div></div>
+    <div class="sum"><label>Sites up</label><div class="big mono" id="sUp">0</div><div class="note" id="sUpNote">of 0 watched</div></div>
+    <div class="sum"><label>Avg response</label><div class="big mono" id="sMs">—</div><div class="note">latest check, ms</div></div>
+    <div class="sum"><label>24h uptime</label><div class="big mono" id="sUptime">—</div><div class="note" id="sUptimeNote">across all sites</div></div>
+  </section>
+
+  <div class="examples" id="exBanner" hidden>
+    <span><b>These are example sites</b> so you can see how it looks. The monitor skips them.</span>
+    <button class="btn ghost" id="clearEx" type="button">Clear examples</button>
+  </div>
+
+  <div class="bar">
+    <div class="filters" role="group" aria-label="Filter sites">
+      <button class="chip" data-f="all" aria-pressed="true" type="button">All<b id="cAll">0</b></button>
+      <button class="chip" data-f="down" aria-pressed="false" type="button">Down<b id="cDown">0</b></button>
+      <button class="chip" data-f="slow" aria-pressed="false" type="button">Slow<b id="cSlow">0</b></button>
+      <button class="chip" data-f="renew" aria-pressed="false" type="button">Renewing soon<b id="cRenew">0</b></button>
+    </div>
+    <span style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="note mono" id="spend" style="font-size:13px;color:var(--ink2)"></span><button class="btn" id="addBtn" type="button">＋ Add site</button></span>
+  </div>
+
+  <section class="grid" id="grid" aria-live="polite"></section>
+
+  <section class="inc" aria-label="Downtime incidents">
+    <h2>Incidents <small id="incNote">last 7 days</small></h2>
+    <ol id="incList"></ol>
+  </section>
+
+  <section class="how" aria-label="How checks run">
+    <strong>How it checks</strong><span>A scheduled monitor visits every site once an hour and writes the result here — status code, response time, days left on the SSL certificate, and whether the page still shows the text you set. Failures are re-checked a few seconds later before a site is marked down, so one blip won't page you. The heartbeat up top turns amber if results are over 90 minutes old.</span>
+    <strong>Slow</strong><span>Responds, but takes longer than 1,500 ms.</span>
+    <strong>Down</strong><span>No response, a timeout, an error code (4xx/5xx), or the required text is missing. Opens an incident and alerts you; it closes itself when the site recovers.</span>
+  </section>
+
+  </div>
+
+  <div class="view" id="viewReq" hidden>
+    <section class="flow" aria-label="Request pipeline">
+      <div class="hot"><label>Needs you</label><b class="mono" id="fNeeds">0</b><span>ready to approve or waiting on an answer</span></div>
+      <div><label>Queued</label><b class="mono" id="fQueued">0</b><span>Claude picks up hourly</span></div>
+      <div><label>Claude working</label><b class="mono" id="fWorking">0</b><span>being built now</span></div>
+      <div><label>Going live</label><b class="mono" id="fApproved">0</b><span>approved, deploying</span></div>
+      <div><label>Live · 30 days</label><b class="mono" id="fLive">0</b><span>changes shipped</span></div>
+    </section>
+    <div class="bar">
+      <div class="filters" role="group" aria-label="Filter requests">
+        <button class="chip" data-rf="active" aria-pressed="true" type="button">Active<b id="rcActive">0</b></button>
+        <button class="chip" data-rf="needs" aria-pressed="false" type="button">Needs you<b id="rcNeeds">0</b></button>
+        <button class="chip" data-rf="done" aria-pressed="false" type="button">Done<b id="rcDone">0</b></button>
+      </div>
+      <button class="btn" id="newReq" type="button">＋ New request</button>
+    </div>
+    <section class="reqs" id="reqList" aria-live="polite"></section>
+    <section class="how" aria-label="How change requests work">
+      <strong>1 · Log it</strong><span>Type what the client asked for in plain words and attach any photos or logos they sent.</span>
+      <strong>2 · Claude builds it</strong><span>Once an hour Claude picks up new requests, makes the change on a private preview copy of the site, and writes a short summary. Anything unclear comes back as a question instead of a guess.</span>
+      <strong>3 · One-tap approve</strong><span>Open the preview, then Approve to go live, or send it back with notes. Nothing reaches the client's site without an Approve.</span>
+      <strong>Automatic for</strong><span>Sites whose files are connected as a Claude artifact. Other sites are marked "do by hand" so nothing silently stalls.</span>
+    </section>
+  </div>
+
+  <div class="quote">Time is Quality</div>
+</div>
+
+<dialog id="dlg">
+  <form class="f" id="form" method="dialog">
+    <h2 id="fTitle">Add a site</h2>
+    <div class="row">
+      <label class="fld">Site name<input id="fName" required maxlength="60" placeholder="SariNails"></label>
+      <label class="fld">Client<input id="fClient" maxlength="60" placeholder="Yosaris Torres"></label>
+    </div>
+    <label class="fld">URL<input id="fUrl" required type="url" placeholder="https://sarinails.us"></label>
+    <div class="row">
+      <label class="fld">Hosted on<select id="fHost"><option>Vercel</option><option>Netlify</option><option>Cloudflare Pages</option><option>GitHub Pages</option><option>Hostinger</option><option>GoDaddy</option><option>Squarespace</option><option>Wix</option><option>VPS</option><option>Claude Artifact</option><option>Other</option></select></label>
+      <label class="fld">Plan<select id="fPlan"><option value="">None</option><option>Care plan $40/mo</option><option>Starter</option><option>Showcase</option><option>Booking+Backend</option><option>Premium</option></select></label>
+    </div>
+    <div class="row">
+      <label class="fld">Domain renews<input id="fRenew" type="date"></label>
+      <label class="fld">Hosting cost / mo<input id="fCost" type="number" min="0" step="0.01" placeholder="0"></label>
+    </div>
+    <div class="row">
+      <label class="fld">Site files<select id="fSource"><option value="none">Not connected</option><option value="artifact">Claude artifact (auto changes)</option><option value="mac">Folder on Mac</option><option value="github">GitHub repo</option></select></label>
+      <label class="fld">Files link<input id="fSourceUrl" maxlength="300" placeholder="https://claude.ai/artifact/…"></label>
+    </div>
+    <label class="fld">Must contain text <span style="color:var(--ink3);font-weight:400">— optional; catches a blank or broken deploy</span><input id="fKeyword" maxlength="80" placeholder="Book now"></label>
+    <label class="check"><input id="fPaused" type="checkbox"> Pause monitoring for this site</label>
+    <label class="fld">Notes<textarea id="fNotes" rows="2" maxlength="300" placeholder="DNS at Namecheap, login in 1Password…"></textarea></label>
+    <div class="acts">
+      <button class="btn danger" id="fDelete" type="button" hidden>Remove site</button>
+      <span style="display:flex;gap:8px;margin-left:auto">
+        <button class="btn ghost" id="fCancel" type="button">Cancel</button>
+        <button class="btn" id="fSave" type="submit">Save site</button>
+      </span>
+    </div>
+  </form>
+</dialog>
+<dialog id="rdlg">
+  <form class="f" id="rform" method="dialog">
+    <h2>New change request</h2>
+    <label class="fld">Site<select id="rSite" required></select></label>
+    <div class="hint" id="rSiteHint"></div>
+    <label class="fld">Short title<input id="rTitle" required maxlength="80" placeholder="Update holiday hours"></label>
+    <label class="fld">What the client wants<textarea id="rDetails" required rows="5" maxlength="4000" placeholder="Paste their text or describe it: which page, what to change, exact wording, colors, prices…"></textarea></label>
+    <div class="row">
+      <label class="fld">Requested by<input id="rBy" maxlength="60" placeholder="Client name"></label>
+      <label class="fld">Needed by<input id="rDue" type="date"></label>
+    </div>
+    <label class="check"><input id="rRush" type="checkbox"> Rush (+$150 add-on)</label>
+    <div class="fld">Photos / logos <span class="hint">up to 4 images, shrunk automatically</span>
+      <div class="drop" id="rDrop" tabindex="0" role="button">Drop images here or tap to choose</div>
+      <input id="rFiles" type="file" accept="image/*" multiple hidden>
+      <div class="pending" id="rPending"></div>
+    </div>
+    <div class="acts">
+      <span></span>
+      <span style="display:flex;gap:8px;margin-left:auto">
+        <button class="btn ghost" id="rCancel" type="button">Cancel</button>
+        <button class="btn" id="rSave" type="submit">Send to Claude</button>
+      </span>
+    </div>
+  </form>
+</dialog>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const SLOW=1500, STALE_MIN=90;
+let sites=[], status={}, incidents=[], monitor=null, filter="all", db=null, editing=null, justAdded=null;
+
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove("on"),2400)}
+function ago(ts){if(!ts)return"never";const m=Math.round((Date.now()-new Date(ts))/60000);if(m<1)return"just now";if(m<60)return m+" min ago";const h=Math.round(m/60);if(h<48)return h+" h ago";return Math.round(h/24)+" d ago"}
+function daysTo(d){if(!d)return null;return Math.ceil((new Date(d+"T00:00:00")-new Date().setHours(0,0,0,0))/864e5)}
+function stateOf(s){if(s.paused)return"paused";const st=status[s.id];const l=st&&st.last;if(st&&st.blockedAt&&(!l||new Date(st.blockedAt)>new Date(l.at)))return"blocked";if(!l)return"unknown";if(!l.ok)return"down";if(l.ms>SLOW)return"slow";return"up"}
+function uptime7(st){if(st&&st.uptime7d!=null)return st.uptime7d;const h=(st&&st.history)||[];if(!h.length)return null;return h.filter(x=>x.ok).length/h.length*100}
+function uptime(st){const h=(st&&st.history)||[];const cut=Date.now()-864e5;const r=h.filter(x=>new Date(x.at)>=cut);if(!r.length)return null;return r.filter(x=>x.ok).length/r.length*100}
+function countUp(el,to,suffix=""){const from=parseFloat(el.dataset.v||"0");el.dataset.v=to;if(matchMedia("(prefers-reduced-motion:reduce)").matches||from===to){el.textContent=fmt(to)+suffix;return}const t0=performance.now();function f(n){const p=Math.min(1,(n-t0)/600),e=1-Math.pow(1-p,3);el.textContent=fmt(from+(to-from)*e)+suffix;if(p<1)requestAnimationFrame(f)}requestAnimationFrame(f);function fmt(v){return Number.isInteger(to)?Math.round(v).toLocaleString():v.toFixed(1)}}
+
+function spark(hist){
+  const pts=(hist||[]).slice(-48); const W=300,H=54,P=4;
+  if(pts.length<2) return `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="No response history yet"><line x1="0" x2="${W}" y1="${H/2}" y2="${H/2}" stroke="var(--grid)" stroke-dasharray="4 4"/><text x="${W/2}" y="${H/2-6}" text-anchor="middle">waiting for checks</text></svg>`;
+  const ms=pts.map(p=>p.ok?p.ms:null); const max=Math.max(SLOW*1.1,...ms.filter(v=>v!=null));
+  const x=i=>P+i*(W-2*P)/(pts.length-1), y=v=>H-P-(v/max)*(H-2*P-10);
+  let d="",area="";let started=false;
+  ms.forEach((v,i)=>{if(v==null){started=false;return}d+=(started?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1);started=true});
+  const okIdx=ms.map((v,i)=>v!=null?i:-1).filter(i=>i>=0);
+  if(okIdx.length>1){area=`M${x(okIdx[0])} ${H-P}`+okIdx.map(i=>`L${x(i).toFixed(1)} ${y(ms[i]).toFixed(1)}`).join("")+`L${x(okIdx.at(-1))} ${H-P}Z`}
+  const downs=ms.map((v,i)=>v==null?`<rect x="${x(i)-2}" y="${P}" width="4" height="${H-2*P}" fill="var(--down)" opacity=".28"/>`:"").join("");
+  const li=okIdx.at(-1); const end=li!=null?`<circle cx="${x(li)}" cy="${y(ms[li])}" r="3.2" fill="var(--spark)" stroke="var(--panel)" stroke-width="1.5"/>`:"";
+  const sy=y(SLOW);
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Response time, last ${pts.length} checks">
+  <line x1="0" x2="${W}" y1="${sy}" y2="${sy}" stroke="var(--warn)" stroke-dasharray="3 4" opacity=".55"/>
+  ${downs}<path d="${area}" fill="var(--spark)" opacity=".12"/><path d="${d}" fill="none" stroke="var(--spark)" stroke-width="1.8" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>${end}</svg>`;
+}
+
+function card(s){
+  const st=status[s.id]||{}; const l=st.last; const k=stateOf(s); const up=uptime(st);
+  const label={up:"Up",slow:"Slow",down:"Down",blocked:"Blocked",paused:"Paused",unknown:s.example?"Example":"Not checked"}[k]; const u7=uptime7(st);
+  const rd=daysTo(s.renew); const ssl=l&&l.sslDays!=null?l.sslDays:null;
+  const strip=(st.history||[]).slice(-24); const pad=24-strip.length;
+  const cells="<b></b>".repeat(pad)+strip.map(h=>`<b class="${!h.ok?"dn":h.ms>SLOW?"sl":"ok"}" title="${esc(new Date(h.at).toLocaleString())} · ${h.ok?h.ms+" ms":"down"}"></b>`).join("");
+  return `<article class="site${justAdded===s.id?" new":""}" data-s="${k}" data-id="${esc(s.id)}">
+    <div class="head"><div style="min-width:0"><div class="name">${esc(s.name)}${s.example?'<span class="tag">EXAMPLE</span>':""}</div><a class="url" href="${esc(s.url)}" target="_blank" rel="noopener">${esc(s.url.replace(/^https?:\/\//,""))}</a></div>
+      <span class="pill"><i></i>${label}</span></div>
+    <div class="stats">
+      <div class="stat"><label>Response</label><span>${l&&l.ok?l.ms+"<small> ms</small>":"—"}</span></div>
+      <div class="stat"><label>24h up</label><span>${up==null?"—":up.toFixed(up===100?0:1)+"%"}</span><small class="s7">7d ${u7==null?"—":Number(u7).toFixed(u7>=100?0:1)+"%"}</small></div>
+      <div class="stat"><label>SSL</label><span class="${ssl!=null&&ssl<=14?(ssl<=3?"overdue":"due"):""}">${ssl==null?"—":ssl+"d"}</span></div>
+    </div>
+    ${spark(st.history)}
+    <div class="strip" aria-label="Last 24 checks">${cells}</div>
+    ${l&&!l.ok&&l.error?`<div class="err">${esc(l.code?("HTTP "+l.code+" · "):"")}${esc(l.error)}</div>`:""}
+    <div class="meta">
+      <span>Host <b>${esc(s.host||"—")}</b></span>
+      ${s.client?`<span>Client <b>${esc(s.client)}</b></span>`:""}
+      ${s.plan?`<span>Plan <b>${esc(s.plan)}</b></span>`:""}
+      ${s.cost?`<span>Cost <b>$${Number(s.cost).toFixed(2)}/mo</b></span>`:""}
+      ${rd!=null?`<span>Domain <b class="${rd<0?"overdue":rd<=30?"due":""}">${rd<0?"expired "+(-rd)+"d ago":rd===0?"renews today":"renews in "+rd+"d"}</b></span>`:""}
+    </div>
+    ${s.keyword?`<div class="meta"><span>Must show <b>“${esc(s.keyword)}”</b></span></div>`:""}
+    ${k==="blocked"?`<div class="err" style="color:var(--warn);background:var(--warn-soft)">The monitor isn't allowed to reach this domain yet — see the notice at the top.</div>`:""}
+    ${s.notes?`<div class="meta">${esc(s.notes)}</div>`:""}
+    <div class="foot"><span>${k==="paused"?"Monitoring paused":k==="blocked"?"Tried "+ago(st.blockedAt):l?"Checked "+ago(l.at)+(l.code?" · HTTP "+l.code:""):s.example?"Example — not monitored":"Waiting for first check"}</span><button class="icon" data-edit="${esc(s.id)}" type="button">Edit</button></div>
+  </article>`;
+}
+
+function render(){
+  const order={down:0,blocked:1,slow:2,unknown:3,paused:4,up:5};
+  const renewSoon=s=>{const d=daysTo(s.renew);const ssl=status[s.id]?.last?.sslDays;return (d!=null&&d<=30)||(ssl!=null&&ssl<=14)};
+  const list=sites.slice().sort((a,b)=>order[stateOf(a)]-order[stateOf(b)]||a.name.localeCompare(b.name));
+  const shown=list.filter(s=>filter==="all"||(filter==="renew"?renewSoon(s):stateOf(s)===filter));
+  $("#cAll").textContent=sites.length; $("#cDown").textContent=sites.filter(s=>stateOf(s)==="down").length;
+  $("#cSlow").textContent=sites.filter(s=>stateOf(s)==="slow").length; $("#cRenew").textContent=sites.filter(renewSoon).length;
+  const g=$("#grid");
+  if(!sites.length){g.innerHTML=`<div class="empty" style="grid-column:1/-1"><h3>No sites yet</h3><p>Add the first client site you host and your Mac will start checking it on the next hourly run.</p><button class="btn" type="button" onclick="document.getElementById('addBtn').click()">＋ Add your first site</button></div>`}
+  else if(!shown.length){g.innerHTML=`<div class="empty" style="grid-column:1/-1"><h3>Nothing here</h3><p>No sites match this filter — that's a good thing.</p></div>`}
+  else g.innerHTML=shown.map(card).join("");
+  justAdded=null;
+  $("#exBanner").hidden=!sites.some(s=>s.example);
+
+  const checked=sites.filter(s=>status[s.id]?.last);
+  const upN=sites.filter(s=>["up","slow"].includes(stateOf(s))).length, downN=sites.filter(s=>stateOf(s)==="down").length, slowN=sites.filter(s=>stateOf(s)==="slow").length;
+  countUp($("#sUp"),upN); $("#sUpNote").textContent=`of ${sites.length} watched`;
+  const oks=checked.map(s=>status[s.id].last).filter(l=>l.ok);
+  if(oks.length) countUp($("#sMs"),Math.round(oks.reduce((a,l)=>a+l.ms,0)/oks.length)); else {$("#sMs").textContent="—";$("#sMs").dataset.v=0}
+  const ups=sites.map(s=>uptime(status[s.id])).filter(v=>v!=null);
+  if(ups.length) countUp($("#sUptime"),Math.round(ups.reduce((a,b)=>a+b,0)/ups.length*10)/10,"%"); else $("#sUptime").textContent="—";
+  const v=$("#verdict"); v.classList.remove("allgood","bad","meh");
+  if(!sites.length){$("#vText").textContent="No sites yet";$("#vNote").textContent="Add a site to start watching"}
+  else if(downN){v.classList.add("bad");$("#vText").textContent=`${downN} site${downN>1?"s":""} down`;$("#vNote").textContent="Check the red cards first"}
+  else if(slowN){v.classList.add("meh");$("#vText").textContent=`${slowN} running slow`;$("#vNote").textContent="Up, but over 1.5 s to respond"}
+  else if(checked.length){v.classList.add("allgood");$("#vText").textContent="All systems up";$("#vNote").textContent="Every checked site is responding"}
+  else {$("#vText").textContent="Waiting on checks";$("#vNote").textContent="First results land on the next hourly run"}
+  const spend=sites.filter(s=>!s.example).reduce((a,s)=>a+(Number(s.cost)||0),0);
+  $("#spend").textContent=spend?`Hosting spend $${spend.toFixed(2)}/mo`:"";
+  renderIncidents();
+  renderBeat();
+  try{renderReqs()}catch(e){}
+}
+function dur(min){if(min<60)return min+" min";const h=Math.floor(min/60),m=min%60;return h+" h"+(m?" "+m+" min":"")}
+function renderIncidents(){
+  const cut=Date.now()-7*864e5;
+  const list=incidents.filter(i=>!i.endedAt||new Date(i.endedAt)>=cut).sort((a,b)=>(!a.endedAt)-(!b.endedAt)||new Date(b.startedAt)-new Date(a.startedAt)).sort((a,b)=>(!b.endedAt)-(!a.endedAt));
+  const open=list.filter(i=>!i.endedAt).length;
+  $("#incNote").textContent=open?`${open} open · last 7 days`:"last 7 days";
+  $("#incList").innerHTML=list.length?list.slice(0,15).map(i=>{
+    const mins=i.endedAt?i.durationMin:Math.max(1,Math.round((Date.now()-new Date(i.startedAt))/60000));
+    return `<li class="${i.endedAt?"":"open"}"><i></i><span><b>${esc(i.siteName||"Site")}</b> ${i.endedAt?"was down for "+dur(mins):"down for "+dur(mins)+" and counting"}</span><span class="when">${esc(new Date(i.startedAt).toLocaleString([], {month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}))}</span><span class="why">${esc(i.lastError||i.error||"")}</span></li>`}).join(""):`<div class="none">No downtime in the last 7 days.</div>`;
+}
+function renderBeat(){
+  const b=$("#beat"); b.classList.remove("live","stale");
+  if(!db){return}
+  if(!monitor||!monitor.lastRun){$("#beatText").textContent="Monitor not run yet";return}
+  const m=(Date.now()-new Date(monitor.lastRun))/60000;
+  const pr=monitor.problem; $("#problem").hidden=!pr||!$("#viewReq").hidden; if(pr)$("#problemText").textContent=pr+" Fix: in Claude settings, allow network access to all domains (or add your client domains to the allowlist).";
+  b.classList.add(m>STALE_MIN||pr?"stale":"live");
+  $("#beatText").textContent=(m>STALE_MIN?"Stale · ":pr?"Blocked · ":"Live · ")+"last check "+ago(monitor.lastRun);
+}
+setInterval(()=>{renderBeat();renderIncidents()},30000);
+
+/* filters */
+document.querySelectorAll(".chip").forEach(c=>c.addEventListener("click",()=>{filter=c.dataset.f;document.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x===c));render()}));
+
+/* dialog */
+const dlg=$("#dlg");
+function openForm(s){
+  editing=s||null; $("#fTitle").textContent=s?"Edit site":"Add a site"; $("#fDelete").hidden=!s;
+  $("#fName").value=s?.name||""; $("#fClient").value=s?.client||""; $("#fUrl").value=s?.url||"";
+  $("#fHost").value=s?.host||"Vercel"; $("#fPlan").value=s?.plan||""; $("#fRenew").value=s?.renew||"";
+  $("#fCost").value=s?.cost??""; $("#fNotes").value=s?.notes||""; $("#fKeyword").value=s?.keyword||""; $("#fPaused").checked=!!s?.paused; $("#fSource").value=s?.sourceType||"none"; $("#fSourceUrl").value=s?.sourceUrl||"";
+  if(!db){toast("Storage isn't connected — changes can't be saved");}
+  dlg.showModal(); $("#fName").focus();
+}
+$("#addBtn").addEventListener("click",()=>openForm());
+$("#fCancel").addEventListener("click",()=>dlg.close());
+$("#grid").addEventListener("click",e=>{const id=e.target.closest("[data-edit]")?.dataset.edit;if(id)openForm(sites.find(s=>s.id===id))});
+$("#form").addEventListener("submit",async e=>{
+  e.preventDefault(); if(!db){toast("Storage isn't connected — reload and try again");return}
+  let url=$("#fUrl").value.trim(); if(!/^https?:\/\//i.test(url)) url="https://"+url;
+  const data={name:$("#fName").value.trim(),client:$("#fClient").value.trim(),url,host:$("#fHost").value,plan:$("#fPlan").value,renew:$("#fRenew").value||"",cost:$("#fCost").value?Number($("#fCost").value):0,notes:$("#fNotes").value.trim(),keyword:$("#fKeyword").value.trim(),paused:$("#fPaused").checked,sourceType:$("#fSource").value,sourceUrl:$("#fSourceUrl").value.trim(),example:false,updatedAt:new Date().toISOString()};
+  $("#fSave").disabled=true;
+  try{
+    if(editing){await db.doc("sites/"+editing.id).set({...data,createdAt:editing.createdAt||data.updatedAt});toast("Saved "+data.name)}
+    else{const ref=db.collection("sites").doc();justAdded=ref.id;await ref.set({...data,createdAt:data.updatedAt});toast("Added "+data.name+" — first check on the next run")}
+    dlg.close();
+  }catch(err){toast("Couldn't save: "+(err.message||err.code||"unknown error"))}
+  finally{$("#fSave").disabled=false}
+});
+$("#fDelete").addEventListener("click",async()=>{
+  if(!editing||!db)return;
+  if($("#fDelete").dataset.arm!=="1"){$("#fDelete").dataset.arm="1";$("#fDelete").textContent="Tap again to remove";setTimeout(()=>{$("#fDelete").dataset.arm="";$("#fDelete").textContent="Remove site"},3000);return}
+  try{await db.doc("sites/"+editing.id).delete();await db.doc("status/"+editing.id).delete().catch(()=>{});toast("Removed "+editing.name);dlg.close()}catch(err){toast("Couldn't remove: "+(err.message||err.code))}
+  $("#fDelete").dataset.arm="";$("#fDelete").textContent="Remove site";
+});
+$("#clearEx").addEventListener("click",async()=>{
+  if(!db)return; const ex=sites.filter(s=>s.example);
+  try{for(const s of ex){await db.doc("sites/"+s.id).delete();await db.doc("status/"+s.id).delete().catch(()=>{})}toast("Examples cleared")}catch(err){toast("Couldn't clear: "+(err.message||err.code))}
+});
+
+/* ================= change requests ================= */
+let requests=[], atts={}, rfilter="active", pendingImgs=[];
+const RS={new:"Queued",revise:"Queued · revision",working:"Claude working",review:"Ready for review",needs_info:"Question for you",approved:"Approved · going live",live:"Live",rejected:"Rejected",failed:"Failed",manual:"Do by hand"};
+const NEEDS=["review","needs_info","failed","manual"], DONE=["live","rejected"];
+function showView(v){const r=v==="req";$("#viewReq").hidden=!r;$("#viewUptime").hidden=r;$("#problem").hidden=r||!(monitor&&monitor.problem);$("#tabReq").setAttribute("aria-selected",r);$("#tabUptime").setAttribute("aria-selected",!r);try{localStorage.setItem("pu-view",v)}catch(e){}}
+$("#tabUptime").addEventListener("click",()=>showView("up"));
+$("#tabReq").addEventListener("click",()=>showView("req"));
+document.querySelectorAll("[data-rf]").forEach(c=>c.addEventListener("click",()=>{rfilter=c.dataset.rf;document.querySelectorAll("[data-rf]").forEach(x=>x.setAttribute("aria-pressed",x===c));renderReqs()}));
+
+function siteOf(id){return sites.find(s=>s.id===id)}
+function renderReqs(){
+  const needs=requests.filter(r=>NEEDS.includes(r.status)), done=requests.filter(r=>DONE.includes(r.status)), active=requests.filter(r=>!DONE.includes(r.status));
+  $("#rcActive").textContent=active.length;$("#rcNeeds").textContent=needs.length;$("#rcDone").textContent=done.length;
+  const b=$("#reqBadge");b.hidden=!needs.length;b.textContent=needs.length;
+  $("#fNeeds").textContent=needs.length;$("#fQueued").textContent=requests.filter(r=>["new","revise"].includes(r.status)).length;
+  $("#fWorking").textContent=requests.filter(r=>r.status==="working").length;$("#fApproved").textContent=requests.filter(r=>r.status==="approved").length;
+  $("#fLive").textContent=requests.filter(r=>r.status==="live"&&Date.now()-new Date(r.liveAt||r.updatedAt)<30*864e5).length;
+  let list=rfilter==="needs"?needs:rfilter==="done"?done:active;
+  const pri=r=>NEEDS.includes(r.status)?0:r.status==="working"?1:r.status==="approved"?2:3;
+  list=list.slice().sort((a,b)=>pri(a)-pri(b)||(b.rush?1:0)-(a.rush?1:0)||new Date(b.createdAt)-new Date(a.createdAt));
+  const el=$("#reqList");
+  if(!list.length){el.innerHTML=`<div class="empty"><h3>${rfilter==="needs"?"Nothing needs you":rfilter==="done"?"No finished requests yet":"No open requests"}</h3><p>${rfilter==="active"?"When a client asks for a change, log it here and Claude takes it from there.":"All caught up."}</p>${rfilter==="active"?'<button class="btn" type="button" onclick="document.getElementById(\'newReq\').click()">＋ Log a request</button>':""}</div>`;return}
+  el.innerHTML=list.map(reqCard).join("");
+}
+function reqCard(r){
+  const st=r.status||"new"; const site=siteOf(r.siteId); const imgs=(atts[r.id]||[]);
+  const thread=(r.thread||[]).slice(-4).map(t=>`<p><b>${t.from==="claude"?"Claude":"Team"}</b> · ${esc(ago(t.at))}: ${esc(t.text)}</p>`).join("");
+  let claude="";
+  if(r.summary&&["review","approved","live"].includes(st)) claude=`<div class="claude"><h4>What Claude changed</h4><div>${esc(r.summary)}</div>${(r.changes||[]).length?`<ul>${r.changes.map(c=>`<li>${esc(c)}</li>`).join("")}</ul>`:""}${r.previewUrl&&st==="review"?`<div><a class="url" href="${esc(r.previewUrl)}" target="_blank" rel="noopener">Open preview ↗</a></div>`:""}</div>`;
+  if(st==="needs_info"&&r.question) claude=`<div class="claude ask"><h4>Claude needs to know</h4><div>${esc(r.question)}</div></div>`;
+  if((st==="failed"||st==="manual")&&r.note) claude=`<div class="claude ask"><h4>${st==="manual"?"Why this one's manual":"What went wrong"}</h4><div>${esc(r.note)}</div></div>`;
+  let acts="";
+  if(st==="review") acts=`<button class="btn ok sm" data-act="approve" data-id="${r.id}" type="button">Approve &amp; go live</button><button class="btn ghost sm" data-act="showrev" data-id="${r.id}" type="button">Request changes</button><button class="icon" data-act="reject" data-id="${r.id}" type="button">Reject</button>`;
+  else if(st==="needs_info") acts=`<div class="reply" style="flex:1"><textarea id="ans-${r.id}" placeholder="Answer Claude…" maxlength="2000"></textarea><button class="btn sm" data-act="answer" data-id="${r.id}" type="button">Send answer</button></div>`;
+  else if(["new","revise"].includes(st)) acts=`<button class="icon" data-act="cancel" data-id="${r.id}" type="button">Cancel request</button>`;
+  else if(st==="failed"||st==="manual") acts=`<button class="btn ghost sm" data-act="retry" data-id="${r.id}" type="button">Try again</button><button class="btn ghost sm" data-act="done" data-id="${r.id}" type="button">Mark done by hand</button>`;
+  const rev=st==="review"?`<div class="reply" id="rev-${r.id}" hidden><textarea id="revt-${r.id}" placeholder="What should Claude fix?" maxlength="2000"></textarea><button class="btn sm" data-act="revise" data-id="${r.id}" type="button">Send back</button></div>`:"";
+  return `<article class="req" data-st="${st}">
+    <div class="rhead"><div><div class="rtitle">${esc(r.title)}</div><div class="rsite">${esc(site?site.name:r.siteName||"Unknown site")}${site&&site.sourceType!=="artifact"?" · files not connected":""}</div></div><span class="rpill">${RS[st]||st}</span></div>
+    <div class="rbody">${esc(r.details)}</div>
+    ${imgs.length?`<div class="thumbs">${imgs.map(a=>`<img src="${esc(a.dataUrl)}" alt="${esc(a.name)}">`).join("")}</div>`:""}
+    <div class="rmeta">${r.rush?'<span class="rush">RUSH</span>':""}${r.requestedBy?`<span>From ${esc(r.requestedBy)}</span>`:""}${r.due?`<span>Needed by ${esc(r.due)}</span>`:""}<span>Logged ${esc(ago(r.createdAt))}</span>${st==="live"&&r.liveAt?`<span>Live ${esc(ago(r.liveAt))}</span>`:""}</div>
+    ${claude}
+    ${thread?`<div class="thread">${thread}</div>`:""}
+    ${acts?`<div class="racts">${acts}</div>`:""}${rev}
+  </article>`;
+}
+async function patchReq(id,status,note,extra={}){
+  if(!db){toast("Storage isn't connected");return}
+  const r=requests.find(x=>x.id===id); if(!r)return;
+  const now=new Date().toISOString(); const thread=(r.thread||[]).slice();
+  if(note) thread.push({from:"team",at:now,text:note});
+  try{await db.doc("requests/"+id).update({status,thread,updatedAt:now,...extra});return true}catch(e){toast("Couldn't update: "+(e.message||e.code));return false}
+}
+$("#reqList").addEventListener("click",async e=>{
+  const b=e.target.closest("[data-act]"); if(!b)return; const id=b.dataset.id, act=b.dataset.act;
+  if(act==="approve"){if(await patchReq(id,"approved",null,{approvedAt:new Date().toISOString()}))toast("Approved — goes live on Claude's next run")}
+  if(act==="showrev"){const r=$("#rev-"+id);r.hidden=!r.hidden;if(!r.hidden)$("#revt-"+id).focus()}
+  if(act==="revise"){const t=$("#revt-"+id).value.trim();if(!t){toast("Tell Claude what to fix");return}if(await patchReq(id,"revise",t))toast("Sent back to Claude")}
+  if(act==="answer"){const t=$("#ans-"+id).value.trim();if(!t){toast("Type an answer first");return}if(await patchReq(id,"revise",t))toast("Answer sent — Claude continues next run")}
+  if(act==="reject"||act==="cancel"){if(b.dataset.arm!=="1"){b.dataset.arm="1";b.textContent="Tap again to confirm";setTimeout(()=>{b.dataset.arm="";b.textContent=act==="reject"?"Reject":"Cancel request"},3000);return}if(await patchReq(id,"rejected",act==="cancel"?"Cancelled":"Rejected"))toast(act==="cancel"?"Request cancelled":"Rejected")}
+  if(act==="retry"){if(await patchReq(id,"new","Retry"))toast("Queued again")}
+  if(act==="done"){if(await patchReq(id,"live","Done by hand",{liveAt:new Date().toISOString()}))toast("Marked live")}
+});
+
+/* new request form */
+const rdlg=$("#rdlg");
+function fillSites(){const sel=$("#rSite");const cur=sel.value;const real=sites.filter(s=>!s.example);const list=real.length?real:sites;sel.innerHTML=list.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}${s.example?" (example)":""}</option>`).join("");if(cur)sel.value=cur;siteHint()}
+function siteHint(){const s=siteOf($("#rSite").value);$("#rSiteHint").textContent=!s?"Add the site on the Uptime tab first.":s.sourceType==="artifact"&&s.sourceUrl?"✓ Files connected — Claude can make this change automatically.":"Files aren't connected for this site, so it'll be flagged to do by hand. Connect them under Edit site → Site files."}
+$("#rSite").addEventListener("change",siteHint);
+$("#newReq").addEventListener("click",()=>{if(!sites.length){toast("Add a site on the Uptime tab first");return}fillSites();$("#rform").reset();pendingImgs=[];drawPending();fillSites();rdlg.showModal();$("#rTitle").focus()});
+$("#rCancel").addEventListener("click",()=>rdlg.close());
+const drop=$("#rDrop");
+drop.addEventListener("click",()=>$("#rFiles").click());
+drop.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();$("#rFiles").click()}});
+["dragover","dragenter"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("over")}));
+["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,()=>drop.classList.remove("over")));
+drop.addEventListener("drop",e=>{e.preventDefault();addFiles(e.dataTransfer.files)});
+$("#rFiles").addEventListener("change",e=>{addFiles(e.target.files);e.target.value=""});
+async function shrink(file){
+  const url=URL.createObjectURL(file);
+  try{const img=await new Promise((ok,no)=>{const i=new Image();i.onload=()=>ok(i);i.onerror=no;i.src=url});
+    const max=1400,sc=Math.min(1,max/Math.max(img.naturalWidth,img.naturalHeight));const w=Math.round(img.naturalWidth*sc),h=Math.round(img.naturalHeight*sc);
+    const c=document.createElement("canvas");c.width=w;c.height=h;c.getContext("2d").drawImage(img,0,0,w,h);
+    const png=/png|svg|gif/.test(file.type);let d=png?c.toDataURL("image/png"):c.toDataURL("image/jpeg",.82);
+    if(d.length>700000)d=c.toDataURL("image/jpeg",.72);
+    if(d.length>900000){const c2=document.createElement("canvas");c2.width=Math.round(w*.6);c2.height=Math.round(h*.6);c2.getContext("2d").drawImage(img,0,0,c2.width,c2.height);d=c2.toDataURL("image/jpeg",.75)}
+    return {name:file.name.slice(0,80),type:d.slice(5,d.indexOf(";")),w,h,dataUrl:d};
+  }finally{URL.revokeObjectURL(url)}
+}
+async function addFiles(files){for(const f of [...files]){if(!f.type.startsWith("image/"))continue;if(pendingImgs.length>=4){toast("Up to 4 images per request");break}try{pendingImgs.push(await shrink(f))}catch(e){toast("Couldn't read "+f.name)}}drawPending()}
+function drawPending(){$("#rPending").innerHTML=pendingImgs.map((p,i)=>`<span><img src="${p.dataUrl}" alt="${esc(p.name)}"><button type="button" data-rm="${i}" aria-label="Remove ${esc(p.name)}">×</button></span>`).join("")}
+$("#rPending").addEventListener("click",e=>{const i=e.target.dataset.rm;if(i!=null){pendingImgs.splice(+i,1);drawPending()}});
+$("#rform").addEventListener("submit",async e=>{
+  e.preventDefault(); if(!db){toast("Storage isn't connected");return}
+  const s=siteOf($("#rSite").value); if(!s){toast("Pick a site");return}
+  const now=new Date().toISOString(); const ref=db.collection("requests").doc();
+  $("#rSave").disabled=true;
+  try{
+    for(let i=0;i<pendingImgs.length;i++) await db.doc(`attachments/${ref.id}-${i}`).set({requestId:ref.id,...pendingImgs[i],createdAt:now});
+    await ref.set({siteId:s.id,siteName:s.name,title:$("#rTitle").value.trim(),details:$("#rDetails").value.trim(),requestedBy:$("#rBy").value.trim(),due:$("#rDue").value||"",rush:$("#rRush").checked,status:"new",attachments:pendingImgs.length,thread:[],createdAt:now,updatedAt:now});
+    rdlg.close(); rfilter="active"; toast("Sent — Claude picks it up within the hour");
+  }catch(err){toast("Couldn't send: "+(err.message||err.code))}
+  finally{$("#rSave").disabled=false}
+});
+try{if(localStorage.getItem("pu-view")==="req")showView("req")}catch(e){}
+
+render();
+(async()=>{
+  try{ db=await claude.use("db"); }catch(e){ db=null; }
+  if(!db){$("#offline").hidden=false;$("#beatText").textContent="Offline";return}
+  db.collection("sites").onSnapshot(snap=>{sites=snap.docs.map(d=>({id:d.id,...d.data()})).filter(s=>s.name&&s.url);render()},()=>{$("#offline").hidden=false});
+  db.collection("status").onSnapshot(snap=>{status={};snap.docs.forEach(d=>status[d.id]=d.data());render()});
+  db.collection("incidents").orderBy("startedAt","desc").limit(60).onSnapshot(snap=>{incidents=snap.docs.map(d=>({id:d.id,...d.data()}));render()},()=>{});
+  db.collection("requests").orderBy("createdAt","desc").limit(200).onSnapshot(snap=>{requests=snap.docs.map(d=>({id:d.id,...d.data()}));renderReqs()},()=>{});
+  db.collection("attachments").onSnapshot(snap=>{atts={};snap.docs.forEach(d=>{const a=d.data();(atts[a.requestId]=atts[a.requestId]||[]).push(a)});renderReqs()},()=>{});
+  db.doc("meta/monitor").onSnapshot(d=>{monitor=d.exists?d.data():null;renderBeat()});
+})();
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,623 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>JMC — Staff Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Oswald:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
+
+<style>
+  :root{
+    --bg:#F5F5F1;
+    --surface:#FFFFFF;
+    --surface-2:#EBEEF4;
+    --ink:#101B33;
+    --ink-soft:#33456B;
+    --muted:#69738F;
+    --line:#D7DBE3;
+    --accent:#C8102E;
+    --accent-ink:#FFFFFF;
+    --accent-soft:#F6D3D8;
+    --accent-2:#1D3E72;
+    --accent-2-soft:#DCE6F5;
+    --good:#2F8F5B;
+    --good-soft:#DCEEE1;
+    --danger:#8C1220;
+    --danger-soft:#F1D3D7;
+    --warn:#B4791A;
+    --warn-soft:#F5E4C6;
+    --shadow:0 1px 2px rgba(16,27,51,.08), 0 10px 28px -14px rgba(16,27,51,.30);
+    --radius:16px;
+    --radius-sm:10px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0A1526; --surface:#101F3B; --surface-2:#162A50;
+      --ink:#F3F5FA; --ink-soft:#C7D0E6; --muted:#8C97B4; --line:#27395F;
+      --accent:#E8384A; --accent-ink:#FFFFFF; --accent-soft:#3A1620;
+      --accent-2:#8FB4F0; --accent-2-soft:#1B2C4C;
+      --good:#5FCB8B; --good-soft:#1E3327;
+      --danger:#FF6B78; --danger-soft:#3F1A22;
+      --warn:#E8B04A; --warn-soft:#3A2E14;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 32px -16px rgba(0,0,0,.65);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0A1526; --surface:#101F3B; --surface-2:#162A50;
+    --ink:#F3F5FA; --ink-soft:#C7D0E6; --muted:#8C97B4; --line:#27395F;
+    --accent:#E8384A; --accent-ink:#FFFFFF; --accent-soft:#3A1620;
+    --accent-2:#8FB4F0; --accent-2-soft:#1B2C4C;
+    --good:#5FCB8B; --good-soft:#1E3327;
+    --danger:#FF6B78; --danger-soft:#3F1A22;
+    --warn:#E8B04A; --warn-soft:#3A2E14;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 14px 32px -16px rgba(0,0,0,.65);
+  }
+
+  *,*::before,*::after{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:'Work Sans', ui-sans-serif, system-ui, sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased; }
+  h1,h2,h3,h4{ font-family:'Anton','Oswald',ui-sans-serif,sans-serif; text-transform:uppercase; letter-spacing:.015em; margin:0; text-wrap:balance; }
+  .mono{ font-family:'IBM Plex Mono', ui-monospace, monospace; }
+  a{ color:inherit; }
+  button{ font-family:inherit; }
+  img,svg{ display:block; max-width:100%; }
+  :focus-visible{ outline:2px solid var(--accent); outline-offset:2px; border-radius:4px; }
+  .container{ max-width:1240px; margin:0 auto; padding:0 20px; }
+
+  header{ position:sticky; top:0; z-index:40; background:color-mix(in srgb, var(--bg) 90%, transparent); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+  .topbar{ display:flex; align-items:center; justify-content:space-between; gap:14px; padding:14px 0; flex-wrap:wrap; }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand-badge{ width:38px; height:38px; border-radius:50%; flex:none; background:radial-gradient(circle at 50% 50%, var(--ink) 0 33%, var(--surface) 33% 50%, var(--accent) 50% 100%); display:grid; place-items:center; box-shadow:var(--shadow); }
+  .brand-badge svg{ width:18px; height:18px; }
+  .brand-name{ font-family:'Anton','Oswald',sans-serif; font-size:17px; text-transform:uppercase; line-height:1; }
+  .brand-sub{ font-family:'IBM Plex Mono'; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-top:2px; }
+  .status-chip{ display:flex; align-items:center; gap:7px; font-size:12.5px; padding:7px 13px; border-radius:999px; border:1px solid var(--line); background:var(--surface); }
+  .status-chip .dot{ width:7px; height:7px; border-radius:50%; background:var(--good); flex:none; }
+  .status-chip.readonly .dot{ background:var(--warn); }
+
+  main{ padding:32px 0 80px; }
+  .page-head{ margin-bottom:24px; }
+  .page-head h1{ font-size:clamp(26px,4vw,36px); }
+  .page-head p{ color:var(--muted); font-size:14.5px; margin-top:6px; max-width:60ch; }
+
+  .stats-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:28px; }
+  @media (max-width:760px){ .stats-row{ grid-template-columns:repeat(2,1fr); } }
+  .stat-tile{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-sm); padding:16px 18px; box-shadow:var(--shadow); }
+  .stat-tile .num{ font-family:'IBM Plex Mono'; font-size:28px; font-weight:600; color:var(--accent); }
+  .stat-tile .lbl{ font-size:12.5px; color:var(--muted); margin-top:4px; }
+
+  .layout{ display:grid; grid-template-columns:1.3fr 1fr; gap:24px; align-items:start; }
+  @media (max-width:980px){ .layout{ grid-template-columns:1fr; } }
+
+  .panel{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); }
+  .panel-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:18px 22px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+  .panel-head h2{ font-size:19px; }
+  .panel-body{ padding:20px 22px; }
+
+  .btn{ display:inline-flex; align-items:center; justify-content:center; gap:8px; font-family:'Oswald',sans-serif; font-weight:600; text-transform:uppercase; letter-spacing:.03em; font-size:13.5px; padding:10px 18px; border-radius:999px; border:2px solid transparent; cursor:pointer; transition:transform .12s ease, filter .12s ease, opacity .15s ease; }
+  .btn:active{ transform:translateY(1px) scale(.98); }
+  .btn-primary{ background:var(--accent); color:var(--accent-ink); }
+  .btn-primary:hover{ filter:brightness(1.06); }
+  .btn-primary:disabled{ opacity:.45; cursor:not-allowed; }
+  .btn-ghost{ background:transparent; color:var(--ink); border-color:var(--line); }
+  .btn-ghost:hover{ border-color:var(--accent); color:var(--accent); }
+  .btn-sm{ padding:7px 13px; font-size:11.5px; }
+  .btn-icon{ padding:7px 10px; }
+
+  label{ font-size:11.5px; font-weight:600; letter-spacing:.03em; text-transform:uppercase; color:var(--ink-soft); display:block; margin-bottom:5px; }
+  input[type="text"], input[type="tel"], input[type="date"], input[type="time"], textarea, select{
+    font-family:'Work Sans'; font-size:14.5px; padding:10px 12px; border-radius:9px; border:1.5px solid var(--line); background:var(--surface); color:var(--ink); width:100%;
+  }
+  textarea{ resize:vertical; min-height:60px; }
+  input:focus, textarea:focus, select:focus{ border-color:var(--accent); }
+
+  /* add appointment form */
+  #addForm{ display:none; grid-template-columns:1fr 1fr; gap:10px; padding:18px 22px; border-bottom:1px solid var(--line); background:var(--surface-2); }
+  #addForm.open{ display:grid; }
+  #addForm .full{ grid-column:1/-1; }
+  @media (max-width:560px){ #addForm{ grid-template-columns:1fr; } }
+
+  /* schedule board */
+  .date-group{ margin-bottom:22px; }
+  .date-group:last-child{ margin-bottom:0; }
+  .date-group h3{ font-family:'Oswald'; font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+  .date-group h3 .pill{ font-family:'IBM Plex Mono'; background:var(--surface-2); border-radius:6px; padding:2px 7px; font-size:11px; color:var(--ink-soft); }
+  .appt{ display:flex; align-items:flex-start; gap:12px; padding:14px; border:1px solid var(--line); border-radius:12px; margin-bottom:10px; background:var(--surface); }
+  .appt:last-child{ margin-bottom:0; }
+  .appt.done{ opacity:.6; }
+  .appt-time{ font-family:'IBM Plex Mono'; font-size:13px; font-weight:600; color:var(--accent-2); min-width:66px; padding-top:2px; }
+  .appt-main{ flex:1; min-width:0; }
+  .appt-top{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .appt-name{ font-weight:700; font-size:14.5px; }
+  .badge{ font-family:'IBM Plex Mono'; font-size:10.5px; letter-spacing:.03em; padding:3px 8px; border-radius:6px; text-transform:uppercase; }
+  .badge-scheduled{ background:var(--accent-2-soft); color:var(--accent-2); }
+  .badge-done{ background:var(--good-soft); color:var(--good); }
+  .badge-noshow{ background:var(--danger-soft); color:var(--danger); }
+  .badge-cancelled{ background:var(--surface-2); color:var(--muted); }
+  .badge-deposit{ background:var(--good-soft); color:var(--good); }
+  .badge-nodeposit{ background:var(--warn-soft); color:var(--warn); }
+  .appt-meta{ font-size:13px; color:var(--ink-soft); margin-top:3px; }
+  .appt-notes{ font-size:12.5px; color:var(--muted); margin-top:4px; }
+  .appt-actions{ display:flex; gap:6px; flex-wrap:wrap; }
+  .empty-state{ text-align:center; padding:40px 20px; color:var(--muted); font-size:14px; }
+
+  /* reference / ask panel */
+  .search-row{ display:flex; gap:8px; padding:16px 22px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+  .search-row input{ flex:1; min-width:160px; }
+  .chip-filter{ display:flex; gap:7px; flex-wrap:wrap; padding:0 22px 16px; }
+  .chip-f{ font-size:12px; padding:6px 12px; border-radius:999px; border:1.5px solid var(--line); background:var(--surface); cursor:pointer; }
+  .chip-f.active{ background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+  .ref-list{ max-height:640px; overflow-y:auto; padding:6px 22px 22px; }
+  .ref-card{ border:1px solid var(--line); border-radius:12px; margin-bottom:12px; overflow:hidden; }
+  .ref-card:last-child{ margin-bottom:0; }
+  .ref-q{ width:100%; text-align:left; background:var(--surface); border:none; padding:13px 15px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:10px; font-weight:600; font-size:13.5px; color:var(--ink); }
+  .ref-q svg{ width:16px; height:16px; color:var(--muted); flex:none; transition:transform .15s ease; }
+  .ref-card.open .ref-q svg{ transform:rotate(180deg); }
+  .ref-body{ display:none; padding:0 15px 16px; }
+  .ref-card.open .ref-body{ display:block; }
+  .ref-body p{ font-size:13.5px; color:var(--ink-soft); margin:0 0 10px; }
+  .ref-diagram{ background:var(--surface-2); border-radius:10px; padding:10px; }
+  .ref-diagram svg{ width:100%; height:auto; }
+  .ref-tags{ display:flex; gap:5px; flex-wrap:wrap; margin-top:4px; }
+  .ref-tags span{ font-family:'IBM Plex Mono'; font-size:9.5px; background:var(--surface-2); border-radius:5px; padding:2px 6px; color:var(--muted); text-transform:uppercase; }
+  .no-results{ text-align:center; color:var(--muted); font-size:13.5px; padding:24px 0; }
+
+  .ask-box{ margin:0 22px 22px; padding:16px; border-radius:12px; background:var(--accent-soft); border:1.5px solid var(--accent); }
+  .ask-box h4{ font-family:'Oswald'; text-transform:none; font-size:14px; margin-bottom:8px; }
+  .ask-box textarea{ margin-bottom:10px; }
+  .ask-row{ display:flex; gap:8px; flex-wrap:wrap; }
+  .ask-note{ font-size:11.5px; color:var(--ink-soft); margin-top:8px; }
+
+  .toast{ position:fixed; bottom:20px; left:50%; transform:translate(-50%,20px); background:var(--ink); color:var(--bg); padding:11px 18px; border-radius:999px; font-size:13.5px; opacity:0; pointer-events:none; transition:opacity .2s ease, transform .2s ease; z-index:100; max-width:90vw; text-align:center; }
+  .toast.show{ opacity:1; transform:translate(-50%,0); }
+</style>
+
+<header>
+  <div class="container topbar">
+    <div class="brand">
+      <span class="brand-badge" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      </span>
+      <span>
+        <span class="brand-name">JMC</span>
+        <span class="brand-sub">Staff Dashboard</span>
+      </span>
+    </div>
+    <span class="status-chip" id="statusChip"><span class="dot"></span><span id="statusText">Checking access…</span></span>
+  </div>
+</header>
+
+<main>
+  <div class="container">
+    <div class="page-head">
+      <h1>Shop Board</h1>
+      <p>Private tool for Chris &amp; Jovany — log the appointments that come in by text or call, and look anything up without leaving the bay. Not linked from the client site.</p>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-tile"><div class="num" id="statToday">0</div><div class="lbl">Today</div></div>
+      <div class="stat-tile"><div class="num" id="statWeek">0</div><div class="lbl">Scheduled this week</div></div>
+      <div class="stat-tile"><div class="num" id="statDone">0</div><div class="lbl">Completed this week</div></div>
+      <div class="stat-tile"><div class="num" id="statNoShow">0</div><div class="lbl">No-shows this week</div></div>
+    </div>
+
+    <div class="layout">
+      <!-- SCHEDULE -->
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Appointments</h2>
+          <button class="btn btn-primary btn-sm" id="toggleAddBtn">+ Add Appointment</button>
+        </div>
+        <form id="addForm">
+          <div class="field full" style="display:flex;gap:10px;flex-wrap:wrap;">
+            <div style="flex:1;min-width:140px;"><label for="fDate">Date</label><input type="date" id="fDate" required /></div>
+            <div style="flex:1;min-width:120px;"><label for="fTime">Time</label><input type="time" id="fTime" required /></div>
+          </div>
+          <div><label for="fName">Customer name</label><input type="text" id="fName" required /></div>
+          <div><label for="fPhone">Phone</label><input type="tel" id="fPhone" /></div>
+          <div><label for="fVehicle">Vehicle</label><input type="text" id="fVehicle" placeholder="e.g. 2016 Honda Civic" /></div>
+          <div><label for="fService">Service</label><input type="text" id="fService" placeholder="e.g. Brake pads + rotors" /></div>
+          <div class="full"><label for="fNotes">Notes (optional)</label><textarea id="fNotes"></textarea></div>
+          <div class="full" style="display:flex;align-items:center;gap:8px;">
+            <input type="checkbox" id="fDeposit" style="width:16px;height:16px;accent-color:var(--good);" />
+            <label for="fDeposit" style="margin:0;text-transform:none;font-weight:500;font-size:13px;">$20 deposit already collected</label>
+          </div>
+          <div class="full" style="display:flex;gap:10px;">
+            <button type="submit" class="btn btn-primary" id="saveApptBtn">Save Appointment</button>
+            <button type="button" class="btn btn-ghost" id="cancelAddBtn">Cancel</button>
+          </div>
+        </form>
+        <div class="panel-body">
+          <div id="scheduleList"></div>
+        </div>
+      </div>
+
+      <!-- REFERENCE / ASK -->
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Ask About a Car</h2>
+        </div>
+        <div class="search-row">
+          <input type="text" id="refSearch" placeholder="Search common questions…" />
+        </div>
+        <div class="chip-filter" id="chipFilter"></div>
+        <div class="ref-list" id="refList"></div>
+        <div class="ask-box">
+          <h4>Not in the list? Ask Claude directly.</h4>
+          <textarea id="askText" placeholder="Type any car question — e.g. 'what torque spec for lug nuts on a 2019 F-150?'"></textarea>
+          <div class="ask-row">
+            <a class="btn btn-primary btn-sm" id="askClaudeBtn" href="https://claude.ai/new" target="_blank" rel="noopener">Ask Claude ↗</a>
+            <button class="btn btn-ghost btn-sm" id="copyAskBtn" type="button">Copy Question</button>
+          </div>
+          <p class="ask-note">Opens Claude in a new tab with your question ready to send (paste it if it doesn't come through automatically) — this page can't run AI answers inline, but Claude can walk through diagrams, torque specs, wiring, codes, anything.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<!-- Canonical shared state. Editors publish updates here; everyone else reads it. -->
+<script id="app-state" type="application/json">{"appointments":[]}</script>
+
+<script>
+(function(){
+  "use strict";
+
+  var STATE = { appointments: [] };
+  try {
+    var raw = document.getElementById('app-state').textContent;
+    var parsed = JSON.parse(raw || '{}');
+    if (parsed && Array.isArray(parsed.appointments)) STATE = parsed;
+  } catch(e){ /* keep default */ }
+
+  var readOnly = false;
+  var saving = false;
+
+  function pad(n){ return n < 10 ? '0'+n : ''+n; }
+  function todayIso(){ var d = new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  function isoDaysFromNow(n){ var d = new Date(); d.setDate(d.getDate()+n); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+  function fmtDateNice(iso){
+    var p = iso.split('-').map(Number);
+    var d = new Date(p[0], p[1]-1, p[2]);
+    var today = todayIso(), tmrw = isoDaysFromNow(1);
+    if (iso === today) return 'Today · ' + d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+    if (iso === tmrw) return 'Tomorrow · ' + d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+    return d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});
+  }
+  function fmtTime(hhmm){
+    var sp = hhmm.split(':').map(Number);
+    var h = sp[0] % 12; if (h===0) h=12;
+    var ampm = sp[0] < 12 ? 'AM':'PM';
+    return h + (sp[1] ? ':'+pad(sp[1]) : ':00') + ' ' + ampm;
+  }
+  function startOfWeekIso(){
+    var d = new Date(); var day = d.getDay(); var diff = d.getDate() - day; // Sunday start
+    var s = new Date(d.setDate(diff));
+    return s.getFullYear()+'-'+pad(s.getMonth()+1)+'-'+pad(s.getDate());
+  }
+
+  var toastEl = document.getElementById('toast');
+  var toastTimer;
+  function showToast(msg){
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 3200);
+  }
+
+  /* ---------- status chip ---------- */
+  var statusChip = document.getElementById('statusChip');
+  var statusText = document.getElementById('statusText');
+  function setStatus(text, isReadOnly){
+    statusText.textContent = text;
+    statusChip.classList.toggle('readonly', !!isReadOnly);
+  }
+
+  /* ---------- rendering ---------- */
+  function computeStats(){
+    var today = todayIso(), weekStart = startOfWeekIso();
+    var todayCount = 0, weekCount = 0, doneCount = 0, noShowCount = 0;
+    STATE.appointments.forEach(function(a){
+      if (a.date === today && a.status !== 'cancelled') todayCount++;
+      if (a.date >= weekStart) {
+        if (a.status === 'scheduled') weekCount++;
+        if (a.status === 'done') doneCount++;
+        if (a.status === 'no-show') noShowCount++;
+      }
+    });
+    document.getElementById('statToday').textContent = todayCount;
+    document.getElementById('statWeek').textContent = weekCount;
+    document.getElementById('statDone').textContent = doneCount;
+    document.getElementById('statNoShow').textContent = noShowCount;
+  }
+
+  function badgeForStatus(s){
+    if (s === 'done') return '<span class="badge badge-done">Done</span>';
+    if (s === 'no-show') return '<span class="badge badge-noshow">No-show</span>';
+    if (s === 'cancelled') return '<span class="badge badge-cancelled">Cancelled</span>';
+    return '<span class="badge badge-scheduled">Scheduled</span>';
+  }
+
+  function renderSchedule(){
+    computeStats();
+    var list = document.getElementById('scheduleList');
+    var appts = STATE.appointments.slice().filter(function(a){ return a.date >= isoDaysFromNow(-1); });
+    appts.sort(function(a,b){ return (a.date+a.time).localeCompare(b.date+b.time); });
+    if (!appts.length){
+      list.innerHTML = '<div class="empty-state">No appointments logged yet. When someone texts or calls to book, tap "+ Add Appointment" and jot it down here so you both see it.</div>';
+      return;
+    }
+    var byDate = {};
+    var order = [];
+    appts.forEach(function(a){
+      if (!byDate[a.date]){ byDate[a.date] = []; order.push(a.date); }
+      byDate[a.date].push(a);
+    });
+    var html = '';
+    order.forEach(function(date){
+      html += '<div class="date-group"><h3>' + fmtDateNice(date) + ' <span class="pill">' + byDate[date].length + '</span></h3>';
+      byDate[date].forEach(function(a){
+        html += '<div class="appt' + (a.status==='done'?' done':'') + '">' +
+          '<div class="appt-time">' + fmtTime(a.time) + '</div>' +
+          '<div class="appt-main">' +
+            '<div class="appt-top"><span class="appt-name">' + escapeHtml(a.name || 'No name') + '</span>' + badgeForStatus(a.status) +
+            '<span class="badge ' + (a.depositPaid ? 'badge-deposit">Deposit paid' : 'badge-nodeposit">No deposit') + '</span></div>' +
+            '<div class="appt-meta">' + [escapeHtml(a.vehicle||''), escapeHtml(a.service||'')].filter(Boolean).join(' · ') +
+              (a.phone ? ' · <a href="tel:'+escapeHtml(a.phone)+'" style="color:var(--accent-2);text-decoration:none;">'+escapeHtml(a.phone)+'</a>' : '') + '</div>' +
+            (a.notes ? '<div class="appt-notes">' + escapeHtml(a.notes) + '</div>' : '') +
+          '</div>' +
+          '<div class="appt-actions">' +
+            (a.status !== 'done' ? '<button class="btn btn-ghost btn-icon btn-sm" data-act="done" data-id="'+a.id+'" title="Mark done">✓</button>' : '') +
+            (a.status !== 'no-show' ? '<button class="btn btn-ghost btn-icon btn-sm" data-act="noshow" data-id="'+a.id+'" title="Mark no-show">!</button>' : '') +
+            '<button class="btn btn-ghost btn-icon btn-sm" data-act="delete" data-id="'+a.id+'" title="Remove">✕</button>' +
+          '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+    });
+    list.innerHTML = html;
+    list.querySelectorAll('[data-act]').forEach(function(btn){
+      btn.addEventListener('click', function(){ handleApptAction(btn.getAttribute('data-act'), btn.getAttribute('data-id')); });
+    });
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+    });
+  }
+
+  function handleApptAction(act, id){
+    var next = STATE.appointments.slice();
+    if (act === 'delete'){
+      next = next.filter(function(a){ return a.id !== id; });
+    } else {
+      next = next.map(function(a){
+        if (a.id !== id) return a;
+        var copy = Object.assign({}, a);
+        if (act === 'done') copy.status = 'done';
+        if (act === 'noshow') copy.status = 'no-show';
+        return copy;
+      });
+    }
+    saveState(Object.assign({}, STATE, { appointments: next }));
+  }
+
+  /* ---------- add appointment form ---------- */
+  var addForm = document.getElementById('addForm');
+  document.getElementById('toggleAddBtn').addEventListener('click', function(){
+    addForm.classList.toggle('open');
+    if (addForm.classList.contains('open')) document.getElementById('fDate').value = todayIso();
+  });
+  document.getElementById('cancelAddBtn').addEventListener('click', function(){ addForm.classList.remove('open'); addForm.reset(); });
+  addForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    var entry = {
+      id: 'a_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+      date: document.getElementById('fDate').value,
+      time: document.getElementById('fTime').value || '09:00',
+      name: document.getElementById('fName').value.trim(),
+      phone: document.getElementById('fPhone').value.trim(),
+      vehicle: document.getElementById('fVehicle').value.trim(),
+      service: document.getElementById('fService').value.trim(),
+      notes: document.getElementById('fNotes').value.trim(),
+      depositPaid: document.getElementById('fDeposit').checked,
+      status: 'scheduled'
+    };
+    if (!entry.date || !entry.name){ showToast('Add at least a date and a name.'); return; }
+    var next = STATE.appointments.concat([entry]);
+    saveState(Object.assign({}, STATE, { appointments: next }), function(){
+      addForm.reset(); addForm.classList.remove('open');
+    });
+  });
+
+  /* ---------- persistence via the artifact capability ---------- */
+  var artifactNs = null;
+  var canWrite = false;
+
+  function updateSaveButtons(){
+    document.getElementById('saveApptBtn').disabled = readOnly || saving;
+    document.querySelectorAll('[data-act]').forEach(function(b){ b.disabled = readOnly || saving; });
+  }
+
+  function saveState(newState, onLocalOk){
+    if (readOnly){ showToast("You're viewing a read-only copy — ask to be added as an editor to make changes."); return; }
+    if (!artifactNs){ showToast("Saving isn't available in this view."); return; }
+    if (saving) return;
+    saving = true; updateSaveButtons();
+    fetch(location.href, { cache: 'no-store' }).then(function(r){ return r.text(); }).then(function(html){
+      var newJson = JSON.stringify(newState);
+      var marker = /(<script id="app-state" type="application\/json">)([\s\S]*?)(<\/script>)/;
+      if (!marker.test(html)){ throw { code: 'transform_error' }; }
+      var newHtml = html.replace(marker, function(_, a, b, c){ return a + newJson + c; });
+      return artifactNs.publish(newHtml);
+    }).then(function(){
+      STATE = newState;
+      if (onLocalOk) onLocalOk();
+      // a successful publish reloads this view to the new version automatically
+    }).catch(function(err){
+      saving = false; updateSaveButtons();
+      var code = err && err.code;
+      if (code === 'conflict'){ return; } // view is reloading to the winner
+      if (code === 'not_writer' || code === 'not_granted' || code === 'capability_disabled'){
+        readOnly = true; updateSaveButtons();
+        setStatus('Read-only — ask to be added as an editor', true);
+        showToast("You're viewing a read-only copy — ask to be added as an editor to make changes.");
+        return;
+      }
+      showToast('Could not save just now — try again in a moment.');
+    });
+  }
+
+  if (window.claude && typeof window.claude.use === 'function'){
+    window.claude.use('artifact').then(function(ns){
+      artifactNs = ns;
+      if (!ns){ readOnly = true; setStatus('Saving unavailable in this view', true); updateSaveButtons(); return; }
+      setStatus('Connected — changes save for everyone', false);
+      updateSaveButtons();
+    }).catch(function(){ readOnly = true; setStatus('Saving unavailable in this view', true); updateSaveButtons(); });
+  } else {
+    readOnly = true;
+    setStatus('Saving unavailable in this view', true);
+  }
+
+  /* ---------- reference library ---------- */
+  var REFS = [
+    {
+      id: 'brakes', title: 'Grinding / squealing brakes — what to check', tags: ['brakes'],
+      answer: "Squeal is usually the wear indicator tab doing its job — pads are getting thin. Grinding almost always means metal-on-metal: pads are gone and it's cutting into the rotor. Check pad thickness, rotor surface for scoring, and caliper slide pins for sticking (uneven wear side-to-side points to a dragging caliper).",
+      diagram: 'brakeSystem'
+    },
+    {
+      id: 'obd', title: 'Common OBD-II codes cheat sheet', tags: ['engine','electrical'],
+      answer: "P0300: random misfire — check plugs/coils/fuel trim first. P0171/P0174: system too lean — look for vacuum leaks or a dirty MAF. P0420: catalyst efficiency below threshold — check upstream/downstream O2 sensors before assuming a bad cat. P0455: large EVAP leak — usually a loose or bad gas cap. P0128: coolant thermostat stuck open. P0442: small EVAP leak — check hoses and the purge valve.",
+      diagram: 'obdTable'
+    },
+    {
+      id: 'belt', title: 'Serpentine belt routing basics', tags: ['engine'],
+      answer: "Always check the routing sticker under the hood first — layouts vary by engine. General rule: the belt's ribbed side rides the grooved pulleys (alternator, power steering, A/C compressor, crank), and the flat back side rides any smooth idler/tensioner pulleys. Release tension at the automatic tensioner arm before removing.",
+      diagram: 'serpentine'
+    },
+    {
+      id: 'jump', title: 'Jump-starting a car safely', tags: ['electrical','emergency'],
+      answer: "Order matters: red to dead battery positive, red to good battery positive, black to good battery negative, black to an unpainted metal ground on the dead car (not its negative terminal — avoids sparking near the battery). Start the good car, let it run a minute, then try the dead one. Remove cables in reverse order.",
+      diagram: 'jumpStart'
+    },
+    {
+      id: 'tires', title: 'Reading tire wear patterns', tags: ['tires'],
+      answer: "Center wear = overinflated. Both edges worn = underinflated. One edge only = alignment/camber issue. Cupping/scalloping = worn shocks or struts, or an unbalanced tire. Feathering (smooth one way, sharp the other) = toe misalignment.",
+      diagram: 'tireWear'
+    },
+    {
+      id: 'coolant', title: 'Coolant system basics & flush intervals', tags: ['fluids','engine'],
+      answer: "Most shops recommend a coolant flush every 30,000–60,000 miles or every 3–5 years, but always check the vehicle's factory interval — modern long-life coolants stretch further. Never open a hot radiator cap. Mixing coolant types (e.g. green with orange/Dex-Cool) can cause sludging — stick to what the vehicle already runs unless doing a full flush.",
+      diagram: 'coolant'
+    },
+    {
+      id: 'ac', title: 'AC blowing warm — where to start', tags: ['ac','electrical'],
+      answer: "Check the compressor clutch first — if it's not engaging, look for a blown fuse, low-pressure cutoff switch (from a low charge), or a bad clutch relay. If it engages but air still isn't cold, suspect a low refrigerant charge (leak) or a failing compressor. Cabin air filter and blend door issues can also mimic 'AC not working.'",
+      diagram: 'acSystem'
+    },
+    {
+      id: 'torque', title: 'Torque specs — quick reminder', tags: ['engine','tires'],
+      answer: "Always pull the actual factory spec for the vehicle and fastener (lug nuts, oil drain plug, etc.) rather than going by feel — overtightening lug nuts can warp rotors, and undertightening is a safety risk. As a rough ballpark, most passenger car lug nuts fall in the 80–100 ft-lb range, but confirm before handing the car back.",
+      diagram: null
+    },
+    {
+      id: 'battery', title: 'Testing a battery / charging system', tags: ['electrical'],
+      answer: "Resting voltage (engine off, sat a few hours): ~12.6V is a healthy full charge, below 12.4V suggests it's due for a charge or nearing end of life. Engine running, voltage should read roughly 13.7–14.7V — lower than that points to a weak alternator or bad connections; higher can mean a bad voltage regulator.",
+      diagram: null
+    }
+  ];
+
+  var CATEGORIES = ['engine','brakes','electrical','tires','fluids','ac','emergency'];
+
+  function diagramSvg(key){
+    if (key === 'brakeSystem') return '<svg viewBox="0 0 240 160"><g fill="none" stroke="var(--accent-2)" stroke-width="3"><circle cx="120" cy="80" r="46"/><circle cx="120" cy="80" r="20"/></g><g fill="var(--accent)"><rect x="106" y="18" width="28" height="18" rx="3"/><rect x="106" y="124" width="28" height="18" rx="3"/></g><g fill="none" stroke="var(--ink-soft)" stroke-width="2"><path d="M120 34v10M120 116v10"/></g><text x="120" y="80" text-anchor="middle" dominant-baseline="middle" font-size="10" fill="var(--muted)" font-family="IBM Plex Mono">rotor</text></svg>';
+    if (key === 'obdTable') return '<svg viewBox="0 0 240 130"><g font-family="IBM Plex Mono" font-size="11" fill="var(--ink-soft)"><text x="8" y="20" fill="var(--accent)" font-weight="700">P0300</text><text x="70" y="20">Random misfire</text><text x="8" y="42" fill="var(--accent)" font-weight="700">P0171</text><text x="70" y="42">System lean</text><text x="8" y="64" fill="var(--accent)" font-weight="700">P0420</text><text x="70" y="64">Catalyst efficiency</text><text x="8" y="86" fill="var(--accent)" font-weight="700">P0455</text><text x="70" y="86">Large EVAP leak</text><text x="8" y="108" fill="var(--accent)" font-weight="700">P0128</text><text x="70" y="108">Thermostat stuck open</text></g></svg>';
+    if (key === 'serpentine') return '<svg viewBox="0 0 240 150"><g fill="none" stroke="var(--ink-soft)" stroke-width="3"><circle cx="60" cy="40" r="16"/><circle cx="180" cy="40" r="16"/><circle cx="60" cy="110" r="20"/><circle cx="150" cy="118" r="12"/><circle cx="120" cy="70" r="10"/></g><path d="M60 24 A16 16 0 0 1 180 24 M180 56 A16 16 0 0 1 150 106 M150 130 A12 12 0 0 1 120 80 M120 60 A10 10 0 0 1 60 90 M60 130 A20 20 0 0 1 60 24" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round"/></svg>';
+    if (key === 'jumpStart') return '<svg viewBox="0 0 240 140"><g><rect x="20" y="50" width="60" height="40" rx="4" fill="var(--surface)" stroke="var(--ink-soft)" stroke-width="2"/><rect x="160" y="50" width="60" height="40" rx="4" fill="var(--surface)" stroke="var(--ink-soft)" stroke-width="2"/><text x="50" y="45" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="IBM Plex Mono">DEAD</text><text x="190" y="45" text-anchor="middle" font-size="10" fill="var(--muted)" font-family="IBM Plex Mono">GOOD</text><path d="M80 60 L160 60" stroke="var(--accent)" stroke-width="3"/><path d="M80 80 L160 80" stroke="var(--ink)" stroke-width="3"/><circle cx="80" cy="60" r="4" fill="var(--accent)"/><circle cx="160" cy="60" r="4" fill="var(--accent)"/><circle cx="80" cy="80" r="4" fill="var(--ink)"/><circle cx="160" cy="80" r="4" fill="var(--ink)"/><text x="120" y="52" text-anchor="middle" font-size="9" fill="var(--accent)" font-family="IBM Plex Mono">+ red</text><text x="120" y="98" text-anchor="middle" font-size="9" fill="var(--ink-soft)" font-family="IBM Plex Mono">- black → ground</text></g></svg>';
+    if (key === 'tireWear') return '<svg viewBox="0 0 240 90"><g font-family="IBM Plex Mono" font-size="9.5" fill="var(--ink-soft)" text-anchor="middle"><rect x="10" y="10" width="40" height="50" rx="6" fill="none" stroke="var(--ink-soft)" stroke-width="2"/><rect x="20" y="14" width="6" height="42" fill="var(--danger)"/><text x="30" y="72">Overinflated</text><rect x="70" y="10" width="40" height="50" rx="6" fill="none" stroke="var(--ink-soft)" stroke-width="2"/><rect x="72" y="14" width="6" height="42" fill="var(--danger)"/><rect x="102" y="14" width="6" height="42" fill="var(--danger)"/><text x="90" y="72">Underinflated</text><rect x="130" y="10" width="40" height="50" rx="6" fill="none" stroke="var(--ink-soft)" stroke-width="2"/><rect x="132" y="14" width="6" height="42" fill="var(--danger)"/><text x="150" y="72">Alignment</text><rect x="190" y="10" width="40" height="50" rx="6" fill="none" stroke="var(--ink-soft)" stroke-width="2"/><circle cx="205" cy="20" r="4" fill="var(--danger)"/><circle cx="215" cy="34" r="4" fill="var(--danger)"/><circle cx="205" cy="48" r="4" fill="var(--danger)"/><text x="210" y="72">Cupping</text></g></svg>';
+    if (key === 'coolant') return '<svg viewBox="0 0 240 130"><g fill="none" stroke="var(--ink-soft)" stroke-width="2"><rect x="20" y="30" width="60" height="70" rx="6"/><rect x="160" y="40" width="50" height="50" rx="6"/></g><path d="M80 45 H160" stroke="var(--accent-2)" stroke-width="4"/><path d="M80 85 H160" stroke="var(--accent)" stroke-width="4"/><text x="50" y="25" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="IBM Plex Mono">RADIATOR</text><text x="185" y="35" text-anchor="middle" font-size="9" fill="var(--muted)" font-family="IBM Plex Mono">ENGINE</text></svg>';
+    if (key === 'acSystem') return '<svg viewBox="0 0 240 100"><g fill="none" stroke="var(--ink-soft)" stroke-width="2"><rect x="10" y="35" width="44" height="30" rx="4"/><rect x="90" y="20" width="44" height="30" rx="4"/><rect x="170" y="35" width="44" height="30" rx="4"/></g><path d="M54 50 H90 M134 35 H170" stroke="var(--accent-2)" stroke-width="3"/><path d="M192 65 V80 H32 V65" stroke="var(--accent)" stroke-width="3" fill="none"/><text x="32" y="30" text-anchor="middle" font-size="8" fill="var(--muted)" font-family="IBM Plex Mono">COMPRESSOR</text><text x="112" y="15" text-anchor="middle" font-size="8" fill="var(--muted)" font-family="IBM Plex Mono">CONDENSER</text><text x="192" y="30" text-anchor="middle" font-size="8" fill="var(--muted)" font-family="IBM Plex Mono">EVAPORATOR</text></svg>';
+    return '';
+  }
+
+  var openRefId = null, activeCategory = null, searchQuery = '';
+
+  function renderChips(){
+    var el = document.getElementById('chipFilter');
+    var html = '<button class="chip-f' + (activeCategory===null?' active':'') + '" data-cat="">All</button>';
+    CATEGORIES.forEach(function(c){
+      html += '<button class="chip-f' + (activeCategory===c?' active':'') + '" data-cat="'+c+'">'+c.charAt(0).toUpperCase()+c.slice(1)+'</button>';
+    });
+    el.innerHTML = html;
+    el.querySelectorAll('.chip-f').forEach(function(b){
+      b.addEventListener('click', function(){
+        activeCategory = b.getAttribute('data-cat') || null;
+        renderChips(); renderRefs();
+      });
+    });
+  }
+
+  function renderRefs(){
+    var list = document.getElementById('refList');
+    var q = searchQuery.toLowerCase();
+    var filtered = REFS.filter(function(r){
+      var matchesCat = !activeCategory || r.tags.indexOf(activeCategory) !== -1;
+      var matchesQ = !q || (r.title + ' ' + r.answer + ' ' + r.tags.join(' ')).toLowerCase().indexOf(q) !== -1;
+      return matchesCat && matchesQ;
+    });
+    if (!filtered.length){ list.innerHTML = '<div class="no-results">Nothing matches — try the "Ask Claude" box below.</div>'; return; }
+    var html = '';
+    filtered.forEach(function(r){
+      var open = openRefId === r.id;
+      html += '<div class="ref-card' + (open?' open':'') + '" data-id="'+r.id+'">' +
+        '<button class="ref-q" data-toggle="'+r.id+'"><span>' + escapeHtml(r.title) + '</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></button>' +
+        '<div class="ref-body">' +
+          '<p>' + escapeHtml(r.answer) + '</p>' +
+          (r.diagram ? '<div class="ref-diagram">' + diagramSvg(r.diagram) + '</div>' : '') +
+          '<div class="ref-tags">' + r.tags.map(function(t){ return '<span>'+t+'</span>'; }).join('') + '</div>' +
+        '</div>' +
+      '</div>';
+    });
+    list.innerHTML = html;
+    list.querySelectorAll('[data-toggle]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var id = btn.getAttribute('data-toggle');
+        openRefId = (openRefId === id) ? null : id;
+        renderRefs();
+      });
+    });
+  }
+
+  document.getElementById('refSearch').addEventListener('input', function(e){
+    searchQuery = e.target.value; renderRefs();
+  });
+
+  /* ---------- ask claude ---------- */
+  var askText = document.getElementById('askText');
+  var askBtn = document.getElementById('askClaudeBtn');
+  askText.addEventListener('input', function(){
+    var q = askText.value.trim();
+    askBtn.href = q ? ('https://claude.ai/new?q=' + encodeURIComponent(q)) : 'https://claude.ai/new';
+  });
+  document.getElementById('copyAskBtn').addEventListener('click', function(){
+    var q = askText.value.trim();
+    if (!q){ showToast('Type a question first.'); return; }
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(q).then(function(){ showToast('Copied — paste it into Claude.'); })
+        .catch(function(){ showToast('Could not copy — select the text manually.'); });
+    } else {
+      showToast('Copy not supported on this browser.');
+    }
+  });
+
+  /* ---------- init ---------- */
+  renderSchedule();
+  renderChips();
+  renderRefs();
+})();
+</script>
+
+</body></html>

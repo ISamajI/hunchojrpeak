@@ -1,0 +1,521 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}</style></head><body>
+<title>Mile Zero Sweatsuit Concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Anton&family=Graduate&family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#15120f;
+    --bg-soft:#1b1712;
+    --surface:#211c16;
+    --surface-2:#2a241c;
+    --ink:#f3ece0;
+    --ink-dim:#cdc3b2;
+    --muted:#948a78;
+    --line:#3a3327;
+    --accent:#b34632;
+    --accent-ink:#f6ece4;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Barlow',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:var(--accent);}
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:64px 28px 96px;
+  }
+
+  /* ---------- Header ---------- */
+  .eyebrow{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:600;
+    letter-spacing:.16em;
+    text-transform:uppercase;
+    font-size:12px;
+    color:var(--accent);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px;height:1px;background:var(--accent);
+    display:inline-block;
+  }
+
+  header.masthead{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:24px;
+    padding-bottom:28px;
+    margin-bottom:36px;
+    border-bottom:1px solid var(--line);
+  }
+  h1.brand{
+    font-family:'Anton',sans-serif;
+    font-weight:400;
+    font-size:clamp(48px,9vw,96px);
+    line-height:.86;
+    margin:10px 0 0;
+    letter-spacing:.01em;
+    text-transform:uppercase;
+  }
+  .tagline{
+    font-family:'Permanent Marker',cursive;
+    font-size:clamp(15px,2.2vw,20px);
+    color:var(--ink-dim);
+    margin:6px 0 0;
+    transform:rotate(-1deg);
+    transform-origin:left center;
+  }
+  .masthead-meta{
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:14px;
+    color:var(--muted);
+    text-align:right;
+    max-width:280px;
+    line-height:1.5;
+  }
+
+  .intro{
+    display:grid;
+    grid-template-columns:1.4fr 1fr;
+    gap:40px;
+    padding-bottom:40px;
+    margin-bottom:8px;
+  }
+  .intro p{
+    font-size:16.5px;
+    line-height:1.65;
+    color:var(--ink-dim);
+    max-width:62ch;
+    margin:0 0 14px;
+  }
+  .intro p strong{color:var(--ink);font-weight:600;}
+  .intro .note{
+    font-size:13.5px;
+    color:var(--muted);
+    border-left:2px solid var(--line);
+    padding-left:12px;
+    margin-top:18px;
+  }
+
+  .spec-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:20px 22px;
+    align-self:start;
+  }
+  .spec-card h3{
+    font-family:'Barlow Condensed',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    font-size:12.5px;
+    color:var(--muted);
+    margin:0 0 12px;
+  }
+  .spec-row{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding:9px 0;
+    border-top:1px solid var(--line);
+    font-size:14px;
+  }
+  .spec-row:first-of-type{border-top:none;}
+  .spec-row dt{color:var(--ink-dim);font-weight:500;}
+  .spec-row dd{margin:0;color:var(--ink);text-align:right;}
+
+  /* ---------- Design sections ---------- */
+  section.design{
+    margin-top:56px;
+    padding-top:40px;
+    border-top:1px solid var(--line);
+  }
+  .design-head{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:baseline;
+    gap:16px;
+    margin-bottom:6px;
+  }
+  .design-index{
+    font-family:'Anton',sans-serif;
+    font-size:15px;
+    color:var(--accent);
+    letter-spacing:.08em;
+  }
+  h2.design-title{
+    font-family:'Anton',sans-serif;
+    font-weight:400;
+    text-transform:uppercase;
+    font-size:clamp(26px,4vw,38px);
+    margin:0;
+    letter-spacing:.01em;
+  }
+  .design-desc{
+    color:var(--muted);
+    font-size:15px;
+    max-width:64ch;
+    margin:10px 0 32px;
+    line-height:1.6;
+  }
+
+  .colorways{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:22px;
+  }
+
+  .look-card{
+    background:var(--surface);
+    border:1px solid var(--line);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .look-card-head{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:16px 18px 14px;
+    border-bottom:1px solid var(--line);
+  }
+  .swatch{
+    width:16px;height:16px;border-radius:50%;
+    box-shadow:inset 0 0 0 1px rgba(0,0,0,.25);
+    flex:none;
+  }
+  .look-card-head .name{
+    font-family:'Barlow Condensed',sans-serif;
+    font-weight:700;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    font-size:14.5px;
+  }
+  .look-card-head .hex{
+    margin-left:auto;
+    font-family:'Barlow Condensed',sans-serif;
+    color:var(--muted);
+    font-size:12px;
+    letter-spacing:.05em;
+  }
+
+  .hero-shot{
+    background:var(--bg-soft);
+    padding:10px;
+  }
+  .hero-shot svg{
+    width:100%;
+    height:auto;
+    display:block;
+    border-radius:2px;
+  }
+
+  .look-card-foot{
+    padding:12px 18px 16px;
+    font-size:12.5px;
+    color:var(--muted);
+    font-family:'Barlow Condensed',sans-serif;
+    letter-spacing:.02em;
+    border-top:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .look-card-foot .side{
+    color:var(--ink-dim);
+    font-weight:600;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    font-size:11px;
+  }
+
+  footer.page-foot{
+    margin-top:72px;
+    padding-top:26px;
+    border-top:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:14px;
+    font-family:'Barlow Condensed',sans-serif;
+    font-size:12.5px;
+    color:var(--muted);
+    letter-spacing:.02em;
+  }
+
+  @media (max-width:640px){
+    .intro{grid-template-columns:1fr;}
+    .masthead-meta{text-align:left;max-width:none;}
+  }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div>
+      <div class="eyebrow">Concept Lookbook — Not Production Art</div>
+      <h1 class="brand">Mile&nbsp;Zero</h1>
+      <p class="tagline">No shortcuts. Just miles.</p>
+    </div>
+    <div class="masthead-meta">
+      Sweatsuit capsule · 2 design directions × 3 colorways<br>
+      Styled as flat-lay shots, built from the existing tee graphics
+    </div>
+  </header>
+
+  <div class="intro">
+    <div>
+      <p><strong>Couldn't pull the Instagram photo</strong> — Instagram blocks it for outside tools, so I worked from how Eric Emanuel actually shoots a set: hoodie and sweatpants styled together on a seamless backdrop, laid flat with real fold shadows and a fabric grain, one bold logo instead of a paragraph of copy.</p>
+      <p>Still no photo of an actual model — this session doesn't have a photo-realistic image generator. What's below is as close as an illustrated flat-lay gets: <strong>Chenille Arch</strong> (a big arched wordmark across the chest, like a varsity patch) and <strong>Drip Back</strong> (the graffiti "MILE ZERO" stack across the back), each in three colorways. I swapped one neutral for <strong>Brick</strong> — the color of the wall behind him in his own photos.</p>
+      <p class="note">Send whichever hits land — happy to push the graphics further (bigger, smaller, different tagline) once you know which direction he's leaning.</p>
+    </div>
+    <aside class="spec-card">
+      <h3>Build Notes</h3>
+      <dl style="margin:0;">
+        <div class="spec-row"><dt>Hood</dt><dd>Tech-fit funnel hood,<br>close to the neck, minimal bunch</dd></div>
+        <div class="spec-row"><dt>Hoodie hem / cuff</dt><dd>Clean bonded edge,<br>no ribbing</dd></div>
+        <div class="spec-row"><dt>Sweatpant leg</dt><dd>Relaxed, open bottom,<br>no ankle cuff</dd></div>
+        <div class="spec-row"><dt>Waistband</dt><dd>Elastic + drawcord</dd></div>
+        <div class="spec-row"><dt>Print</dt><dd>Chenille or puff,<br>one hero logo per piece</dd></div>
+      </dl>
+    </aside>
+  </div>
+
+  <!-- shared gradients / filters, referenced by every garment SVG below -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <radialGradient id="studioBg" cx="50%" cy="38%" r="75%">
+        <stop offset="0%" stop-color="#e9e2d2"/>
+        <stop offset="65%" stop-color="#d6cdb9"/>
+        <stop offset="100%" stop-color="#b9ae96"/>
+      </radialGradient>
+
+      <linearGradient id="grad-black" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#332f29"/>
+        <stop offset="45%" stop-color="#141210"/>
+        <stop offset="100%" stop-color="#000000"/>
+      </linearGradient>
+      <linearGradient id="grad-heather" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#b5b1a7"/>
+        <stop offset="45%" stop-color="#8d8a84"/>
+        <stop offset="100%" stop-color="#615e58"/>
+      </linearGradient>
+      <linearGradient id="grad-brick" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#b06a49"/>
+        <stop offset="45%" stop-color="#853d29"/>
+        <stop offset="100%" stop-color="#4f2015"/>
+      </linearGradient>
+
+      <filter id="heroShadow" x="-30%" y="-20%" width="160%" height="150%">
+        <feDropShadow dx="0" dy="14" stdDeviation="12" flood-color="#2a2114" flood-opacity="0.38"/>
+      </filter>
+      <filter id="fabricTexture" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7" result="noise"/>
+        <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.14 0" result="noiseAlpha"/>
+        <feComposite in="noiseAlpha" in2="SourceGraphic" operator="in" result="noiseClipped"/>
+        <feBlend in="SourceGraphic" in2="noiseClipped" mode="overlay"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <div id="designs"></div>
+
+  <footer class="page-foot">
+    <span>Mile Zero — concept direction, pair with a real tech pack before cutting production.</span>
+    <span>2 designs × 3 colorways · illustrated flat-lays</span>
+  </footer>
+
+</div>
+
+<script>
+const COLORWAYS = [
+  { id:'black',   name:'Blackout',    hex:'#111110', grad:'grad-black',   print:'#f4efe4', printMuted:'#cbc3b3', rib:'#000000' },
+  { id:'heather', name:'Ash Heather', hex:'#8d8a84', grad:'grad-heather', print:'#161513', printMuted:'#3a3733', rib:'#57544e' },
+  { id:'brick',   name:'Brick',       hex:'#853d29', grad:'grad-brick',   print:'#f3ece0', printMuted:'#dcc9b8', rib:'#33130b' },
+];
+
+// shared flat-lay silhouette: torso 190–370 wide, canvas center x=280
+function garmentBase(c){
+  return `
+    <g filter="url(#fabricTexture)">
+      <path d="M190,150 L370,150 L388,380 Q390,394 374,394 L186,394 Q170,394 172,380 Z" fill="url(#${c.grad})" stroke="${c.rib}" stroke-width="1.4"/>
+      <path d="M188,152 Q120,175 108,230 Q106,252 130,258 L158,248 Q165,220 182,205 Q188,178 188,152 Z" fill="url(#${c.grad})" stroke="${c.rib}" stroke-width="1.2"/>
+      <path d="M372,152 Q440,175 452,230 Q454,252 430,258 L402,248 Q395,220 378,205 Q372,178 372,152 Z" fill="url(#${c.grad})" stroke="${c.rib}" stroke-width="1.2"/>
+      <g transform="rotate(4 280 112)">
+        <path d="M240,150 Q244,95 280,84 Q316,95 320,150 Q296,135 280,135 Q264,135 240,150 Z" fill="url(#${c.grad})" stroke="${c.rib}" stroke-width="1.3"/>
+      </g>
+    </g>
+    <rect x="112" y="238" width="34" height="16" rx="6" transform="rotate(-18 129 246)" fill="${c.rib}" opacity="0.5"/>
+    <rect x="414" y="238" width="34" height="16" rx="6" transform="rotate(18 431 246)" fill="${c.rib}" opacity="0.5"/>
+    <path d="M225,150 Q280,166 335,150" fill="none" stroke="${c.rib}" stroke-width="1.3" opacity="0.55"/>
+    <path d="M205,222 Q280,242 355,222" stroke="rgba(0,0,0,.2)" stroke-width="4" fill="none"/>
+    <path d="M200,300 Q280,318 360,300" stroke="rgba(0,0,0,.16)" stroke-width="4" fill="none"/>
+    <path d="M215,182 Q280,194 345,182" stroke="rgba(255,255,255,.07)" stroke-width="3" fill="none"/>
+  `;
+}
+
+function hoodieFrontDetails(c){
+  return `
+    <path d="M266,140 Q253,178 228,208" stroke="${c.rib}" stroke-width="2" fill="none"/>
+    <path d="M294,140 Q302,172 286,196" stroke="${c.rib}" stroke-width="2" fill="none"/>
+    <circle cx="228" cy="208" r="3" fill="${c.rib}"/>
+    <circle cx="286" cy="196" r="3" fill="${c.rib}"/>
+    <path d="M225,330 L275,352" stroke="${c.rib}" stroke-width="2" fill="none" opacity="0.6"/>
+    <path d="M335,330 L295,352" stroke="${c.rib}" stroke-width="2" fill="none" opacity="0.6"/>
+  `;
+}
+
+function hoodieBackDetails(c){
+  return `<path d="M280,152 L280,392" stroke="${c.rib}" stroke-width="1.2" opacity="0.45"/>`;
+}
+
+function chenilleArch(c, uid){
+  return `
+    <path id="arc-${uid}" d="M205,232 Q280,182 355,232" fill="none"/>
+    <text font-family="'Graduate',serif" font-size="32" fill="${c.print}" stroke="${c.rib}" stroke-width="1" letter-spacing="1.5">
+      <textPath href="#arc-${uid}" startOffset="50%" text-anchor="middle">MILE ZERO</textPath>
+    </text>
+    <g transform="translate(315,278)">
+      <circle r="10" fill="none" stroke="${c.print}" stroke-width="2.2"/>
+      <line x1="-6.5" y1="6.5" x2="6.5" y2="-6.5" stroke="${c.print}" stroke-width="2.2"/>
+    </g>
+    <text x="280" y="320" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="600" font-size="9" letter-spacing="2" fill="${c.printMuted}">NO SHORTCUTS. JUST MILES.</text>
+  `;
+}
+
+function dripBack(c, uid){
+  return `
+    <text x="280" y="196" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="700" font-size="11" letter-spacing="2.5" fill="${c.printMuted}">NO SHORTCUTS. JUST MILES.</text>
+    <text x="280" y="245" text-anchor="middle" font-family="'Permanent Marker',cursive" font-size="40" fill="${c.print}">MILE</text>
+    <text x="280" y="290" text-anchor="middle" font-family="'Permanent Marker',cursive" font-size="40" fill="${c.print}">ZERO</text>
+    <g transform="translate(280,318)">
+      <rect x="-46" y="-11" width="92" height="22" rx="3" fill="none" stroke="${c.print}" stroke-width="1.6"/>
+      <text x="0" y="6" text-anchor="middle" font-family="'Barlow Condensed',sans-serif" font-weight="700" font-size="11" letter-spacing="1.2" fill="${c.print}">MILEZERO</text>
+    </g>
+  `;
+}
+
+function pantsBase(c){
+  return `
+    <g transform="rotate(-3 280 500)">
+      <g filter="url(#fabricTexture)">
+        <rect x="210" y="400" width="140" height="28" rx="14" fill="url(#${c.grad})" stroke="${c.rib}" stroke-width="1.4"/>
+        <path d="M214,426 L165,480 L150,620 Q149,632 162,632 L206,632 L222,490 Z" fill="url(#${c.grad})" stroke="${c.rib}" stroke-width="1.4"/>
+        <path d="M346,426 L395,480 L410,620 Q411,632 398,632 L354,632 L338,490 Z" fill="url(#${c.grad})" stroke="${c.rib}" stroke-width="1.4"/>
+      </g>
+      <path d="M264,414 Q253,436 240,452" stroke="${c.rib}" stroke-width="2" fill="none"/>
+      <path d="M296,414 Q307,436 320,452" stroke="${c.rib}" stroke-width="2" fill="none"/>
+      <circle cx="240" cy="452" r="2.8" fill="${c.rib}"/>
+      <circle cx="320" cy="452" r="2.8" fill="${c.rib}"/>
+      <path d="M222,490 Q280,514 338,490" fill="none" stroke="${c.rib}" stroke-width="1.3" opacity="0.55"/>
+      <path d="M172,486 L192,516" stroke="${c.rib}" stroke-width="2" fill="none" opacity="0.6"/>
+      <path d="M388,486 L368,516" stroke="${c.rib}" stroke-width="2" fill="none" opacity="0.6"/>
+      <path d="M153,610 L204,610" stroke="${c.rib}" stroke-width="1" stroke-dasharray="2 3" opacity="0.5"/>
+      <path d="M356,610 L407,610" stroke="${c.rib}" stroke-width="1" stroke-dasharray="2 3" opacity="0.5"/>
+    </g>
+  `;
+}
+
+function pantsHit(c, design, uid){
+  if (design === 'archive'){
+    return `
+      <g transform="rotate(-3 280 500)">
+        <path id="arcp-${uid}" d="M136,558 Q198,516 260,558" fill="none"/>
+        <text font-family="'Graduate',serif" font-size="12" fill="${c.print}" stroke="${c.rib}" stroke-width="0.4" letter-spacing="0.4">
+          <textPath href="#arcp-${uid}" startOffset="50%" text-anchor="middle">MILEZERO</textPath>
+        </text>
+      </g>`;
+  }
+  return `
+    <g transform="rotate(-9 195 548)">
+      <text x="195" y="552" text-anchor="middle" font-family="'Permanent Marker',cursive" font-size="17" fill="${c.print}">MZ</text>
+    </g>`;
+}
+
+function heroFlatLay(c, design){
+  const uid = c.id + '-' + design;
+  const base = garmentBase(c);
+  const details = design === 'archive' ? hoodieFrontDetails(c) : hoodieBackDetails(c);
+  const graphic = design === 'archive' ? chenilleArch(c, uid) : dripBack(c, uid);
+
+  return `
+  <svg viewBox="0 0 560 680" xmlns="http://www.w3.org/2000/svg">
+    <rect x="0" y="0" width="560" height="680" fill="url(#studioBg)"/>
+    <ellipse cx="280" cy="470" rx="190" ry="26" fill="#000000" opacity="0.14"/>
+    <g filter="url(#heroShadow)">
+      ${base}
+      ${details}
+      ${graphic}
+    </g>
+    <g filter="url(#heroShadow)">
+      ${pantsBase(c)}
+      ${pantsHit(c, design, uid)}
+    </g>
+  </svg>`;
+}
+
+const DESIGNS = [
+  {
+    id:'archive',
+    index:'DIRECTION 01',
+    title:'Chenille Arch',
+    side:'Front',
+    desc:'One hero hit: a big arched "MILE ZERO" wordmark across the chest, chenille-patch style, with a small Ø tag and the tagline set quiet underneath — matching arch runs down the thigh. Back stays plain.'
+  },
+  {
+    id:'drip',
+    index:'DIRECTION 02',
+    title:'Drip Back',
+    side:'Back',
+    desc:'The graffiti-marker "MILE ZERO" stack from the tee, sized up across the full back with the tagline above and the boxed logo below. Front stays plain, small drip "MZ" on the thigh.'
+  }
+];
+
+const root = document.getElementById('designs');
+
+DESIGNS.forEach(design => {
+  const section = document.createElement('section');
+  section.className = 'design';
+
+  const cards = COLORWAYS.map(c => `
+    <div class="look-card">
+      <div class="look-card-head">
+        <span class="swatch" style="background:${c.hex}"></span>
+        <span class="name">${c.name}</span>
+        <span class="hex">${c.hex.toUpperCase()}</span>
+      </div>
+      <div class="hero-shot">${heroFlatLay(c, design.id)}</div>
+      <div class="look-card-foot">
+        <span>Tech-fit hood · open-hem leg</span>
+        <span class="side">${design.side} shown</span>
+      </div>
+    </div>
+  `).join('');
+
+  section.innerHTML = `
+    <div class="design-head">
+      <span class="design-index">${design.index}</span>
+      <h2 class="design-title">${design.title}</h2>
+    </div>
+    <p class="design-desc">${design.desc}</p>
+    <div class="colorways">${cards}</div>
+  `;
+  root.appendChild(section);
+});
+</script>
+
+</body></html>

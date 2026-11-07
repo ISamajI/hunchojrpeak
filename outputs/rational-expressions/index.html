@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rational Expressions Cheat Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<script>
+window.MathJax = { tex: { inlineMath: [['$','$']], displayMath: [['$$','$$']] }, svg: { fontCache: 'global' } };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.js" defer></script>
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --paper:#fbfcff; --grid:#dfe7f5; --ink:#1c2a4a; --muted:#56627d;
+  --hi:#fff2a8; --red:#c8324a; --blue:#2f5fb3; --card:#ffffff; --line:#c9d4ea;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#141a26; --grid:#1f2838; --ink:#e6ecf8; --muted:#9aa6c0;
+    --hi:#5a4f12; --red:#ff7b8f; --blue:#8fb2ff; --card:#1a2231; --line:#2d3a52;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#141a26; --grid:#1f2838; --ink:#e6ecf8; --muted:#9aa6c0;
+  --hi:#5a4f12; --red:#ff7b8f; --blue:#8fb2ff; --card:#1a2231; --line:#2d3a52;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*,*::before,*::after{box-sizing:border-box}
+body{
+  margin:0; color:var(--ink); background-color:var(--paper);
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:22px 22px;
+  font-family:"Atkinson Hyperlegible",system-ui,-apple-system,Segoe UI,sans-serif;
+  font-size:17px; line-height:1.55;
+}
+main{max-width:760px;margin:0 auto;padding:28px 16px 60px}
+header h1{
+  font-family:"Kalam","Comic Sans MS",cursive; font-weight:700;
+  font-size:clamp(2rem,7vw,3rem); line-height:1.05; margin:0 0 6px;
+}
+header p{margin:0 0 20px;color:var(--muted)}
+.jump{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:22px}
+.jump a{font-size:.85rem;color:var(--blue);text-decoration:none;border:1.5px solid var(--line);background:var(--card);padding:4px 10px;border-radius:999px}
+.jump a:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+details{background:var(--card);border:1.5px solid var(--line);border-left:6px solid var(--blue);border-radius:6px;margin-bottom:14px}
+summary{cursor:pointer;list-style:none;padding:14px 16px;display:flex;gap:12px;align-items:baseline}
+summary::-webkit-details-marker{display:none}
+summary .n{font-family:"Kalam",cursive;font-weight:700;color:var(--blue);font-size:1.4rem;min-width:1.2em}
+summary h2{margin:0;font-family:"Kalam",cursive;font-size:1.35rem;font-weight:700;line-height:1.2}
+summary::after{content:"+";margin-left:auto;font-size:1.4rem;color:var(--muted)}
+details[open] summary::after{content:"–"}
+.body{padding:0 16px 16px}
+.rule{background:var(--hi);padding:10px 12px;border-radius:4px;margin:4px 0 12px}
+ol,ul{padding-left:1.3em;margin:6px 0 12px}
+li{margin-bottom:4px}
+.ex{border-top:1.5px dashed var(--line);padding-top:10px;margin-top:10px}
+.ex b{color:var(--blue)}
+.trap{color:var(--red);border-left:3px solid var(--red);padding:4px 0 4px 10px;margin:12px 0 0}
+.math{overflow-x:auto;overflow-y:hidden;padding:2px 0}
+mjx-container{max-width:100%}
+.final{font-family:"Kalam",cursive;font-size:1.2rem;margin-top:26px;text-align:center;color:var(--muted)}
+@media print{details{break-inside:avoid} body{background:#fff}}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <h1>Rational Expressions Cheat Sheet</h1>
+  <p>Tap a topic to open it. Every section: the rule, the steps, one worked example, and the mistake to avoid.</p>
+</header>
+
+<nav class="jump">
+  <a href="#s1">Zero product</a><a href="#s2">Rational functions</a><a href="#s3">× and ÷</a><a href="#s4">+ and −</a><a href="#s5">Complex fractions</a><a href="#s6">Rational equations</a><a href="#s7">Applications</a>
+</nav>
+
+<details id="s1" open>
+<summary><span class="n">1</span><h2>Zero Product Rule</h2></summary>
+<div class="body">
+<div class="rule">If $ab = 0$, then $a = 0$ or $b = 0$.</div>
+<ol>
+<li>Move everything to one side so it equals <b>0</b>.</li>
+<li>Factor completely (GCF first!).</li>
+<li>Set each factor equal to 0 and solve.</li>
+<li>Check your answers.</li>
+</ol>
+<div class="ex"><b>Example:</b> $x^2 - 5x = -6$
+<div class="math">$$x^2-5x+6=0 \;\Rightarrow\; (x-2)(x-3)=0 \;\Rightarrow\; x=2,\; x=3$$</div>
+<b>Example:</b> $2x^3 - 18x = 0$
+<div class="math">$$2x(x^2-9)=0 \;\Rightarrow\; 2x(x-3)(x+3)=0 \;\Rightarrow\; x=0,\,3,\,-3$$</div>
+</div>
+<p class="trap">Trap: it only works when one side is 0. $(x-1)(x+2)=4$ does NOT mean $x-1=4$. Also don't divide both sides by $x$ — you lose the $x=0$ answer.</p>
+</div>
+</details>
+
+<details id="s2">
+<summary><span class="n">2</span><h2>Rational Expressions &amp; Functions</h2></summary>
+<div class="body">
+<div class="rule">A rational expression is $\dfrac{p}{q}$ (polynomials) where $q \ne 0$.</div>
+<ul>
+<li><b>Domain:</b> set the denominator $= 0$ and solve. Those x-values are excluded.</li>
+<li><b>Simplify:</b> factor top and bottom, then cancel common <i>factors</i>.</li>
+<li><b>Opposites:</b> $\dfrac{a-b}{b-a} = -1$</li>
+</ul>
+<div class="ex"><b>Example:</b> simplify and state the domain
+<div class="math">$$\frac{x^2-9}{x^2+x-6}=\frac{(x-3)(x+3)}{(x+3)(x-2)}=\frac{x-3}{x-2}$$</div>
+Domain: $x \ne -3,\ x \ne 2$ &nbsp;(use the <b>original</b> denominator).
+<p>Function form: $f(x)=\dfrac{x+1}{x-4}$ has domain $\{x \mid x \ne 4\}$, or $(-\infty,4)\cup(4,\infty)$.</p>
+</div>
+<p class="trap">Trap: you can only cancel factors, not terms. $\dfrac{x+5}{5} \ne x$.</p>
+</div>
+</details>
+
+<details id="s3">
+<summary><span class="n">3</span><h2>Multiplying &amp; Dividing</h2></summary>
+<div class="body">
+<div class="rule">$\dfrac{a}{b}\cdot\dfrac{c}{d}=\dfrac{ac}{bd}$ &nbsp;&nbsp; $\dfrac{a}{b}\div\dfrac{c}{d}=\dfrac{a}{b}\cdot\dfrac{d}{c}$</div>
+<ol>
+<li>Dividing? Flip the second fraction and change ÷ to ×.</li>
+<li>Factor every numerator and denominator.</li>
+<li>Cancel common factors (top with any bottom).</li>
+<li>Multiply what's left.</li>
+</ol>
+<div class="ex"><b>Example:</b>
+<div class="math">$$\frac{x^2-4}{3x}\div\frac{x+2}{6x^2}=\frac{(x-2)(x+2)}{3x}\cdot\frac{6x^2}{x+2}=2x(x-2)$$</div>
+</div>
+<p class="trap">Trap: flip only the fraction AFTER the ÷ sign — never the first one.</p>
+</div>
+</details>
+
+<details id="s4">
+<summary><span class="n">4</span><h2>Adding &amp; Subtracting</h2></summary>
+<div class="body">
+<div class="rule">You need a common denominator (LCD). Then $\dfrac{a}{c}\pm\dfrac{b}{c}=\dfrac{a\pm b}{c}$.</div>
+<ol>
+<li>Factor each denominator.</li>
+<li>LCD = every different factor, each at its highest power.</li>
+<li>Multiply each fraction's top and bottom by whatever it's missing.</li>
+<li>Combine numerators (use parentheses when subtracting!).</li>
+<li>Simplify and factor if possible.</li>
+</ol>
+<div class="ex"><b>Example:</b>
+<div class="math">$$\frac{3}{x-2}-\frac{1}{x+1}=\frac{3(x+1)-(x-2)}{(x-2)(x+1)}=\frac{2x+5}{(x-2)(x+1)}$$</div>
+</div>
+<p class="trap">Trap: the minus sign hits the WHOLE second numerator: $-(x-2) = -x+2$.</p>
+</div>
+</details>
+
+<details id="s5">
+<summary><span class="n">5</span><h2>Complex Fractions</h2></summary>
+<div class="body">
+<div class="rule">A fraction with fractions inside its top and/or bottom.</div>
+<p><b>Method 1:</b> make the top one fraction, make the bottom one fraction, then divide (flip and multiply).</p>
+<p><b>Method 2 (usually faster):</b> multiply the top AND bottom by the LCD of all the little fractions.</p>
+<div class="ex"><b>Example (Method 2, LCD = $x^2$):</b>
+<div class="math">$$\frac{1+\frac{1}{x}}{1-\frac{1}{x^2}}\cdot\frac{x^2}{x^2}=\frac{x^2+x}{x^2-1}=\frac{x(x+1)}{(x+1)(x-1)}=\frac{x}{x-1}$$</div>
+</div>
+<p class="trap">Trap: multiply EVERY term by the LCD, including whole numbers like the 1's.</p>
+</div>
+</details>
+
+<details id="s6">
+<summary><span class="n">6</span><h2>Solving Rational Equations</h2></summary>
+<div class="body">
+<div class="rule">Equation (has =)? Multiply everything by the LCD to clear the fractions. Expression (no =)? Keep the LCD in the denominator.</div>
+<ol>
+<li>Find the restrictions (values that make any denominator 0).</li>
+<li>Multiply every term on both sides by the LCD.</li>
+<li>Solve the equation that's left (might need zero product rule).</li>
+<li>Throw out any answer that's a restricted value (extraneous).</li>
+</ol>
+<div class="ex"><b>Example:</b> $\dfrac{2}{x}+\dfrac{1}{3}=1$ &nbsp; (LCD $=3x$, $x\ne0$)
+<div class="math">$$6 + x = 3x \;\Rightarrow\; 6 = 2x \;\Rightarrow\; x = 3 \;\checkmark$$</div>
+<b>Extraneous example:</b> $\dfrac{x}{x-3}=\dfrac{3}{x-3}+2$ &nbsp; ($x\ne3$)
+<div class="math">$$x = 3 + 2(x-3) \;\Rightarrow\; x = 2x-3 \;\Rightarrow\; x=3$$</div>
+But $x=3$ is restricted, so there is <b>no solution</b>.
+</div>
+<p class="trap">Trap: always check restrictions at the end — an answer that makes a denominator 0 doesn't count.</p>
+</div>
+</details>
+
+<details id="s7">
+<summary><span class="n">7</span><h2>Applications &amp; Proportions</h2></summary>
+<div class="body">
+<div class="rule">Proportion: $\dfrac{a}{b}=\dfrac{c}{d} \;\Rightarrow\; ad = bc$ (cross-multiply).</div>
+<ul>
+<li><b>Proportions / scale / similar triangles:</b> keep the same units in the same spots on both sides.</li>
+<li><b>Work:</b> $\dfrac{1}{a}+\dfrac{1}{b}=\dfrac{1}{t}$ &nbsp;($a,b$ = each one's time alone, $t$ = time together)</li>
+<li><b>Distance, rate, time:</b> $d = rt$, so $t = \dfrac{d}{r}$. With a current or wind: downstream $r+c$, upstream $r-c$.</li>
+</ul>
+<div class="ex"><b>Proportion:</b> 3 in on a map = 50 mi. How far is 7.5 in?
+<div class="math">$$\frac{3}{50}=\frac{7.5}{x}\;\Rightarrow\;3x=375\;\Rightarrow\;x=125\text{ mi}$$</div>
+<b>Work:</b> Pipe A fills a pool in 3 h, Pipe B in 6 h. Together?
+<div class="math">$$\frac13+\frac16=\frac1t \;\Rightarrow\; 2t + t = 6 \;\Rightarrow\; t=2\text{ h}$$</div>
+<b>Current:</b> Boat goes 20 mph in still water. It travels 36 mi downstream in the same time as 24 mi upstream. Find the current $c$.
+<div class="math">$$\frac{36}{20+c}=\frac{24}{20-c}\;\Rightarrow\;720-36c=480+24c\;\Rightarrow\;c=4\text{ mph}$$</div>
+</div>
+<p class="trap">Trap: in "same time" problems, set the two times ($d/r$) equal to each other.</p>
+</div>
+</details>
+
+<p class="final">Factor first. Watch the denominators. Check your answers.</p>
+</main>
+</body>
+</html>

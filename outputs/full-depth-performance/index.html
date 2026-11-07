@@ -1,0 +1,873 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Full Depth Performance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Chivo:wght@400;500;700&family=Chivo+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one consistent rhythm — every section = label + title on the left, short intro on the right, content below on a 12-col grid. Brand: FD army green, The Yard orange, emblem gold, on black. */
+:root{
+  --ground:#0f1010; --slab:#171918; --slab2:#1f2220; --line:#2b2f2c;
+  --chalk:#eeece6; --steel:#9ca19c; --orange:#ec7a1c; --army:#6a8a2f; --gold:#d8a642;
+  --display:"Big Shoulders Display","Impact","Arial Narrow",sans-serif;
+  --body:"Chivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"Chivo Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+html,body{overflow-x:clip}
+body{background:var(--ground);color:var(--chalk);font-family:var(--body);font-size:16px;line-height:1.55;padding-top:70px}
+a{color:inherit}
+img{display:block;max-width:100%;height:auto}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.wrap{max-width:1200px;margin:0 auto;padding-inline:clamp(16px,4vw,40px)}
+h1,h2,h3{font-family:var(--display);font-weight:900;text-transform:uppercase;line-height:.9;margin:0;text-wrap:balance}
+.label{font-family:var(--mono);font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--orange);display:flex;align-items:center;gap:10px}
+.label::before{content:"";width:22px;height:2px;background:currentColor}
+.outline{color:transparent;-webkit-text-stroke:2px var(--chalk)}
+section{padding-block:clamp(64px,8vw,104px);border-top:1px solid var(--line)}
+.alt{background:var(--slab)}
+.head{display:grid;grid-template-columns:1fr minmax(0,380px);gap:24px;align-items:end;margin-bottom:40px}
+.head h2{font-size:clamp(46px,7vw,88px);margin-top:12px}
+.head p{color:var(--steel);margin:0}
+@media (max-width:760px){.head{grid-template-columns:1fr}}
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:13px 20px;border:2px solid var(--chalk);cursor:pointer;background:none;color:var(--chalk);transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translate(-3px,-3px);box-shadow:3px 3px 0 var(--gold)}
+.btn.primary{background:var(--orange);border-color:var(--orange);color:#111}
+.btn.primary:hover{box-shadow:4px 4px 0 var(--chalk)}
+.btn .arr{transition:transform .2s}.btn:hover .arr{transform:translateX(4px)}
+
+/* header */
+header{position:fixed;top:0;left:0;right:0;padding-top:env(safe-area-inset-top,0px);z-index:50;transform:translateZ(0);background:rgba(15,16,16,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;height:70px}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;white-space:nowrap;min-width:0}
+@media (max-width:440px){.nav{height:62px;gap:10px}.brand img{width:42px}.brand b{font-size:19px}.brand small{display:none}.nav .btn{padding:8px 12px;font-size:15px}body{padding-top:62px}}
+.brand img{width:52px;height:auto}
+.brand b{font-family:var(--display);font-weight:900;font-size:22px;letter-spacing:.04em;line-height:1;display:block}
+.brand small{font-family:var(--mono);font-size:9px;letter-spacing:.22em;color:var(--steel)}
+.nav ul{display:flex;gap:24px;list-style:none;margin:0;padding:0}
+.nav ul a{text-decoration:none;font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel)}
+.nav ul a:hover{color:var(--chalk)}
+.nav .btn{padding:9px 16px;font-size:17px}
+@media (max-width:960px){.nav ul{display:none}}
+
+/* hero */
+.hero{border-top:0;padding-block:clamp(36px,5vw,64px) clamp(40px,5vw,64px)}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(24px,4vw,56px);align-items:center}
+.hero h1{font-size:clamp(46px,5.6vw,88px)}
+.hero h1 .l{display:block;overflow:hidden}
+.hero h1 .l span{display:block;animation:rise .9s cubic-bezier(.2,.8,.2,1) both}
+.hero h1 .l:nth-child(2) span{animation-delay:.12s;color:var(--orange)}
+.hero h1 .l:nth-child(3) span{animation-delay:.24s}
+@keyframes rise{from{transform:translateY(60%)}to{transform:none}}
+.hero p{font-size:clamp(17px,1.5vw,19px);max-width:500px;color:#cfcdc6;margin:20px 0 26px}
+.ctas{display:flex;gap:12px;flex-wrap:wrap}
+.photo{position:relative;min-width:0}
+.photo img.main{width:100%;height:auto;aspect-ratio:1284/713;object-fit:cover;object-position:center;border:2px solid var(--line)}
+.photo::before{content:"";position:absolute;inset:14px -14px -14px 14px;border:2px solid var(--orange);z-index:-1}
+.photo .emb{position:absolute;left:-26px;bottom:-26px;width:min(150px,28%);border:2px solid var(--gold);box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.photo .tag{position:absolute;top:14px;right:14px;background:#111;color:var(--gold);font-family:var(--mono);font-size:11px;letter-spacing:.14em;padding:6px 10px;text-transform:uppercase}
+.hero-wrap{position:relative;isolation:isolate}
+@media (max-width:900px){.hero-grid{grid-template-columns:minmax(0,1fr)}.photo{margin:0 14px 14px 26px}}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);margin-top:clamp(48px,6vw,72px);border:1px solid var(--line)}
+.stats div{padding:20px clamp(14px,2vw,24px);border-right:1px solid var(--line)}
+.stats div:last-child{border-right:0}
+.stats b{display:block;font-family:var(--display);font-weight:900;font-size:clamp(40px,5vw,64px);line-height:.9}
+.stats span{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--steel)}
+@media (max-width:700px){.stats{grid-template-columns:1fr 1fr}.stats div:nth-child(2){border-right:0}.stats div:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+
+.ticker{overflow:hidden;white-space:nowrap;background:var(--gold)}
+.ticker .trow{display:inline-flex;animation:slide 36s linear infinite}
+.ticker span{font-family:var(--display);font-weight:900;font-size:19px;letter-spacing:.08em;color:#111;padding:7px 18px;text-transform:uppercase}
+.ticker span::after{content:"◆";margin-left:36px;font-size:11px;vertical-align:middle}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* paths: 3 doors */
+.doors{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.door{position:relative;display:flex;flex-direction:column;justify-content:flex-end;min-height:300px;padding:22px;text-decoration:none;overflow:hidden;border:1px solid var(--line);isolation:isolate}
+.door img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.door::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.05) 20%,rgba(0,0,0,.88));z-index:-1}
+.door:hover img{transform:scale(1.06)}
+.door small{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.door h3{font-size:46px;margin:6px 0}
+.door p{margin:0;color:#d6d4cd;font-size:15px}
+.door .go{margin-top:14px;font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:.06em;text-transform:uppercase;color:var(--orange)}
+@media (max-width:860px){.doors{grid-template-columns:1fr}.door{min-height:240px}}
+
+/* programs tabs */
+.tabs{display:inline-flex;border:1px solid var(--line);margin-bottom:22px}
+.tabs button{background:none;border:0;color:var(--steel);font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:.06em;text-transform:uppercase;padding:10px 22px;cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--chalk);color:#111}
+.plist{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pcard{background:var(--slab);border:1px solid var(--line);padding:22px;display:flex;flex-direction:column;gap:10px;text-decoration:none;transition:border-color .2s,transform .2s;min-width:0}
+.alt .pcard{background:var(--ground)}
+.pcard:hover{border-color:var(--orange);transform:translateY(-4px)}
+.pcard .ic{width:40px;height:40px;display:grid;place-items:center;background:var(--slab2);border:1px solid var(--line)}
+.pcard h3{font-size:32px}
+.pcard p{margin:0;color:var(--steel);font-size:15px;flex:1}
+.pcard .tags{display:flex;gap:6px;flex-wrap:wrap}
+.pcard .tags i{font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line);padding:3px 7px;color:var(--steel)}
+.pcard .go{font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.06em;text-transform:uppercase;color:var(--orange)}
+@media (max-width:960px){.plist{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.plist{grid-template-columns:1fr}}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line)}
+.step{padding:24px 22px;border-right:1px solid var(--line)}
+.step:last-child{border-right:0}
+.step .n{font-family:var(--display);font-weight:900;font-size:56px;line-height:1;color:transparent;-webkit-text-stroke:1.5px var(--orange)}
+.step h3{font-size:28px;margin:8px 0 6px}
+.step p{margin:0;color:var(--steel);font-size:15px}
+@media (max-width:860px){.steps{grid-template-columns:1fr 1fr}.step:nth-child(2){border-right:0}.step:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+@media (max-width:480px){.steps{grid-template-columns:1fr}.step{border-right:0;border-bottom:1px solid var(--line)}}
+
+/* pricing */
+.rate-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.rate{background:var(--ground);border:1px solid var(--line);padding:24px;display:flex;flex-direction:column;gap:6px;position:relative}
+.rate small{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--steel);text-transform:uppercase}
+.rate .p{font-family:var(--display);font-weight:900;font-size:clamp(64px,7vw,92px);line-height:.85}
+.rate .p sup{font-size:.38em;vertical-align:top;position:relative;top:.25em;margin-right:2px}
+.rate p{margin:4px 0 0;color:#c9c7c0;font-size:15px}
+.rate.hl{border-color:var(--gold)}
+.rate .flag{position:absolute;top:-1px;right:-1px;background:var(--gold);color:#111;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.12em;padding:5px 9px}
+.packs{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.pack{border:1px solid var(--line);padding:24px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 20px;background:var(--ground)}
+.pack .medal{width:60px;height:60px;grid-row:span 3}
+.pack h3{font-size:40px}
+.pack .req{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.pack ul{margin:6px 0 0;padding:0;list-style:none;display:grid;gap:4px;color:#c9c7c0;font-size:15px}
+.pack li::before{content:"+ ";color:var(--orange);font-weight:700}
+.calc{margin-top:14px;border:1px dashed var(--steel);padding:20px 24px;display:grid;grid-template-columns:1fr 1fr auto;gap:22px;align-items:center}
+.calc label,.calc .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);display:block;margin-bottom:8px}
+.seg{display:inline-flex;border:1px solid var(--line)}
+.seg button{background:none;border:0;color:var(--steel);font-family:var(--display);font-weight:700;font-size:18px;padding:8px 16px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--chalk);color:#111}
+input[type=range]{width:100%;accent-color:var(--orange)}
+.calc output{font-family:var(--display);font-weight:900;font-size:clamp(42px,5vw,58px);line-height:.9;font-variant-numeric:tabular-nums;text-align:right;display:block}
+.calc .note{font-family:var(--mono);font-size:10.5px;color:var(--steel);text-align:right;display:block;margin-top:4px}
+.more{margin-top:18px;font-family:var(--mono);font-size:12px;color:var(--steel)}
+.more a{color:var(--gold)}
+@media (max-width:860px){.rate-grid,.packs{grid-template-columns:1fr}.calc{grid-template-columns:1fr}.calc output,.calc .note{text-align:left}}
+
+/* coaches */
+.roster{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.card{perspective:1200px;min-height:330px;cursor:pointer}
+.card-in{position:relative;width:100%;height:100%;min-height:330px;transition:transform .7s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.card:hover .card-in,.card.flip .card-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;overflow:hidden}
+.front{background:linear-gradient(160deg,var(--slab2),var(--ground))}
+.front .stripe{position:absolute;top:0;left:0;right:0;height:6px}
+.front .ini{font-family:var(--display);font-weight:900;font-size:140px;line-height:.8;color:transparent;-webkit-text-stroke:2px rgba(238,236,230,.16);position:absolute;right:-4px;top:30px}
+.front .pos{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--gold);text-transform:uppercase}
+.front h3{font-size:42px;margin-top:auto}
+.front .hint{font-family:var(--mono);font-size:10px;color:var(--steel);letter-spacing:.1em;margin-top:8px;text-transform:uppercase}
+.back{transform:rotateY(180deg);background:var(--orange);color:#111;gap:10px}
+.back small{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase}
+.back ul{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.back li{font-family:var(--display);font-weight:900;font-size:32px;text-transform:uppercase;line-height:1}
+.back a{margin-top:auto;font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;border-top:1.5px solid #111;padding-top:12px;display:flex;justify-content:space-between}
+@media (max-width:1000px){.roster{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.roster{grid-template-columns:1fr}}
+
+/* finder */
+.finder{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,44px)}
+.q{margin-bottom:24px}
+.q h3{font-size:24px;margin-bottom:12px;color:var(--steel)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-family:var(--display);font-weight:700;font-size:18px;letter-spacing:.05em;text-transform:uppercase;padding:9px 14px;border:1.5px solid var(--line);background:var(--ground);color:var(--chalk);cursor:pointer;transition:border-color .15s,transform .15s}
+.chip:hover{border-color:var(--steel);transform:translateY(-2px)}
+.chip[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#111}
+.result{background:var(--chalk);color:#111;padding:clamp(22px,3vw,32px);display:flex;flex-direction:column;gap:12px;position:relative;overflow:hidden;min-width:0}
+.result .bar{position:absolute;left:0;right:0;top:0;height:8px;background:repeating-linear-gradient(-45deg,var(--orange) 0 14px,#111 14px 28px)}
+.result small{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#555;margin-top:6px}
+.result h3{font-size:clamp(42px,5vw,64px)}
+.result p{margin:0;color:#333}
+.result .coach{display:flex;align-items:center;gap:14px;border-top:1.5px solid #111;padding-top:14px;margin-top:auto}
+.result .coach b{font-family:var(--display);font-size:28px;text-transform:uppercase}
+.result .coach span{font-family:var(--mono);font-size:11px;color:#555;display:block}
+.result .btn{align-self:flex-start}
+.swap{animation:swap .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes swap{from{transform:translateY(10px);opacity:.3}to{transform:none;opacity:1}}
+@media (max-width:860px){.finder{grid-template-columns:1fr}}
+
+/* yard */
+.gallery{display:grid;grid-template-columns:1.6fr 1fr;grid-template-rows:auto auto;gap:14px}
+.gallery figure{margin:0;position:relative;overflow:hidden;border:1px solid var(--line);min-width:0}
+.gallery img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.gallery figure:hover img{transform:scale(1.04)}
+.gallery figcaption{position:absolute;left:12px;bottom:12px;background:#111;color:var(--chalk);font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;padding:6px 10px}
+.gallery .big{grid-row:span 2;aspect-ratio:4/3}
+.gallery .sm{aspect-ratio:16/9}
+@media (max-width:760px){.gallery{grid-template-columns:1fr}.gallery .big{grid-row:auto}}
+.specs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:14px}
+.spec{background:var(--ground);border:1px solid var(--line);padding:18px}
+.spec{min-width:0}
+.spec b{font-family:var(--display);font-weight:900;font-size:clamp(32px,4.4vw,44px);line-height:.9;display:block}
+.spec b em{font-style:normal;font-size:.42em;color:var(--gold);margin-left:4px}
+.spec span{font-size:14px;color:var(--steel)}
+@media (max-width:860px){.specs{grid-template-columns:1fr 1fr}}
+.tech{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}
+.panel{background:var(--ground);border:1px solid var(--line);padding:22px;min-width:0}
+.panel h3{font-size:30px;margin-bottom:14px}
+.kit{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--line)}
+.kit li{padding:10px 0;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:13px;display:flex;gap:10px}
+.kit li::before{content:"■";color:var(--orange);font-size:9px;line-height:2}
+.tool{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.tool:first-of-type{border-top:1px solid var(--line)}
+.tool b{font-family:var(--display);font-size:24px;text-transform:uppercase;line-height:1}
+.tool span{display:block;font-size:13px;color:var(--steel);margin-top:3px}
+.tool i{font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--gold);text-transform:uppercase}
+.kitchen{margin-top:14px;font-size:14px;color:#c9c7c0;border:1px dashed var(--steel);padding:12px 14px}
+.kitchen b{color:var(--chalk)}
+@media (max-width:860px){.tech{grid-template-columns:1fr}}
+@media (max-width:440px){.kit{grid-template-columns:1fr}}
+
+/* strike zone */
+.zone{background:var(--slab);border:1px solid var(--line);min-width:0}
+.zone-top{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel)}
+.live{display:flex;align-items:center;gap:8px;color:var(--chalk)}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--orange);animation:pulse 1.2s infinite}
+@keyframes pulse{50%{opacity:.25}}
+.zone svg{display:block;width:100%;height:auto;max-height:360px}
+.zone .cell{fill:transparent;stroke:rgba(238,236,230,.22);cursor:crosshair;transition:fill .15s}
+.zone .cell:hover{fill:rgba(216,166,66,.16)}
+.zone .cell.hit{fill:rgba(236,122,28,.3)}
+.readout{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line)}
+.readout div{padding:12px 14px;border-right:1px solid var(--line);min-width:0}
+.readout div:last-child{border-right:0}
+.readout small{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--steel);text-transform:uppercase}
+.readout b{font-family:var(--display);font-size:clamp(26px,2.8vw,34px);line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.readout b em{font-style:normal;font-size:.45em;color:var(--steel);margin-left:3px}
+.zone-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;border-top:1px solid var(--line);flex-wrap:wrap}
+.zone-foot .btn{font-size:16px;padding:8px 14px}
+.zone-foot span{font-family:var(--mono);font-size:11px;color:var(--steel)}
+
+/* shop */
+.drops{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.drop{background:#fff;color:#111;text-decoration:none;display:flex;flex-direction:column;border:2px solid #fff;transition:transform .2s,box-shadow .2s;position:relative;min-width:0}
+.drop:hover{transform:translate(-4px,-4px);box-shadow:6px 6px 0 var(--orange)}
+.drop img{aspect-ratio:3/4;object-fit:cover;width:100%;background:#f3f3f3}
+.drop .info{padding:14px;display:flex;flex-direction:column;gap:6px;flex:1;border-top:2px solid #111}
+.drop h3{font-size:24px;line-height:.95}
+.drop .price{font-family:var(--mono);font-size:14px;font-weight:600;margin-top:auto}
+.drop .price s{color:#888;font-weight:400;margin-left:6px}
+.drop .badge{position:absolute;top:10px;left:10px;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.12em;padding:4px 8px;background:#111;color:var(--gold);text-transform:uppercase}
+.drop .badge.pink{background:#e6457a;color:#fff}
+.shop-links{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+@media (max-width:1000px){.drops{grid-template-columns:1fr 1fr}}
+
+/* visit */
+.visit{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}
+.visit .pic{position:relative;border:1px solid var(--line);overflow:hidden;min-height:280px}
+.visit .pic img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0}
+.visit .pic .pin{position:absolute;left:16px;bottom:16px;right:16px;background:rgba(15,16,16,.92);border:1px solid var(--line);padding:16px 18px}
+.visit .pin small{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--gold);text-transform:uppercase}
+.visit .pin b{display:block;font-family:var(--display);font-size:30px;text-transform:uppercase;line-height:1;margin:4px 0}
+.visit .pin span{color:var(--steel);font-size:14px}
+.info-stack{display:grid;gap:14px}
+.row{background:var(--slab);border:1px solid var(--line);padding:18px 20px}
+.row small{font-family:var(--mono);font-size:10px;letter-spacing:.14em;color:var(--steel);text-transform:uppercase;display:block;margin-bottom:8px}
+.copy{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.copy code{font-family:var(--mono);font-size:16px;user-select:all;word-break:break-all}
+.copy button{background:none;border:1px solid var(--line);color:var(--chalk);font-family:var(--mono);font-size:11px;letter-spacing:.1em;padding:6px 10px;cursor:pointer;text-transform:uppercase}
+.copy button:hover{border-color:var(--gold)}
+.socials{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.soc{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--line);text-decoration:none;transition:border-color .15s,background .15s;min-width:0}
+.soc:hover{border-color:var(--orange);background:var(--slab2)}
+.soc svg{flex:none}
+.soc b{font-family:var(--display);font-size:18px;text-transform:uppercase;letter-spacing:.03em;display:block;line-height:1}
+.soc span{font-family:var(--mono);font-size:11px;color:var(--steel);overflow-wrap:anywhere}
+@media (max-width:860px){.visit{grid-template-columns:1fr}}
+@media (max-width:440px){.socials{grid-template-columns:1fr}}
+
+/* final */
+.final{background:var(--orange);color:#111;border-top:0;position:relative;overflow:hidden}
+.final h2{font-size:clamp(78px,15vw,220px);line-height:.8}
+.final h2 .outline{-webkit-text-stroke-color:#111}
+.final p{font-size:19px;max-width:500px;margin:22px 0 26px}
+.final .btn{background:#111;border-color:#111;color:#fff;font-size:22px;padding:16px 26px}
+.final .btn:hover{box-shadow:5px 5px 0 #fff}
+.final .logo-ghost{position:absolute;right:-30px;bottom:-30px;width:min(420px,50vw);opacity:.18;filter:grayscale(1) brightness(0);pointer-events:none}
+
+/* footer */
+footer{padding-block:52px 36px;border-top:1px solid var(--line)}
+.foot{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:28px}
+.foot h4{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);margin:0 0 12px;font-weight:400}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.foot a{text-decoration:none;color:#d2d0c9;font-size:15px}
+.foot a:hover{color:var(--gold)}
+.foot p{color:var(--steel);font-size:14px;max-width:300px}
+.icons{display:flex;gap:8px;margin-top:14px}
+.icons a{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line)}
+.icons a:hover{border-color:var(--orange)}
+.legal{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--steel)}
+.legal a{text-decoration:none}
+@media (max-width:860px){.foot{grid-template-columns:1fr 1fr}.foot>div:first-child{grid-column:1/-1}}
+
+/* demo bar */
+[hidden]{display:none!important}
+#demoBar{position:fixed;left:50%;bottom:max(16px,env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:900;display:flex;gap:4px;align-items:center;padding:5px;background:rgba(15,16,16,.92);border:1px solid var(--line);backdrop-filter:blur(10px);box-shadow:0 10px 30px rgba(0,0,0,.5)}
+#demoBar span{font-family:var(--mono);font-size:10px;letter-spacing:.16em;color:var(--gold);padding:0 8px}
+#demoBar button{background:none;border:1px solid transparent;color:var(--steel);font-family:var(--display);font-weight:700;font-size:15px;letter-spacing:.05em;text-transform:uppercase;padding:7px 12px;cursor:pointer;white-space:nowrap}
+#demoBar button:hover{color:var(--chalk)}
+#demoBar button[aria-pressed="true"]{background:var(--chalk);color:#111}
+#demoBar #dbIntro{background:var(--orange);color:#111}
+#phoneView:not([hidden])~#demoBar,body:has(#phoneView:not([hidden])) #demoBar,body:has(#pitchView:not([hidden])) #demoBar{display:none}
+#phoneView{position:fixed;inset:0;z-index:950;background:rgba(5,5,5,.94);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px}
+.pv-btns{display:flex;gap:8px}
+@media (max-width:520px){#demoBar button{font-size:12px;padding:6px 7px;letter-spacing:.02em}#demoBar{gap:2px;padding:4px}#demoBar{flex-wrap:wrap;justify-content:center;width:max-content;max-width:calc(100vw - 24px)}#demoBar span{flex-basis:100%;text-align:center;font-size:9px;padding:2px 0 4px;letter-spacing:.12em}}
+/* device previews */
+#phoneView{gap:14px;background:radial-gradient(900px 600px at 50% 45%,#1d1a17,#070707 70%)!important}
+.dev-fit{position:relative;flex:none}
+.dev-stage{position:absolute;top:0;left:0;transform-origin:0 0}
+.iphone{position:relative;width:418px;height:872px;border-radius:66px;background:#1b1b1d;padding:14px;box-shadow:inset 0 0 0 2px #3a3a3e,inset 0 0 0 5px #0c0c0d,0 0 0 1.5px #55555a,0 40px 90px rgba(0,0,0,.7)}
+.iphone::before,.iphone::after{content:"";position:absolute;width:4px;border-radius:2px;background:#2c2c30;box-shadow:inset 0 0 0 1px #4a4a50}
+.iphone::before{left:-5px;top:180px;height:64px;box-shadow:inset 0 0 0 1px #4a4a50,0 84px 0 #2c2c30}
+.iphone::after{right:-5px;top:230px;height:100px}
+.iphone .scr{position:relative;width:390px;height:844px;border-radius:54px;overflow:hidden;background:#000}
+.iphone iframe{width:390px;height:844px;border:0;display:block}
+.iphone .island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:122px;height:36px;border-radius:20px;background:#000;z-index:3;box-shadow:inset -14px 0 0 -10px #111}
+.iphone .island::after{content:"";position:absolute;right:16px;top:12px;width:12px;height:12px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#2a3550,#05070c 70%)}
+.iphone .bar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:rgba(255,255,255,.75);z-index:3;pointer-events:none}
+.laptop{position:relative;width:1478px;height:872px}
+.laptop .lid{position:absolute;left:79px;top:0;width:1320px;height:850px;border-radius:22px 22px 6px 6px;background:#0b0b0c;padding:26px 20px 24px;box-shadow:0 0 0 2px #2b2b2e,0 0 0 4px #9a9ca1,0 40px 90px rgba(0,0,0,.65)}
+.laptop .cam{position:absolute;top:9px;left:50%;width:8px;height:8px;margin-left:-4px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#334,#000 70%)}
+.laptop .scr{width:1280px;height:800px;overflow:hidden;background:#000;border-radius:4px}
+.laptop iframe{width:1280px;height:800px;border:0;display:block}
+.laptop .base{position:absolute;left:0;bottom:0;width:1478px;height:24px;border-radius:2px 2px 16px 16px;background:linear-gradient(#d9dadd,#a9abb0 55%,#7d7f84);box-shadow:0 18px 30px rgba(0,0,0,.55)}
+.laptop .base i{position:absolute;top:0;left:50%;width:180px;height:10px;margin-left:-90px;border-radius:0 0 10px 10px;background:linear-gradient(#9fa1a6,#c6c8cc)}
+.dev-label{font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--steel);text-transform:uppercase}
+/* pitch */
+#pitchView{position:fixed;inset:0;z-index:960;background:#0b0b0b;overflow-y:auto;-webkit-overflow-scrolling:touch}
+#pitchView .pw{max-width:1040px;margin:0 auto;padding:clamp(28px,5vw,64px) clamp(16px,4vw,40px) 120px}
+.p-top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:34px}
+.p-top .from{font-family:var(--mono);font-size:11px;letter-spacing:.18em;color:var(--gold);text-transform:uppercase}
+.p-close{white-space:nowrap;flex:none;background:none;border:1px solid var(--line);color:var(--chalk);font-family:var(--mono);font-size:11px;letter-spacing:.14em;padding:8px 12px;cursor:pointer;text-transform:uppercase}
+.p-close:hover{border-color:var(--orange)}
+.p-hero h2{font-size:clamp(44px,8vw,96px)}
+.p-hero p{font-size:clamp(17px,1.6vw,20px);color:#cfcdc6;max-width:640px;margin:20px 0 0}
+.p-sec{margin-top:clamp(44px,6vw,72px)}
+.p-sec h3{font-size:clamp(30px,4vw,44px);margin:12px 0 18px}
+.why{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.why div{background:var(--slab);border:1px solid var(--line);padding:22px}
+.why b{display:block;font-family:var(--display);font-size:26px;text-transform:uppercase;line-height:1;margin-bottom:8px}
+.why p{margin:0;color:var(--steel);font-size:15px}
+.feat{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;list-style:none;padding:0;margin:0}
+.feat li{display:flex;gap:14px;align-items:flex-start;padding:16px 18px;border:1px solid var(--line);background:var(--slab)}
+.feat li i{flex:none;width:30px;height:30px;display:grid;place-items:center;background:var(--orange);color:#111;font-style:normal;font-family:var(--display);font-weight:900;font-size:16px}
+.feat li b{display:block;font-family:var(--display);font-size:20px;text-transform:uppercase;letter-spacing:.02em;line-height:1.1}
+.feat li span{color:var(--steel);font-size:14px}
+.ba{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.ba>div{border:1px solid var(--line);padding:22px}
+.ba .before{background:var(--slab)}
+.ba .after{background:var(--ground);border-color:var(--orange)}
+.ba small{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+.ba .before small{color:var(--steel)}.ba .after small{color:var(--orange)}
+.ba ul{margin:12px 0 0;padding:0;list-style:none;display:grid;gap:8px;font-size:15px}
+.ba .before li{color:var(--steel)}.ba .before li::before{content:"– ";color:#666}
+.ba .after li::before{content:"✓ ";color:var(--orange);font-weight:700}
+.p-cta{margin-top:clamp(44px,6vw,72px);background:var(--orange);color:#111;padding:clamp(24px,4vw,40px);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.p-cta h3{font-size:clamp(32px,5vw,56px);margin:0}
+.p-cta p{margin:8px 0 0;max-width:520px}
+.p-cta .btn{background:#111;border-color:#111;color:#fff}
+@media (max-width:760px){.why,.feat,.ba{grid-template-columns:minmax(0,1fr)}}
+/* intro — orange logo drop */
+#intro{position:fixed;inset:0;z-index:1000;overflow:hidden;pointer-events:none}
+.wipe{position:absolute;inset:0;background:var(--orange);z-index:8;display:grid;place-items:center;animation:wipeUp .5s cubic-bezier(.7,0,.3,1) both}
+@keyframes wipeUp{from{transform:translateY(101%)}to{transform:none}}
+.wipe img{width:min(170px,36vw);filter:brightness(0);opacity:.88;animation:logoPop .6s .35s cubic-bezier(.2,.9,.2,1.3) both}
+@keyframes logoPop{from{transform:scale(.4) rotate(-10deg);opacity:0}to{transform:none;opacity:.88}}
+#intro.exit{animation:introOut .6s cubic-bezier(.7,0,.3,1) forwards}
+@keyframes introOut{to{transform:translateY(-101%)}}
+html.intro-on,html.intro-on body{overflow:hidden}
+.intro-on .hero h1 .l span,.intro-on .hero .photo{animation-play-state:paused}
+.hero .photo{animation:photoIn .9s .3s cubic-bezier(.2,.8,.2,1) both}
+@keyframes photoIn{from{transform:translateY(30px) scale(.96);opacity:0}}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}#intro{display:none}}
+</style>
+
+<div id="demoBar" role="toolbar" aria-label="Demo controls"><span>DEMO <b style="color:var(--chalk);font-weight:600">· BY LTGPEAK</b></span><button type="button" data-mode="desktop" aria-pressed="false">Website view</button><button type="button" data-mode="phone" aria-pressed="false">Phone view</button><button type="button" id="dbPitch">The pitch</button><button type="button" id="dbIntro">Replay intro ↻</button></div>
+<div id="phoneView" hidden><div class="dev-label" id="devLabel">iPhone · 390 × 844</div><div class="dev-fit" id="devFit"><div class="dev-stage" id="devStage">
+<div class="iphone" id="devPhone"><div class="scr"><div class="island"></div><iframe id="phoneFrame" title="Phone preview"></iframe><div class="bar"></div></div></div>
+<div class="laptop" id="devLap" hidden><div class="lid"><div class="cam"></div><div class="scr"><iframe id="lapFrame" title="Website preview"></iframe></div></div><div class="base"><i></i></div></div>
+</div></div><div class="pv-btns"><button class="btn" type="button" id="pvReload" style="font-size:15px;padding:8px 14px">Replay ↻</button><button class="btn primary" type="button" data-mode="close" style="font-size:15px;padding:8px 14px">Close preview</button></div></div>
+<div id="pitchView" hidden role="dialog" aria-label="Why Full Depth needs this website"><div class="pw">
+<div class="p-top"><span class="from">LTGPEAK × The Yard at Full Depth</span><button class="p-close" type="button" id="pitchClose">Close ✕</button></div>
+<div class="p-hero"><div class="label">The pitch</div><h2 style="margin-top:12px">You train elite athletes.<br><span class="outline">Your site should look elite.</span></h2>
+<p>Parents, players and gym members look you up before they ever walk into the Yard. This site turns that first look into a booked session, and it shows the level of training you deliver before they meet a coach.</p></div>
+<div class="p-sec"><div class="label">Why a great website matters</div><h3>Your website is your front door</h3>
+<div class="why">
+<div><b>First impressions</b><p>Your site is the first look most people get at your facility. A sharp one tells them you're serious before you say a word.</p></div>
+<div><b>Bookings on autopilot</b><p>Every page leads to Mindbody. Fewer DMs and phone calls, more sessions booked at 11pm from a phone.</p></div>
+<div><b>Recruiting the right athletes</b><p>Serious players and parents compare facilities online. Clear programs, coaches and prices win that comparison.</p></div>
+<div><b>One home for everything</b><p>Training, booking, apparel and socials live in one place instead of scattered across separate sites.</p></div>
+<div><b>Built for phones</b><p>Most visitors are on their phones. Every section is designed for a thumb first, then scaled up for desktop.</p></div>
+<div><b>Sells the merch</b><p>The drop section puts your apparel in front of every visitor and links straight to your Shopify checkout.</p></div>
+</div></div>
+<div class="p-sec"><div class="label">What's on the site</div><h3>Everything we built for you</h3>
+<ul class="feat">
+<li><i>1</i><div><b>Branded logo drop</b><span>Your orange-and-black intro with the FD logo the second the site opens.</span></div></li>
+<li><i>2</i><div><b>One-tap booking</b><span>Every program, coach and button connects to your Mindbody schedule.</span></div></li>
+<li><i>3</i><div><b>Baseball + gym programs</b><span>12 programs in two clean tabs, each with what it covers.</span></div></li>
+<li><i>4</i><div><b>Program finder</b><span>Two taps match a player with the right program and coach.</span></div></li>
+<li><i>5</i><div><b>Clear pricing</b><span>Private rates, the $50 credited eval, Gold and Platinum packages, plus a monthly cost slider.</span></div></li>
+<li><i>6</i><div><b>Coach cards</b><span>Kyle, Anthony, Eli and Mike with their specialties on flip cards.</span></div></li>
+<li><i>7</i><div><b>The Yard showcase</b><span>Your real photos, the 10K sq ft facility, tunnels, weight room and tech.</span></div></li>
+<li><i>8</i><div><b>Interactive strike zone</b><span>A Rapsodo-style bullpen visitors can play with, so the site is memorable.</span></div></li>
+<li><i>9</i><div><b>Shop drop</b><span>Your current apparel with prices, linked to your Shopify store and the sale.</span></div></li>
+<li><i>10</i><div><b>Visit &amp; follow</b><span>Address with directions, email, and all five social accounts in one spot.</span></div></li>
+</ul></div>
+<div class="p-sec"><div class="label">Before vs after</div><h3>The upgrade</h3>
+<div class="ba">
+<div class="before"><small>Today</small><ul><li>Training site and apparel store live on separate websites</li><li>Booking means hunting for the Mindbody link</li><li>Programs, prices and coaches spread across different pages</li><li>Looks like a standard template</li></ul></div>
+<div class="after"><small>With the new site</small><ul><li>One site for training, booking, the shop and socials</li><li>A booking button on every section</li><li>Programs, prices and coaches all on one page</li><li>A custom look built around your brand and your facility</li></ul></div>
+</div></div>
+<div class="p-cta"><div><h3>Let's make it live.</h3><p>LTGPEAK builds fast, usually within one to two days, and we keep it updated as your programs, prices and drops change.</p></div><button class="btn" type="button" id="pitchBack">Explore the site →</button></div>
+</div></div>
+<div id="intro" aria-hidden="true"><div class="wipe"><img src="img/logo.webp" alt=""></div></div>
+<script>if(!matchMedia("(prefers-reduced-motion: reduce)").matches)document.documentElement.classList.add("intro-on");</script>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#top" aria-label="Full Depth home"><img src="img/logo.webp" alt="Full Depth Performance logo" width="840" height="737"><span><b>FULL DEPTH</b><small>THE YARD · PENNINGTON NJ</small></span></a>
+    <ul>
+      <li><a href="#train">Train</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#coaches">Coaches</a></li>
+      <li><a href="#yard">The Yard</a></li>
+      <li><a href="#shop">Shop</a></li>
+      <li><a href="#visit">Visit</a></li>
+    </ul>
+    <a class="btn primary" href="https://clients.mindbodyonline.com/classic/ws?studioid=928556" target="_blank" rel="noopener">Book <span class="arr">→</span></a>
+  </div>
+</header>
+
+<main id="top">
+<!-- 1. HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="label">The Yard at Full Depth</div>
+        <h1 style="margin-top:16px"><span class="l"><span>Motivate.</span></span><span class="l"><span>Innovate.</span></span><span class="l"><span class="outline">Accelerate.</span></span></h1>
+        <p>Central Jersey's top gym and baseball training facility. Private lessons, arm care, strength and a full weight room, all under one roof in Pennington.</p>
+        <div class="ctas">
+          <a class="btn primary" href="https://clients.mindbodyonline.com/classic/ws?studioid=928556" target="_blank" rel="noopener">Book on Mindbody <span class="arr">→</span></a>
+          <a class="btn" href="#finder">Find my program</a>
+        </div>
+      </div>
+      <div class="hero-wrap"><div class="photo">
+        <img class="main" src="img/cage.webp" alt="Hitter training in an indoor cage with a Full Depth coach" width="2048" height="1137">
+        <span class="tag">Inside the Yard</span>
+        <img class="emb" src="img/emblem.webp" alt="The Yard Baseball at Full Depth, Est. 2023 emblem" width="900" height="742">
+      </div></div>
+    </div>
+    <div class="stats">
+      <div><b>1,000+</b><span>Athletes trained yearly</span></div>
+      <div><b>10K</b><span>Sq ft facility</span></div>
+      <div><b>4</b><span>Pro tunnels</span></div>
+      <div><b>4</b><span>Coaches on staff</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true"><div class="trow" id="tick"></div></div>
+
+<!-- 2. CHOOSE YOUR PATH -->
+<section>
+  <div class="wrap">
+    <div class="head"><div><div class="label">Start here</div><h2>Choose your<br><span class="outline">lane.</span></h2></div><p>Three ways in. Pick the one that fits and we'll take it from there.</p></div>
+    <div class="doors">
+      <a class="door" href="#train" data-tab="baseball"><img src="img/turf.webp" alt="" loading="lazy"><small>Players &amp; teams</small><h3>Baseball</h3><p>Lessons, arm care, hitting and mental training.</p><span class="go">See programs →</span></a>
+      <a class="door" href="#train" data-tab="gym"><img src="img/mural.webp" alt="" loading="lazy"><small>Members</small><h3>The Gym</h3><p>Membership, powerlifting, personal and group training.</p><span class="go">See gym options →</span></a>
+      <a class="door" href="#shop"><img src="img/p2.webp" alt="" loading="lazy" style="object-position:center 30%"><small>Apparel</small><h3>The Shop</h3><p>New drops every season. Rep the Yard.</p><span class="go">Shop the drop →</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- 3. PROGRAMS -->
+<section class="alt" id="train">
+  <div class="wrap">
+    <div class="head"><div><div class="label">Programs</div><h2>Pick your<br><span class="outline">weapon.</span></h2></div><p>Everything books through Mindbody. Private lessons and fitness training are under Appointments in the app.</p></div>
+    <div class="tabs" role="tablist" aria-label="Program type">
+      <button type="button" role="tab" id="tab-baseball" aria-selected="true" aria-controls="panel">Baseball</button>
+      <button type="button" role="tab" id="tab-gym" aria-selected="false" aria-controls="panel">Gym</button>
+    </div>
+    <div class="plist" id="panel" role="tabpanel"></div>
+  </div>
+</section>
+
+<!-- 4. HOW TO START -->
+<section>
+  <div class="wrap">
+    <div class="head"><div><div class="label">How to start</div><h2>Four steps<br><span class="outline">in.</span></h2></div><p>Booking questions? Email <b style="color:var(--chalk)">Fulldepth17@gmail.com</b>.</p></div>
+    <div class="steps">
+      <div class="step"><div class="n">01</div><h3>Get Mindbody</h3><p>Download the Mindbody app or open the booking page.</p></div>
+      <div class="step"><div class="n">02</div><h3>Book the eval</h3><p>A $50 initial evaluation finds what's holding you back.</p></div>
+      <div class="step"><div class="n">03</div><h3>Lock your plan</h3><p>Sign up for a service within 30 days and the $50 comes off.</p></div>
+      <div class="step"><div class="n">04</div><h3>Go full depth</h3><p>Train, track it on Rapsodo, watch the numbers climb.</p></div>
+    </div>
+    <div class="ctas" style="margin-top:22px">
+      <a class="btn primary" href="https://clients.mindbodyonline.com/classic/ws?studioid=928556" target="_blank" rel="noopener">Open Mindbody booking <span class="arr">→</span></a>
+      <a class="btn" href="https://www.fulldepthperformance.com/book-a-private-lesson" target="_blank" rel="noopener">Sign-up form</a>
+    </div>
+  </div>
+</section>
+
+<!-- 5. PRICING -->
+<section class="alt" id="pricing">
+  <div class="wrap">
+    <div class="head"><div><div class="label">Pricing</div><h2>Pay for<br><span class="outline">reps.</span></h2></div><p>Straight pricing on private sessions. Stack services into a package for priority slots and discounts.</p></div>
+    <div class="rate-grid">
+      <div class="rate"><small>Private · 30 min</small><div class="p"><sup>$</sup>55</div><p>One coach, one focus. Great for a tune-up.</p></div>
+      <div class="rate"><small>Private · 60 min</small><div class="p"><sup>$</sup>110</div><p>Full session to break down and rebuild.</p></div>
+      <div class="rate hl"><span class="flag">CREDITED BACK</span><small>Initial evaluation</small><div class="p"><sup>$</sup>50</div><p>Comes off your first service if you sign up within 30 days.</p></div>
+    </div>
+    <div class="packs">
+      <div class="pack"><svg class="medal" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="none" stroke="#c9ccd1" stroke-width="3"/><circle cx="32" cy="32" r="19" fill="#c9ccd1"/><text x="32" y="38" text-anchor="middle" font-family="Big Shoulders Display, Impact, sans-serif" font-weight="900" font-size="18" fill="#111">PT</text></svg><h3>Platinum</h3><div class="req">3 services · weight room + group + private</div><ul><li>Private lessons</li><li>Priority training slots</li><li>Discounts on merch and services</li></ul></div>
+      <div class="pack"><svg class="medal" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="28" fill="none" stroke="#d8a642" stroke-width="3"/><circle cx="32" cy="32" r="19" fill="#d8a642"/><text x="32" y="38" text-anchor="middle" font-family="Big Shoulders Display, Impact, sans-serif" font-weight="900" font-size="18" fill="#111">GD</text></svg><h3>Gold</h3><div class="req">2 services</div><ul><li>Priority training slots</li><li>Mix any two services</li></ul></div>
+    </div>
+    <div class="calc">
+      <div><label for="spw">Sessions per week · <span id="spwv">2</span></label><input id="spw" type="range" min="1" max="5" value="2"></div>
+      <div><span class="lbl" id="lenlbl">Session length</span><div class="seg" role="group" aria-labelledby="lenlbl"><button type="button" data-len="55" aria-pressed="false">30 min</button><button type="button" data-len="110" aria-pressed="true">60 min</button></div></div>
+      <div><output id="est">$953</output><span class="note">Est. per month at private rates</span></div>
+    </div>
+    <p class="more">Gym memberships and group pricing: <a href="https://www.fulldepthperformance.com/pricing" target="_blank" rel="noopener">see the full pricing page →</a></p>
+  </div>
+</section>
+
+<!-- 6. COACHES -->
+<section id="coaches">
+  <div class="wrap">
+    <div class="head"><div><div class="label">The staff</div><h2>Meet the<br><span class="outline">dugout.</span></h2></div><p>Hover or tap a card to see each coach's specialties. <a href="https://www.fulldepthperformance.com/our-instructors" target="_blank" rel="noopener" style="color:var(--gold)">Full instructor bios →</a></p></div>
+    <div class="roster" id="roster"></div>
+  </div>
+</section>
+
+<!-- 7. FINDER -->
+<section class="alt" id="finder">
+  <div class="wrap">
+    <div class="head"><div><div class="label">Program finder</div><h2>Where do<br><span class="outline">you start?</span></h2></div><p>Two taps and we'll match you with a program and a coach.</p></div>
+    <div class="finder">
+      <div>
+        <div class="q"><h3>What do you want to fix first?</h3><div class="chips" id="qgoal"></div></div>
+        <div class="q"><h3>Where do you play?</h3><div class="chips" id="qpos"></div></div>
+      </div>
+      <div class="result" id="result" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
+<!-- 8. THE YARD -->
+<section id="yard">
+  <div class="wrap">
+    <div class="head"><div><div class="label">The facility</div><h2>Welcome to<br><span class="outline">the Yard.</span></h2></div><p>The old-school gym you know, plus pro-level baseball training. Teams can rent space too.</p></div>
+    <div class="gallery">
+      <figure class="big"><img src="img/turf.webp" alt="The Yard's indoor turf arena with orange batting lanes" loading="lazy"><figcaption>4,500 sq ft turf arena</figcaption></figure>
+      <figure class="sm"><img src="img/mural.webp" alt="The Yard wall mural with the orange Y logo" loading="lazy" style="object-position:center 40%"><figcaption>The Yard</figcaption></figure>
+      <figure class="sm"><img src="img/cage.webp" alt="Hitting lesson in a tunnel" loading="lazy"><figcaption>Pro tunnels</figcaption></figure>
+    </div>
+    <div class="specs">
+      <div class="spec"><b>10K<em>SQ FT</em></b><span>Total facility</span></div>
+      <div class="spec"><b>4,500<em>SQ FT</em></b><span>Arena-style turf cage</span></div>
+      <div class="spec"><b>3,200<em>SQ FT</em></b><span>Weight room</span></div>
+      <div class="spec"><b>4</b><span>Full-length tunnels</span></div>
+    </div>
+    <div class="tech">
+      <div class="panel">
+        <h3>The arsenal</h3>
+        <div class="tool"><div><b>Rapsodo</b><span>Hitting and pitching units. Every rep measured.</span></div><i>Data</i></div>
+        <div class="tool"><div><b>Hack Attack</b><span>Live-speed pitching machine reps.</span></div><i>Hitting</i></div>
+        <div class="tool"><div><b>Core Velocity Belt</b><span>Resisted rotation for real power.</span></div><i>Power</i></div>
+        <div class="tool"><div><b>Velo Pro</b><span>Velocity development.</span></div><i>Velo</i></div>
+        <div class="tool"><div><b>Arm Care Setup</b><span>Weighted balls, body blades, J-bands.</span></div><i>Health</i></div>
+        <h3 style="margin-top:22px">Weight room</h3>
+        <ul class="kit"><li>Specialty bars</li><li>Powerlifting mono-lift</li><li>Glute ham machine</li><li>Reverse hyper</li><li>Deadlift platforms</li><li>Bumper plates</li><li>Bands &amp; chains</li><li>Cardio + outdoor space</li></ul>
+        <p class="kitchen"><b>Members-only kitchen:</b> meal prep, post-workout cool-downs, coffee and the game on TV.</p>
+      </div>
+      <div class="zone" id="zone">
+        <div class="zone-top"><span class="live"><i></i>Try it · Rapsodo bullpen</span><span id="pcount">Pitch 0</span></div>
+        <svg viewBox="0 0 300 330" role="img" aria-label="Interactive strike zone. Pick a box to throw a pitch there.">
+          <defs><radialGradient id="ball" cx="35%" cy="35%"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#cfcabd"/></radialGradient></defs>
+          <g id="trail"></g>
+          <rect x="75" y="40" width="150" height="190" fill="none" stroke="#eeece6" stroke-width="2"/>
+          <g id="cells"></g>
+          <path d="M95 280 205 280 205 296 150 318 95 296Z" fill="none" stroke="#9ca19c" stroke-width="2"/>
+          <text x="150" y="26" text-anchor="middle" font-family="Chivo Mono, monospace" font-size="9" fill="#9ca19c" letter-spacing="2">CATCHER VIEW</text>
+          <g id="ballg" opacity="0"><circle r="9" fill="url(#ball)"/><path d="M-5 -6 Q0 0 -5 6 M5 -6 Q0 0 5 6" stroke="#ec7a1c" stroke-width="1.3" fill="none"/></g>
+        </svg>
+        <div class="readout">
+          <div><small>Velo</small><b id="rv">00.0<em>MPH</em></b></div>
+          <div><small>Spin</small><b id="rs">0000<em>RPM</em></b></div>
+          <div><small>Pitch</small><b id="rt" style="font-size:clamp(20px,2.2vw,28px)">—</b></div>
+        </div>
+        <div class="zone-foot"><span>Tap a box to call your pitch</span><button class="btn" id="throw" type="button">Throw one</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 9. SHOP -->
+<section class="alt" id="shop">
+  <div class="wrap">
+    <div class="head"><div><div class="label">Get better, looking good</div><h2>The<br><span class="outline">drop.</span></h2></div><p>New apparel every season: tees, hoodies, long sleeves, hats and joggers.</p></div>
+    <div class="drops" id="drops"></div>
+    <div class="shop-links">
+      <a class="btn primary" href="https://fulldepth.myshopify.com/collections/all" target="_blank" rel="noopener">Shop the full catalog <span class="arr">→</span></a>
+      <a class="btn" href="https://fulldepth.myshopify.com/collections/black-friday-sale/Hoodies+Long-Sleeves" target="_blank" rel="noopener">Black Friday sale</a>
+      <a class="btn" href="https://fulldepth.myshopify.com/cart" target="_blank" rel="noopener">Cart</a>
+    </div>
+  </div>
+</section>
+
+<!-- 10. VISIT + FOLLOW -->
+<section id="visit">
+  <div class="wrap">
+    <div class="head"><div><div class="label">Visit &amp; follow</div><h2>Find<br><span class="outline">the Yard.</span></h2></div><p>Come train, rent space for your team, or follow along for drops and highlights.</p></div>
+    <div class="visit">
+      <div class="pic"><img src="img/building.webp" alt="Outside of The Yard at Full Depth building in Pennington" loading="lazy">
+        <div class="pin"><small>Location</small><b>1595 Reed Road, Suite 1</b><span>Pennington, New Jersey</span>
+          <div style="margin-top:12px"><a class="btn" style="font-size:16px;padding:8px 14px" href="https://www.google.com/maps/search/?api=1&amp;query=1595+Reed+Road+Pennington+NJ" target="_blank" rel="noopener">Get directions <span class="arr">→</span></a></div></div>
+      </div>
+      <div class="info-stack">
+        <div class="row"><small>Email</small><div class="copy"><code id="em">Fulldepth17@gmail.com</code><button type="button" id="cp">Copy</button></div></div>
+        <div class="row"><small>Social</small>
+          <div class="socials">
+            <a class="soc" href="https://www.instagram.com/full_depth/" target="_blank" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="#ec7a1c" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="#ec7a1c" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.2" fill="#ec7a1c"/></svg><div><b>Instagram</b><span>@full_depth</span></div></a>
+            <a class="soc" href="https://www.instagram.com/theyard_fdp/" target="_blank" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="#ec7a1c" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="#ec7a1c" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.2" fill="#ec7a1c"/></svg><div><b>The Yard</b><span>@theyard_fdp</span></div></a>
+            <a class="soc" href="https://instagram.com/thescrapyard_fdp/" target="_blank" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="#ec7a1c" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="#ec7a1c" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.2" fill="#ec7a1c"/></svg><div><b>Scrapyard</b><span>@thescrapyard_fdp</span></div></a>
+            <a class="soc" href="https://www.facebook.com/fulldepth/" target="_blank" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8.5a.5.5 0 0 1 .5-.5Z" fill="#ec7a1c"/></svg><div><b>Facebook</b><span>/fulldepth</span></div></a>
+            <a class="soc" href="https://twitter.com/fulldepth1" target="_blank" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4l16 16M20 4 4 20" stroke="#ec7a1c" stroke-width="2.4"/></svg><div><b>X / Twitter</b><span>@fulldepth1</span></div></a>
+            <a class="soc" href="https://coach.ly/theyardatfulldepth" target="_blank" rel="noopener"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="#ec7a1c" stroke-width="2"/><path d="M12 7v5l3 2" stroke="#ec7a1c" stroke-width="2" fill="none"/></svg><div><b>Coachly</b><span>Remote booking</span></div></a>
+          </div>
+        </div>
+        <div class="row"><small>Booking app</small><div class="copy"><span style="font-size:15px;color:#c9c7c0">Search <b style="color:var(--chalk)">“Mindbody”</b> in the App Store or Google Play.</span><a class="btn primary" style="font-size:16px;padding:8px 14px" href="https://clients.mindbodyonline.com/classic/ws?studioid=928556" target="_blank" rel="noopener">Book online →</a></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="final">
+  <img class="logo-ghost" src="img/logo.webp" alt="" aria-hidden="true">
+  <div class="wrap" style="position:relative">
+    <h2>Go full<br><span class="outline">depth.</span></h2>
+    <p>Your next level is one evaluation away. Book it now and the $50 goes toward your training.</p>
+    <a class="btn" href="https://clients.mindbodyonline.com/classic/ws?studioid=928556" target="_blank" rel="noopener">Book on Mindbody <span class="arr">→</span></a>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="brand" href="#top"><img src="img/logo.webp" alt="Full Depth Performance logo" width="840" height="737"><span><b>FULL DEPTH</b><small>THE YARD · PENNINGTON NJ</small></span></a>
+        <p>1595 Reed Road, Suite 1, Pennington, NJ<br>Fulldepth17@gmail.com</p>
+        <div class="icons">
+          <a href="https://www.instagram.com/full_depth/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="18" height="18" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="#eeece6" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="#eeece6" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.2" fill="#eeece6"/></svg></a>
+          <a href="https://www.facebook.com/fulldepth/" target="_blank" rel="noopener" aria-label="Facebook"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M14 8h3V4h-3a4 4 0 0 0-4 4v3H7v4h3v6h4v-6h3l1-4h-4V8.5a.5.5 0 0 1 .5-.5Z" fill="#eeece6"/></svg></a>
+          <a href="https://twitter.com/fulldepth1" target="_blank" rel="noopener" aria-label="X / Twitter"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M4 4l16 16M20 4 4 20" stroke="#eeece6" stroke-width="2.4"/></svg></a>
+        </div>
+      </div>
+      <div><h4>Train</h4><ul>
+        <li><a href="https://clients.mindbodyonline.com/classic/ws?studioid=928556" target="_blank" rel="noopener">Book on Mindbody</a></li>
+        <li><a href="https://www.fulldepthperformance.com/classes-1" target="_blank" rel="noopener">Fall Pro Line</a></li>
+        <li><a href="https://www.fulldepthperformance.com/in-season" target="_blank" rel="noopener">In season</a></li>
+        <li><a href="https://www.fulldepthperformance.com/remote-training" target="_blank" rel="noopener">Remote training</a></li>
+        <li><a href="https://www.fulldepthperformance.com/gym-training" target="_blank" rel="noopener">Gym training</a></li>
+        <li><a href="https://www.fulldepthperformance.com/book-a-private-lesson" target="_blank" rel="noopener">Sign up</a></li>
+      </ul></div>
+      <div><h4>About</h4><ul>
+        <li><a href="https://www.fulldepthperformance.com/about" target="_blank" rel="noopener">About us</a></li>
+        <li><a href="https://www.fulldepthperformance.com/our-instructors" target="_blank" rel="noopener">Our instructors</a></li>
+        <li><a href="https://www.fulldepthperformance.com/reviews" target="_blank" rel="noopener">Reviews</a></li>
+        <li><a href="https://www.fulldepthperformance.com/pricing" target="_blank" rel="noopener">Pricing</a></li>
+        <li><a href="https://www.fulldepthperformance.com/location" target="_blank" rel="noopener">Location</a></li>
+      </ul></div>
+      <div><h4>Shop</h4><ul>
+        <li><a href="https://fulldepth.myshopify.com/" target="_blank" rel="noopener">Shop home</a></li>
+        <li><a href="https://fulldepth.myshopify.com/collections/all" target="_blank" rel="noopener">Catalog</a></li>
+        <li><a href="https://fulldepth.myshopify.com/collections/black-friday-sale/Hoodies+Long-Sleeves" target="_blank" rel="noopener">Black Friday sale</a></li>
+        <li><a href="https://fulldepth.myshopify.com/pages/contact" target="_blank" rel="noopener">Contact</a></li>
+        <li><a href="https://fulldepth.myshopify.com/customer_authentication/redirect?locale=en&amp;region_country=US" target="_blank" rel="noopener">Account login</a></li>
+        <li><a href="https://fulldepth.myshopify.com/cart" target="_blank" rel="noopener">Cart</a></li>
+      </ul></div>
+    </div>
+    <div class="legal"><span>© 2026 The Yard at Full Depth</span><span><a href="https://fulldepth.myshopify.com/policies/privacy-policy" target="_blank" rel="noopener">Privacy policy</a></span></div>
+  </div>
+</footer>
+
+<script>
+(()=>{
+const BOOK="https://clients.mindbodyonline.com/classic/ws?studioid=928556";
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* intro — video */
+const introTpl=document.getElementById("intro")?document.getElementById("intro").outerHTML:"";
+function runIntro(){const intro=document.getElementById("intro"),root=document.documentElement;
+ if(!intro)return;
+ if(reduce){intro.remove();root.classList.remove("intro-on");return}
+ let done=false;
+ function finish(){if(done)return;done=true;intro.classList.add("exit");
+  setTimeout(()=>root.classList.remove("intro-on"),250);
+  setTimeout(()=>intro.remove(),650);}
+ setTimeout(finish,1250);
+}
+runIntro();
+/* demo bar */
+const isPhoneFrame=location.hash==="#phone";
+if(isPhoneFrame)document.getElementById("demoBar").remove();
+else{
+ document.getElementById("dbIntro").onclick=()=>{const old=document.getElementById("intro");if(old)old.remove();document.body.insertAdjacentHTML("afterbegin",introTpl);document.documentElement.classList.add("intro-on");scrollTo(0,0);runIntro();};
+ const pv=document.getElementById("phoneView"),fit=document.getElementById("devFit"),stage=document.getElementById("devStage"),ph=document.getElementById("devPhone"),lap=document.getElementById("devLap"),pf=document.getElementById("phoneFrame"),lf=document.getElementById("lapFrame"),lbl=document.getElementById("devLabel");
+ const url=()=>location.href.split("#")[0]+"#phone";let mode=null;
+ const size=()=>{if(!mode)return;const W=mode==="phone"?418:1478,H=872;const sc=Math.min(1,(innerWidth-32)/W,(innerHeight-130)/H);stage.style.transform="scale("+sc+")";fit.style.width=W*sc+"px";fit.style.height=H*sc+"px"};
+ const load=()=>{const f=mode==="phone"?pf:lf;f.src="about:blank";setTimeout(()=>f.src=url(),40)};
+ const setMode=m=>{document.querySelectorAll("[data-mode]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===m));
+  if(m==="close"){mode=null;pv.hidden=true;pf.src=lf.src="about:blank";document.documentElement.style.overflow="";return}
+  mode=m;ph.hidden=m!=="phone";lap.hidden=m==="phone";lbl.textContent=m==="phone"?"iPhone · 390 × 844":"Laptop · 1280 × 800";
+  (m==="phone"?lf:pf).src="about:blank";pv.hidden=false;document.documentElement.style.overflow="hidden";size();load()};
+ addEventListener("resize",size);
+ document.querySelectorAll("[data-mode]").forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+ document.getElementById("pvReload").onclick=load;
+ const pt=document.getElementById("pitchView");
+ const openP=()=>{pt.hidden=false;pt.scrollTop=0;document.documentElement.style.overflow="hidden"},closeP=()=>{pt.hidden=true;document.documentElement.style.overflow=""};
+ document.getElementById("dbPitch").onclick=openP;document.getElementById("pitchClose").onclick=closeP;document.getElementById("pitchBack").onclick=closeP;
+ addEventListener("keydown",e=>{if(e.key==="Escape"&&!pt.hidden)closeP()});
+}
+const words=["Hitting","Pitching","Arm Care","Strength","Powerlifting","Mental Approach","Catching","Boot Camp","Rapsodo","Get Better"];
+document.getElementById("tick").innerHTML=[...words,...words].map(w=>`<span>${w}</span>`).join("");
+
+/* programs */
+const arrow=`<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 10h14M12 5l5 5-5 5" stroke="#ec7a1c" stroke-width="2.2" fill="none"/></svg>`;
+const P={
+ baseball:[
+  ["Private Lessons","One-on-one hitting, pitching, infield, outfield and throwing mechanics. Flexible scheduling.",["30 / 60 min","All positions"]],
+  ["Hitting Coaching","An evaluation finds the movement leaks in your swing, then we fix them on Hack Attack and Rapsodo.",["Eval first","Exit velo"]],
+  ["Arm Care","Rotator cuff strength, shoulder stability, range of motion and mobility. Evaluation required.",["J-bands","Weighted balls"]],
+  ["Strength & Agility","In-season maintenance for strength, speed, agility and endurance, plus recovery work.",["Speed","Injury prevention"]],
+  ["In-Season / Pro Line","Private, small group and team training daily, with instructors for every part of the game.",["Daily","Teams"]],
+  ["Mental Approach","Build a plan for every pitch and every situation so you compete with a clear head.",["Pitch-by-pitch","Confidence"]]],
+ gym:[
+  ["Gym Membership","Full access to the 3,200 sq ft weight room, outdoor space and the members-only kitchen.",["Open gym","Members"]],
+  ["Powerlifting","Mono-lift, specialty bars, platforms, bands and chains. Built for heavy days.",["Strength","Platforms"]],
+  ["Personal Training","One-on-one programming built around your goals and your schedule.",["1-on-1","Custom plan"]],
+  ["Group Training","Train with a crew. Coached sessions that push the whole group.",["Small group","Coached"]],
+  ["General Classes","Circuit style, boot camp and foundation/strength classes for every level.",["Circuit","Boot camp"]],
+  ["Women's Warm Up Club","A dedicated class for women. Warm up, get moving and train together.",["Women","Class"]]]
+};
+const panel=document.getElementById("panel");
+function showTab(k){
+  document.querySelectorAll('[role="tab"]').forEach(t=>t.setAttribute("aria-selected",t.id==="tab-"+k));
+  panel.setAttribute("aria-labelledby","tab-"+k);
+  panel.innerHTML=P[k].map(([n,d,t])=>`<a class="pcard" href="${BOOK}" target="_blank" rel="noopener"><h3>${n}</h3><p>${d}</p><div class="tags">${t.map(x=>`<i>${x}</i>`).join("")}</div><span class="go">Book on Mindbody →</span></a>`).join("");
+  panel.classList.remove("swap");void panel.offsetWidth;panel.classList.add("swap");
+}
+document.getElementById("tab-baseball").onclick=()=>showTab("baseball");
+document.getElementById("tab-gym").onclick=()=>showTab("gym");
+document.querySelectorAll(".door[data-tab]").forEach(d=>d.addEventListener("click",()=>showTab(d.dataset.tab)));
+showTab("baseball");
+
+/* calculator */
+let len=110;const spw=document.getElementById("spw"),est=document.getElementById("est");
+function calc(){document.getElementById("spwv").textContent=spw.value;est.textContent="$"+Math.round(len*spw.value*52/12).toLocaleString()}
+spw.addEventListener("input",calc);
+document.querySelectorAll(".seg button").forEach(b=>b.addEventListener("click",()=>{len=+b.dataset.len;document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed",x===b));calc()}));
+calc();
+
+/* coaches */
+const coaches=[
+ {n:"Kyle Elder",i:"KE",sk:["Hitting","Pitching","Defense"],col:"#ec7a1c"},
+ {n:"Anthony Peroni",i:"AP",sk:["Hitting","Catching","Throwing mechanics"],col:"#d8a642"},
+ {n:"Eli Garcia",i:"EG",sk:["Pitching","Throwing mechanics","Arm care"],col:"#6a8a2f"},
+ {n:"Mike Salvatore",i:"MS",sk:["Hitting","Infield","Throwing mechanics"],col:"#eeece6"}];
+document.getElementById("roster").innerHTML=coaches.map(c=>`
+ <div class="card" tabindex="0" role="button" aria-label="${c.n}, show specialties"><div class="card-in">
+  <div class="face front"><div class="stripe" style="background:${c.col}"></div><div class="pos">Coach</div><div class="ini">${c.i}</div><h3>${c.n.replace(" ","<br>")}</h3><div class="hint">${c.sk.join(" · ")}</div></div>
+  <div class="face back"><small>Specialties</small><ul>${c.sk.map(s=>`<li>${s}</li>`).join("")}</ul><a href="${BOOK}" target="_blank" rel="noopener">Train with ${c.n.split(" ")[0]} <span>→</span></a></div>
+ </div></div>`).join("");
+document.querySelectorAll(".card").forEach(c=>{
+ c.addEventListener("click",e=>{if(!e.target.closest("a"))c.classList.toggle("flip")});
+ c.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();c.classList.toggle("flip")}});
+});
+
+/* finder */
+const goals={swing:"My swing",pitch:"Pitching / velo",health:"Arm health",body:"Speed & strength",mind:"Mental game",all:"Everything"};
+const pos={P:"Pitcher",C:"Catcher",IF:"Infield",OF:"Outfield",TW:"Two-way"};
+let g="swing",p="C";
+function chips(id,obj,get,set){const el=document.getElementById(id);
+ el.innerHTML=Object.entries(obj).map(([k,v])=>`<button type="button" class="chip" data-k="${k}" aria-pressed="${k===get()}">${v}</button>`).join("");
+ el.addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;set(b.dataset.k);el.querySelectorAll(".chip").forEach(x=>x.setAttribute("aria-pressed",x===b));render()});}
+chips("qgoal",goals,()=>g,v=>g=v);chips("qpos",pos,()=>p,v=>p=v);
+const byPos={C:"Anthony Peroni",P:"Eli Garcia",IF:"Mike Salvatore",OF:"Kyle Elder",TW:"Kyle Elder"};
+function pick(){switch(g){
+ case"swing":return{prog:"Hitting Coaching",d:"Start with an evaluation to find the leaks in your swing, then rebuild it with Rapsodo tracking every rep.",coach:{C:"Anthony Peroni",IF:"Mike Salvatore"}[p]||"Kyle Elder",price:"Eval $50 · then $55 / 30 min"};
+ case"pitch":return{prog:"Private Pitching",d:"One-on-one work on mechanics, command and velocity, measured on the Rapsodo pitching unit.",coach:p==="TW"?"Kyle Elder":"Eli Garcia",price:"$55 / 30 min · $110 / 60 min"};
+ case"health":return{prog:"Arm Care Program",d:"Rotator cuff strength, shoulder stability and mobility with weighted balls, body blades and J-bands.",coach:"Eli Garcia",price:"Eval $50, credited to your program"};
+ case"body":return{prog:"Strength & Agility",d:"Strength, speed, agility and endurance in the weight room, with injury prevention built in.",coach:byPos[p],price:"Pair with lessons for a Gold package"};
+ case"mind":return{prog:"Mental Approach",d:"Build a plan for every pitch and situation so you stay clear-headed when the game speeds up.",coach:byPos[p],price:"Add to any package"};
+ default:return{prog:"Platinum Package",d:"Weight room, group and private training together, with priority slots and discounts.",coach:byPos[p],price:"3 services · best value"};}}
+const res=document.getElementById("result");
+function render(){const r=pick(),c=coaches.find(x=>x.n===r.coach);
+ res.innerHTML=`<div class="bar"></div><small>Your match · ${pos[p]}</small><h3>${r.prog}</h3><p>${r.d}</p>
+ <div class="coach"><svg width="50" height="50" viewBox="0 0 50 50" aria-hidden="true"><rect width="50" height="50" fill="#111"/><text x="25" y="33" text-anchor="middle" font-family="Big Shoulders Display, Impact, sans-serif" font-weight="900" font-size="23" fill="${c.col}">${c.i}</text></svg><div><span>Recommended coach</span><b>${c.n}</b></div></div>
+ <div style="font-family:var(--mono);font-size:12px;color:#555">${r.price}</div>
+ <a class="btn primary" href="${BOOK}" target="_blank" rel="noopener">Book this on Mindbody <span class="arr">→</span></a>`;
+ res.classList.remove("swap");void res.offsetWidth;res.classList.add("swap");}
+render();
+
+/* shop */
+const items=[
+ {n:"“Unite For Her” Fundraising Line",p:"From $40.00",u:"unite-for-her-breast-cancer-fundraising-line",img:"p1",b:"Fundraiser",pink:1},
+ {n:"Alternate Flagship Long Sleeve",p:"$40.00",u:"alternate-flagship-long-sleeve",img:"p2"},
+ {n:"Army Green FD Full Logo",p:"From $25.00",was:"$45.00",u:"army-green-fd-full-logo",img:"p3",b:"Sale"},
+ {n:"Back FD Outdoors Long Sleeve",p:"$40.00",u:"back-fd-outdoors-long-sleeve",img:"p4"}];
+document.getElementById("drops").innerHTML=items.map(i=>`
+ <a class="drop" href="https://fulldepth.myshopify.com/products/${i.u}" target="_blank" rel="noopener">
+  ${i.b?`<span class="badge ${i.pink?"pink":""}">${i.b}</span>`:""}
+  <img src="img/${i.img}.webp" alt="${i.n}" loading="lazy" width="1200" height="1600">
+  <div class="info"><h3>${i.n}</h3><div class="price">${i.p} USD${i.was?`<s>${i.was}</s>`:""}</div></div></a>`).join("");
+
+/* copy email */
+document.getElementById("cp").addEventListener("click",e=>{const b=e.currentTarget,t="Fulldepth17@gmail.com";
+ const done=()=>{b.textContent="Copied";setTimeout(()=>b.textContent="Copy",1600)};
+ try{navigator.clipboard.writeText(t).then(done,()=>{sel();})}catch(_){sel()}
+ function sel(){const r=document.createRange();r.selectNodeContents(document.getElementById("em"));const s=getSelection();s.removeAllRanges();s.addRange(r);b.textContent="Selected"}});
+
+/* strike zone */
+const NS="http://www.w3.org/2000/svg",cellsG=document.getElementById("cells"),trail=document.getElementById("trail"),cells=[];
+for(let r=0;r<3;r++)for(let c=0;c<3;c++){const el=document.createElementNS(NS,"rect");
+ el.setAttribute("x",75+c*50);el.setAttribute("y",40+r*63.33);el.setAttribute("width",50);el.setAttribute("height",63.33);
+ el.setAttribute("class","cell");el.setAttribute("tabindex","0");el.setAttribute("role","button");
+ el.setAttribute("aria-label",`Throw ${["high","middle","low"][r]} ${["inside","middle","away"][c]}`);
+ el.addEventListener("click",()=>{user=true;pitch(r,c)});
+ el.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();user=true;pitch(r,c)}});
+ cellsG.appendChild(el);cells.push(el);}
+const types=[{n:"4-Seam",v:[88,96],s:[2150,2500]},{n:"Slider",v:[80,86],s:[2300,2700]},{n:"Curve",v:[72,79],s:[2400,2900]},{n:"Change",v:[78,84],s:[1500,1900]},{n:"Sinker",v:[86,93],s:[1950,2250]}];
+const ballg=document.getElementById("ballg"),rv=document.getElementById("rv"),rs=document.getElementById("rs"),rt=document.getElementById("rt"),pc=document.getElementById("pcount");
+let n=0,busy=false,user=false;const rnd=(a,b)=>a+Math.random()*(b-a);
+function pitch(r,c){if(busy)return;busy=true;n++;
+ const t=types[Math.floor(Math.random()*types.length)],velo=rnd(...t.v),spin=Math.round(rnd(...t.s));
+ const tx=100+c*50+rnd(-14,14),ty=71.6+r*63.33+rnd(-18,18),sx=150,sy=150,dur=reduce?1:520;
+ const bend=t.n==="Curve"?40:t.n==="Change"?18:0,side=t.n==="Slider"?-30:0;
+ ballg.setAttribute("opacity","1");const t0=performance.now();
+ (function step(now){const k=Math.min(1,(now-t0)/dur),e=k*k;
+  const x=sx+(tx-sx)*e+side*e*(1-e),y=sy+(ty-sy)*e+bend*e*(1-e);
+  ballg.setAttribute("transform",`translate(${x},${y}) rotate(${now/2%360}) scale(${.25+.85*e})`);
+  if(k<1)requestAnimationFrame(step);else land();})(t0);
+ function land(){const dot=document.createElementNS(NS,"circle");dot.setAttribute("cx",tx);dot.setAttribute("cy",ty);dot.setAttribute("r",6);dot.setAttribute("fill","#ec7a1c");
+  trail.appendChild(dot);[...trail.children].forEach((d,i,a)=>{d.setAttribute("opacity",(.15+.75*(i+1)/a.length).toFixed(2));if(i<a.length-1)d.setAttribute("fill","#9ca19c")});
+  while(trail.children.length>7)trail.removeChild(trail.firstChild);
+  const cell=cells[r*3+c];cell.classList.add("hit");setTimeout(()=>cell.classList.remove("hit"),500);
+  ballg.setAttribute("opacity","0");count(rv,velo,1,"MPH");count(rs,spin,0,"RPM");rt.textContent=t.n;pc.textContent="Pitch "+n;busy=false;}
+}
+function count(el,to,dec,unit){const t0=performance.now(),d=reduce?1:600;
+ (function f(now){const k=Math.min(1,(now-t0)/d),v=to*(1-Math.pow(1-k,3));el.innerHTML=(dec?v.toFixed(1):String(Math.round(v)).padStart(4,"0"))+`<em>${unit}</em>`;if(k<1)requestAnimationFrame(f)})(t0);}
+document.getElementById("throw").addEventListener("click",()=>{user=true;pitch(Math.floor(Math.random()*3),Math.floor(Math.random()*3))});
+pitch(1,1);
+if(!reduce)setInterval(()=>{if(!user&&!document.hidden)pitch(Math.floor(Math.random()*3),Math.floor(Math.random()*3))},2800);
+})();
+</script>
+
+</body></html>

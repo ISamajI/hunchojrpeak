@@ -1,0 +1,209 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Timbí on BRAG Template</title>
+<link rel="stylesheet" href="static/css/brag_main.css">
+<style>
+  /* ---- Timbí test overrides: kept small on purpose so the template itself is what's being tested ---- */
+  .site { background: var(--white); color: var(--black); min-height: 100vh; --accent: #e0a468; }
+  .demo-ribbon { font-size: .8rem; text-align: center; padding: .5rem 1rem; border-bottom: 1px solid var(--black); color: var(--grey-dark); }
+  .demo-ribbon b { color: var(--accent); letter-spacing: .1em; }
+  /* template bug fix: .site-logo rule is broken in the SCSS (missing semicolon) */
+  .site-logo { width: clamp(110px, 16.6667%, 180px); display: block; line-height: 0; }
+  .site-logo img { width: 100%; height: auto; }
+  .mobile-nav--button button { background: none; border: 1px solid var(--black); color: var(--black); border-radius: 999px; padding: .4rem 1rem; font: inherit; }
+  .page-header__pre-title { color: var(--accent); }
+  .page-section h2 { font-weight: 300; font-size: 1.75rem; line-height: 1.15; margin-bottom: 1.5rem; }
+  .media-video { width: 100%; aspect-ratio: 16/9; object-fit: cover; background: #111; display: block; }
+  .media-video + * { margin-top: 1.5rem; }
+  /* unstyled template sections (events, resources, footer) get just enough to be readable */
+  .card-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 1rem; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); }
+  .card-list img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+  .card-list h3 { font-weight: 300; font-size: 1.15rem; margin: .75rem 0 .25rem; }
+  .card-list h3 small { display: block; color: var(--grey-medium); font-size: .8rem; margin-bottom: .2rem; }
+  .res-list { list-style: none; padding: 0; margin: 1rem 0 0; display: grid; gap: .75rem; }
+  .res-list a { display: flex; align-items: center; gap: 1rem; text-decoration: none; }
+  .res-list svg path { fill: var(--black); }
+  .res-list svg text { fill: var(--white); font-family: Roobert, sans-serif; }
+  .page-section > div.stack { flex: 1; }
+  footer.page-section { flex-wrap: wrap; row-gap: 1.5rem; border-top: 1px solid var(--black); }
+  footer.page-section > * { flex: 1 1 220px; margin: 0; }
+  footer ul { list-style: none; padding: 0; margin: 0; }
+  footer .legal { flex-basis: 100%; font-size: .85rem; color: var(--grey-medium); }
+  .flickity-viewport { transition: height .3s; }
+</style>
+
+<div class="site dark-theme">
+  <div class="demo-ribbon"><b>DEMO</b> · Timbí content running on the brag-temp template (test build by LTGPEAK)</div>
+
+  <header id="site-header">
+    <a class="site-logo" href="#top" aria-label="Timbí home"><img src="static/timbi/logo-light.png" alt="Timbí Latin Experience"></a>
+    <nav class="mobile-nav--button"><button>Menu</button></nav>
+    <nav class="desktop-nav">
+      <ul class="desktop-nav__list">
+        <li><a href="#favorites">Favorites</a></li>
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#watch">Watch</a></li>
+        <li><a href="#order">Order</a></li>
+        <li><a href="#visit">Visit</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="top">
+    <header class="page-header">
+      <div class="page-header__info">
+        <h1>
+          <span class="page-header__pre-title">Latin street food · Trenton, NJ</span>
+          Oven roasted. Never fried.
+        </h1>
+        <p class="page-header__lede">The home of the oven-roasted chicharrón, on South Broad Street plus the Timbí truck in Hamilton.</p>
+        <time class="page-header__time">Open daily · 10 AM – 9 PM</time>
+      </div>
+      <img class="page-header__banner-image" src="static/timbi/chicharron-tray.jpg" alt="A tray of Timbí's oven-roasted chicharrón">
+    </header>
+
+    <section class="page-section event-intro">
+      <aside class="event-intro__info">
+        <strong>Restaurant</strong><br>
+        <time>10:00 AM – 9:00 PM</time><br>
+        322 S Broad St, Trenton, NJ 08608<br>
+        <a href="tel:+16092887020">(609) 288-7020</a>
+      </aside>
+      <div class="event-intro__body">
+        <p>Right where downtown Trenton begins, Timbí brings Dominican and Latin flavor to South Broad Street: chimis, yaroas, mofongo, birria and our oven-roasted chicharrón. Everybody fries it. Timbí roasts it. The skin blisters and cracks like glass, the meat stays tender, and it's the reason people drive across Mercer County. We believe Trenton's best days are still ahead, and we're proud to grow with it. Cultura · Familia · Comunidad.</p>
+      </div>
+    </section>
+
+    <section class="page-section" id="gallery">
+      <h2 class="page-section__left-column">From the kitchen</h2>
+      <div class="page-section__right-column">
+        <div class="image-gallery">
+          <figure class="image-gallery__figure">
+            <img src="static/timbi/neon-sign.jpg" alt="Timbí neon sign" class="image-gallery__image">
+            <figcaption class="image-gallery__caption"><span>1/6</span><p>The sign on South Broad Street, Trenton</p></figcaption>
+          </figure>
+          <figure class="image-gallery__figure">
+            <img src="static/timbi/la-toxica.jpg" alt="La Tóxica sandwich" class="image-gallery__image">
+            <figcaption class="image-gallery__caption"><span>2/6</span><p>La Tóxica: roasted pork, fried cheese, maduro, pickled onions, salsa verde</p></figcaption>
+          </figure>
+          <figure class="image-gallery__figure">
+            <img src="static/timbi/birria-bowl.jpg" alt="Birria bowl" class="image-gallery__image">
+            <figcaption class="image-gallery__caption"><span>3/6</span><p>Birria Bowl with cilantro-lime rice, cheese, onions, cilantro and guac</p></figcaption>
+          </figure>
+          <figure class="image-gallery__figure">
+            <img src="static/timbi/tacos.jpg" alt="Tacos" class="image-gallery__image">
+            <figcaption class="image-gallery__caption"><span>4/6</span><p>Tacos: asada, birria, chicharrón, al pastor and veggie</p></figcaption>
+          </figure>
+          <figure class="image-gallery__figure">
+            <img src="static/timbi/storefront-wide.jpg" alt="Timbí storefront" class="image-gallery__image">
+            <figcaption class="image-gallery__caption"><span>5/6</span><p>322 S Broad St, one minute from the CURE Insurance Arena</p></figcaption>
+          </figure>
+          <figure class="image-gallery__figure">
+            <img src="static/timbi/food-truck.jpg" alt="The Timbí food truck" class="image-gallery__image">
+            <figcaption class="image-gallery__caption"><span>6/6</span><p>The Timbí truck at Mercerwoods Plaza, Hamilton</p></figcaption>
+          </figure>
+        </div>
+        <nav class="image-gallery__nav" aria-label="Gallery thumbnails">
+          <img src="static/timbi/neon-sign.jpg" alt="" class="image-gallery__nav-thumbnail">
+          <img src="static/timbi/la-toxica.jpg" alt="" class="image-gallery__nav-thumbnail">
+          <img src="static/timbi/birria-bowl.jpg" alt="" class="image-gallery__nav-thumbnail">
+          <img src="static/timbi/tacos.jpg" alt="" class="image-gallery__nav-thumbnail">
+          <img src="static/timbi/storefront-wide.jpg" alt="" class="image-gallery__nav-thumbnail">
+          <img src="static/timbi/food-truck.jpg" alt="" class="image-gallery__nav-thumbnail">
+        </nav>
+      </div>
+    </section>
+
+    <section class="page-section" id="watch">
+      <h2 class="page-section__left-column">Watch</h2>
+      <div class="page-section__right-column">
+        <video class="media-video" src="static/timbi/hero.mp4" poster="static/timbi/chicharron-tray.jpg" controls muted loop playsinline preload="metadata"></video>
+        <h3>Chicharrón al horno</h3>
+        <p>A short film of the signature dish, from the oven to the tray.</p>
+        <aside>Film made with Higgsfield</aside>
+      </div>
+    </section>
+
+    <section class="page-section" id="favorites">
+      <div class="stack">
+        <h2>Trenton's favorites</h2>
+        <ul class="card-list">
+          <li>
+            <img src="static/timbi/la-toxica.jpg" alt="La Tóxica">
+            <h3><small>Burgers &amp; chimis</small>La Tóxica</h3>
+            <span>$15.99</span>
+          </li>
+          <li>
+            <img src="static/timbi/chicharron-tray.jpg" alt="Tostones con chicharrón">
+            <h3><small>Signature</small>Tostones con chicharrón</h3>
+            <span>$13.99</span>
+          </li>
+          <li>
+            <img src="static/timbi/chimi-burger.jpg" alt="Chimi de Res">
+            <h3><small>Dominican classic</small>Chimi de Res</h3>
+            <span>$12.99</span>
+          </li>
+          <li>
+            <img src="static/timbi/empanada.jpg" alt="Empanada">
+            <h3><small>Empanadas</small>Pernil y Queso</h3>
+            <span>$3.50</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="page-section" id="order">
+      <div class="stack">
+        <h2>Order &amp; catering</h2>
+        <p>Call the restaurant for delivery, order on the apps, or get Timbí at your next event. Empanada trays, chicharrón, whole roasts and bowls for parties, offices and grand openings.</p>
+        <ul class="res-list">
+          <li>
+            <a href="tel:+16092887020">
+              <svg xmlns="http://www.w3.org/2000/svg" width="53" height="36" viewBox="0 0 53 36" aria-hidden="true"><g transform="translate(-475 -2991)"><path d="M-1990,29V0h53V29h-46l-7,7Z" transform="translate(2465 2991)"/><text transform="translate(475 2995)" font-size="14" font-weight="300"><tspan x="6" y="15">CALL</tspan></text></g></svg>
+              Delivery: (609) 288-7020
+            </a>
+          </li>
+          <li>
+            <a href="#order">
+              <svg xmlns="http://www.w3.org/2000/svg" width="53" height="36" viewBox="0 0 53 36" aria-hidden="true"><g transform="translate(-475 -2991)"><path d="M-1990,29V0h53V29h-46l-7,7Z" transform="translate(2465 2991)"/><text transform="translate(475 2995)" font-size="14" font-weight="300"><tspan x="9" y="15">APP</tspan></text></g></svg>
+              DoorDash · Grubhub · Uber Eats
+            </a>
+          </li>
+          <li>
+            <a href="#order">
+              <svg xmlns="http://www.w3.org/2000/svg" width="53" height="36" viewBox="0 0 53 36" aria-hidden="true"><g transform="translate(-475 -2991)"><path d="M-1990,29V0h53V29h-46l-7,7Z" transform="translate(2465 2991)"/><text transform="translate(475 2995)" font-size="14" font-weight="300"><tspan x="5" y="15">EVNT</tspan></text></g></svg>
+              Request a catering quote
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="page-section" id="visit">
+    <div>
+      <h2>Timbí Latin Experience</h2>
+      <p>322 S Broad St, Trenton, NJ 08608<br>Open 10 AM – 9 PM<br><a href="tel:+16092887020">(609) 288-7020</a></p>
+    </div>
+    <div>
+      <h2>Hamilton truck</h2>
+      <p>2103 Whitehorse Mercerville Rd<br>Mercerwoods Plaza, Hamilton, NJ 08619<br>Open 11 AM – 7 PM</p>
+    </div>
+    <ul>
+      <li><a href="https://www.instagram.com/timbi.nj/" target="_blank" rel="noopener">Instagram @timbi.nj</a></li>
+      <li>TikTok</li>
+    </ul>
+    <p class="legal">© 2026 Timbí Latin Experience · Website concept by LTGPEAK · Template: brag-temp</p>
+  </footer>
+</div>
+
+<script src="static/js/flickity.js"></script>
+<script>
+  var imageGallery = new Flickity('.image-gallery', {
+    imagesLoaded: true, cellAlign: 'left', prevNextButtons: false, pageDots: false, adaptiveHeight: true
+  });
+  var imageGalleryNav = new Flickity('.image-gallery__nav', {
+    imagesLoaded: true, cellAlign: 'left', prevNextButtons: false, asNavFor: '.image-gallery', pageDots: false, contain: true
+  });
+</script>
+
+</body></html>
