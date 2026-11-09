@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{biz} — Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">$</span><span data-biz></span> · Dashboard</div>
+    <div class="who"><button id="copyLink" type="button">Copy client link</button><span id="who"></span><button id="logout" type="button">Sign out</button></div>
+  </header>
+
+  <main class="wrap wide">
+    <!-- List view -->
+    <section id="listView">
+      <div class="stats" id="stats"></div>
+      <div class="card">
+        <div class="toolbar">
+          <input id="search" type="text" placeholder="Search name or email…" aria-label="Search">
+          <span class="muted small" id="lastRefresh"></span>
+        </div>
+        <table class="list">
+          <thead><tr><th>Client</th><th>Status</th><th class="hide-sm">Submitted</th><th class="hide-sm">Docs</th><th class="hide-sm">Last update</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+        <p id="empty" class="muted hidden">No clients yet. Click <strong>Copy client link</strong> at the top and send it to your clients.</p>
+      </div>
+    </section>
+
+    <!-- Detail view -->
+    <section id="detailView" class="hidden"></section>
+  </main>
+
+  <script src="/js/common.js"></script>
+  <script src="/js/schema.js"></script>
+  <script src="/js/form.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

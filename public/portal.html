@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{biz} — My Tax Return</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">$</span><span data-biz></span></div>
+    <div class="who"><span id="who"></span><button id="logout" type="button">Sign out</button></div>
+  </header>
+
+  <main class="wrap">
+    <div id="loading" class="card muted">Loading your return…</div>
+
+    <!-- Wizard -->
+    <section id="wizard" class="hidden">
+      <div class="detail-head">
+        <div>
+          <h1><span data-year></span> Tax Questionnaire</h1>
+          <p class="muted">Your answers save automatically. You can leave and come back anytime.</p>
+        </div>
+      </div>
+      <div id="needsInfo" class="alert alert-warn hidden"></div>
+      <nav id="steps" class="steps" aria-label="Steps"></nav>
+      <div class="progress"><div id="bar"></div></div>
+      <div class="card">
+        <h2 id="stepTitle"></h2>
+        <p id="stepIntro" class="muted"></p>
+        <div id="stepBody"></div>
+        <div class="navbtns">
+          <button id="back" class="btn btn-ghost" type="button">← Back</button>
+          <button id="next" class="btn btn-primary" type="button">Save & continue →</button>
+        </div>
+        <div id="saveState" class="savestate"></div>
+      </div>
+    </section>
+
+    <!-- After submission -->
+    <section id="status" class="hidden">
+      <div class="card status-hero">
+        <div class="big" id="statusIcon">✅</div>
+        <h1 id="statusTitle">Thank you! Your information was received.</h1>
+        <p class="muted" id="statusText"></p>
+        <div class="timeline" id="timeline"></div>
+        <p class="small muted" id="signedLine"></p>
+      </div>
+      <div class="card" id="lateUpload">
+        <h2>Forgot a document?</h2>
+        <p class="muted">You can still upload documents here. Your preparer will be notified.</p>
+        <div id="lateUploadBody"></div>
+      </div>
+      <div class="card">
+        <h2>Account</h2>
+        <form id="pwForm" class="grid" novalidate>
+          <div class="f third"><label class="lbl" for="pw-cur">Current password</label><input id="pw-cur" type="password" autocomplete="current-password"></div>
+          <div class="f third"><label class="lbl" for="pw-new">New password</label><input id="pw-new" type="password" autocomplete="new-password"></div>
+          <div class="f third"><label class="lbl">&nbsp;</label><button class="btn btn-ghost btn-block" type="submit">Change password</button></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <script src="/js/common.js"></script>
+  <script src="/js/schema.js"></script>
+  <script src="/js/form.js"></script>
+  <script src="/js/portal.js"></script>
+</body>
+</html>
