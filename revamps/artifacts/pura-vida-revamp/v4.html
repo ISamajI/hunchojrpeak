@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pura Vida · Vuelo 228</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Overpass:wght@400;600;800&family=Overpass+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: airport wayfinding — a live split-flap departures board (dishes as flights, status from the real clock), boarding pass = order online */
+:root{
+  --board:#0C0E11; --flap:#1B1E24; --flap-hi:#262A31; --chalk:#F1F1EC; --sign:#FFC72C; --red:#BD2027; --paper:#F4F6F8; --ink:#111418; --muted:#5B6370; --line:#D6DBE2; --go:#3DDC84;
+  --display:"Anton", Impact, "Arial Narrow", sans-serif; --body:"Overpass", system-ui, sans-serif; --mono:"Overpass Mono", ui-monospace, monospace;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.6 var(--body);overflow-x:hidden}
+a{color:inherit}
+img{max-width:100%;display:block}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:400}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:15px 22px;border-radius:6px;font:800 15px/1 var(--body);letter-spacing:.04em;text-transform:uppercase;text-decoration:none;border:0;cursor:pointer;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn:focus-visible{outline:3px solid var(--sign);outline-offset:3px}
+.btn-sign{background:var(--sign);color:var(--ink)}
+.btn-red{background:var(--red);color:#fff}
+.btn-ghost{background:transparent;color:var(--chalk);box-shadow:inset 0 0 0 2px rgba(241,241,236,.35)}
+.btn-ink{background:var(--ink);color:#fff}
+.arrow{width:18px;height:18px;flex:none}
+
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:41;background:var(--board)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:var(--board);color:var(--chalk);border-bottom:4px solid var(--sign)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-block:12px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none}
+.logo img{height:40px;width:auto;background:#fff;border-radius:4px;padding:3px}
+.logo .wm{font:400 26px/1 var(--display);letter-spacing:.02em;text-transform:uppercase}
+.logo [data-photo].has-photo + .wm{display:none}
+.logo .code{font:700 12px/1 var(--mono);background:var(--sign);color:var(--ink);padding:5px 7px;border-radius:3px}
+.bar nav{display:flex;gap:6px;align-items:center}
+.bar nav a.navl{font:700 13px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;padding:10px 12px;border-radius:4px}
+.bar nav a.navl:hover{background:var(--flap-hi)}
+@media (max-width:820px){.bar nav a.navl{display:none}.bar .btn{padding:12px 14px;font-size:13px}}
+@media (max-width:600px){.logo .code{display:none}.logo .wm{font-size:22px}}
+
+/* hero board */
+.hero{background:var(--board);color:var(--chalk);padding-block:clamp(40px,6vw,80px) clamp(48px,7vw,90px);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 120px,rgba(255,255,255,.025) 120px 121px);pointer-events:none}
+.hgrid{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px;align-items:end}
+.hero h1{font:400 clamp(46px,7vw,108px)/.9 var(--display);text-transform:uppercase;letter-spacing:.005em}
+.hero h1 .y{color:var(--sign)}
+.hero .lead{font-size:clamp(17px,1.6vw,20px);max-width:46ch;color:#C8CBD2;margin:18px 0 0}
+.route{font:700 13px/1.5 var(--mono);text-align:right;color:#9AA0AA;letter-spacing:.08em;text-transform:uppercase}
+.route b{display:block;font:400 clamp(34px,4vw,54px)/1 var(--display);color:var(--chalk);letter-spacing:.02em}
+@media (max-width:760px){.hgrid{grid-template-columns:1fr}.route{text-align:left}}
+
+.board{margin-top:clamp(28px,4vw,44px);background:#000;border-radius:10px;padding:clamp(10px,1.6vw,18px);box-shadow:0 30px 60px rgba(0,0,0,.4), inset 0 0 0 2px #22262C}
+.board-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:4px 6px 12px;font:700 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--sign)}
+.board-head .clk{color:var(--chalk)}
+.rows{display:flex;flex-direction:column;gap:6px}
+.row{display:flex;gap:clamp(8px,1.2vw,16px);align-items:center;padding:4px 6px;border-radius:4px}
+.row.labels{font:700 11px/1 var(--mono);letter-spacing:.14em;color:#7E8590;text-transform:uppercase;padding-bottom:2px}
+.cells{display:flex;gap:2px}
+.c{width:var(--cw);height:calc(var(--cw) * 1.42);background:linear-gradient(180deg,var(--flap-hi) 0 49%,#0A0B0D 49% 51%,var(--flap) 51%);color:var(--chalk);border-radius:3px;display:grid;place-items:center;font:700 calc(var(--cw) * .82)/1 var(--mono);text-transform:uppercase;position:relative}
+.c.flip{animation:flip .09s linear}
+@keyframes flip{0%{transform:scaleY(1)}50%{transform:scaleY(.15)}100%{transform:scaleY(1)}}
+.st-board .c{color:var(--sign)}
+.st-go .c{color:var(--go)}
+.st-done .c{color:#7E8590}
+.row.now{background:rgba(255,199,44,.08);box-shadow:inset 3px 0 0 var(--sign)}
+.board{--cw:22px}
+@media (max-width:1100px){.board{--cw:18px}}
+@media (max-width:860px){.board{--cw:15px}.hide-sm{display:none!important}}
+@media (max-width:600px){.board{--cw:17px}.row.labels{display:none}.row{flex-wrap:wrap;row-gap:6px;padding:9px 6px}.row .dest{order:3;flex-basis:100%}.row .st{margin-left:auto}}
+@media (max-width:340px){.board{--cw:15px}}
+.board-foot{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;align-items:center;margin-top:14px;padding:0 6px 4px}
+.board-foot .note{font:700 12px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:#9AA0AA}
+.ctas{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+
+/* boarding pass */
+.passwrap{padding-block:clamp(56px,8vw,100px)}
+.passwrap h2,.menu h2,.cards h2,.visit h2{font:400 clamp(40px,6vw,84px)/.92 var(--display);text-transform:uppercase}
+.pass{margin-top:30px;display:grid;grid-template-columns:minmax(0,1fr) 260px;background:#fff;border-radius:18px;box-shadow:0 20px 50px rgba(17,20,24,.12);overflow:hidden;position:relative}
+.pass .main{padding:clamp(20px,3vw,34px);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 18px}
+.pass .top{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:14px}
+.pass .top b{font:400 30px/1 var(--display);text-transform:uppercase;letter-spacing:.02em}
+.pass .top span{font:700 12px/1 var(--mono);letter-spacing:.1em;background:var(--red);color:#fff;padding:6px 9px;border-radius:3px}
+.pass .from,.pass .to{grid-column:span 2}
+.f label{display:block;font:700 11px/1 var(--mono);letter-spacing:.14em;color:var(--muted);text-transform:uppercase;margin-bottom:6px}
+.f div{font:800 18px/1.25 var(--body)}
+.from div,.to div{font:400 clamp(40px,5vw,64px)/1 var(--display);letter-spacing:.01em}
+.from small,.to small{display:block;font:600 14px/1.3 var(--body);color:var(--muted);margin-top:4px}
+.stub{border-left:3px dashed var(--line);padding:clamp(20px,3vw,30px);display:flex;flex-direction:column;gap:16px;background:var(--paper);position:relative}
+.stub::before,.stub::after{content:"";position:absolute;left:-14px;width:26px;height:26px;border-radius:50%;background:var(--paper)}
+.stub::before{top:-13px}.stub::after{bottom:-13px}
+.barcode{height:70px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 4px,var(--ink) 4px 7px,transparent 7px 8px,var(--ink) 8px 9px,transparent 9px 12px);border-radius:2px}
+@media (max-width:820px){.pass{grid-template-columns:1fr}.stub{border-left:0;border-top:3px dashed var(--line)}.stub::before,.stub::after{display:none}.pass .main{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* menu terminals */
+.menu{padding-block:clamp(56px,8vw,100px);background:#fff;border-block:1px solid var(--line)}
+.gates{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 10px}
+.gates button{display:inline-flex;align-items:center;gap:10px;font:800 14px/1 var(--body);text-transform:uppercase;letter-spacing:.04em;padding:12px 14px;border-radius:5px;border:0;background:var(--ink);color:#fff;cursor:pointer}
+.gates button b{font:700 12px/1 var(--mono);background:var(--sign);color:var(--ink);padding:4px 6px;border-radius:3px}
+.gates button[aria-selected="true"]{background:var(--sign);color:var(--ink)}
+.gates button[aria-selected="true"] b{background:var(--ink);color:var(--sign)}
+.gates button:focus-visible{outline:3px solid var(--red);outline-offset:2px}
+.mlist{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 44px}
+.mi{display:grid;grid-template-columns:auto 1fr auto;gap:2px 14px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--line)}
+.mi .no{font:700 12px/1 var(--mono);color:var(--muted)}
+.mi h4{margin:0;font:800 18px/1.3 var(--body)}
+.mi .p{font:700 15px/1 var(--mono);color:var(--red);white-space:nowrap}
+.mi p{grid-column:2/-1;margin:0;color:var(--muted);font-size:15px}
+.mi .en{display:block;font-weight:400;font-size:14px;color:var(--muted)}
+.fine{font-size:13px;color:var(--muted);margin-top:20px}
+@media (max-width:760px){.mlist{grid-template-columns:1fr}}
+
+/* postcards */
+.cards{padding-block:clamp(56px,8vw,100px)}
+.pc-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:34px}
+.pc{margin:0;background:#fff;padding:12px 12px 16px;border-radius:6px;box-shadow:0 14px 34px rgba(17,20,24,.14);transform:rotate(var(--r,0deg));transition:transform .3s}
+.pc:hover{transform:rotate(0) translateY(-6px)}
+.pc .img{aspect-ratio:4/3;border-radius:3px;overflow:hidden;position:relative;background:linear-gradient(160deg,#1A6FB3,#59B4E8 55%,#F2C14E)}
+.pc .img img{width:100%;height:100%;object-fit:cover}
+.pc .img .fb{position:absolute;inset:0;display:none;align-items:center;justify-content:center;font:400 clamp(34px,4vw,50px)/.95 var(--display);color:#fff;text-transform:uppercase;text-align:center;padding:12px;text-shadow:3px 3px 0 var(--red)}
+.pc.no-photo .img .fb{display:flex}
+.pc figcaption{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;font:700 12px/1.3 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.stamp{width:44px;height:52px;border:2px dashed var(--red);border-radius:3px;display:grid;place-items:center;font:400 13px/1 var(--display);color:var(--red);flex:none}
+@media (max-width:820px){.pc-row{grid-template-columns:1fr 1fr}.pc:nth-child(3){display:none}}
+
+/* wayfinding visit */
+.visit{padding-block:clamp(56px,8vw,100px);background:var(--board);color:var(--chalk)}
+.signs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:30px}
+.sign{background:var(--sign);color:var(--ink);border-radius:8px;padding:22px;display:flex;flex-direction:column;gap:10px}
+.sign.dark{background:var(--flap);color:var(--chalk);box-shadow:inset 0 0 0 2px #2B3038}
+.sign .t{display:flex;align-items:center;gap:10px;font:700 12px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase}
+.sign .v{font:400 clamp(28px,3vw,40px)/1 var(--display);text-transform:uppercase;letter-spacing:.01em}
+.sign .row2{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:8px}
+.sign .btn{padding:11px 14px;font-size:13px}
+.status{display:inline-flex;align-items:center;gap:8px;font:700 12px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.status::before{content:"";width:9px;height:9px;border-radius:50%;background:#888}
+.status.is-open::before{background:var(--go);box-shadow:0 0 10px var(--go)}
+.status.is-closed::before{background:var(--red)}
+@media (max-width:860px){.signs{grid-template-columns:1fr}}
+
+footer{background:#000;color:#9AA0AA;padding-block:34px calc(34px + env(safe-area-inset-bottom,0px))}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
+footer .wm{font:400 28px/1 var(--display);color:#fff;text-transform:uppercase}
+footer a{color:#fff}
+.mobile-order{display:none}
+@media (max-width:760px){
+  .mobile-order{display:flex;position:fixed;inset:auto 0 0 0;z-index:60;gap:10px;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:var(--board);border-top:3px solid var(--sign)}
+  .mobile-order .btn{flex:1}
+  footer{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="arr" viewBox="0 0 24 24"><path d="M4 12h14M12 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square"/></symbol><symbol id="plane" viewBox="0 0 24 24"><path d="M2 13.5 22 8l-2-2-7 2.5L7 3 5 4l4 6-4 1.5-2-1.5-1.5.5 2 3z" fill="currentColor"/></symbol></svg>
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#top" aria-label="Pura Vida home"><span data-photo><img data-pv="logo" alt="Pura Vida logo"></span><span class="wm">Pura Vida</span><span class="code">PV228</span></a>
+    <nav><a class="navl" href="#salidas">Salidas</a><a class="navl" href="#menu">Menú</a><a class="navl" href="#visit">Gate 228</a><a class="btn btn-sign" href="https://fromtherestaurant.com/pura-vida/" target="_blank" rel="noopener">Order online</a></nav>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero" id="salidas">
+  <div class="wrap">
+    <div class="hgrid">
+      <div>
+        <p class="mono" style="color:var(--sign);margin:0 0 14px;font-weight:700;font-size:13px">Salidas · Departures · Trenton</p>
+        <h1>San José is 2,170 miles away.<br><span class="y">Cummings Ave</span> is closer.</h1>
+        <p class="lead">Real Costa Rican food, no passport. Pura Vida serves gallo pinto, chifrijo, olla de carne and bandeja paisa every day from 9 AM to 11 PM.</p>
+      </div>
+      <div class="route">TTN <svg class="arrow" style="vertical-align:-3px"><use href="#plane"/></svg> 228<b>Gate 228</b>Open daily 09:00–23:00</div>
+    </div>
+    <div class="board" role="table" aria-label="Pura Vida departures board">
+      <div class="board-head"><span>Salidas / Departures</span><span class="clk" id="clk">--:--</span></div>
+      <div class="rows" id="rows"></div>
+      <div class="board-foot"><span class="note" id="boardNote">Status follows the time in Trenton</span><span class="status" data-status="long" style="color:var(--chalk)">Open daily</span></div>
+    </div>
+    <div class="ctas">
+      <a class="btn btn-sign" href="https://fromtherestaurant.com/pura-vida/" target="_blank" rel="noopener">Board now · Order online <svg class="arrow"><use href="#arr"/></svg></a>
+      <a class="btn btn-ghost" href="#menu">See every destination</a>
+    </div>
+  </div>
+</section>
+
+<section class="passwrap">
+  <div class="wrap">
+    <h2>Your boarding pass</h2>
+    <div class="pass">
+      <div class="main">
+        <div class="top"><b>Pura Vida Airlines</b><span>Pickup · Delivery · Dine in</span></div>
+        <div class="f from"><label>From</label><div>TTN</div><small>Wherever you are in Trenton</small></div>
+        <div class="f to"><label>To</label><div>PV 228</div><small>228 Cummings Ave, Trenton NJ 08611</small></div>
+        <div class="f"><label>Passenger</label><div>You + the table</div></div>
+        <div class="f"><label>Boarding</label><div>09:00 – 23:00</div></div>
+        <div class="f"><label>Seat</label><div>Mesa libre</div></div>
+        <div class="f"><label>Meal</label><div id="meal">Gallo Pinto</div></div>
+      </div>
+      <div class="stub">
+        <div class="f"><label>Gate</label><div style="font:400 48px/1 var(--display)">228</div></div>
+        <div class="barcode" aria-hidden="true"></div>
+        <a class="btn btn-red" href="https://fromtherestaurant.com/pura-vida/" target="_blank" rel="noopener">Order online</a>
+        <span class="mono" style="font-size:12px;color:var(--muted);user-select:all">(609) 396-7472</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="menu" id="menu">
+  <div class="wrap">
+    <h2>Destinos</h2>
+    <p style="color:var(--muted);font-size:18px;max-width:56ch;margin:12px 0 0">Every section of the menu is its own terminal. Pick one.</p>
+    <div class="gates" role="tablist" aria-label="Menu sections" id="gates"></div>
+    <div class="mlist" id="mlist" role="tabpanel"></div>
+    <p class="fine">Prices from Pura Vida's online ordering and may vary in the restaurant. <a href="https://fromtherestaurant.com/pura-vida/menu/" target="_blank" rel="noopener">Full menu</a>.</p>
+  </div>
+</section>
+
+<section class="cards">
+  <div class="wrap">
+    <h2>Saludos desde Trenton</h2>
+    <div class="pc-row">
+      <figure class="pc" data-photo style="--r:-2deg"><div class="img"><img data-pv="food3" alt="A main plate at Pura Vida"><div class="fb">Platos<br>fuertes</div></div><figcaption><span>Platos fuertes · from $15.59</span><span class="stamp">CR</span></figcaption></figure>
+      <figure class="pc" data-photo style="--r:1.5deg"><div class="img"><img data-pv="food1" alt="Food prep at Pura Vida"><div class="fb">Gallo<br>pinto</div></div><figcaption><span>Desayuno · from 9 AM</span><span class="stamp">228</span></figcaption></figure>
+      <figure class="pc" data-photo style="--r:-1deg"><div class="img"><img data-pv="food2" alt="A side at Pura Vida"><div class="fb">Para<br>picar</div></div><figcaption><span>Chifrijo · $11.96</span><span class="stamp">NJ</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="visit" id="visit">
+  <div class="wrap">
+    <h2>Gate 228</h2>
+    <div class="signs">
+      <div class="sign"><span class="t"><svg class="arrow"><use href="#arr"/></svg>Address</span><span class="v">228 Cummings Ave</span><span>Trenton, NJ 08611 · Chambersburg</span><div class="row2"><a class="btn btn-ink" href="https://www.google.com/maps/search/?api=1&query=Pura+Vida+228+Cummings+Ave+Trenton+NJ+08611" target="_blank" rel="noopener">Directions</a></div></div>
+      <div class="sign dark"><span class="t">Hours · every day</span><span class="v">09:00 – 23:00</span><span class="status" data-status="long">Open daily</span></div>
+      <div class="sign"><span class="t">Phone</span><span class="v" style="user-select:all">(609) 396-7472</span><div class="row2"><a class="btn btn-ink" href="tel:+16093967472">Call</a><button class="btn btn-ink" type="button" data-copy-phone>Copy</button></div></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="wm">Pura Vida</span>
+    <span>© <span data-year>2026</span> Pura Vida · Costa Rican kitchen · Trenton NJ</span>
+    <span>Demo revamp by <a href="https://ltgpeak.app" target="_blank" rel="noopener">LTGPEAK</a> · <a href="index.html">All 5 versions</a></span>
+  </div>
+</footer>
+<div class="mobile-order"><a class="btn btn-sign" href="https://fromtherestaurant.com/pura-vida/" target="_blank" rel="noopener">Order online</a><a class="btn btn-ghost" href="tel:+16093967472">Call</a></div>
+
+<script>/* Pura Vida — shared real content (from puravidatrentonnj.com + fromtherestaurant.com/pura-vida, Nov 2026) */
+const PV = {
+  name: "Pura Vida",
+  kind: "Costa Rican Restaurant & Lounge",
+  addr1: "228 Cummings Ave",
+  addr2: "Trenton, NJ 08611",
+  hood: "Chambersburg",
+  phone: "(609) 396-7472",
+  tel: "tel:+16093967472",
+  order: "https://fromtherestaurant.com/pura-vida/",
+  fullMenu: "https://fromtherestaurant.com/pura-vida/menu/",
+  maps: "https://www.google.com/maps/search/?api=1&query=Pura+Vida+228+Cummings+Ave+Trenton+NJ+08611",
+  press: "https://communitynews.org/sections/mercereats/mystery-muncher-tasting-tico-culture-in-chambersburg/",
+  open: 9, close: 23,
+  menu: [
+    { id: "desayuno", es: "Desayunos", en: "Breakfast", items: [
+      { es: "Gallo Pinto", en: "Costa Rican rice & beans", d: "Fried egg, cheese, sweet plantain, avocado and the meat you pick: bistec, chorizo, pollo en salsa, chicharrón, tilapia and more.", p: "from $15.58", star: 1 },
+      { es: "Tamales Ticos (2)", en: "Costa Rican pork tamales", d: "Two pork tamales, tico style.", p: "$12.96" },
+      { es: "Omelette Pura Vida", en: "House omelette", d: "Mashed beans, sweet plantain, cheese and shredded beef, with house potatoes and bread.", p: "$14.05" },
+      { es: "Sándwich Pura Vida", en: "Pura Vida sandwich", d: "Lettuce, tomato, fries, salsa Pura Vida and one meat.", p: "$12.96" },
+      { es: "Gallo Pinto Especial", en: "The big breakfast", d: "The house special gallo pinto plate.", p: "$32.23" }
+    ]},
+    { id: "picar", es: "Para Picar", en: "Appetizers", items: [
+      { es: "Picada Pura Vida", en: "Pura Vida sampler", d: "Beef, grilled chicken, chicharrón, salchichón, chorizo, sweet plantain and yuca.", p: "$12.47", star: 1 },
+      { es: "Chifrijo", en: "The tico bar bowl", d: "Rice, red beans, pico de gallo, avocado and tortilla chips.", p: "$11.96", star: 1 },
+      { es: "Patacones a Caballo", en: "Loaded plantains", d: "Mashed beans, shredded beef, pico de gallo and cheese.", p: "$16.20" },
+      { es: "Tostones Rellenos", en: "Stuffed plantain", d: "Shrimp or chicken, under gratin cheese.", p: "$15.13" },
+      { es: "Chicharrones con Yuca", en: "Pork crackling & fried yuca", d: "Crispy pork crackling with fried cassava.", p: "$12.47" },
+      { es: "Tacos Ticos", en: "Costa Rican tacos", d: "With cabbage, ketchup and mayo.", p: "$10.81" },
+      { es: "Picada de Mariscos", en: "Seafood sampler", d: "Tilapia, shrimp and calamari with yuca and tostones.", p: "$40.97" }
+    ]},
+    { id: "sopas", es: "Sopas & Ceviche", en: "Soups & ceviche", items: [
+      { es: "Olla de Carne", en: "Costa Rican beef soup", d: "Potato, squash, yuca, corn and carrot, with white rice.", p: "$18.70", star: 1 },
+      { es: "Sopa Negra", en: "Black bean soup", d: "With a side of white rice.", p: "$15.58" },
+      { es: "Sopa de Mariscos", en: "Seafood soup", d: "With white rice.", p: "$17.99" },
+      { es: "Consomé de Pollo", en: "Chicken broth with noodles", d: "Onion, pepper, noodles, egg and shredded chicken, with white rice.", p: "$13.50" },
+      { es: "Ceviche con Chips", en: "Ceviche with chips", d: "With tortilla chips.", p: "$13.79" }
+    ]},
+    { id: "fuertes", es: "Platos Fuertes", en: "Mains", items: [
+      { es: "Bandeja Paisa", en: "The full platter", d: "Rice, beans, steak, chicharrón, sausage, fried egg, tostones, sweet plantain and avocado.", p: "$24.95", star: 1 },
+      { es: "Carne en Salsa", en: "Tico stewed beef", d: "With white rice, peppers, onion and chips.", p: "$15.59" },
+      { es: "Pollo en Salsa", en: "Stewed chicken", d: "Peppers, onion, mushrooms and cilantro, with white rice and chips.", p: "$16.63" },
+      { es: "Arroz con Camarones", en: "Shrimp fried rice", d: "Costa Rican style fried rice with shrimp.", p: "$17.67" },
+      { es: "Arroz con Pollo", en: "Chicken rice", d: "The classic.", p: "$15.59" },
+      { es: "Fajitas Especiales", en: "Special fajitas", d: "With shrimp, vegetables and potato.", p: "$34.60" },
+      { es: "Bistec a la Parrilla", en: "Grilled steak", d: "Grilled or on the plancha, with two sides.", p: "$32.20" },
+      { es: "Filet Mignon", en: "New on the menu", d: "From the new plates.", p: "$37.99" },
+      { es: "Costilla de Cerdo", en: "Pork ribs", d: "From the new plates.", p: "$24.99" }
+    ]},
+    { id: "dulces", es: "Postres", en: "Desserts", items: [
+      { es: "Dubai Ball", en: "Pistachio & kataifi sphere", d: "Pistachio cream wrapped in crispy kataifi with a mango ice-cream heart.", p: "$18.93", star: 1 },
+      { es: "Brownie Dubai con Helado", en: "Dubai brownie", d: "Pistachio-cream brownie with vanilla ice cream and premium chocolate.", p: "$16.21" },
+      { es: "Fresas con Chocolate Dubai", en: "Dubai chocolate strawberries", d: "Strawberries dipped in Dubai-style pistachio chocolate.", p: "from $10.40", star: 1 },
+      { es: "Crepes de Tres Leches", en: "Tres leches crepes", d: "With fresh strawberries.", p: "$18.44" },
+      { es: "Coco Loco Nutella", en: "Coconut & Nutella", d: "Coconut and Nutella.", p: "$15.08" },
+      { es: "Tres Leches", en: "Three-milk cake", d: "Three-milk sponge cake.", p: "$7.56" },
+      { es: "Arroz con Leche", en: "Rice pudding", d: "", p: "$7.56" }
+    ]},
+    { id: "bebidas", es: "Bebidas", en: "Drinks", items: [
+      { es: "Capuccino Dubai", en: "Pistachio cappuccino", d: "Cappuccino with Dubai-style pistachio.", p: "$10.82", star: 1 },
+      { es: "Aguadulce", en: "Hot panela", d: "Unrefined whole cane sugar, served hot.", p: "$2.60" },
+      { es: "Café Negro", en: "Black coffee", d: "", p: "$3.52" },
+      { es: "Batido en Leche", en: "Milkshake", d: "Assorted fruit flavors.", p: "$5.41" },
+      { es: "Chocolate", en: "Hot chocolate", d: "Served hot.", p: "$4.33" },
+      { es: "Limonada", en: "Lemonade", d: "", p: "$4.32" }
+    ]}
+  ]
+};
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const PV_REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Time in Trenton */
+function pvNow() {
+  const parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "numeric", weekday: "short", hour12: false }).formatToParts(new Date());
+  const get = t => (parts.find(p => p.type === t) || {}).value;
+  let h = parseInt(get("hour"), 10); if (h === 24) h = 0;
+  return { h, m: parseInt(get("minute"), 10), day: get("weekday") };
+}
+function pvStatus() {
+  const { h, m } = pvNow(); const t = h + m / 60;
+  const open = t >= PV.open && t < PV.close;
+  if (open) {
+    const left = Math.round((PV.close - t) * 60);
+    return { open, short: "Open now", long: left <= 60 ? `Open now · closes in ${left} min` : "Open now · until 11 PM", es: "Abierto" };
+  }
+  return { open, short: "Closed", long: "Closed · opens 9 AM", es: "Cerrado" };
+}
+function pvStatusFill() {
+  const s = pvStatus();
+  $$("[data-status]").forEach(el => { el.textContent = el.dataset.status === "short" ? s.short : s.long; el.classList.toggle("is-open", s.open); el.classList.toggle("is-closed", !s.open); });
+  return s;
+}
+
+/* Real photos: tries ./assets first (drop files there), then the restaurant's own CDN, then the designed fallback */
+const PV_IMG = { logo: "pura-vida-logo.png", food1: "pura-vida-food1.jpg", food2: "pura-vida-food2.jpg", food3: "pura-vida-food3.jpg" };
+function pvImgs() {
+  $$("img[data-pv]").forEach(img => {
+    const f = PV_IMG[img.dataset.pv]; if (!f) return;
+    const chain = ["assets/" + f, "https://d2gqo3h0psesgi.cloudfront.net/auto/" + f];
+    let i = 0;
+    const host = img.closest("[data-photo]");
+    img.addEventListener("load", () => host && host.classList.add("has-photo"));
+    img.addEventListener("error", () => { i++; if (i < chain.length) img.src = chain[i]; else { host && host.classList.add("no-photo"); img.remove(); } });
+    img.src = chain[0];
+  });
+}
+
+function pvCopy(btn) {
+  const done = () => { const o = btn.dataset.label || btn.textContent; btn.dataset.label = o; btn.textContent = "Copied"; setTimeout(() => btn.textContent = o, 1400); };
+  try { navigator.clipboard.writeText(PV.phone).then(done, done); } catch (e) { done(); }
+}
+
+function pvEsc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+document.addEventListener("DOMContentLoaded", () => {
+  pvImgs(); pvStatusFill(); setInterval(pvStatusFill, 60000);
+  $$("[data-copy-phone]").forEach(b => b.addEventListener("click", () => pvCopy(b)));
+  $$("[data-year]").forEach(e => e.textContent = new Date().getFullYear());
+});
+
+/* LTGPEAK demo switcher (desktop) */
+function pvSwitcher(cur) {
+  const names = ["La Carreta", "Reloj Tico", "Dulce Noche", "Vuelo 228", "Selva"];
+  const d = document.createElement("nav");
+  d.className = "ltg-switch"; d.setAttribute("aria-label", "Demo versions");
+  d.innerHTML = `<a class="ltg-home" href="index.html">LTGPEAK demo</a>` + names.map((n, i) => `<a href="v${i + 1}.html" title="${n}"${i + 1 === cur ? ' aria-current="page"' : ""}>${i + 1}</a>`).join("");
+  const st = document.createElement("style");
+  st.textContent = `.ltg-switch{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:90;display:flex;gap:2px;align-items:center;padding:4px;border-radius:999px;background:rgba(14,14,20,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font:600 11px/1 system-ui,sans-serif;letter-spacing:.04em;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.ltg-switch a{color:#fff;text-decoration:none;min-width:26px;height:26px;display:grid;place-items:center;border-radius:999px;opacity:.7}
+.ltg-switch a:hover,.ltg-switch a:focus-visible{opacity:1;background:rgba(255,255,255,.14);outline:none}
+.ltg-switch a[aria-current]{opacity:1;background:#BD2027}
+.ltg-switch .ltg-home{padding:0 10px;opacity:.9;text-transform:uppercase}
+@media (max-width:760px){.ltg-switch{display:none}}`;
+  document.head.appendChild(st); document.body.appendChild(d);
+}
+</script>
+<script>
+const FLIGHTS = [
+  { t: 9, code: "PV101", dest: "GALLO PINTO" },
+  { t: 11, code: "PV214", dest: "OLLA DE CARNE" },
+  { t: 13, code: "PV330", dest: "CARNE EN SALSA" },
+  { t: 15, code: "PV405", dest: "CHIFRIJO" },
+  { t: 18, code: "PV518", dest: "BANDEJA PAISA" },
+  { t: 21, code: "PV621", dest: "FRESAS DUBAI" }
+];
+const W = { time: 5, code: 5, dest: 14, gate: 3, st: 9 };
+const pad = (s, n) => (s + " ".repeat(n)).slice(0, n);
+function statusFor(f, i, h) {
+  if (h < 9 || h >= 23) return { s: "MAÑANA", cls: "st-done" };
+  const next = FLIGHTS[i + 1] ? FLIGHTS[i + 1].t : 23;
+  if (h >= f.t && h < next) return { s: "ABORDANDO", cls: "st-board", now: 1 };
+  if (h >= next) return { s: "SERVIDO", cls: "st-done" };
+  return { s: "A TIEMPO", cls: "st-go" };
+}
+const rowsEl = $("#rows");
+const cellsHTML = (n, cls = "") => `<span class="cells ${cls}">${"<span class=\"c\"> </span>".repeat(n)}</span>`;
+rowsEl.innerHTML = `<div class="row labels" role="row"><span role="columnheader" style="width:calc(${W.time} * (var(--cw) + 2px))">Hora</span><span role="columnheader" class="hide-sm" style="width:calc(${W.code} * (var(--cw) + 2px))">Vuelo</span><span role="columnheader" style="width:calc(${W.dest} * (var(--cw) + 2px))">Destino</span><span role="columnheader" class="hide-sm" style="width:calc(${W.gate} * (var(--cw) + 2px))">Gate</span><span role="columnheader">Estado</span></div>` +
+  FLIGHTS.map((f, i) => `<div class="row" role="row" data-i="${i}">${cellsHTML(W.time, "time")}${cellsHTML(W.code, "code hide-sm")}${cellsHTML(W.dest, "dest")}${cellsHTML(W.gate, "gate hide-sm")}${cellsHTML(W.st, "st")}</div>`).join("");
+const CH = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789:";
+function flapTo(group, text, delay) {
+  const cells = $$(".c", group);
+  cells.forEach((c, k) => {
+    const target = text[k] || " ";
+    if (c.textContent === target) return;
+    if (PV_REDUCED) { c.textContent = target; return; }
+    let n = 4 + Math.floor(Math.random() * 7);
+    setTimeout(function step() {
+      c.classList.remove("flip"); void c.offsetWidth; c.classList.add("flip");
+      c.textContent = n-- > 0 ? CH[Math.floor(Math.random() * CH.length)] : target;
+      if (n >= 0) setTimeout(step, 70);
+    }, delay + k * 28);
+  });
+}
+function fmt24(h) { const hh = Math.floor(h), mm = Math.round((h - hh) * 60); return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`; }
+function paintBoard(first) {
+  const { h: hh, m } = pvNow(), h = hh + m / 60;
+  $("#clk").textContent = `Trenton ${fmt24(h)}`;
+  let nowDest = null;
+  FLIGHTS.forEach((f, i) => {
+    const row = $(`.row[data-i="${i}"]`, rowsEl), st = statusFor(f, i, h);
+    row.classList.toggle("now", !!st.now); if (st.now) nowDest = f.dest;
+    const stCells = $(".st", row); stCells.className = "cells st " + st.cls;
+    const d = first ? i * 260 : 0;
+    flapTo($(".time", row), pad(fmt24(f.t), W.time), d);
+    flapTo($(".code", row), pad(f.code, W.code), d + 80);
+    flapTo($(".dest", row), pad(f.dest, W.dest), d + 160);
+    flapTo($(".gate", row), pad("228", W.gate), d + 220);
+    flapTo(stCells, pad(st.s, W.st), d + 300);
+  });
+  $("#boardNote").textContent = (h < 9 || h >= 23) ? "Closed now · first departure 09:00 tomorrow" : nowDest ? `Now boarding: ${nowDest.toLowerCase().replace(/\b\w/g, c => c.toUpperCase())}` : "Status follows the time in Trenton";
+  $("#meal").textContent = nowDest ? nowDest.toLowerCase().replace(/\b\w/g, c => c.toUpperCase()) : "Gallo Pinto";
+}
+paintBoard(true); setInterval(() => paintBoard(false), 60000);
+
+/* menu gates */
+const gates = $("#gates"), letters = "ABCDEF";
+PV.menu.forEach((c, i) => { const b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "tab"); b.innerHTML = `<b>${letters[i]}</b>${pvEsc(c.es)}`; b.onclick = () => gate(i); gates.appendChild(b); });
+function gate(i) {
+  $$("button", gates).forEach((b, j) => b.setAttribute("aria-selected", i === j));
+  $("#mlist").innerHTML = PV.menu[i].items.map((it, k) => `<div class="mi"><span class="no">${letters[i]}${k + 1}</span><h4>${pvEsc(it.es)}<span class="en">${pvEsc(it.en)}</span></h4><span class="p">${it.p}</span>${it.d ? `<p>${pvEsc(it.d)}</p>` : ""}</div>`).join("");
+}
+gate(0);
+pvSwitcher(4);
+</script>
+</body>
+</html>

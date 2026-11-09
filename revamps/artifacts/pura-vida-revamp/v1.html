@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pura Vida · La Carreta</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Manrope:wght@400;500;700;800&display=swap">
+<style>
+/* Layout: folk-art poster — giant painted oxcart wheel spins off the right edge; menu lives on a second, clickable wheel */
+:root{
+  --paper:#FFFFFF; --ink:#1B1530; --red:#BD2027; --sun:#F4B400; --azul:#1F4FA3; --verde:#16804A; --rosa:#EE6FA0; --soft:#FFF4E0;
+  --display:"Shrikhand", "Georgia", serif; --body:"Manrope", system-ui, sans-serif;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:500 16px/1.6 var(--body);overflow-x:hidden}
+a{color:inherit}
+img{max-width:100%;display:block}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{text-wrap:balance;margin:0}
+.eyebrow{font:800 12px/1 var(--body);letter-spacing:.16em;text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border-radius:999px;font:800 15px/1 var(--body);text-decoration:none;border:2.5px solid var(--ink);transition:transform .2s, box-shadow .2s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--ink)}
+.btn:focus-visible{outline:3px solid var(--azul);outline-offset:3px}
+.btn-red{background:var(--red);color:#fff;border-color:var(--red)}
+.btn-red:hover{box-shadow:4px 4px 0 var(--ink)}
+.btn-line{background:#fff}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:7px 12px;border-radius:999px;background:var(--soft);font:800 12px/1 var(--body);letter-spacing:.06em;text-transform:uppercase}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:#999}
+.pill.is-open::before{background:var(--verde);box-shadow:0 0 0 4px rgba(22,128,74,.18)}
+.pill.is-closed::before{background:var(--red)}
+
+/* top bar */
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:rgba(255,255,255,.92);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:2px solid var(--ink)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:41;background:#fff}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo [data-photo]{height:44px;display:flex;align-items:center}
+.logo img{height:44px;width:auto}
+.logo .wm{font:400 26px/1 var(--display);color:var(--red)}
+.logo [data-photo].has-photo + .wm{display:none}
+.bar nav{display:flex;gap:22px;align-items:center}
+.bar nav a{font-weight:700;text-decoration:none;font-size:15px}
+.bar nav a:hover{color:var(--red)}
+@media (max-width:820px){.bar nav a:not(.btn){display:none}.bar .btn{padding:11px 16px;font-size:14px}}
+
+/* stripe border like carreta paint */
+.stripe{height:14px;background:repeating-linear-gradient(90deg,var(--red) 0 40px,var(--sun) 40px 80px,var(--azul) 80px 120px,var(--verde) 120px 160px,var(--rosa) 160px 200px)}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding-block:clamp(48px,8vw,110px) clamp(56px,9vw,120px)}
+.hero .wrap{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,.95fr);gap:24px;align-items:center}
+.hero h1{font:400 clamp(64px,11vw,160px)/.86 var(--display);color:var(--red);letter-spacing:-.01em}
+.hero h1 span{display:block;color:var(--ink);font-size:.42em;line-height:1.05;margin-top:.2em}
+.hero p.lead{font-size:clamp(17px,1.6vw,20px);max-width:34ch;margin:22px 0 28px}
+.hero .ctas{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.hero .meta{display:flex;flex-wrap:wrap;gap:10px 18px;margin-top:26px;align-items:center;font-weight:700}
+.wheel-stage{position:relative;aspect-ratio:1;max-width:100%}
+#heroWheel{position:absolute;inset:-12%;width:124%;height:124%}
+@media (max-width:860px){
+  .hero .wrap{grid-template-columns:1fr}
+  .wheel-stage{width:min(88vw,420px);justify-self:center;margin-top:8px}
+}
+
+/* what is pura vida */
+.meaning{background:var(--ink);color:#fff;padding-block:clamp(56px,8vw,96px)}
+.meaning .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,5vw,72px);align-items:center}
+.meaning h2{font:400 clamp(40px,6vw,76px)/1 var(--display);color:var(--sun)}
+.meaning p{font-size:18px;max-width:52ch;margin:0 0 14px;color:#E9E5F5}
+.meaning .uses{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.meaning .uses span{border:2px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 14px;font-weight:700}
+@media (max-width:820px){.meaning .wrap{grid-template-columns:1fr}}
+
+/* photo tiles */
+.tiles{padding-block:clamp(56px,8vw,100px)}
+.tiles .head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:28px}
+.tiles h2{font:400 clamp(36px,5vw,64px)/1 var(--display)}
+.tile-row{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:18px}
+.tile{position:relative;border-radius:28px;overflow:hidden;aspect-ratio:4/5;border:3px solid var(--ink);background:var(--soft)}
+.tile:nth-child(1){aspect-ratio:auto;min-height:100%}
+.tile img{width:100%;height:100%;object-fit:cover}
+.tile .cap{position:absolute;left:12px;bottom:12px;right:12px;background:#fff;border:2px solid var(--ink);border-radius:16px;padding:10px 14px;display:flex;justify-content:space-between;gap:10px;font-weight:800}
+.tile .cap b{color:var(--red)}
+.tile .art{position:absolute;inset:0;display:none}
+.tile.no-photo .art{display:block}
+@media (max-width:820px){.tile-row{grid-template-columns:1fr 1fr}.tile:nth-child(1){grid-column:1/-1;aspect-ratio:16/10}}
+
+/* menu wheel */
+.menu{padding-block:clamp(56px,8vw,100px);background:var(--soft);position:relative}
+.menu h2{font:400 clamp(40px,6vw,80px)/1 var(--display);color:var(--red)}
+.menu .sub{max-width:52ch;margin:10px 0 0;font-size:17px}
+.menu-grid{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:clamp(24px,4vw,56px);align-items:start;margin-top:36px}
+.mw-box{position:sticky;top:96px}
+#menuWheel{width:100%;height:auto;display:block;overflow:visible}
+#menuWheel .wedge{cursor:pointer;transition:filter .2s}
+#menuWheel .wedge:hover{filter:brightness(1.08)}
+#menuWheel .wedge:focus-visible{outline:none;filter:drop-shadow(0 0 0 #000) brightness(1.15)}
+.pointer{display:block;margin:0 auto -6px;width:34px}
+.cats{display:none;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.cats button{font:800 14px/1 var(--body);padding:11px 14px;border-radius:999px;border:2px solid var(--ink);background:#fff;cursor:pointer}
+.cats button[aria-selected="true"]{background:var(--ink);color:#fff}
+.list h3{font:400 clamp(30px,3.6vw,46px)/1 var(--display)}
+.list .en{font-weight:700;color:#5D5675;margin:6px 0 16px}
+.item{display:grid;grid-template-columns:1fr auto;gap:4px 16px;padding:16px 0;border-bottom:2px dashed rgba(27,21,48,.18)}
+.item h4{margin:0;font:800 19px/1.25 var(--body)}
+.item h4 small{display:block;font-weight:600;font-size:14px;color:#5D5675}
+.item .p{font:800 18px/1.25 var(--body);color:var(--red);white-space:nowrap;font-variant-numeric:tabular-nums}
+.item p{grid-column:1/-1;margin:0;color:#3B3452;font-size:15px}
+.item .star{display:inline-block;background:var(--sun);color:var(--ink);font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:3px 7px;border-radius:6px;margin-left:8px;vertical-align:2px}
+.fine{font-size:13px;color:#5D5675;margin-top:18px}
+@media (max-width:860px){.menu-grid{grid-template-columns:1fr}.mw-box{position:static;max-width:340px;margin:0 auto;width:100%}.cats{display:flex}}
+
+/* visit */
+.visit{padding-block:clamp(56px,8vw,100px)}
+.visit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.card{border:3px solid var(--ink);border-radius:28px;padding:26px;background:#fff;display:flex;flex-direction:column;gap:12px}
+.card:nth-child(1){background:var(--sun)}
+.card:nth-child(2){background:var(--azul);color:#fff}
+.card:nth-child(3){background:var(--verde);color:#fff}
+.card h3{font:400 34px/1 var(--display)}
+.card .big{font:800 22px/1.3 var(--body)}
+.card .row{display:flex;flex-wrap:wrap;gap:10px;margin-top:auto}
+.card .btn{border-color:currentColor;background:transparent;color:inherit;padding:12px 16px;font-size:14px}
+.card .btn:hover{box-shadow:4px 4px 0 currentColor}
+.hours{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+.hours td{padding:5px 0;border-bottom:1.5px solid rgba(27,21,48,.15);font-weight:700}
+.hours td:last-child{text-align:right}
+.hours tr.today td{color:var(--red)}
+@media (max-width:900px){.visit-grid{grid-template-columns:1fr}}
+
+footer{background:var(--ink);color:#CFC9E3;padding-block:36px calc(36px + env(safe-area-inset-bottom,0px))}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:center}
+footer .wm{font:400 30px/1 var(--display);color:#fff}
+footer a{color:#fff}
+.mobile-order{display:none}
+@media (max-width:760px){
+  .mobile-order{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:60;gap:10px;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:#fff;border-top:2px solid var(--ink)}
+  .mobile-order a{flex:1;justify-content:center}
+  footer{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#top" aria-label="Pura Vida home"><span data-photo><img data-pv="logo" alt="Pura Vida logo"></span><span class="wm">Pura Vida</span></a>
+    <nav>
+      <a href="#menu">Menú</a><a href="#pura-vida">Pura vida</a><a href="#visit">Visit</a>
+      <a class="btn btn-red" href="https://fromtherestaurant.com/pura-vida/" target="_blank" rel="noopener">Order online</a>
+    </nav>
+  </div>
+  <div class="stripe" aria-hidden="true"></div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow" style="color:var(--azul)">Cocina costarricense · Chambersburg, Trenton</p>
+      <h1>¡Pura Vida!<span>Tico food, every day, 9 to 11.</span></h1>
+      <p class="lead">Gallo pinto in the morning, chifrijo with friends, olla de carne when it's cold, Dubai strawberries for later. All on Cummings Ave.</p>
+      <div class="ctas">
+        <a class="btn btn-red" href="https://fromtherestaurant.com/pura-vida/" target="_blank" rel="noopener">Order pickup or delivery</a>
+        <a class="btn btn-line" href="#menu">Spin the menu</a>
+      </div>
+      <div class="meta"><span class="pill" data-status="long">Open daily</span><span>228 Cummings Ave</span><span>(609) 396-7472</span></div>
+    </div>
+    <div class="wheel-stage" aria-hidden="true"><svg id="heroWheel" viewBox="-260 -260 520 520"></svg></div>
+  </div>
+</section>
+
+<section class="meaning" id="pura-vida">
+  <div class="wrap">
+    <h2>Two words. The whole country.</h2>
+    <div>
+      <p>In Costa Rica, <b>pura vida</b> means hello, goodbye, thank you, no worries and life is good. Ticos say it all day.</p>
+      <p>At Pura Vida in Trenton it also means a plate of gallo pinto with a fried egg on top, a hot aguadulce, and a picada for the table.</p>
+      <div class="uses"><span>¡Hola, pura vida!</span><span>¿Cómo estás? Pura vida.</span><span>Gracias, pura vida.</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="tiles">
+  <div class="wrap">
+    <div class="head"><h2>Hecho en la cocina</h2><a class="btn btn-line" href="#menu">Full menu</a></div>
+    <div class="tile-row">
+      <figure class="tile" data-photo style="margin:0"><img data-pv="food3" alt="A main plate at Pura Vida"><div class="art" data-art="0"></div><figcaption class="cap"><span>Platos fuertes</span><b>from $15.59</b></figcaption></figure>
+      <figure class="tile" data-photo style="margin:0"><img data-pv="food1" alt="Food prep at Pura Vida"><div class="art" data-art="1"></div><figcaption class="cap"><span>Desayunos</span><b>9 AM</b></figcaption></figure>
+      <figure class="tile" data-photo style="margin:0"><img data-pv="food2" alt="A side dish at Pura Vida"><div class="art" data-art="2"></div><figcaption class="cap"><span>Para picar</span><b>$11.96</b></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="menu" id="menu">
+  <div class="wrap">
+    <p class="eyebrow" style="color:var(--azul)">La rueda del menú</p>
+    <h2>Spin to pick.</h2>
+    <p class="sub">Every carreta wheel in Costa Rica is hand-painted. Ours holds the menu. Tap a section of the wheel.</p>
+    <div class="menu-grid">
+      <div class="mw-box">
+        <svg class="pointer" viewBox="0 0 34 26" aria-hidden="true"><path d="M17 26 0 0h34z" fill="#1B1530"/></svg>
+        <svg id="menuWheel" viewBox="-220 -220 440 440" role="tablist" aria-label="Menu sections"></svg>
+      </div>
+      <div class="list" aria-live="polite">
+        <div class="cats" role="tablist" aria-label="Menu sections"></div>
+        <h3 id="catTitle"></h3>
+        <p class="en" id="catEn"></p>
+        <div id="items"></div>
+        <p class="fine">Prices from Pura Vida's online ordering and may vary in the restaurant. <a href="https://fromtherestaurant.com/pura-vida/menu/" target="_blank" rel="noopener">See the full menu</a>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="visit" id="visit">
+  <div class="wrap">
+    <div class="visit-grid">
+      <div class="card">
+        <h3>Horario</h3>
+        <span class="pill" data-status="long" style="align-self:flex-start;background:#fff">Open daily</span>
+        <table class="hours" id="hours"></table>
+      </div>
+      <div class="card">
+        <h3>Visítanos</h3>
+        <p class="big">228 Cummings Ave<br>Trenton, NJ 08611</p>
+        <p style="margin:0;opacity:.9">In the Chambersburg neighborhood of Trenton. Dine in, pick up, or get it delivered.</p>
+        <div class="row"><a class="btn" href="https://www.google.com/maps/search/?api=1&query=Pura+Vida+228+Cummings+Ave+Trenton+NJ+08611" target="_blank" rel="noopener">Get directions</a></div>
+      </div>
+      <div class="card">
+        <h3>Llámanos</h3>
+        <p class="big" style="user-select:all">(609) 396-7472</p>
+        <p style="margin:0;opacity:.9">Order pickup or delivery straight from the restaurant's online ordering.</p>
+        <div class="row"><a class="btn" href="tel:+16093967472">Call</a><button class="btn" type="button" data-copy-phone>Copy number</button><a class="btn" href="https://fromtherestaurant.com/pura-vida/" target="_blank" rel="noopener">Order</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="wm">Pura Vida</span>
+    <span>© <span data-year>2026</span> Pura Vida · 228 Cummings Ave, Trenton NJ</span>
+    <span>Demo revamp by <a href="https://ltgpeak.app" target="_blank" rel="noopener">LTGPEAK</a> · <a href="index.html">All 5 versions</a></span>
+  </div>
+</footer>
+<div class="mobile-order"><a class="btn btn-red" href="https://fromtherestaurant.com/pura-vida/" target="_blank" rel="noopener">Order online</a><a class="btn btn-line" href="tel:+16093967472">Call</a></div>
+
+<script>/* Pura Vida — shared real content (from puravidatrentonnj.com + fromtherestaurant.com/pura-vida, Nov 2026) */
+const PV = {
+  name: "Pura Vida",
+  kind: "Costa Rican Restaurant & Lounge",
+  addr1: "228 Cummings Ave",
+  addr2: "Trenton, NJ 08611",
+  hood: "Chambersburg",
+  phone: "(609) 396-7472",
+  tel: "tel:+16093967472",
+  order: "https://fromtherestaurant.com/pura-vida/",
+  fullMenu: "https://fromtherestaurant.com/pura-vida/menu/",
+  maps: "https://www.google.com/maps/search/?api=1&query=Pura+Vida+228+Cummings+Ave+Trenton+NJ+08611",
+  press: "https://communitynews.org/sections/mercereats/mystery-muncher-tasting-tico-culture-in-chambersburg/",
+  open: 9, close: 23,
+  menu: [
+    { id: "desayuno", es: "Desayunos", en: "Breakfast", items: [
+      { es: "Gallo Pinto", en: "Costa Rican rice & beans", d: "Fried egg, cheese, sweet plantain, avocado and the meat you pick: bistec, chorizo, pollo en salsa, chicharrón, tilapia and more.", p: "from $15.58", star: 1 },
+      { es: "Tamales Ticos (2)", en: "Costa Rican pork tamales", d: "Two pork tamales, tico style.", p: "$12.96" },
+      { es: "Omelette Pura Vida", en: "House omelette", d: "Mashed beans, sweet plantain, cheese and shredded beef, with house potatoes and bread.", p: "$14.05" },
+      { es: "Sándwich Pura Vida", en: "Pura Vida sandwich", d: "Lettuce, tomato, fries, salsa Pura Vida and one meat.", p: "$12.96" },
+      { es: "Gallo Pinto Especial", en: "The big breakfast", d: "The house special gallo pinto plate.", p: "$32.23" }
+    ]},
+    { id: "picar", es: "Para Picar", en: "Appetizers", items: [
+      { es: "Picada Pura Vida", en: "Pura Vida sampler", d: "Beef, grilled chicken, chicharrón, salchichón, chorizo, sweet plantain and yuca.", p: "$12.47", star: 1 },
+      { es: "Chifrijo", en: "The tico bar bowl", d: "Rice, red beans, pico de gallo, avocado and tortilla chips.", p: "$11.96", star: 1 },
+      { es: "Patacones a Caballo", en: "Loaded plantains", d: "Mashed beans, shredded beef, pico de gallo and cheese.", p: "$16.20" },
+      { es: "Tostones Rellenos", en: "Stuffed plantain", d: "Shrimp or chicken, under gratin cheese.", p: "$15.13" },
+      { es: "Chicharrones con Yuca", en: "Pork crackling & fried yuca", d: "Crispy pork crackling with fried cassava.", p: "$12.47" },
+      { es: "Tacos Ticos", en: "Costa Rican tacos", d: "With cabbage, ketchup and mayo.", p: "$10.81" },
+      { es: "Picada de Mariscos", en: "Seafood sampler", d: "Tilapia, shrimp and calamari with yuca and tostones.", p: "$40.97" }
+    ]},
+    { id: "sopas", es: "Sopas & Ceviche", en: "Soups & ceviche", items: [
+      { es: "Olla de Carne", en: "Costa Rican beef soup", d: "Potato, squash, yuca, corn and carrot, with white rice.", p: "$18.70", star: 1 },
+      { es: "Sopa Negra", en: "Black bean soup", d: "With a side of white rice.", p: "$15.58" },
+      { es: "Sopa de Mariscos", en: "Seafood soup", d: "With white rice.", p: "$17.99" },
+      { es: "Consomé de Pollo", en: "Chicken broth with noodles", d: "Onion, pepper, noodles, egg and shredded chicken, with white rice.", p: "$13.50" },
+      { es: "Ceviche con Chips", en: "Ceviche with chips", d: "With tortilla chips.", p: "$13.79" }
+    ]},
+    { id: "fuertes", es: "Platos Fuertes", en: "Mains", items: [
+      { es: "Bandeja Paisa", en: "The full platter", d: "Rice, beans, steak, chicharrón, sausage, fried egg, tostones, sweet plantain and avocado.", p: "$24.95", star: 1 },
+      { es: "Carne en Salsa", en: "Tico stewed beef", d: "With white rice, peppers, onion and chips.", p: "$15.59" },
+      { es: "Pollo en Salsa", en: "Stewed chicken", d: "Peppers, onion, mushrooms and cilantro, with white rice and chips.", p: "$16.63" },
+      { es: "Arroz con Camarones", en: "Shrimp fried rice", d: "Costa Rican style fried rice with shrimp.", p: "$17.67" },
+      { es: "Arroz con Pollo", en: "Chicken rice", d: "The classic.", p: "$15.59" },
+      { es: "Fajitas Especiales", en: "Special fajitas", d: "With shrimp, vegetables and potato.", p: "$34.60" },
+      { es: "Bistec a la Parrilla", en: "Grilled steak", d: "Grilled or on the plancha, with two sides.", p: "$32.20" },
+      { es: "Filet Mignon", en: "New on the menu", d: "From the new plates.", p: "$37.99" },
+      { es: "Costilla de Cerdo", en: "Pork ribs", d: "From the new plates.", p: "$24.99" }
+    ]},
+    { id: "dulces", es: "Postres", en: "Desserts", items: [
+      { es: "Dubai Ball", en: "Pistachio & kataifi sphere", d: "Pistachio cream wrapped in crispy kataifi with a mango ice-cream heart.", p: "$18.93", star: 1 },
+      { es: "Brownie Dubai con Helado", en: "Dubai brownie", d: "Pistachio-cream brownie with vanilla ice cream and premium chocolate.", p: "$16.21" },
+      { es: "Fresas con Chocolate Dubai", en: "Dubai chocolate strawberries", d: "Strawberries dipped in Dubai-style pistachio chocolate.", p: "from $10.40", star: 1 },
+      { es: "Crepes de Tres Leches", en: "Tres leches crepes", d: "With fresh strawberries.", p: "$18.44" },
+      { es: "Coco Loco Nutella", en: "Coconut & Nutella", d: "Coconut and Nutella.", p: "$15.08" },
+      { es: "Tres Leches", en: "Three-milk cake", d: "Three-milk sponge cake.", p: "$7.56" },
+      { es: "Arroz con Leche", en: "Rice pudding", d: "", p: "$7.56" }
+    ]},
+    { id: "bebidas", es: "Bebidas", en: "Drinks", items: [
+      { es: "Capuccino Dubai", en: "Pistachio cappuccino", d: "Cappuccino with Dubai-style pistachio.", p: "$10.82", star: 1 },
+      { es: "Aguadulce", en: "Hot panela", d: "Unrefined whole cane sugar, served hot.", p: "$2.60" },
+      { es: "Café Negro", en: "Black coffee", d: "", p: "$3.52" },
+      { es: "Batido en Leche", en: "Milkshake", d: "Assorted fruit flavors.", p: "$5.41" },
+      { es: "Chocolate", en: "Hot chocolate", d: "Served hot.", p: "$4.33" },
+      { es: "Limonada", en: "Lemonade", d: "", p: "$4.32" }
+    ]}
+  ]
+};
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const PV_REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Time in Trenton */
+function pvNow() {
+  const parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "numeric", weekday: "short", hour12: false }).formatToParts(new Date());
+  const get = t => (parts.find(p => p.type === t) || {}).value;
+  let h = parseInt(get("hour"), 10); if (h === 24) h = 0;
+  return { h, m: parseInt(get("minute"), 10), day: get("weekday") };
+}
+function pvStatus() {
+  const { h, m } = pvNow(); const t = h + m / 60;
+  const open = t >= PV.open && t < PV.close;
+  if (open) {
+    const left = Math.round((PV.close - t) * 60);
+    return { open, short: "Open now", long: left <= 60 ? `Open now · closes in ${left} min` : "Open now · until 11 PM", es: "Abierto" };
+  }
+  return { open, short: "Closed", long: "Closed · opens 9 AM", es: "Cerrado" };
+}
+function pvStatusFill() {
+  const s = pvStatus();
+  $$("[data-status]").forEach(el => { el.textContent = el.dataset.status === "short" ? s.short : s.long; el.classList.toggle("is-open", s.open); el.classList.toggle("is-closed", !s.open); });
+  return s;
+}
+
+/* Real photos: tries ./assets first (drop files there), then the restaurant's own CDN, then the designed fallback */
+const PV_IMG = { logo: "pura-vida-logo.png", food1: "pura-vida-food1.jpg", food2: "pura-vida-food2.jpg", food3: "pura-vida-food3.jpg" };
+function pvImgs() {
+  $$("img[data-pv]").forEach(img => {
+    const f = PV_IMG[img.dataset.pv]; if (!f) return;
+    const chain = ["assets/" + f, "https://d2gqo3h0psesgi.cloudfront.net/auto/" + f];
+    let i = 0;
+    const host = img.closest("[data-photo]");
+    img.addEventListener("load", () => host && host.classList.add("has-photo"));
+    img.addEventListener("error", () => { i++; if (i < chain.length) img.src = chain[i]; else { host && host.classList.add("no-photo"); img.remove(); } });
+    img.src = chain[0];
+  });
+}
+
+function pvCopy(btn) {
+  const done = () => { const o = btn.dataset.label || btn.textContent; btn.dataset.label = o; btn.textContent = "Copied"; setTimeout(() => btn.textContent = o, 1400); };
+  try { navigator.clipboard.writeText(PV.phone).then(done, done); } catch (e) { done(); }
+}
+
+function pvEsc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+document.addEventListener("DOMContentLoaded", () => {
+  pvImgs(); pvStatusFill(); setInterval(pvStatusFill, 60000);
+  $$("[data-copy-phone]").forEach(b => b.addEventListener("click", () => pvCopy(b)));
+  $$("[data-year]").forEach(e => e.textContent = new Date().getFullYear());
+});
+
+/* LTGPEAK demo switcher (desktop) */
+function pvSwitcher(cur) {
+  const names = ["La Carreta", "Reloj Tico", "Dulce Noche", "Vuelo 228", "Selva"];
+  const d = document.createElement("nav");
+  d.className = "ltg-switch"; d.setAttribute("aria-label", "Demo versions");
+  d.innerHTML = `<a class="ltg-home" href="index.html">LTGPEAK demo</a>` + names.map((n, i) => `<a href="v${i + 1}.html" title="${n}"${i + 1 === cur ? ' aria-current="page"' : ""}>${i + 1}</a>`).join("");
+  const st = document.createElement("style");
+  st.textContent = `.ltg-switch{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:90;display:flex;gap:2px;align-items:center;padding:4px;border-radius:999px;background:rgba(14,14,20,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font:600 11px/1 system-ui,sans-serif;letter-spacing:.04em;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.ltg-switch a{color:#fff;text-decoration:none;min-width:26px;height:26px;display:grid;place-items:center;border-radius:999px;opacity:.7}
+.ltg-switch a:hover,.ltg-switch a:focus-visible{opacity:1;background:rgba(255,255,255,.14);outline:none}
+.ltg-switch a[aria-current]{opacity:1;background:#BD2027}
+.ltg-switch .ltg-home{padding:0 10px;opacity:.9;text-transform:uppercase}
+@media (max-width:760px){.ltg-switch{display:none}}`;
+  document.head.appendChild(st); document.body.appendChild(d);
+}
+</script>
+<script>
+const NS = "http://www.w3.org/2000/svg";
+const C = { red:"#BD2027", sun:"#F4B400", azul:"#1F4FA3", verde:"#16804A", rosa:"#EE6FA0", ink:"#1B1530", white:"#FFFFFF" };
+const el = (t, a = {}, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); p && p.appendChild(e); return e; };
+const pt = (r, deg) => { const a = (deg - 90) * Math.PI / 180; return [r * Math.cos(a), r * Math.sin(a)]; };
+function arc(r1, r2, a0, a1) {
+  const [x0, y0] = pt(r2, a0), [x1, y1] = pt(r2, a1), [x2, y2] = pt(r1, a1), [x3, y3] = pt(r1, a0);
+  const lg = a1 - a0 > 180 ? 1 : 0;
+  return `M${x0} ${y0}A${r2} ${r2} 0 ${lg} 1 ${x1} ${y1}L${x2} ${y2}A${r1} ${r1} 0 ${lg} 0 ${x3} ${y3}Z`;
+}
+
+/* Hero: painted carreta wheel */
+function carreta(svg) {
+  const g = el("g", {}, svg);
+  el("circle", { r: 250, fill: C.red }, g);
+  for (let i = 0; i < 48; i++) { const [x, y] = pt(236, i * 7.5); el("circle", { cx: x, cy: y, r: 6, fill: i % 2 ? C.sun : C.white }, g); }
+  el("circle", { r: 222, fill: C.ink }, g);
+  el("circle", { r: 214, fill: C.sun }, g);
+  const ring = [C.azul, C.verde, C.rosa, C.red];
+  for (let i = 0; i < 16; i++) {
+    el("path", { d: arc(120, 210, i * 22.5 + 1.5, (i + 1) * 22.5 - 1.5), fill: ring[i % 4] }, g);
+    const [px, py] = pt(168, i * 22.5 + 11.25);
+    const petal = el("g", { transform: `translate(${px} ${py}) rotate(${i * 22.5 + 11.25})` }, g);
+    el("ellipse", { rx: 13, ry: 30, fill: C.white, opacity: .95 }, petal);
+    el("ellipse", { rx: 6, ry: 16, fill: ring[(i + 2) % 4] }, petal);
+    el("circle", { cy: -36, r: 5, fill: C.sun }, petal);
+    el("circle", { cy: 36, r: 5, fill: C.sun }, petal);
+  }
+  for (let i = 0; i < 16; i++) { const [x, y] = pt(210, i * 22.5), [x2, y2] = pt(110, i * 22.5); el("line", { x1: x2, y1: y2, x2: x, y2: y, stroke: C.ink, "stroke-width": 7, "stroke-linecap": "round" }, g); }
+  el("circle", { r: 116, fill: C.ink }, g);
+  el("circle", { r: 108, fill: C.white }, g);
+  for (let i = 0; i < 12; i++) {
+    const s = el("g", { transform: `rotate(${i * 30})` }, g);
+    el("path", { d: "M0 -100 C 22 -70 22 -40 0 -24 C -22 -40 -22 -70 0 -100Z", fill: [C.red, C.azul, C.verde][i % 3] }, s);
+  }
+  el("circle", { r: 34, fill: C.sun, stroke: C.ink, "stroke-width": 6 }, g);
+  el("circle", { r: 12, fill: C.red }, g);
+  return g;
+}
+const heroG = carreta($("#heroWheel"));
+let spin = 0, last = performance.now();
+function loop(t) {
+  const dt = Math.min(64, t - last); last = t;
+  spin += dt * 0.006;
+  const rot = spin + scrollY * 0.12;
+  heroG.setAttribute("transform", `rotate(${rot})`);
+  if (!PV_REDUCED) requestAnimationFrame(loop);
+}
+PV_REDUCED ? heroG.setAttribute("transform", "rotate(8)") : requestAnimationFrame(loop);
+
+/* Art fallbacks for photo tiles */
+$$("[data-art]").forEach(a => {
+  const k = +a.dataset.art, cols = [[C.red, C.sun], [C.azul, C.rosa], [C.verde, C.sun]][k];
+  a.style.background = `radial-gradient(circle at 50% 50%, ${cols[1]} 0 18%, transparent 18.5%), repeating-conic-gradient(from ${k * 15}deg, ${cols[0]} 0 15deg, #fff 15deg 30deg)`;
+});
+
+/* Menu wheel */
+const mw = $("#menuWheel");
+const wg = el("g", {}, mw);
+const cats = PV.menu, n = cats.length, step = 360 / n;
+const wcol = [C.red, C.azul, C.verde, C.sun, C.rosa, C.ink];
+el("circle", { r: 214, fill: C.ink }, wg);
+cats.forEach((c, i) => {
+  const w = el("g", { class: "wedge", role: "tab", tabindex: 0, "aria-label": `${c.es} — ${c.en}`, "data-i": i }, wg);
+  el("path", { d: arc(62, 206, i * step + 1, (i + 1) * step - 1), fill: wcol[i] }, w);
+  const mid = i * step + step / 2, [tx, ty] = pt(140, mid);
+  const t = el("text", { x: tx, y: ty, "text-anchor": "middle", "dominant-baseline": "middle", fill: wcol[i] === C.sun ? C.ink : "#fff", "font-family": "Shrikhand, Georgia, serif", "font-size": 21, transform: `rotate(${mid} ${tx} ${ty})` }, w);
+  t.textContent = c.es.split(" ")[0];
+  for (let d = 0; d < 3; d++) { const [dx, dy] = pt(84 + d * 10, mid); el("circle", { cx: dx, cy: dy, r: 3, fill: "#fff", opacity: .7 }, w); }
+  w.addEventListener("click", () => pick(i));
+  w.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); pick(i); } });
+});
+el("circle", { r: 58, fill: C.sun, stroke: C.ink, "stroke-width": 8 }, wg);
+const hubT = el("text", { "text-anchor": "middle", y: 8, "font-family": "Shrikhand, Georgia, serif", "font-size": 22, fill: C.ink }, mw);
+hubT.textContent = "Menú";
+
+const chipBox = $(".cats");
+cats.forEach((c, i) => { const b = document.createElement("button"); b.type = "button"; b.role = "tab"; b.textContent = c.es; b.onclick = () => pick(i); chipBox.appendChild(b); });
+
+let wheelRot = 0;
+function pick(i) {
+  const target = -(i * step + step / 2);
+  let delta = ((target - wheelRot) % 360 + 540) % 360 - 180;
+  wheelRot += delta + (Math.abs(delta) < 1 ? 0 : 360);
+  wg.style.transition = PV_REDUCED ? "none" : "transform 1.1s cubic-bezier(.2,.9,.25,1.05)";
+  wg.style.transformOrigin = "0 0"; wg.style.transform = `rotate(${wheelRot}deg)`;
+  $$(".wedge", mw).forEach((w, j) => w.setAttribute("aria-selected", j === i));
+  $$("button", chipBox).forEach((b, j) => b.setAttribute("aria-selected", j === i));
+  const c = cats[i];
+  $("#catTitle").textContent = c.es; $("#catEn").textContent = c.en;
+  $("#items").innerHTML = c.items.map(it => `<div class="item"><h4>${pvEsc(it.es)}${it.star ? '<span class="star">Favorito</span>' : ""}<small>${pvEsc(it.en)}</small></h4><span class="p">${it.p}</span>${it.d ? `<p>${pvEsc(it.d)}</p>` : ""}</div>`).join("");
+}
+pick(0);
+
+/* Hours */
+const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], es = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+const today = pvNow().day;
+$("#hours").innerHTML = days.map((d, i) => `<tr class="${d === today ? "today" : ""}"><td>${es[i]}</td><td>9:00 AM – 11:00 PM</td></tr>`).join("");
+pvSwitcher(1);
+</script>
+</body>
+</html>

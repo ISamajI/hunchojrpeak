@@ -4,8 +4,9 @@ Henry's work vault and build library: every project, workflow, revamp and publis
 
 - **Start here:** [`wiki/Home.md`](wiki/Home.md)
 - **Revamps (build off these):** [`revamps/README.md`](revamps/README.md) + starter kit [`revamps/_kit/`](revamps/_kit/README.md)
-- **All artifacts:** [`revamps/ARTIFACT-INDEX.md`](revamps/ARTIFACT-INDEX.md) (92 published artifacts with live links and local snapshots)
-- **Session logs:** [`raw/sessions/`](raw/sessions/)
+- **All artifacts:** [`revamps/ARTIFACT-INDEX.md`](revamps/ARTIFACT-INDEX.md) (101 published artifacts with live links and local snapshots)
+- **Session logs:** [`raw/sessions/`](raw/sessions/) · latest daily note [`raw/2026-11-09.md`](raw/2026-11-09.md)
+- **Other work:** [`outputs/`](outputs/) (school answers, study guides, call lists) · [`editing-research/`](editing-research/) (viral editing trends report)
 
 Open the repo folder as a vault in Obsidian to get the `[[wiki links]]` and graph view.
 

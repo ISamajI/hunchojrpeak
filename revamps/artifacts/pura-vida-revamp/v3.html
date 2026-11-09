@@ -1,0 +1,482 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pura Vida · Dulce Noche</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,700;1,6..96,500;1,6..96,700&family=Jost:wght@400;500;600&display=swap">
+<style>
+/* Layout: chocolate-dark dessert lounge — a hand-drawn Dubai Ball tilts with your cursor; savory tico kitchen sits underneath as "de día" */
+:root{
+  --cacao:#1C100B; --cacao2:#2A1912; --cacao3:#3A251B; --crema:#F5E6D0; --muted:#C2A992; --pist:#A9C46C; --pist-d:#62802F; --gold:#E3B25E; --fresa:#E5394F; --red:#BD2027;
+  --display:"Bodoni Moda", "Didot", Georgia, serif; --body:"Jost", "Futura", system-ui, sans-serif;
+  color-scheme: dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cacao);color:var(--crema);font:400 16.5px/1.65 var(--body);overflow-x:hidden}
+a{color:inherit}
+img{max-width:100%;display:block}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:500}
+.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.kicker{font:500 12px/1 var(--body);letter-spacing:.32em;text-transform:uppercase;color:var(--gold)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 26px;border-radius:999px;font:600 14px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;text-decoration:none;cursor:pointer;border:1px solid transparent;transition:background .25s,color .25s,transform .25s}
+.btn:hover{transform:translateY(-2px)}
+.btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.btn-pist{background:var(--pist);color:var(--cacao)}
+.btn-pist:hover{background:#BDD583}
+.btn-line{border-color:rgba(245,230,208,.4);color:var(--crema);background:transparent}
+.btn-line:hover{border-color:var(--gold);color:var(--gold)}
+
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:41;background:var(--cacao)}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:40;background:rgba(28,16,11,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(227,178,94,.18)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:14px;padding-block:14px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo img{height:42px;width:auto;background:#fff;border-radius:8px;padding:3px}
+.logo .wm{font:italic 700 26px/1 var(--display)}
+.logo [data-photo].has-photo + .wm{display:none}
+.bar nav{display:flex;gap:26px;align-items:center;font-size:14px;letter-spacing:.08em;text-transform:uppercase}
+.bar nav a{text-decoration:none}
+.bar nav a:hover{color:var(--gold)}
+@media (max-width:820px){.bar nav a:not(.btn){display:none}.bar .btn{padding:12px 16px}}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding-block:clamp(48px,7vw,100px) clamp(48px,7vw,90px)}
+.hero::after{content:"";position:absolute;inset:auto -10% -40% -10%;height:70%;background:radial-gradient(closest-side,rgba(169,196,108,.16),transparent);pointer-events:none}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,4vw,56px);align-items:center;position:relative;z-index:2}
+.hero h1{font:500 clamp(48px,7.6vw,112px)/.95 var(--display);letter-spacing:-.02em;margin-top:18px}
+.hero h1 i{color:var(--pist);font-weight:500}
+.hero h1 span{display:block}
+.hero .lead{max-width:42ch;color:var(--muted);font-size:18px;margin:24px 0 30px}
+.hero .ctas{display:flex;gap:12px;flex-wrap:wrap}
+.status{display:inline-flex;gap:10px;align-items:center;margin-top:28px;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:#888}
+.status.is-open::before{background:var(--pist);box-shadow:0 0 12px var(--pist)}
+.status.is-closed::before{background:var(--fresa)}
+.ball-stage{position:relative;perspective:900px;display:grid;place-items:center;aspect-ratio:1;max-width:560px;width:100%;justify-self:center}
+.ball{width:82%;aspect-ratio:1;border-radius:50%;position:relative;transform-style:preserve-3d;transition:transform .25s ease-out;filter:drop-shadow(0 40px 50px rgba(0,0,0,.55))}
+.ball canvas{width:100%;height:100%;display:block;border-radius:50%}
+.ball .shine{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at var(--sx,35%) var(--sy,30%),rgba(255,248,220,.55),rgba(255,248,220,0) 34%);mix-blend-mode:screen;pointer-events:none}
+.plate{position:absolute;bottom:4%;width:92%;height:16%;border-radius:50%;background:radial-gradient(closest-side,rgba(245,230,208,.14),transparent 70%)}
+.tag{position:absolute;right:2%;top:8%;background:var(--crema);color:var(--cacao);border-radius:999px;padding:12px 18px;font:600 13px/1.2 var(--body);letter-spacing:.06em;text-transform:uppercase;transform:rotate(6deg);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.tag b{display:block;font:italic 700 22px/1 var(--display);letter-spacing:0;text-transform:none;color:var(--red)}
+.crumb{position:absolute;width:10px;height:8px;border-radius:40%;background:var(--pist);opacity:.9;animation:float 6s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-14px) rotate(30deg)}}
+@media (max-width:860px){.hero .wrap{grid-template-columns:1fr}.ball-stage{max-width:380px;order:-1}}
+
+/* dessert carta */
+.carta{padding-block:clamp(60px,8vw,110px);background:var(--cacao2)}
+.carta .head{display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap}
+h2.big{font:500 clamp(40px,5.6vw,76px)/1 var(--display);letter-spacing:-.02em}
+h2.big i{color:var(--gold)}
+.dgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:40px}
+.dcard{background:var(--cacao3);border:1px solid rgba(227,178,94,.16);border-radius:26px;padding:24px;display:flex;flex-direction:column;gap:10px;position:relative;overflow:hidden;transition:transform .3s,border-color .3s}
+.dcard:hover{transform:translateY(-4px);border-color:rgba(227,178,94,.5)}
+.dcard .sw{height:120px;border-radius:18px;margin-bottom:6px}
+.dcard h3{font:italic 500 28px/1.1 var(--display)}
+.dcard p{margin:0;color:var(--muted);font-size:15px}
+.dcard .p{margin-top:auto;padding-top:10px;font:600 15px/1 var(--body);letter-spacing:.06em;color:var(--pist);font-variant-numeric:tabular-nums}
+@media (max-width:900px){.dgrid{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.dgrid{grid-template-columns:1fr}}
+
+/* builder */
+.build{padding-block:clamp(60px,8vw,110px)}
+.bgrid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(24px,5vw,64px);align-items:center;margin-top:34px}
+.cupbox{background:radial-gradient(circle at 50% 40%,var(--cacao3),var(--cacao2));border-radius:32px;border:1px solid rgba(227,178,94,.18);padding:24px;display:grid;place-items:center}
+#cup{width:100%;max-width:380px;height:auto}
+fieldset{border:0;margin:0 0 22px;padding:0}
+legend{font:500 12px/1 var(--body);letter-spacing:.28em;text-transform:uppercase;color:var(--gold);margin-bottom:12px}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opts label{position:relative}
+.opts input{position:absolute;opacity:0;inset:0;cursor:pointer}
+.opts span{display:inline-block;padding:11px 16px;border-radius:999px;border:1px solid rgba(245,230,208,.25);font-size:14.5px;transition:all .2s}
+.opts input:checked + span{background:var(--crema);color:var(--cacao);border-color:var(--crema)}
+.opts input:focus-visible + span{outline:2px solid var(--gold);outline-offset:2px}
+.opts input:disabled + span{opacity:.35;text-decoration:line-through}
+.total{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;border-top:1px solid rgba(227,178,94,.2);padding-top:20px}
+.total b{font:italic 700 clamp(44px,6vw,64px)/1 var(--display);color:var(--pist);font-variant-numeric:tabular-nums}
+.total span{color:var(--muted)}
+@media (max-width:860px){.bgrid{grid-template-columns:1fr}}
+
+/* de día */
+.dia{padding-block:clamp(60px,8vw,110px);background:var(--crema);color:var(--cacao)}
+.dia h2.big i{color:var(--red)}
+.dia .lead{max-width:58ch;font-size:18px;margin:14px 0 0;color:#5A4334}
+.photos{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:36px}
+.ph{margin:0;aspect-ratio:1;border-radius:24px;overflow:hidden;position:relative;background:var(--cacao2)}
+.ph img{width:100%;height:100%;object-fit:cover}
+.ph .fb{position:absolute;inset:0;display:none;place-items:center;text-align:center;padding:20px;font:italic 500 28px/1.1 var(--display);color:var(--crema);background:radial-gradient(circle at 30% 30%,var(--cacao3),var(--cacao))}
+.ph.no-photo .fb{display:grid}
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 56px;margin-top:44px}
+.cols h3{font:italic 500 30px/1 var(--display);margin:18px 0 6px;grid-column:1/-1;color:var(--red)}
+.ln{display:flex;align-items:baseline;gap:10px;padding:8px 0}
+.ln .n{font-weight:600}
+.ln .n small{display:block;font-weight:400;color:#7A604D;font-size:14px}
+.ln .dots{flex:1;border-bottom:1.5px dotted rgba(28,16,11,.3);transform:translateY(-4px);min-width:20px}
+.ln .p{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dia .btn-line{border-color:rgba(28,16,11,.35);color:var(--cacao)}
+.dia .btn-line:hover{border-color:var(--red);color:var(--red)}
+.fine{font-size:13px;color:#7A604D;margin-top:24px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}.photos{grid-template-columns:1fr 1fr}.ph:nth-child(3){display:none}}
+
+/* visit */
+.visit{padding-block:clamp(60px,8vw,110px)}
+.vgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:rgba(227,178,94,.22);border:1px solid rgba(227,178,94,.22);border-radius:28px;overflow:hidden;margin-top:36px}
+.vgrid > div{background:var(--cacao);padding:30px;display:flex;flex-direction:column;gap:10px}
+.vgrid h3{font:italic 500 30px/1 var(--display);color:var(--gold)}
+.vgrid .v{font-size:20px;font-weight:500}
+.vgrid .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto;padding-top:12px}
+.vgrid .btn{padding:12px 18px}
+@media (max-width:860px){.vgrid{grid-template-columns:1fr}}
+
+footer{border-top:1px solid rgba(227,178,94,.18);padding-block:36px calc(36px + env(safe-area-inset-bottom,0px));color:var(--muted)}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;align-items:center}
+footer .wm{font:italic 700 28px/1 var(--display);color:var(--crema)}
+footer a{color:var(--crema)}
+.mobile-order{display:none}
+@media (max-width:760px){
+  .mobile-order{display:flex;position:fixed;inset:auto 0 0 0;z-index:60;gap:10px;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:rgba(28,16,11,.94);border-top:1px solid rgba(227,178,94,.25)}
+  .mobile-order .btn{flex:1}
+  footer{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#top" aria-label="Pura Vida home"><span data-photo><img data-pv="logo" alt="Pura Vida logo"></span><span class="wm">Pura Vida</span></a>
+    <nav><a href="#dulces">Dulces</a><a href="#fresas">Fresas</a><a href="#dia">De día</a><a href="#visit">Visit</a><a class="btn btn-pist" href="https://fromtherestaurant.com/pura-vida/" target="_blank" rel="noopener">Order</a></nav>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="kicker">Pura Vida · Trenton · until 11 PM</span>
+      <h1><span>Cocina tica</span><span>de día.</span><span><i>Dulce</i> de noche.</span></h1>
+      <p class="lead">Gallo pinto and olla de carne from 9 AM. After dark: the Dubai Ball, pistachio-chocolate strawberries and a Capuccino Dubai.</p>
+      <div class="ctas">
+        <a class="btn btn-pist" href="https://fromtherestaurant.com/pura-vida/" target="_blank" rel="noopener">Order dessert</a>
+        <a class="btn btn-line" href="#fresas">Build your fresas</a>
+      </div>
+      <span class="status" data-status="long">Open daily 9 AM – 11 PM</span>
+    </div>
+    <div class="ball-stage" id="stage" aria-label="Illustration of the Dubai Ball dessert" role="img">
+      <div class="plate"></div>
+      <div class="ball" id="ball"><canvas id="ballC" width="900" height="900"></canvas><div class="shine"></div></div>
+      <div class="tag">The Dubai Ball<b>$18.93</b></div>
+    </div>
+  </div>
+</section>
+
+<section class="carta" id="dulces">
+  <div class="wrap">
+    <div class="head">
+      <div><span class="kicker">La carta dulce</span><h2 class="big" style="margin-top:14px">The <i>Dubai</i> menu</h2></div>
+      <a class="btn btn-line" href="https://fromtherestaurant.com/pura-vida/menu/" target="_blank" rel="noopener">All 40+ desserts</a>
+    </div>
+    <div class="dgrid" id="dgrid"></div>
+  </div>
+</section>
+
+<section class="build" id="fresas">
+  <div class="wrap">
+    <span class="kicker">Arma tus fresas</span>
+    <h2 class="big" style="margin-top:14px">Strawberries, <i>your way</i></h2>
+    <div class="bgrid">
+      <div class="cupbox"><svg id="cup" viewBox="0 0 380 380" aria-hidden="true"></svg></div>
+      <form id="fresaForm">
+        <fieldset><legend>1 · Pick the style</legend><div class="opts" id="tops"></div></fieldset>
+        <fieldset><legend>2 · Pick the size</legend><div class="opts" id="sizes"></div></fieldset>
+        <div class="total" aria-live="polite"><b id="price">$8.32</b><span id="desc">Fresas con crema y leche condensada · Small</span></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:22px"><a class="btn btn-pist" href="https://fromtherestaurant.com/pura-vida/menu/" target="_blank" rel="noopener">Order this</a></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="dia" id="dia">
+  <div class="wrap">
+    <span class="kicker" style="color:var(--red)">De día · desde las 9</span>
+    <h2 class="big" style="margin-top:14px">The <i>tico</i> kitchen</h2>
+    <p class="lead">Before the desserts, there's dinner. Costa Rican plates from breakfast to close: gallo pinto, chifrijo, olla de carne, bandeja paisa.</p>
+    <div class="photos">
+      <figure class="ph" data-photo><img data-pv="food3" alt="Main plate at Pura Vida"><div class="fb">Platos fuertes</div></figure>
+      <figure class="ph" data-photo><img data-pv="food1" alt="Kitchen prep at Pura Vida"><div class="fb">Gallo pinto</div></figure>
+      <figure class="ph" data-photo><img data-pv="food2" alt="Side dish at Pura Vida"><div class="fb">Para picar</div></figure>
+    </div>
+    <div class="cols" id="cols"></div>
+    <p class="fine">Prices from Pura Vida's online ordering and may vary in the restaurant.</p>
+    <a class="btn btn-line" style="margin-top:12px" href="https://fromtherestaurant.com/pura-vida/menu/" target="_blank" rel="noopener">See the full menu</a>
+  </div>
+</section>
+
+<section class="visit" id="visit">
+  <div class="wrap">
+    <span class="kicker">Visítanos</span>
+    <h2 class="big" style="margin-top:14px">Open <i>every</i> night until 11</h2>
+    <div class="vgrid">
+      <div><h3>Horario</h3><span class="status" data-status="long" style="margin:0">Open daily</span><p class="v" style="margin:0">Every day<br>9:00 AM – 11:00 PM</p></div>
+      <div><h3>Dirección</h3><p class="v" style="margin:0">228 Cummings Ave<br>Trenton, NJ 08611</p><div class="row"><a class="btn btn-line" href="https://www.google.com/maps/search/?api=1&query=Pura+Vida+228+Cummings+Ave+Trenton+NJ+08611" target="_blank" rel="noopener">Directions</a></div></div>
+      <div><h3>Teléfono</h3><p class="v" style="margin:0;user-select:all">(609) 396-7472</p><div class="row"><a class="btn btn-line" href="tel:+16093967472">Call</a><button class="btn btn-line" type="button" data-copy-phone>Copy</button></div></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="wm">Pura Vida</span>
+    <span>© <span data-year>2026</span> Pura Vida · 228 Cummings Ave, Trenton NJ</span>
+    <span>Demo revamp by <a href="https://ltgpeak.app" target="_blank" rel="noopener">LTGPEAK</a> · <a href="index.html">All 5 versions</a></span>
+  </div>
+</footer>
+<div class="mobile-order"><a class="btn btn-pist" href="https://fromtherestaurant.com/pura-vida/" target="_blank" rel="noopener">Order online</a><a class="btn btn-line" href="tel:+16093967472">Call</a></div>
+
+<script>/* Pura Vida — shared real content (from puravidatrentonnj.com + fromtherestaurant.com/pura-vida, Nov 2026) */
+const PV = {
+  name: "Pura Vida",
+  kind: "Costa Rican Restaurant & Lounge",
+  addr1: "228 Cummings Ave",
+  addr2: "Trenton, NJ 08611",
+  hood: "Chambersburg",
+  phone: "(609) 396-7472",
+  tel: "tel:+16093967472",
+  order: "https://fromtherestaurant.com/pura-vida/",
+  fullMenu: "https://fromtherestaurant.com/pura-vida/menu/",
+  maps: "https://www.google.com/maps/search/?api=1&query=Pura+Vida+228+Cummings+Ave+Trenton+NJ+08611",
+  press: "https://communitynews.org/sections/mercereats/mystery-muncher-tasting-tico-culture-in-chambersburg/",
+  open: 9, close: 23,
+  menu: [
+    { id: "desayuno", es: "Desayunos", en: "Breakfast", items: [
+      { es: "Gallo Pinto", en: "Costa Rican rice & beans", d: "Fried egg, cheese, sweet plantain, avocado and the meat you pick: bistec, chorizo, pollo en salsa, chicharrón, tilapia and more.", p: "from $15.58", star: 1 },
+      { es: "Tamales Ticos (2)", en: "Costa Rican pork tamales", d: "Two pork tamales, tico style.", p: "$12.96" },
+      { es: "Omelette Pura Vida", en: "House omelette", d: "Mashed beans, sweet plantain, cheese and shredded beef, with house potatoes and bread.", p: "$14.05" },
+      { es: "Sándwich Pura Vida", en: "Pura Vida sandwich", d: "Lettuce, tomato, fries, salsa Pura Vida and one meat.", p: "$12.96" },
+      { es: "Gallo Pinto Especial", en: "The big breakfast", d: "The house special gallo pinto plate.", p: "$32.23" }
+    ]},
+    { id: "picar", es: "Para Picar", en: "Appetizers", items: [
+      { es: "Picada Pura Vida", en: "Pura Vida sampler", d: "Beef, grilled chicken, chicharrón, salchichón, chorizo, sweet plantain and yuca.", p: "$12.47", star: 1 },
+      { es: "Chifrijo", en: "The tico bar bowl", d: "Rice, red beans, pico de gallo, avocado and tortilla chips.", p: "$11.96", star: 1 },
+      { es: "Patacones a Caballo", en: "Loaded plantains", d: "Mashed beans, shredded beef, pico de gallo and cheese.", p: "$16.20" },
+      { es: "Tostones Rellenos", en: "Stuffed plantain", d: "Shrimp or chicken, under gratin cheese.", p: "$15.13" },
+      { es: "Chicharrones con Yuca", en: "Pork crackling & fried yuca", d: "Crispy pork crackling with fried cassava.", p: "$12.47" },
+      { es: "Tacos Ticos", en: "Costa Rican tacos", d: "With cabbage, ketchup and mayo.", p: "$10.81" },
+      { es: "Picada de Mariscos", en: "Seafood sampler", d: "Tilapia, shrimp and calamari with yuca and tostones.", p: "$40.97" }
+    ]},
+    { id: "sopas", es: "Sopas & Ceviche", en: "Soups & ceviche", items: [
+      { es: "Olla de Carne", en: "Costa Rican beef soup", d: "Potato, squash, yuca, corn and carrot, with white rice.", p: "$18.70", star: 1 },
+      { es: "Sopa Negra", en: "Black bean soup", d: "With a side of white rice.", p: "$15.58" },
+      { es: "Sopa de Mariscos", en: "Seafood soup", d: "With white rice.", p: "$17.99" },
+      { es: "Consomé de Pollo", en: "Chicken broth with noodles", d: "Onion, pepper, noodles, egg and shredded chicken, with white rice.", p: "$13.50" },
+      { es: "Ceviche con Chips", en: "Ceviche with chips", d: "With tortilla chips.", p: "$13.79" }
+    ]},
+    { id: "fuertes", es: "Platos Fuertes", en: "Mains", items: [
+      { es: "Bandeja Paisa", en: "The full platter", d: "Rice, beans, steak, chicharrón, sausage, fried egg, tostones, sweet plantain and avocado.", p: "$24.95", star: 1 },
+      { es: "Carne en Salsa", en: "Tico stewed beef", d: "With white rice, peppers, onion and chips.", p: "$15.59" },
+      { es: "Pollo en Salsa", en: "Stewed chicken", d: "Peppers, onion, mushrooms and cilantro, with white rice and chips.", p: "$16.63" },
+      { es: "Arroz con Camarones", en: "Shrimp fried rice", d: "Costa Rican style fried rice with shrimp.", p: "$17.67" },
+      { es: "Arroz con Pollo", en: "Chicken rice", d: "The classic.", p: "$15.59" },
+      { es: "Fajitas Especiales", en: "Special fajitas", d: "With shrimp, vegetables and potato.", p: "$34.60" },
+      { es: "Bistec a la Parrilla", en: "Grilled steak", d: "Grilled or on the plancha, with two sides.", p: "$32.20" },
+      { es: "Filet Mignon", en: "New on the menu", d: "From the new plates.", p: "$37.99" },
+      { es: "Costilla de Cerdo", en: "Pork ribs", d: "From the new plates.", p: "$24.99" }
+    ]},
+    { id: "dulces", es: "Postres", en: "Desserts", items: [
+      { es: "Dubai Ball", en: "Pistachio & kataifi sphere", d: "Pistachio cream wrapped in crispy kataifi with a mango ice-cream heart.", p: "$18.93", star: 1 },
+      { es: "Brownie Dubai con Helado", en: "Dubai brownie", d: "Pistachio-cream brownie with vanilla ice cream and premium chocolate.", p: "$16.21" },
+      { es: "Fresas con Chocolate Dubai", en: "Dubai chocolate strawberries", d: "Strawberries dipped in Dubai-style pistachio chocolate.", p: "from $10.40", star: 1 },
+      { es: "Crepes de Tres Leches", en: "Tres leches crepes", d: "With fresh strawberries.", p: "$18.44" },
+      { es: "Coco Loco Nutella", en: "Coconut & Nutella", d: "Coconut and Nutella.", p: "$15.08" },
+      { es: "Tres Leches", en: "Three-milk cake", d: "Three-milk sponge cake.", p: "$7.56" },
+      { es: "Arroz con Leche", en: "Rice pudding", d: "", p: "$7.56" }
+    ]},
+    { id: "bebidas", es: "Bebidas", en: "Drinks", items: [
+      { es: "Capuccino Dubai", en: "Pistachio cappuccino", d: "Cappuccino with Dubai-style pistachio.", p: "$10.82", star: 1 },
+      { es: "Aguadulce", en: "Hot panela", d: "Unrefined whole cane sugar, served hot.", p: "$2.60" },
+      { es: "Café Negro", en: "Black coffee", d: "", p: "$3.52" },
+      { es: "Batido en Leche", en: "Milkshake", d: "Assorted fruit flavors.", p: "$5.41" },
+      { es: "Chocolate", en: "Hot chocolate", d: "Served hot.", p: "$4.33" },
+      { es: "Limonada", en: "Lemonade", d: "", p: "$4.32" }
+    ]}
+  ]
+};
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const PV_REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Time in Trenton */
+function pvNow() {
+  const parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "numeric", weekday: "short", hour12: false }).formatToParts(new Date());
+  const get = t => (parts.find(p => p.type === t) || {}).value;
+  let h = parseInt(get("hour"), 10); if (h === 24) h = 0;
+  return { h, m: parseInt(get("minute"), 10), day: get("weekday") };
+}
+function pvStatus() {
+  const { h, m } = pvNow(); const t = h + m / 60;
+  const open = t >= PV.open && t < PV.close;
+  if (open) {
+    const left = Math.round((PV.close - t) * 60);
+    return { open, short: "Open now", long: left <= 60 ? `Open now · closes in ${left} min` : "Open now · until 11 PM", es: "Abierto" };
+  }
+  return { open, short: "Closed", long: "Closed · opens 9 AM", es: "Cerrado" };
+}
+function pvStatusFill() {
+  const s = pvStatus();
+  $$("[data-status]").forEach(el => { el.textContent = el.dataset.status === "short" ? s.short : s.long; el.classList.toggle("is-open", s.open); el.classList.toggle("is-closed", !s.open); });
+  return s;
+}
+
+/* Real photos: tries ./assets first (drop files there), then the restaurant's own CDN, then the designed fallback */
+const PV_IMG = { logo: "pura-vida-logo.png", food1: "pura-vida-food1.jpg", food2: "pura-vida-food2.jpg", food3: "pura-vida-food3.jpg" };
+function pvImgs() {
+  $$("img[data-pv]").forEach(img => {
+    const f = PV_IMG[img.dataset.pv]; if (!f) return;
+    const chain = ["assets/" + f, "https://d2gqo3h0psesgi.cloudfront.net/auto/" + f];
+    let i = 0;
+    const host = img.closest("[data-photo]");
+    img.addEventListener("load", () => host && host.classList.add("has-photo"));
+    img.addEventListener("error", () => { i++; if (i < chain.length) img.src = chain[i]; else { host && host.classList.add("no-photo"); img.remove(); } });
+    img.src = chain[0];
+  });
+}
+
+function pvCopy(btn) {
+  const done = () => { const o = btn.dataset.label || btn.textContent; btn.dataset.label = o; btn.textContent = "Copied"; setTimeout(() => btn.textContent = o, 1400); };
+  try { navigator.clipboard.writeText(PV.phone).then(done, done); } catch (e) { done(); }
+}
+
+function pvEsc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+document.addEventListener("DOMContentLoaded", () => {
+  pvImgs(); pvStatusFill(); setInterval(pvStatusFill, 60000);
+  $$("[data-copy-phone]").forEach(b => b.addEventListener("click", () => pvCopy(b)));
+  $$("[data-year]").forEach(e => e.textContent = new Date().getFullYear());
+});
+
+/* LTGPEAK demo switcher (desktop) */
+function pvSwitcher(cur) {
+  const names = ["La Carreta", "Reloj Tico", "Dulce Noche", "Vuelo 228", "Selva"];
+  const d = document.createElement("nav");
+  d.className = "ltg-switch"; d.setAttribute("aria-label", "Demo versions");
+  d.innerHTML = `<a class="ltg-home" href="index.html">LTGPEAK demo</a>` + names.map((n, i) => `<a href="v${i + 1}.html" title="${n}"${i + 1 === cur ? ' aria-current="page"' : ""}>${i + 1}</a>`).join("");
+  const st = document.createElement("style");
+  st.textContent = `.ltg-switch{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:90;display:flex;gap:2px;align-items:center;padding:4px;border-radius:999px;background:rgba(14,14,20,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font:600 11px/1 system-ui,sans-serif;letter-spacing:.04em;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.ltg-switch a{color:#fff;text-decoration:none;min-width:26px;height:26px;display:grid;place-items:center;border-radius:999px;opacity:.7}
+.ltg-switch a:hover,.ltg-switch a:focus-visible{opacity:1;background:rgba(255,255,255,.14);outline:none}
+.ltg-switch a[aria-current]{opacity:1;background:#BD2027}
+.ltg-switch .ltg-home{padding:0 10px;opacity:.9;text-transform:uppercase}
+@media (max-width:760px){.ltg-switch{display:none}}`;
+  document.head.appendChild(st); document.body.appendChild(d);
+}
+</script>
+<script>
+/* Dubai Ball, drawn: kataifi strands over pistachio cream */
+(function drawBall() {
+  const c = $("#ballC"), x = c.getContext("2d"), W = c.width, R = W / 2;
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  x.save(); x.beginPath(); x.arc(R, R, R - 4, 0, Math.PI * 2); x.clip();
+  const base = x.createRadialGradient(R * .7, R * .6, R * .1, R, R, R);
+  base.addColorStop(0, "#E9B866"); base.addColorStop(.55, "#B9772F"); base.addColorStop(1, "#5A3412");
+  x.fillStyle = base; x.fillRect(0, 0, W, W);
+  for (let i = 0; i < 2600; i++) {
+    const a = rnd() * Math.PI * 2, r = Math.sqrt(rnd()) * R;
+    const px = R + Math.cos(a) * r, py = R + Math.sin(a) * r;
+    const len = 18 + rnd() * 46, ang = rnd() * Math.PI * 2;
+    const shade = 1 - r / R * .55;
+    const light = 140 + Math.floor(rnd() * 100 * shade);
+    x.strokeStyle = `rgba(${light + 40},${Math.floor(light * .78)},${Math.floor(light * .38)},${.35 + rnd() * .5})`;
+    x.lineWidth = 1.2 + rnd() * 2.4;
+    x.beginPath(); x.moveTo(px, py);
+    x.quadraticCurveTo(px + Math.cos(ang + 1) * len * .6, py + Math.sin(ang + 1) * len * .6, px + Math.cos(ang) * len, py + Math.sin(ang) * len);
+    x.stroke();
+  }
+  // pistachio drizzle
+  for (let k = 0; k < 7; k++) {
+    x.strokeStyle = k % 2 ? "rgba(169,196,108,.95)" : "rgba(122,152,64,.95)"; x.lineWidth = 10 + rnd() * 8; x.lineCap = "round";
+    x.beginPath(); const y0 = R * .25 + k * R * .2;
+    x.moveTo(R * .05, y0);
+    for (let s = 1; s <= 6; s++) x.quadraticCurveTo(R * (s * .33 - .16), y0 + (s % 2 ? -50 : 60) * rnd(), R * s * .33, y0 + (rnd() - .5) * 40);
+    x.stroke();
+  }
+  for (let i = 0; i < 160; i++) { x.fillStyle = rnd() > .5 ? "#7FA03F" : "#B9D27C"; const a = rnd() * 6.28, r = rnd() * R * .9; x.beginPath(); x.ellipse(R + Math.cos(a) * r, R + Math.sin(a) * r, 5 + rnd() * 6, 3 + rnd() * 4, rnd() * 3, 0, 6.28); x.fill(); }
+  const shade = x.createRadialGradient(R * .8, R * .7, R * .3, R, R, R);
+  shade.addColorStop(0, "rgba(0,0,0,0)"); shade.addColorStop(1, "rgba(20,8,2,.72)");
+  x.fillStyle = shade; x.fillRect(0, 0, W, W);
+  x.restore();
+})();
+/* tilt */
+const stage = $("#stage"), ball = $("#ball"), shine = $(".shine");
+for (let i = 0; i < 9; i++) { const s = document.createElement("i"); s.className = "crumb"; s.style.left = (8 + Math.random() * 84) + "%"; s.style.top = (8 + Math.random() * 80) + "%"; s.style.animationDelay = (-Math.random() * 6) + "s"; stage.appendChild(s); }
+function tilt(nx, ny) { ball.style.transform = `rotateY(${nx * 18}deg) rotateX(${-ny * 18}deg)`; shine.style.setProperty("--sx", (35 - nx * 18) + "%"); shine.style.setProperty("--sy", (30 - ny * 18) + "%"); }
+if (!PV_REDUCED) {
+  addEventListener("pointermove", e => { const r = stage.getBoundingClientRect(); tilt(Math.max(-1, Math.min(1, (e.clientX - (r.left + r.width / 2)) / (r.width))), Math.max(-1, Math.min(1, (e.clientY - (r.top + r.height / 2)) / (r.height)))); });
+  let t0 = performance.now(); (function idle(t) { if (matchMedia("(hover: none)").matches) tilt(Math.sin((t - t0) / 1800) * .5, Math.cos((t - t0) / 2300) * .35); requestAnimationFrame(idle); })(t0);
+}
+
+/* dessert cards */
+const sw = ["radial-gradient(circle at 30% 40%,#C9DC97,#7FA03F 60%,#3F5418)", "linear-gradient(135deg,#5A3412,#2A1912 60%,#A9C46C)", "radial-gradient(circle at 40% 40%,#FF7A8A,#E5394F 50%,#7A1222)", "linear-gradient(135deg,#F5E6D0,#E9C9A1 60%,#E5394F)", "radial-gradient(circle at 60% 40%,#FFFFFF,#E9DCC8 50%,#5A3412)", "linear-gradient(135deg,#F7E9CF,#E3B25E)", "linear-gradient(135deg,#F5E6D0,#D9B89A)"];
+const dul = PV.menu.find(c => c.id === "dulces").items, capu = PV.menu.find(c => c.id === "bebidas").items[0];
+const cards = [dul[0], dul[1], dul[2], dul[3], capu, dul[5]];
+$("#dgrid").innerHTML = cards.map((it, i) => `<article class="dcard"><div class="sw" style="background:${sw[i]}"></div><h3>${pvEsc(it.es)}</h3><p>${pvEsc(it.d || it.en)}</p><span class="p">${it.p}</span></article>`).join("");
+
+/* fresas builder — real menu prices */
+const TOPS = [
+  { k: "leche", n: "Leche condensada", c: "#F7EEDD", p: [8.32, 11.44, 14.56], name: "Fresas con crema y leche condensada" },
+  { k: "nutella", n: "Nutella", c: "#5A2E14", p: [8.32, 11.44, 14.56], name: "Fresas con crema y Nutella" },
+  { k: "chispas", n: "Chispas", c: "#F7EEDD", sp: 1, p: [8.32, 11.44, 14.56], name: "Fresas con crema y chispas" },
+  { k: "mms", n: "M&Ms", c: "#F7EEDD", mm: 1, p: [8.32, 11.44, 14.56], name: "Fresas con crema y M&Ms" },
+  { k: "brownie", n: "Brownie", c: "#3B2012", p: [8.32, 11.44, 14.56], name: "Fresas con crema y brownie" },
+  { k: "mani", n: "Maní · todo", c: "#C99A5B", sp: 1, p: [10.40, 13.52, 16.64], name: "Fresas con crema y maní (brownie, dulce de leche, Nutella, leche condensada, maní, chispas, M&Ms)" },
+  { k: "belga", n: "Chocolate belga", c: "#2E160B", p: [10.40, 15.60, null], name: "Fresas con chocolate belga premium" },
+  { k: "dubai", n: "Chocolate Dubai", c: "#7FA03F", p: [10.40, 15.60, 20.80], name: "Fresas con chocolate Dubai" }
+];
+const SIZES = ["Small", "Medium", "Large"];
+$("#tops").innerHTML = TOPS.map((t, i) => `<label><input type="radio" name="top" id="top-${t.k}" value="${i}" ${i === 7 ? "checked" : ""}><span>${t.n}</span></label>`).join("");
+$("#sizes").innerHTML = SIZES.map((s, i) => `<label><input type="radio" name="size" id="size-${i}" value="${i}" ${i === 1 ? "checked" : ""}><span>${s}</span></label>`).join("");
+const NS = "http://www.w3.org/2000/svg";
+function drawCup(t, s) {
+  const svg = $("#cup"), n = [6, 9, 12][s];
+  let h = `<defs><clipPath id="cc"><path d="M70 150 L310 150 L282 340 Q190 362 98 340 Z"/></clipPath></defs>`;
+  h += `<ellipse cx="190" cy="350" rx="130" ry="14" fill="rgba(0,0,0,.35)"/>`;
+  h += `<g clip-path="url(#cc)"><rect x="60" y="150" width="260" height="220" fill="#F7EEDD"/>`;
+  h += `<rect x="60" y="${330 - s * 40}" width="260" height="${60 + s * 40}" fill="${t.c}" opacity=".9"/>`;
+  h += `</g><path d="M70 150 L310 150 L282 340 Q190 362 98 340 Z" fill="none" stroke="rgba(255,255,255,.6)" stroke-width="3"/>`;
+  let seed = s * 13 + 3; const r = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  for (let i = 0; i < n; i++) {
+    const cx = 100 + r() * 180, cy = 150 - 10 - r() * (30 + s * 22);
+    const rot = -40 + r() * 80;
+    h += `<g transform="translate(${cx} ${cy}) rotate(${rot})"><path d="M0 -26 C 22 -24 24 8 0 28 C -24 8 -22 -24 0 -26Z" fill="#E5394F"/>`;
+    if (t.k === "dubai" || t.k === "belga") h += `<path d="M-19 4 C -12 20 12 20 19 4 C 22 18 10 30 0 30 C -10 30 -22 18 -19 4Z" fill="${t.c}"/>`;
+    h += `<path d="M-10 -24 L0 -34 L10 -24 L0 -20Z" fill="#3E7A2A"/>`;
+    for (let d = 0; d < 6; d++) h += `<circle cx="${(d % 3 - 1) * 8}" cy="${-8 + Math.floor(d / 3) * 14}" r="1.4" fill="#FFD9A0"/>`;
+    h += `</g>`;
+  }
+  if (t.sp || t.mm) for (let i = 0; i < 30; i++) h += `<rect x="${90 + r() * 200}" y="${70 + r() * 90}" width="${t.mm ? 9 : 3}" height="${t.mm ? 9 : 10}" rx="${t.mm ? 4.5 : 1.5}" fill="${["#E5394F", "#F4B400", "#1F4FA3", "#16804A", "#EE6FA0", "#fff"][i % 6]}" transform="rotate(${r() * 180} ${90 + r() * 200} ${70 + r() * 90})"/>`;
+  if (t.k === "nutella" || t.k === "leche" || t.k === "mani") h += `<path d="M90 120 Q140 150 190 112 T290 124" fill="none" stroke="${t.c}" stroke-width="10" stroke-linecap="round" opacity=".95"/>`;
+  svg.innerHTML = h;
+}
+function update() {
+  const ti = +$('input[name="top"]:checked').value; let si = +$('input[name="size"]:checked').value;
+  const t = TOPS[ti];
+  $$('input[name="size"]').forEach((inp, i) => inp.disabled = t.p[i] == null);
+  if (t.p[si] == null) { si = 1; $("#size-1").checked = true; }
+  $("#price").textContent = "$" + t.p[si].toFixed(2);
+  $("#desc").textContent = `${t.name} · ${SIZES[si]}`;
+  drawCup(t, si);
+}
+$("#fresaForm").addEventListener("change", update);
+$("#fresaForm").addEventListener("submit", e => e.preventDefault());
+update();
+
+/* de día columns */
+const pick = { desayuno: 4, picar: 4, sopas: 3, fuertes: 5 };
+$("#cols").innerHTML = PV.menu.filter(c => pick[c.id]).map(c => `<h3>${c.es}</h3>` + c.items.slice(0, pick[c.id]).map(it => `<div class="ln"><span class="n">${pvEsc(it.es)}<small>${pvEsc(it.en)}</small></span><span class="dots"></span><span class="p">${it.p}</span></div>`).join("")).join("");
+pvSwitcher(3);
+</script>
+</body>
+</html>

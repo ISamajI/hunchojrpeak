@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pura Vida · Reloj Tico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Martian+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: the page is a day — the hero sky follows the real Trenton clock (drag the sun to scrub 9 AM → 11 PM); everything below is organized by hour */
+:root{
+  --ink:#10183A; --paper:#F6F8FC; --line:#D9DFEC; --red:#BD2027; --gold:#F2A531; --night:#0E1330; --muted:#56607E;
+  --top:#7EC8F2; --bot:#DDF3FF; --sky-ink:#10183A;
+  --display:"Bricolage Grotesque", system-ui, sans-serif; --mono:"Martian Mono", ui-monospace, monospace;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.6 var(--display);overflow-x:hidden}
+a{color:inherit}
+img{max-width:100%;display:block}
+h1,h2,h3{margin:0;text-wrap:balance;font-stretch:85%}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 22px;border-radius:14px;font:700 15px/1 var(--display);text-decoration:none;border:0;cursor:pointer;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.btn-red{background:var(--red);color:#fff}
+.btn-glass{background:rgba(255,255,255,.22);color:var(--sky-ink);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.45)}
+
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:41;background:var(--top)}
+header{position:absolute;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:30;color:var(--sky-ink)}
+.bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-block:18px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo img{height:46px;width:auto}
+.logo .wm{font:800 24px/1 var(--display);letter-spacing:-.02em}
+.logo [data-photo].has-photo + .wm{display:none}
+.bar nav{display:flex;gap:20px;align-items:center;font-weight:600}
+.bar nav a{text-decoration:none}
+@media (max-width:760px){.bar nav a:not(.btn){display:none}}
+
+/* hero sky */
+.sky{position:relative;overflow:hidden;color:var(--sky-ink);background:linear-gradient(180deg,var(--top),var(--bot));transition:color .6s;padding-top:calc(96px + env(safe-area-inset-top,0px));padding-bottom:40px}
+.sky .stars{position:absolute;inset:0;opacity:0;transition:opacity .8s;background-image:radial-gradient(1.5px 1.5px at 12% 22%,#fff 99%,transparent),radial-gradient(1px 1px at 32% 12%,#fff 99%,transparent),radial-gradient(1.5px 1.5px at 58% 28%,#fff 99%,transparent),radial-gradient(1px 1px at 76% 9%,#fff 99%,transparent),radial-gradient(1.5px 1.5px at 88% 34%,#fff 99%,transparent),radial-gradient(1px 1px at 22% 44%,#fff 99%,transparent),radial-gradient(1px 1px at 66% 48%,#fff 99%,transparent),radial-gradient(1.5px 1.5px at 44% 6%,#fff 99%,transparent)}
+.arcbox{position:absolute;left:0;right:0;top:calc(70px + env(safe-area-inset-top,0px));height:min(46vw,420px);pointer-events:none}
+.arcbox svg{width:100%;height:100%;overflow:visible}
+.orb{position:absolute;width:clamp(64px,9vw,120px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 35% 35%,#FFF6C9,#FFC93C 55%,#F49B1C);box-shadow:0 0 60px 20px rgba(255,201,60,.45);transition:background .6s, box-shadow .6s}
+.orb.moon{background:radial-gradient(circle at 38% 36%,#FFFFFF,#E6E8F5 55%,#B9BED8);box-shadow:0 0 50px 10px rgba(220,225,255,.25)}
+.sky-grid{position:relative;z-index:2;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:28px;align-items:end;margin-top:clamp(120px,20vw,230px)}
+.clock{font:600 clamp(13px,1.3vw,15px)/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.clock b{font-size:clamp(28px,4vw,44px);letter-spacing:0;font-weight:600}
+.sky h1{font:800 clamp(46px,8.4vw,124px)/.92 var(--display);letter-spacing:-.035em;margin-top:14px;font-stretch:78%}
+.sky h1 em{font-style:normal;color:var(--red)}
+.sky .pick{font-size:clamp(17px,1.6vw,20px);max-width:40ch;margin:18px 0 0}
+.panel{background:rgba(255,255,255,.2);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.4);border-radius:22px;padding:20px;display:flex;flex-direction:column;gap:12px}
+.panel .dish{font:800 24px/1.1 var(--display)}
+.panel .price{font:600 16px/1 var(--mono)}
+.scrub{position:relative;z-index:2;margin-top:34px}
+.scrub label{display:flex;justify-content:space-between;gap:8px;font:600 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:6px;border-radius:9px;background:rgba(255,255,255,.45);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;background:#fff;border:3px solid var(--red);cursor:grab}
+input[type=range]::-moz-range-thumb{width:26px;height:26px;border-radius:50%;background:#fff;border:3px solid var(--red);cursor:grab}
+input[type=range]:focus-visible{box-shadow:0 0 0 3px var(--gold)}
+.ticks{display:flex;justify-content:space-between;font:400 11px/1 var(--mono);opacity:.8;margin-top:8px}
+.ctas{display:flex;gap:10px;flex-wrap:wrap}
+@media (max-width:860px){.sky-grid{grid-template-columns:1fr;margin-top:clamp(150px,38vw,230px)}}
+
+/* day timeline */
+.day{padding-block:clamp(56px,8vw,100px)}
+.day h2,.menu h2,.visit h2{font:800 clamp(36px,5.4vw,72px)/.95 var(--display);letter-spacing:-.03em;font-stretch:80%}
+.day .intro{max-width:56ch;color:var(--muted);font-size:18px;margin:12px 0 0}
+.timeline{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-top:36px}
+.slot{border-radius:22px;padding:20px;color:#fff;display:flex;flex-direction:column;gap:10px;min-height:300px;cursor:pointer;border:0;text-align:left;font:inherit;transition:transform .25s}
+.slot:hover{transform:translateY(-4px)}
+.slot:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.slot .t{font:600 13px/1 var(--mono);letter-spacing:.06em}
+.slot h3{font:800 28px/1 var(--display);font-stretch:80%}
+.slot ul{list-style:none;margin:auto 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+.slot li{display:flex;justify-content:space-between;gap:10px;font-size:14.5px;border-top:1px solid rgba(255,255,255,.3);padding-top:8px}
+.slot li span:last-child{font-family:var(--mono);font-size:12.5px;white-space:nowrap}
+.slot.dark-ink{color:var(--ink)}
+.slot.dark-ink li{border-color:rgba(16,24,58,.2)}
+@media (max-width:1000px){.timeline{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}.slot{min-height:auto}}
+
+/* photos as windows */
+.windows{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:40px}
+.win{margin:0;border-radius:200px 200px 24px 24px;overflow:hidden;aspect-ratio:3/4;position:relative;background:linear-gradient(180deg,#FFB38A,#FFE3C2)}
+.win:nth-child(2){background:linear-gradient(180deg,#3FA9F5,#BFE6FF)}
+.win:nth-child(3){background:linear-gradient(180deg,#141B3D,#5B3B8C)}
+.win img{width:100%;height:100%;object-fit:cover}
+.win figcaption{position:absolute;left:14px;right:14px;bottom:14px;color:#fff;font:800 22px/1.05 var(--display);text-shadow:0 2px 14px rgba(0,0,0,.35)}
+.win.no-photo figcaption{bottom:auto;top:50%;transform:translateY(-50%);text-align:center;font-size:clamp(22px,3vw,34px);text-shadow:none}
+@media (max-width:700px){.windows{grid-template-columns:1fr 1fr}.win:nth-child(3){display:none}}
+
+/* menu */
+.menu{padding-block:clamp(56px,8vw,100px);background:#fff;border-block:1px solid var(--line)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:26px 0 8px}
+.tabs button{font:600 14px/1 var(--display);padding:12px 16px;border-radius:12px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.tabs button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.mgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 48px}
+.mi{display:grid;grid-template-columns:1fr auto;gap:2px 16px;padding:16px 0;border-bottom:1px solid var(--line)}
+.mi h4{margin:0;font:700 18px/1.3 var(--display)}
+.mi .en{color:var(--muted);font-size:14px}
+.mi .p{font:600 14px/1.4 var(--mono);white-space:nowrap;color:var(--red)}
+.mi p{grid-column:1/-1;margin:2px 0 0;color:var(--muted);font-size:15px}
+.fine{font-size:13px;color:var(--muted);margin-top:20px}
+@media (max-width:760px){.mgrid{grid-template-columns:1fr}}
+
+/* visit */
+.visit{padding-block:clamp(56px,8vw,100px)}
+.vgrid{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:20px;margin-top:30px}
+.box{background:#fff;border:1px solid var(--line);border-radius:24px;padding:26px}
+.today-bar{height:16px;border-radius:9px;background:var(--paper);border:1px solid var(--line);position:relative;overflow:hidden;margin:16px 0 8px}
+.today-bar i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,#FFB38A,#3FA9F5 40%,#FF8A5B 70%,#141B3D);border-radius:9px}
+.today-bar b{position:absolute;top:-3px;width:3px;height:22px;background:var(--red)}
+.big{font:800 clamp(26px,3vw,36px)/1.1 var(--display);letter-spacing:-.02em;font-stretch:82%}
+.stat{display:flex;gap:28px;flex-wrap:wrap;margin-top:18px}
+.stat div{display:flex;flex-direction:column}
+.stat b{font:800 40px/1 var(--display);font-stretch:78%}
+.stat span{color:var(--muted);font-size:14px}
+.status{display:inline-flex;align-items:center;gap:8px;font:600 12px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em}
+.status::before{content:"";width:9px;height:9px;border-radius:50%;background:#999}
+.status.is-open::before{background:#1E9E5A;box-shadow:0 0 0 4px rgba(30,158,90,.2)}
+.status.is-closed::before{background:var(--red)}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.btn-ink{background:var(--ink);color:#fff}
+.btn-line{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+@media (max-width:860px){.vgrid{grid-template-columns:1fr}}
+
+footer{background:var(--night);color:#C9CEE6;padding-block:40px calc(40px + env(safe-area-inset-bottom,0px))}
+footer .wrap{display:flex;flex-wrap:wrap;gap:16px;justify-content:space-between;align-items:center}
+footer a{color:#fff}
+footer .wm{font:800 28px/1 var(--display);color:#fff;letter-spacing:-.02em}
+.mobile-order{display:none}
+@media (max-width:760px){
+  .mobile-order{display:flex;position:fixed;inset:auto 0 0 0;z-index:60;gap:10px;padding:10px max(16px,env(safe-area-inset-right,0px)) calc(10px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:rgba(255,255,255,.94);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-top:1px solid var(--line)}
+  .mobile-order .btn{flex:1}
+  footer{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#top" aria-label="Pura Vida home"><span data-photo><img data-pv="logo" alt="Pura Vida logo"></span><span class="wm">Pura Vida</span></a>
+    <nav><a href="#day">Un día</a><a href="#menu">Menú</a><a href="#visit">Visit</a><a class="btn btn-red" href="https://fromtherestaurant.com/pura-vida/" target="_blank" rel="noopener">Order online</a></nav>
+  </div>
+</header>
+
+<main id="top">
+<section class="sky" id="sky">
+  <div class="stars" id="stars"></div>
+  <div class="arcbox" aria-hidden="true">
+    <svg viewBox="0 0 1000 400" preserveAspectRatio="none"><path d="M40 380 Q500 -120 960 380" fill="none" stroke="currentColor" stroke-opacity=".35" stroke-width="2" stroke-dasharray="4 10" vector-effect="non-scaling-stroke"/></svg>
+    <div class="orb" id="orb"></div>
+  </div>
+  <div class="wrap">
+    <div class="sky-grid">
+      <div>
+        <div class="clock"><b id="clockT">9:00 AM</b><span id="clockL">in Trenton</span><span class="status" data-status="long">Open daily</span></div>
+        <h1 id="headline">Buenos días. <em>Gallo pinto</em> time.</h1>
+        <p class="pick" id="blurb">Rice and beans, fried egg, cheese, sweet plantain and avocado. The way Costa Rica starts the day.</p>
+      </div>
+      <aside class="panel" aria-live="polite">
+        <span class="mono">Right now we'd order</span>
+        <span class="dish" id="pDish">Gallo Pinto</span>
+        <span class="price" id="pPrice">from $15.58</span>
+        <div class="ctas"><a class="btn btn-red" href="https://fromtherestaurant.com/pura-vida/" target="_blank" rel="noopener">Order it</a><a class="btn btn-glass" href="#menu">Menu</a></div>
+      </aside>
+    </div>
+    <div class="scrub">
+      <label for="hour"><span>Drag the sun · Pura Vida's day</span><button type="button" id="nowBtn" class="mono" style="background:none;border:0;color:inherit;cursor:pointer;padding:0;text-decoration:underline">Back to now</button></label>
+      <input type="range" id="hour" min="9" max="23" step="0.25" value="9" aria-label="Time of day">
+      <div class="ticks"><span>9 AM</span><span>12 PM</span><span>3 PM</span><span>6 PM</span><span>9 PM</span><span>11 PM</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="day" id="day">
+  <div class="wrap">
+    <span class="mono" style="color:var(--red)">9:00 AM → 11:00 PM · every day</span>
+    <h2>Un día en Pura Vida</h2>
+    <p class="intro">Fourteen hours, seven days a week. Here's what to order at each part of the day. Tap a card to see that hour in the sky.</p>
+    <div class="timeline" id="timeline"></div>
+    <div class="windows">
+      <figure class="win" data-photo><img data-pv="food1" alt="In the Pura Vida kitchen"><figcaption>Mañana</figcaption></figure>
+      <figure class="win" data-photo><img data-pv="food3" alt="A main plate at Pura Vida"><figcaption>Almuerzo</figcaption></figure>
+      <figure class="win" data-photo><img data-pv="food2" alt="A side at Pura Vida"><figcaption>Noche</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="menu" id="menu">
+  <div class="wrap">
+    <span class="mono" style="color:var(--red)">El menú</span>
+    <h2>Everything on the menu</h2>
+    <div class="tabs" role="tablist" aria-label="Menu sections" id="tabs"></div>
+    <div class="mgrid" id="mgrid" role="tabpanel"></div>
+    <p class="fine">Prices from Pura Vida's online ordering and may vary in the restaurant. <a href="https://fromtherestaurant.com/pura-vida/menu/" target="_blank" rel="noopener">Full menu with sides, kids' plates and every gallo pinto option</a>.</p>
+  </div>
+</section>
+
+<section class="visit" id="visit">
+  <div class="wrap">
+    <h2>Come by</h2>
+    <div class="vgrid">
+      <div class="box">
+        <span class="status" data-status="long">Open daily</span>
+        <p class="big" style="margin:12px 0 0" id="leftToday">Open today 9 AM – 11 PM</p>
+        <div class="today-bar" aria-hidden="true"><i id="dayFill"></i><b id="dayNow"></b></div>
+        <div class="ticks" style="color:var(--muted)"><span>9 AM</span><span>4 PM</span><span>11 PM</span></div>
+        <div class="stat"><div><b>98</b><span>hours open a week</span></div><div><b>7</b><span>days, no day off</span></div><div><b>9–11</b><span>same hours daily</span></div></div>
+      </div>
+      <div class="box">
+        <p class="big" style="margin:0">228 Cummings Ave<br>Trenton, NJ 08611</p>
+        <p style="color:var(--muted);margin:10px 0 0">Chambersburg · <span style="user-select:all">(609) 396-7472</span></p>
+        <div class="row">
+          <a class="btn btn-ink" href="https://www.google.com/maps/search/?api=1&query=Pura+Vida+228+Cummings+Ave+Trenton+NJ+08611" target="_blank" rel="noopener">Directions</a>
+          <a class="btn btn-line" href="tel:+16093967472">Call</a>
+          <button class="btn btn-line" type="button" data-copy-phone>Copy number</button>
+        </div>
+        <div class="row"><a class="btn btn-red" style="flex:1" href="https://fromtherestaurant.com/pura-vida/" target="_blank" rel="noopener">Order pickup or delivery</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span class="wm">Pura Vida</span>
+    <span>© <span data-year>2026</span> Pura Vida · Costa Rican kitchen · Trenton, NJ</span>
+    <span>Demo revamp by <a href="https://ltgpeak.app" target="_blank" rel="noopener">LTGPEAK</a> · <a href="index.html">All 5 versions</a></span>
+  </div>
+</footer>
+<div class="mobile-order"><a class="btn btn-red" href="https://fromtherestaurant.com/pura-vida/" target="_blank" rel="noopener">Order online</a><a class="btn btn-line" href="tel:+16093967472">Call</a></div>
+
+<script>/* Pura Vida — shared real content (from puravidatrentonnj.com + fromtherestaurant.com/pura-vida, Nov 2026) */
+const PV = {
+  name: "Pura Vida",
+  kind: "Costa Rican Restaurant & Lounge",
+  addr1: "228 Cummings Ave",
+  addr2: "Trenton, NJ 08611",
+  hood: "Chambersburg",
+  phone: "(609) 396-7472",
+  tel: "tel:+16093967472",
+  order: "https://fromtherestaurant.com/pura-vida/",
+  fullMenu: "https://fromtherestaurant.com/pura-vida/menu/",
+  maps: "https://www.google.com/maps/search/?api=1&query=Pura+Vida+228+Cummings+Ave+Trenton+NJ+08611",
+  press: "https://communitynews.org/sections/mercereats/mystery-muncher-tasting-tico-culture-in-chambersburg/",
+  open: 9, close: 23,
+  menu: [
+    { id: "desayuno", es: "Desayunos", en: "Breakfast", items: [
+      { es: "Gallo Pinto", en: "Costa Rican rice & beans", d: "Fried egg, cheese, sweet plantain, avocado and the meat you pick: bistec, chorizo, pollo en salsa, chicharrón, tilapia and more.", p: "from $15.58", star: 1 },
+      { es: "Tamales Ticos (2)", en: "Costa Rican pork tamales", d: "Two pork tamales, tico style.", p: "$12.96" },
+      { es: "Omelette Pura Vida", en: "House omelette", d: "Mashed beans, sweet plantain, cheese and shredded beef, with house potatoes and bread.", p: "$14.05" },
+      { es: "Sándwich Pura Vida", en: "Pura Vida sandwich", d: "Lettuce, tomato, fries, salsa Pura Vida and one meat.", p: "$12.96" },
+      { es: "Gallo Pinto Especial", en: "The big breakfast", d: "The house special gallo pinto plate.", p: "$32.23" }
+    ]},
+    { id: "picar", es: "Para Picar", en: "Appetizers", items: [
+      { es: "Picada Pura Vida", en: "Pura Vida sampler", d: "Beef, grilled chicken, chicharrón, salchichón, chorizo, sweet plantain and yuca.", p: "$12.47", star: 1 },
+      { es: "Chifrijo", en: "The tico bar bowl", d: "Rice, red beans, pico de gallo, avocado and tortilla chips.", p: "$11.96", star: 1 },
+      { es: "Patacones a Caballo", en: "Loaded plantains", d: "Mashed beans, shredded beef, pico de gallo and cheese.", p: "$16.20" },
+      { es: "Tostones Rellenos", en: "Stuffed plantain", d: "Shrimp or chicken, under gratin cheese.", p: "$15.13" },
+      { es: "Chicharrones con Yuca", en: "Pork crackling & fried yuca", d: "Crispy pork crackling with fried cassava.", p: "$12.47" },
+      { es: "Tacos Ticos", en: "Costa Rican tacos", d: "With cabbage, ketchup and mayo.", p: "$10.81" },
+      { es: "Picada de Mariscos", en: "Seafood sampler", d: "Tilapia, shrimp and calamari with yuca and tostones.", p: "$40.97" }
+    ]},
+    { id: "sopas", es: "Sopas & Ceviche", en: "Soups & ceviche", items: [
+      { es: "Olla de Carne", en: "Costa Rican beef soup", d: "Potato, squash, yuca, corn and carrot, with white rice.", p: "$18.70", star: 1 },
+      { es: "Sopa Negra", en: "Black bean soup", d: "With a side of white rice.", p: "$15.58" },
+      { es: "Sopa de Mariscos", en: "Seafood soup", d: "With white rice.", p: "$17.99" },
+      { es: "Consomé de Pollo", en: "Chicken broth with noodles", d: "Onion, pepper, noodles, egg and shredded chicken, with white rice.", p: "$13.50" },
+      { es: "Ceviche con Chips", en: "Ceviche with chips", d: "With tortilla chips.", p: "$13.79" }
+    ]},
+    { id: "fuertes", es: "Platos Fuertes", en: "Mains", items: [
+      { es: "Bandeja Paisa", en: "The full platter", d: "Rice, beans, steak, chicharrón, sausage, fried egg, tostones, sweet plantain and avocado.", p: "$24.95", star: 1 },
+      { es: "Carne en Salsa", en: "Tico stewed beef", d: "With white rice, peppers, onion and chips.", p: "$15.59" },
+      { es: "Pollo en Salsa", en: "Stewed chicken", d: "Peppers, onion, mushrooms and cilantro, with white rice and chips.", p: "$16.63" },
+      { es: "Arroz con Camarones", en: "Shrimp fried rice", d: "Costa Rican style fried rice with shrimp.", p: "$17.67" },
+      { es: "Arroz con Pollo", en: "Chicken rice", d: "The classic.", p: "$15.59" },
+      { es: "Fajitas Especiales", en: "Special fajitas", d: "With shrimp, vegetables and potato.", p: "$34.60" },
+      { es: "Bistec a la Parrilla", en: "Grilled steak", d: "Grilled or on the plancha, with two sides.", p: "$32.20" },
+      { es: "Filet Mignon", en: "New on the menu", d: "From the new plates.", p: "$37.99" },
+      { es: "Costilla de Cerdo", en: "Pork ribs", d: "From the new plates.", p: "$24.99" }
+    ]},
+    { id: "dulces", es: "Postres", en: "Desserts", items: [
+      { es: "Dubai Ball", en: "Pistachio & kataifi sphere", d: "Pistachio cream wrapped in crispy kataifi with a mango ice-cream heart.", p: "$18.93", star: 1 },
+      { es: "Brownie Dubai con Helado", en: "Dubai brownie", d: "Pistachio-cream brownie with vanilla ice cream and premium chocolate.", p: "$16.21" },
+      { es: "Fresas con Chocolate Dubai", en: "Dubai chocolate strawberries", d: "Strawberries dipped in Dubai-style pistachio chocolate.", p: "from $10.40", star: 1 },
+      { es: "Crepes de Tres Leches", en: "Tres leches crepes", d: "With fresh strawberries.", p: "$18.44" },
+      { es: "Coco Loco Nutella", en: "Coconut & Nutella", d: "Coconut and Nutella.", p: "$15.08" },
+      { es: "Tres Leches", en: "Three-milk cake", d: "Three-milk sponge cake.", p: "$7.56" },
+      { es: "Arroz con Leche", en: "Rice pudding", d: "", p: "$7.56" }
+    ]},
+    { id: "bebidas", es: "Bebidas", en: "Drinks", items: [
+      { es: "Capuccino Dubai", en: "Pistachio cappuccino", d: "Cappuccino with Dubai-style pistachio.", p: "$10.82", star: 1 },
+      { es: "Aguadulce", en: "Hot panela", d: "Unrefined whole cane sugar, served hot.", p: "$2.60" },
+      { es: "Café Negro", en: "Black coffee", d: "", p: "$3.52" },
+      { es: "Batido en Leche", en: "Milkshake", d: "Assorted fruit flavors.", p: "$5.41" },
+      { es: "Chocolate", en: "Hot chocolate", d: "Served hot.", p: "$4.33" },
+      { es: "Limonada", en: "Lemonade", d: "", p: "$4.32" }
+    ]}
+  ]
+};
+
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const PV_REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+/* Time in Trenton */
+function pvNow() {
+  const parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "numeric", weekday: "short", hour12: false }).formatToParts(new Date());
+  const get = t => (parts.find(p => p.type === t) || {}).value;
+  let h = parseInt(get("hour"), 10); if (h === 24) h = 0;
+  return { h, m: parseInt(get("minute"), 10), day: get("weekday") };
+}
+function pvStatus() {
+  const { h, m } = pvNow(); const t = h + m / 60;
+  const open = t >= PV.open && t < PV.close;
+  if (open) {
+    const left = Math.round((PV.close - t) * 60);
+    return { open, short: "Open now", long: left <= 60 ? `Open now · closes in ${left} min` : "Open now · until 11 PM", es: "Abierto" };
+  }
+  return { open, short: "Closed", long: "Closed · opens 9 AM", es: "Cerrado" };
+}
+function pvStatusFill() {
+  const s = pvStatus();
+  $$("[data-status]").forEach(el => { el.textContent = el.dataset.status === "short" ? s.short : s.long; el.classList.toggle("is-open", s.open); el.classList.toggle("is-closed", !s.open); });
+  return s;
+}
+
+/* Real photos: tries ./assets first (drop files there), then the restaurant's own CDN, then the designed fallback */
+const PV_IMG = { logo: "pura-vida-logo.png", food1: "pura-vida-food1.jpg", food2: "pura-vida-food2.jpg", food3: "pura-vida-food3.jpg" };
+function pvImgs() {
+  $$("img[data-pv]").forEach(img => {
+    const f = PV_IMG[img.dataset.pv]; if (!f) return;
+    const chain = ["assets/" + f, "https://d2gqo3h0psesgi.cloudfront.net/auto/" + f];
+    let i = 0;
+    const host = img.closest("[data-photo]");
+    img.addEventListener("load", () => host && host.classList.add("has-photo"));
+    img.addEventListener("error", () => { i++; if (i < chain.length) img.src = chain[i]; else { host && host.classList.add("no-photo"); img.remove(); } });
+    img.src = chain[0];
+  });
+}
+
+function pvCopy(btn) {
+  const done = () => { const o = btn.dataset.label || btn.textContent; btn.dataset.label = o; btn.textContent = "Copied"; setTimeout(() => btn.textContent = o, 1400); };
+  try { navigator.clipboard.writeText(PV.phone).then(done, done); } catch (e) { done(); }
+}
+
+function pvEsc(s) { return String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+document.addEventListener("DOMContentLoaded", () => {
+  pvImgs(); pvStatusFill(); setInterval(pvStatusFill, 60000);
+  $$("[data-copy-phone]").forEach(b => b.addEventListener("click", () => pvCopy(b)));
+  $$("[data-year]").forEach(e => e.textContent = new Date().getFullYear());
+});
+
+/* LTGPEAK demo switcher (desktop) */
+function pvSwitcher(cur) {
+  const names = ["La Carreta", "Reloj Tico", "Dulce Noche", "Vuelo 228", "Selva"];
+  const d = document.createElement("nav");
+  d.className = "ltg-switch"; d.setAttribute("aria-label", "Demo versions");
+  d.innerHTML = `<a class="ltg-home" href="index.html">LTGPEAK demo</a>` + names.map((n, i) => `<a href="v${i + 1}.html" title="${n}"${i + 1 === cur ? ' aria-current="page"' : ""}>${i + 1}</a>`).join("");
+  const st = document.createElement("style");
+  st.textContent = `.ltg-switch{position:fixed;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:90;display:flex;gap:2px;align-items:center;padding:4px;border-radius:999px;background:rgba(14,14,20,.78);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font:600 11px/1 system-ui,sans-serif;letter-spacing:.04em;box-shadow:0 6px 24px rgba(0,0,0,.25)}
+.ltg-switch a{color:#fff;text-decoration:none;min-width:26px;height:26px;display:grid;place-items:center;border-radius:999px;opacity:.7}
+.ltg-switch a:hover,.ltg-switch a:focus-visible{opacity:1;background:rgba(255,255,255,.14);outline:none}
+.ltg-switch a[aria-current]{opacity:1;background:#BD2027}
+.ltg-switch .ltg-home{padding:0 10px;opacity:.9;text-transform:uppercase}
+@media (max-width:760px){.ltg-switch{display:none}}`;
+  document.head.appendChild(st); document.body.appendChild(d);
+}
+</script>
+<script>
+const find = name => { for (const c of PV.menu) for (const it of c.items) if (it.es === name) return it; return { es: name, p: "" }; };
+const SLOTS = [
+  { from: 9, to: 11, t: "9–11 AM", name: "Desayuno", h: "Buenos días. <em>Gallo pinto</em> time.", b: "Rice and beans, fried egg, cheese, sweet plantain and avocado. The way Costa Rica starts the day.", picks: ["Gallo Pinto", "Tamales Ticos (2)", "Aguadulce", "Omelette Pura Vida"], bg: "linear-gradient(160deg,#FF9F7A,#FFD3A6)", ink: 1 },
+  { from: 11, to: 15, t: "11 AM–3 PM", name: "Almuerzo", h: "Almuerzo. <em>Olla de carne</em> weather.", b: "Costa Rican beef soup with yuca, squash, corn and white rice. Or a plate of carne en salsa.", picks: ["Olla de Carne", "Carne en Salsa", "Arroz con Camarones", "Sopa Negra"], bg: "linear-gradient(160deg,#2F8FE0,#7EC8F2)" },
+  { from: 15, to: 18, t: "3–6 PM", name: "La tarde", h: "La tarde. <em>Chifrijo</em> for the table.", b: "Rice, red beans, pico de gallo, avocado and chips. Add a picada and call your friends.", picks: ["Chifrijo", "Picada Pura Vida", "Patacones a Caballo", "Tacos Ticos"], bg: "linear-gradient(160deg,#F2743E,#FFC56B)", ink: 1 },
+  { from: 18, to: 21, t: "6–9 PM", name: "La cena", h: "La cena. <em>Bandeja paisa</em> big.", b: "Steak, chicharrón, sausage, fried egg, tostones, maduro and avocado over rice and beans.", picks: ["Bandeja Paisa", "Bistec a la Parrilla", "Fajitas Especiales", "Costilla de Cerdo"], bg: "linear-gradient(160deg,#4A2F7E,#D9677C)" },
+  { from: 21, to: 23, t: "9–11 PM", name: "Noche dulce", h: "Late night. <em>Dubai</em> strawberries.", b: "Pistachio chocolate strawberries, the Dubai Ball and a Capuccino Dubai before close.", picks: ["Fresas con Chocolate Dubai", "Dubai Ball", "Capuccino Dubai", "Tres Leches"], bg: "linear-gradient(160deg,#0E1330,#2E2A6B)" }
+];
+const KEYS = [[6, "#FFB38A", "#FFE3C2"], [9, "#8FD0F5", "#E4F5FF"], [13, "#3FA9F5", "#BFE6FF"], [16.5, "#FF8A5B", "#FFD27A"], [18.5, "#5B3B8C", "#F0787A"], [20.5, "#151C40", "#2E2A6B"], [24, "#090C22", "#191740"]];
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+const mix = (a, b, t) => "#" + hex(a).map((v, i) => Math.round(v + (hex(b)[i] - v) * t).toString(16).padStart(2, "0")).join("");
+function skyAt(h) {
+  for (let i = 0; i < KEYS.length - 1; i++) { const [h0, t0, b0] = KEYS[i], [h1, t1, b1] = KEYS[i + 1]; if (h >= h0 && h <= h1) { const t = (h - h0) / (h1 - h0); return [mix(t0, t1, t), mix(b0, b1, t)]; } }
+  return [KEYS[0][1], KEYS[0][2]];
+}
+const fmt = h => { const hh = Math.floor(h), mm = Math.round((h - hh) * 60); const ap = hh >= 12 && hh < 24 ? "PM" : "AM"; const h12 = ((hh + 11) % 12) + 1; return `${h12}:${String(mm).padStart(2, "0")} ${ap}`; };
+const sky = $("#sky"), orb = $("#orb"), range = $("#hour");
+let live = true;
+function render(h) {
+  const [top, bot] = skyAt(h);
+  const root = document.documentElement.style;
+  root.setProperty("--top", top); root.setProperty("--bot", bot);
+  const night = h >= 18.6;
+  root.setProperty("--sky-ink", night ? "#FFFFFF" : "#10183A");
+  $("#stars").style.opacity = night ? Math.min(1, (h - 18.6) / 1.5) : 0;
+  const t = Math.min(1, Math.max(0, (h - 9) / 14));
+  const x = 4 + t * 92, y = 95 - Math.sin(t * Math.PI) * 88;
+  orb.style.left = x + "%"; orb.style.top = y + "%";
+  orb.classList.toggle("moon", night);
+  const s = SLOTS.find(s => h >= s.from && h < s.to) || SLOTS[SLOTS.length - 1];
+  $("#headline").innerHTML = s.h; $("#blurb").textContent = s.b;
+  const it = find(s.picks[0]); $("#pDish").textContent = it.es; $("#pPrice").textContent = it.p;
+  $("#clockT").textContent = fmt(h);
+  $("#clockL").textContent = live ? "now in Trenton" : "at Pura Vida";
+  $$(".slot").forEach((el, i) => el.setAttribute("aria-pressed", SLOTS[i] === s));
+}
+function nowHour() { const { h, m } = pvNow(); return h + m / 60; }
+function goNow() {
+  live = true; const h = nowHour();
+  if (h >= 9 && h < 23) { range.value = h; render(h); }
+  else { range.value = 23; render(h < 9 ? 9 : 23); $("#headline").innerHTML = "Closed for the night. <em>Gallo pinto</em> at 9."; $("#blurb").textContent = "Pura Vida opens every day at 9 AM. Order online for tomorrow or come by in the morning."; $("#clockT").textContent = fmt(h); $("#clockL").textContent = "now in Trenton"; }
+}
+range.addEventListener("input", () => { live = false; render(+range.value); });
+$("#nowBtn").addEventListener("click", goNow);
+
+/* timeline */
+$("#timeline").innerHTML = SLOTS.map((s, i) => `<button type="button" class="slot ${s.ink ? "dark-ink" : ""}" style="background:${s.bg}" data-i="${i}"><span class="t">${s.t}</span><h3>${s.name}</h3><ul>${s.picks.map(p => { const it = find(p); return `<li><span>${pvEsc(it.es)}</span><span>${it.p}</span></li>`; }).join("")}</ul></button>`).join("");
+$$(".slot").forEach(b => b.addEventListener("click", () => { const s = SLOTS[+b.dataset.i]; live = false; const h = s.from + 0.5; range.value = h; render(h); $("#sky").scrollIntoView({ behavior: PV_REDUCED ? "auto" : "smooth" }); }));
+
+/* menu tabs */
+const tabs = $("#tabs");
+PV.menu.forEach((c, i) => { const b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "tab"); b.textContent = c.es; b.onclick = () => tab(i); tabs.appendChild(b); });
+function tab(i) {
+  $$("button", tabs).forEach((b, j) => b.setAttribute("aria-selected", i === j));
+  $("#mgrid").innerHTML = PV.menu[i].items.map(it => `<div class="mi"><h4>${pvEsc(it.es)} <span class="en">· ${pvEsc(it.en)}</span></h4><span class="p">${it.p}</span>${it.d ? `<p>${pvEsc(it.d)}</p>` : ""}</div>`).join("");
+}
+tab(0);
+
+/* today bar */
+function today() {
+  const h = nowHour(), t = Math.min(1, Math.max(0, (h - 9) / 14));
+  $("#dayFill").style.width = (t * 100) + "%"; $("#dayNow").style.left = `calc(${t * 100}% - 1.5px)`;
+  const left = 23 - h;
+  $("#leftToday").textContent = h >= 9 && h < 23 ? (left >= 1 ? `${Math.floor(left)} h ${Math.round((left % 1) * 60)} min left today` : `${Math.round(left * 60)} min until close`) : "Opens at 9 AM";
+}
+goNow(); today(); setInterval(() => { today(); if (live) goNow(); }, 60000);
+pvSwitcher(2);
+</script>
+</body>
+</html>

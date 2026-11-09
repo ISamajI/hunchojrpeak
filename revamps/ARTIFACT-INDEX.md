@@ -6,6 +6,12 @@ Project notes live in `/wiki` — see [[Home]] and [[Revamp Library]]. Revamp si
 
 | Updated | Artifact | Project | Live | Local copy |
 |---|---|---|---|---|
+| 2026-11-09 | Math Test Study Guide — Ch. 1 & 7 | [[School]] | [open](https://claude.ai/artifact/LFR5AVc1YVWVEChVFPMFMT) | [markdown](../outputs/Math%20Test%20Study%20Guide%20-%20Ch%201%20%26%207.md) |
+| 2026-11-08 | Peoples Take a Number | [[Italian Peoples Bakery]] | [open](https://claude.ai/artifact/VM6tXPSjebaKeaAH45L6PS) | [snapshot](./artifacts/peoples-take-a-number/index.html) |
+| 2026-11-08 | Peoples Bread Line | [[Italian Peoples Bakery]] | [open](https://claude.ai/artifact/16fzfJWvCcqWwj6RAm3dY6) | [snapshot](./artifacts/peoples-bread-line/index.html) |
+| 2026-11-08 | Peoples Pastry Neon | [[Italian Peoples Bakery]] | [open](https://claude.ai/artifact/QkmpxWVPKGSje2ih7thAX7) | [snapshot](./artifacts/peoples-pastry-neon/index.html) |
+| 2026-11-07 | Italian Peoples Bakery | [[Italian Peoples Bakery]] | [open](https://claude.ai/artifact/DU3ckKsZxq8amHcSYqqJEw) | [snapshot](./artifacts/italian-peoples-bakery/index.html) |
+| 2026-11-07 | Pura Vida Revamp | [[Pura Vida]] | [open](https://claude.ai/artifact/FpYBGLa8ZMSxTwB7Uvp5Ni) | [snapshot](./artifacts/pura-vida-revamp/index.html) (hub + v1–v5) |
 | 2026-11-07 | Casa 3D | [[Games & Fun Builds]] | [open](https://claude.ai/artifact/HcExid7y3FNJsfp6x3nGQF) | [snapshot](./cowork/casa-3d/index.html) (all 62 files) |
 | 2026-11-07 | Casa La Brisa | [[Games & Fun Builds]] | [open](https://claude.ai/artifact/LCxV4SvxeVhVutzFu8Pnam) | [snapshot](./cowork/casa-la-brisa/index.html) |
 | 2026-11-07 | Bucks Legion | [[Health & Fitness]] | [open](https://claude.ai/artifact/3piScbQ9t66jBGUmmunfnt) | [snapshot](./cowork/bucks-legion/index.html) |

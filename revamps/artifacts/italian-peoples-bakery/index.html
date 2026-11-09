@@ -1,0 +1,729 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Italian Peoples Bakery</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Italian Peoples Bakery, Trenton's family bakery since 1936. Bread, rolls, custom cakes and Italian pastry in Trenton, Mercerville and Levittown.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bevan&family=Figtree:wght@400;500;600;700&family=Oswald:wght@500;600&family=Yesteryear&display=swap">
+<style>
+/* Layout: a tied pastry box opens the page, then the shop in order: specials board, glass case, cakes, family story, wholesale, catering, visit. */
+:root{
+  --bg:#FAFAF7; --surface:#FFFFFF; --tile:#EAF1EC; --ink:#142019; --muted:#56645B; --line:#DCE3DD;
+  --red:#C32228; --red-ink:#B01E24; --green:#23552B; --green-ink:#23552B; --crust:#B87A22;
+  --band:#1E4A26; --band-2:#173D1F; --on-band:#F3F6F1; --on-band-muted:#B9CDBE;
+  --box:#FFFFFF; --box-edge:#E7E3DC; --box-inside:#F1EEE8; --paper:#FFFFFF; --paper-ink:#142019;
+  --flour:rgba(150,140,120,.55); --shadow:0 30px 60px -28px rgba(20,32,25,.35);
+  --display:"Bevan","Rockwell","Georgia",serif; --body:"Figtree","Helvetica Neue",Arial,sans-serif;
+  --label:"Oswald","Arial Narrow","Helvetica Neue",sans-serif; --script:"Yesteryear","Brush Script MT",cursive;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1511; --surface:#151F19; --tile:#18261D; --ink:#EEF1EA; --muted:#A4B0A7; --line:#283730;
+  --red:#D93A40; --red-ink:#F0676C; --green:#4E9A5E; --green-ink:#7CC08A; --crust:#E2A84E;
+  --band:#132E19; --band-2:#0F2414; --on-band:#EEF3EC; --on-band-muted:#9DB6A3;
+  --box:#F1EFEA; --box-edge:#D9D4CB; --box-inside:#E4E0D8; --paper:#F4F2EE; --paper-ink:#142019;
+  --flour:rgba(255,250,240,.55); --shadow:0 30px 60px -24px rgba(0,0,0,.7); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1511; --surface:#151F19; --tile:#18261D; --ink:#EEF1EA; --muted:#A4B0A7; --line:#283730;
+  --red:#D93A40; --red-ink:#F0676C; --green:#4E9A5E; --green-ink:#7CC08A; --crust:#E2A84E;
+  --band:#132E19; --band-2:#0F2414; --on-band:#EEF3EC; --on-band-muted:#9DB6A3;
+  --box:#F1EFEA; --box-edge:#D9D4CB; --box-inside:#E4E0D8; --paper:#F4F2EE; --paper-ink:#142019;
+  --flour:rgba(255,250,240,.55); --shadow:0 30px 60px -24px rgba(0,0,0,.7); color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:84px}
+body{background:var(--bg);color:var(--ink);font:400 1.0625rem/1.6 var(--body);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+img{max-width:100%;display:block}
+a{color:inherit}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--crust);outline-offset:3px;border-radius:6px}
+.wrap{max-width:1240px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font:600 .8rem/1.2 var(--label);letter-spacing:.16em;text-transform:uppercase;color:var(--green-ink)}
+h1,h2,h3{text-wrap:balance;margin:0}
+h2{font:400 clamp(2.1rem,4.6vw,3.6rem)/1.02 var(--display);letter-spacing:-.01em}
+.script{font-family:var(--script);font-weight:400;color:var(--red-ink)}
+.lede{color:var(--muted);max-width:60ch;margin:0}
+.sec{padding-block:clamp(64px,9vw,120px)}
+.sec-head{display:grid;gap:14px;margin-bottom:clamp(28px,4vw,48px)}
+.btn{display:inline-flex;align-items:center;gap:.55em;border-radius:999px;padding:.85em 1.35em;font:600 1rem/1 var(--body);text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .2s ease,background .2s ease,box-shadow .2s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn-red{background:var(--red);color:#fff;box-shadow:0 10px 24px -12px var(--red)}
+.btn-line{border-color:currentColor;background:transparent}
+.chip{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:.5em 1em;font:600 .9rem/1 var(--body);cursor:pointer;transition:background .2s,border-color .2s,color .2s}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.num{font-variant-numeric:tabular-nums}
+.copy{background:none;border:1.5px solid currentColor;border-radius:999px;padding:.3em .8em;font:600 .78rem/1 var(--body);cursor:pointer;opacity:.85}
+
+/* demo strip + header */
+.demo{background:var(--ink);color:var(--bg);font:500 .82rem/1.3 var(--body)}
+.demo .wrap{display:flex;gap:12px;align-items:center;justify-content:center;padding-block:8px;text-align:center}
+.demo button{background:none;border:0;cursor:pointer;font-size:1.1rem;line-height:1;opacity:.7;padding:2px 6px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:20px;padding-block:10px}
+.brand img{height:44px;width:auto}
+.nav{display:flex;gap:4px;margin-left:auto}
+.nav a{text-decoration:none;font:600 .92rem/1 var(--body);padding:.6em .75em;border-radius:999px;color:var(--muted)}
+.nav a:hover{color:var(--ink);background:var(--tile)}
+.take{display:inline-flex;align-items:center;gap:10px;text-decoration:none;background:var(--red);color:#fff;border-radius:10px;padding:.5em .9em;font:600 .9rem/1.1 var(--label);letter-spacing:.06em;text-transform:uppercase;position:relative}
+.take b{font:400 1rem/1 var(--display);letter-spacing:0}
+.burger{display:none;margin-left:auto;background:none;border:1.5px solid var(--line);border-radius:10px;padding:8px 10px;cursor:pointer}
+.burger span{display:block;width:20px;height:2px;background:var(--ink);margin:4px 0;transition:transform .25s}
+@media (max-width:1060px){.nav{display:none}.burger{display:block}.take{display:none}
+  .nav.open{display:flex;position:absolute;left:0;right:0;top:100%;flex-direction:column;background:var(--bg);border-bottom:1px solid var(--line);padding:10px max(16px,env(safe-area-inset-right,0px)) 18px max(16px,env(safe-area-inset-left,0px))}
+  .nav.open a{font-size:1.1rem;padding:.8em .6em}}
+
+/* hero */
+.hero{position:relative;overflow:hidden;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.55;
+  background:repeating-conic-gradient(var(--tile) 0 25%,transparent 0 50%) 0 0/56px 56px;
+  -webkit-mask:radial-gradient(70% 80% at 75% 45%,#000 0,transparent 75%);mask:radial-gradient(70% 80% at 75% 45%,#000 0,transparent 75%)}
+.hero .wrap{display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(24px,4vw,64px);align-items:center;padding-block:clamp(36px,6vw,80px) clamp(48px,7vw,96px)}
+.hero h1{font:400 clamp(2.9rem,6.6vw,6rem)/.95 var(--display);letter-spacing:-.015em;margin-top:18px}
+.hero h1 .script{display:block;font-size:.42em;line-height:1;margin:.15em 0 .05em .1em;transform:rotate(-4deg);transform-origin:left}
+.hero h1 em{font-style:normal;color:var(--red-ink)}
+.hero .lede{margin-top:22px;font-size:1.15rem}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.facts{display:flex;flex-wrap:wrap;gap:12px 28px;margin:34px 0 0;padding:0;list-style:none}
+.facts li{display:grid;gap:2px}
+.facts b{font:400 1.7rem/1 var(--display);color:var(--green-ink)}
+.facts span{font:600 .74rem/1.2 var(--label);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+.stage{--s:min(480px,82vw);position:relative;justify-self:center;width:var(--s);padding-top:calc(var(--s)*.34);perspective:2300px;perspective-origin:50% 30%}
+.tilt{transform-style:preserve-3d;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.box{position:relative;width:var(--s);height:var(--s);transform-style:preserve-3d;cursor:pointer}
+.box::after{content:"";position:absolute;inset:4% -2% -7% 4%;background:radial-gradient(closest-side,rgba(0,0,0,.28),transparent);filter:blur(14px);transform:translateZ(-30px);z-index:-1}
+.tray{position:absolute;inset:0;border-radius:6px;background:var(--box);box-shadow:inset 0 0 0 1px var(--box-edge),var(--shadow);padding:5.5%}
+.tray-in{position:relative;height:100%;border-radius:3px;background:
+  linear-gradient(115deg,rgba(255,255,255,.7) 0 10%,rgba(255,255,255,0) 30% 55%,rgba(255,255,255,.55) 70%,rgba(255,255,255,0) 90%),
+  linear-gradient(25deg,#efece6,#f8f6f1 40%,#ebe7df);box-shadow:inset 0 10px 18px -8px rgba(0,0,0,.35),inset 0 0 0 1px rgba(0,0,0,.06);display:grid;grid-template-columns:1fr 1fr;gap:5%;padding:6%}
+.tray-in figure{margin:0;border-radius:50%;overflow:hidden;position:relative;box-shadow:0 8px 14px -8px rgba(0,0,0,.55),0 0 0 5px #fff,0 0 0 6px rgba(0,0,0,.06);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.tray-in figure:nth-child(1){transform:rotate(-6deg) scale(.96)}.tray-in figure:nth-child(2){transform:rotate(5deg) scale(.96)}
+.tray-in figure:nth-child(3){transform:rotate(4deg) scale(.96)}.tray-in figure:nth-child(4){transform:rotate(-3deg) scale(.96)}
+.box.open .tray-in figure{transform:none}
+.tray-in img{width:100%;height:100%;object-fit:cover}
+.lid{position:absolute;inset:0;transform-origin:50% 0;transform-style:preserve-3d;transition:transform 1.15s cubic-bezier(.3,.7,.2,1)}
+.lid-face,.lid-back{position:absolute;inset:0;border-radius:6px;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.lid-face{background:linear-gradient(160deg,#fff 0%,var(--box) 60%,#f3f1ec 100%);box-shadow:inset 0 0 0 1px var(--box-edge),0 2px 0 var(--box-edge),var(--shadow);display:grid;place-items:center;overflow:hidden}
+.lid-face::before{content:"";position:absolute;inset:4.5%;border:2px solid #C32228;border-radius:4px;box-shadow:inset 0 0 0 5px #fff,inset 0 0 0 6.5px #C32228}
+.lid-back{transform:rotateX(180deg);background:linear-gradient(180deg,#e9e5dd,#d9d3c8);box-shadow:inset 0 0 0 1px rgba(0,0,0,.08)}
+.lid-print{position:relative;width:78%;aspect-ratio:1;display:grid;place-items:center}
+.lid-print svg{position:absolute;inset:0;width:100%;height:100%}
+.lid-print img{width:70%;filter:drop-shadow(0 1px 0 rgba(0,0,0,.05))}
+.lid-note{position:absolute;bottom:9%;left:0;right:0;text-align:center;font:400 clamp(1rem,2.6vw,1.35rem)/1 var(--script);color:#23552B}
+.twine{position:absolute;background:repeating-linear-gradient(45deg,#C32228 0 7px,#fff 7px 12px);box-shadow:0 2px 3px rgba(0,0,0,.25);transition:transform .75s cubic-bezier(.5,0,.9,.4),opacity .75s ease;transform:translateZ(2px)}
+.twine.h{left:-3%;right:-3%;top:calc(50% - 4px);height:8px;border-radius:4px}
+.twine.v{top:-3%;bottom:-3%;left:calc(50% - 4px);width:8px;border-radius:4px;background:repeating-linear-gradient(-45deg,#C32228 0 7px,#fff 7px 12px)}
+.bow{position:absolute;left:50%;top:50%;width:34%;transform:translate(-50%,-56%) translateZ(4px);transition:transform .6s cubic-bezier(.5,-0.4,.7,1),opacity .5s ease .1s;filter:drop-shadow(0 3px 3px rgba(0,0,0,.3))}
+.box.untied .twine.h{transform:translate3d(130%,0,2px) rotate(-6deg);opacity:0}
+.box.untied .twine.v{transform:translate3d(0,130%,2px) rotate(5deg);opacity:0}
+.box.untied .bow{transform:translate(-50%,-260%) rotate(-25deg) scale(.6) translateZ(4px);opacity:0}
+.box.open .lid{transform:rotateX(101deg)}
+.flour{position:absolute;inset:-20% -20% -10%;width:140%;height:130%;pointer-events:none;z-index:5}
+.stage-ui{display:flex;justify-content:center;gap:10px;margin-top:22px}
+.stage-ui button{background:var(--surface);border:1.5px solid var(--line);border-radius:999px;padding:.55em 1.1em;font:600 .88rem/1 var(--body);cursor:pointer}
+.stage-ui span{font:400 1.25rem/1 var(--script);color:var(--muted);align-self:center}
+
+/* ticker */
+.ticker{background:var(--red);color:#fff;overflow:hidden;border-block:3px solid var(--green)}
+.ticker-track{display:flex;width:max-content;animation:tick 48s linear infinite}
+.ticker-track span{font:400 clamp(1.1rem,2.2vw,1.5rem)/1 var(--display);padding:16px 22px;white-space:nowrap;display:flex;align-items:center;gap:22px}
+.ticker-track span::after{content:"";width:9px;height:9px;border-radius:50%;background:#fff;opacity:.85}
+@keyframes tick{to{transform:translateX(-50%)}}
+
+/* specials */
+.specials .wrap{display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(28px,5vw,72px);align-items:center}
+.today{display:grid;gap:16px}
+.today-day{font:600 .9rem/1 var(--label);letter-spacing:.16em;text-transform:uppercase;color:var(--red-ink)}
+.today-item{font:400 clamp(2.4rem,5.5vw,4.4rem)/1 var(--display);margin:0}
+.today-deal{display:inline-block;font:600 clamp(1.1rem,2.2vw,1.45rem)/1.2 var(--label);letter-spacing:.04em;text-transform:uppercase;background:var(--green);color:#fff;padding:.45em .8em;border-radius:6px;justify-self:start}
+.days{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.days .chip{font-family:var(--label);letter-spacing:.08em;text-transform:uppercase;padding:.55em .8em}
+.fine{font-size:.88rem;color:var(--muted)}
+.board-wrap{position:relative;display:grid;grid-template-columns:1fr auto;gap:18px;align-items:end}
+.board{background:var(--paper);color:var(--paper-ink);border:7px double #23552B;border-radius:4px;padding:22px 22px 18px;box-shadow:var(--shadow);transform:rotate(-1.2deg)}
+.board h3{font:400 2rem/1 var(--script);color:#C32228;text-align:center}
+.board .sub{text-align:center;font:600 .8rem/1 var(--label);letter-spacing:.1em;text-transform:uppercase;color:#C32228;margin:6px 0 12px}
+.board ol{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+.board li{display:grid;grid-template-columns:7.2em 1fr;gap:10px;align-items:baseline;padding:6px 8px;border-radius:4px;position:relative;cursor:pointer;transition:background .2s}
+.board li:hover{background:rgba(35,85,43,.07)}
+.board .d{font:600 .95rem/1.1 var(--label);letter-spacing:.06em;text-transform:uppercase;color:#C32228}
+.board .t{font:600 .95rem/1.3 var(--body)}
+.board li.is-today{background:linear-gradient(transparent 12%,rgba(255,214,64,.55) 12% 88%,transparent 88%)}
+.board li.is-pick{outline:2px solid #23552B;outline-offset:-2px}
+.board li.is-today::after{content:"Today";position:absolute;right:-12px;top:-9px;background:#C32228;color:#fff;font:600 .68rem/1 var(--label);letter-spacing:.12em;text-transform:uppercase;padding:5px 8px;border-radius:999px;transform:rotate(6deg)}
+.board-photo{width:132px;border:6px solid #fff;box-shadow:var(--shadow);transform:rotate(4deg);margin-bottom:-18px}
+.board-photo img{aspect-ratio:300/447;object-fit:cover;width:100%}
+.board-photo figcaption{font:400 .95rem/1.1 var(--script);color:#56645B;background:#fff;text-align:center;padding-top:4px}
+
+/* the case */
+.case{background:var(--band);color:var(--on-band)}
+.case .eyebrow{color:var(--on-band-muted)}
+.case .lede{color:var(--on-band-muted)}
+.case-grid{display:grid;grid-template-columns:230px 1fr;gap:clamp(18px,3vw,36px);align-items:start}
+.case-tabs{display:grid;gap:6px;position:sticky;top:96px}
+.case-tabs button{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;background:transparent;border:1.5px solid rgba(255,255,255,.18);color:var(--on-band);border-radius:12px;padding:.8em 1em;font:600 1rem/1.1 var(--body);cursor:pointer;transition:background .2s,border-color .2s}
+.case-tabs button small{font:500 .8rem/1 var(--label);letter-spacing:.06em;opacity:.7}
+.case-tabs button[aria-selected="true"]{background:var(--on-band);color:var(--band);border-color:var(--on-band)}
+.search{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.22);border-radius:12px;padding:0 14px;margin-bottom:6px}
+.search input{flex:1;min-width:0;background:transparent;border:0;padding:.85em 0;color:var(--on-band);font-size:1rem}
+.search input::placeholder{color:var(--on-band-muted)}
+.search input:focus{outline:none}
+.search:focus-within{border-color:var(--on-band)}
+.glass{position:relative;border-radius:18px;padding:clamp(16px,2.5vw,28px);background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.03));border:1.5px solid rgba(255,255,255,.2);overflow:hidden;min-width:0}
+.glass::before{content:"";position:absolute;inset:-40% auto auto -20%;width:40%;height:180%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.09),transparent);transform:rotate(20deg);pointer-events:none}
+.shelf-top{display:grid;grid-template-columns:1fr 200px;gap:20px;align-items:center;margin-bottom:20px}
+.shelf-top h3{font:400 clamp(1.6rem,3vw,2.3rem)/1.05 var(--display)}
+.shelf-top p{margin:8px 0 0;color:var(--on-band-muted);font-size:.98rem}
+.shelf-photo{border-radius:14px;overflow:hidden;aspect-ratio:4/3;box-shadow:0 18px 30px -18px rgba(0,0,0,.6)}
+.shelf-photo img{width:100%;height:100%;object-fit:cover}
+.tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
+.tags li{background:#fff;color:#142019;border-radius:6px;padding:.5em .8em .5em 1.05em;font:600 .92rem/1.2 var(--body);position:relative;box-shadow:0 3px 0 rgba(0,0,0,.18);animation:pop .35s both}
+.tags li::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:4px;border-radius:2px;background:linear-gradient(#23552B 0 33%,#e9e9e9 33% 66%,#C32228 66%)}
+.tags li mark{background:#ffe08a;color:inherit;border-radius:2px}
+.tags .cat{background:transparent;color:var(--on-band-muted);box-shadow:none;padding-left:0;font:600 .74rem/1 var(--label);letter-spacing:.14em;text-transform:uppercase;width:100%;margin-top:10px}
+.tags .cat::before{display:none}
+@keyframes pop{from{transform:translateY(6px);opacity:.3}}
+.case-note{margin-top:16px;font-size:.9rem;color:var(--on-band-muted)}
+
+/* cakes */
+.cake-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(24px,4vw,56px);align-items:start}
+.builder{display:grid;gap:26px}
+.step{display:grid;gap:12px;border:0;padding:0;margin:0;min-width:0}
+.step legend,.step label.lab{font:600 .8rem/1.2 var(--label);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:0;margin-bottom:12px}
+.flavors{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px}
+.flavor{position:relative}
+.flavor input{position:absolute;opacity:0;pointer-events:none}
+.flavor label{display:grid;gap:4px;height:100%;border:1.5px solid var(--line);background:var(--surface);border-radius:14px;padding:12px 14px;cursor:pointer;transition:border-color .2s,transform .2s,box-shadow .2s}
+.flavor label b{font:600 1rem/1.2 var(--body)}
+.flavor label small{color:var(--muted);font-size:.84rem;line-height:1.35}
+.flavor input:checked+label{border-color:var(--red);box-shadow:0 0 0 2px var(--red) inset;transform:translateY(-2px)}
+.flavor input:focus-visible+label{outline:3px solid var(--crust);outline-offset:2px}
+.occasions{display:flex;flex-wrap:wrap;gap:8px}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.field{display:grid;gap:6px;min-width:0}
+.field span{font:600 .8rem/1.2 var(--label);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.field input,.field select{border:1.5px solid var(--line);background:var(--surface);border-radius:12px;padding:.75em .9em;width:100%}
+.field input:focus,.field select:focus{outline:none;border-color:var(--ink)}
+.field.full{grid-column:1/-1}
+.ticket-col{position:sticky;top:96px}
+.ticket{position:relative;background:var(--paper);color:var(--paper-ink);border-radius:6px;padding:26px 24px 22px;box-shadow:var(--shadow);transform:rotate(1.2deg);
+  -webkit-mask:radial-gradient(circle 7px at 50% 0,transparent 98%,#000) 0 0/20px 51% repeat-x,radial-gradient(circle 7px at 50% 100%,transparent 98%,#000) 0 100%/20px 51% repeat-x;
+  mask:radial-gradient(circle 7px at 50% 0,transparent 98%,#000) 0 0/20px 51% repeat-x,radial-gradient(circle 7px at 50% 100%,transparent 98%,#000) 0 100%/20px 51% repeat-x}
+.ticket-head{display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px dashed #cfd6d0;padding-bottom:14px;margin-bottom:14px}
+.ticket-head small{font:600 .74rem/1.3 var(--label);letter-spacing:.14em;text-transform:uppercase;color:#56645B}
+.ticket-no{font:400 2.6rem/1 var(--display);color:#C32228}
+.ticket dl{display:grid;grid-template-columns:auto 1fr;gap:9px 16px;margin:0}
+.ticket dt{font:600 .74rem/1.6 var(--label);letter-spacing:.14em;text-transform:uppercase;color:#56645B}
+.ticket dd{margin:0;font-weight:600;min-width:0;overflow-wrap:anywhere}
+.ticket dd.msg{font:400 1.55rem/1.1 var(--script);color:#C32228}
+.ticket-foot{margin-top:18px;padding-top:14px;border-top:2px dashed #cfd6d0;display:grid;gap:10px}
+.ticket-foot p{margin:0;font-size:.92rem}
+.ticket-foot .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ticket-foot .btn{padding:.7em 1.1em;font-size:.92rem}
+.ticket .done{font:600 .85rem/1.35 var(--body);color:#23552B;min-height:1.35em}
+.gal-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:16px;margin:clamp(56px,7vw,88px) 0 20px}
+.gal-head h3{font:400 clamp(1.6rem,3vw,2.3rem)/1.05 var(--display)}
+.gallery{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 2px 18px;scrollbar-width:thin}
+.gallery button{flex:0 0 clamp(200px,24vw,280px);aspect-ratio:4/5;border:0;padding:0;border-radius:16px;overflow:hidden;cursor:zoom-in;scroll-snap-align:start;background:#111;position:relative}
+.gallery img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.gallery button:hover img{transform:scale(1.05)}
+.gallery button span{position:absolute;left:10px;bottom:10px;background:rgba(255,255,255,.92);color:#142019;font:600 .72rem/1 var(--label);letter-spacing:.12em;text-transform:uppercase;padding:6px 9px;border-radius:999px}
+dialog.lb{border:0;padding:0;background:transparent;max-width:min(92vw,760px);width:100%}
+dialog.lb::backdrop{background:rgba(8,12,10,.82)}
+dialog.lb img{width:100%;max-height:82vh;object-fit:contain;border-radius:12px;background:#111}
+dialog.lb button{position:absolute;top:10px;right:10px;background:#fff;color:#111;border:0;border-radius:999px;width:40px;height:40px;font-size:1.3rem;cursor:pointer}
+
+/* story */
+.story{background:var(--tile)}
+.story-pin{position:sticky;top:64px;overflow:hidden;padding-block:clamp(48px,7vw,88px)}
+.story.static .story-pin{position:relative;top:auto}
+.track{display:flex;gap:clamp(16px,2vw,28px);will-change:transform;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.story.static .track{overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px;scroll-padding-inline:max(16px,env(safe-area-inset-left,0px))}
+.era{flex:0 0 min(380px,82vw);background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;display:grid;gap:12px;align-content:start;scroll-snap-align:start}
+.era .yr{font:400 clamp(3rem,6vw,4.6rem)/.9 var(--display);color:transparent;-webkit-text-stroke:2px var(--red-ink)}
+.era h3{font:700 1.2rem/1.25 var(--body)}
+.era p{margin:0;color:var(--muted);font-size:.98rem}
+.era figure{margin:0;border-radius:10px;overflow:hidden;position:relative;background:#222}
+.era figure img{width:100%;height:220px;object-fit:cover;filter:grayscale(1) contrast(1.05)}
+.era figure::after{content:"";position:absolute;inset:0;background:radial-gradient(transparent 50%,rgba(0,0,0,.35));mix-blend-mode:multiply}
+.era.intro{background:transparent;border:0;padding:0 20px 0 0;flex-basis:min(420px,86vw);align-content:center}
+.era.intro h2{margin-top:10px}
+
+/* wholesale */
+.whole .wrap{display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(28px,5vw,72px);align-items:center}
+.big{font:400 clamp(5rem,13vw,10rem)/.85 var(--display);color:var(--red-ink);letter-spacing:-.02em}
+.marq{display:grid;gap:10px;overflow:hidden;-webkit-mask:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.marq-row{display:flex;gap:10px;width:max-content;animation:tick 60s linear infinite}
+.marq-row.rev{animation-direction:reverse;animation-duration:70s}
+.marq-row span{border:1.5px solid var(--line);background:var(--surface);border-radius:999px;padding:.6em 1.1em;font:600 .95rem/1 var(--body);white-space:nowrap}
+.whole-cta{display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center;margin-top:26px}
+.phone{font:600 1.15rem/1 var(--body);user-select:all}
+
+/* catering */
+.cater{background:var(--surface);border-top:1px solid var(--line)}
+.planner{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,48px);align-items:start;margin-bottom:clamp(40px,6vw,64px)}
+.panel{border:1.5px solid var(--line);border-radius:20px;padding:clamp(18px,3vw,28px);background:var(--bg);display:grid;gap:16px;min-width:0}
+.panel h3{font:400 1.6rem/1.1 var(--display)}
+.guests{display:flex;align-items:baseline;gap:10px}
+.guests output{font:400 3.2rem/1 var(--display);color:var(--red-ink)}
+input[type=range]{width:100%;accent-color:var(--red)}
+.rec{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.rec li{display:flex;gap:12px;align-items:baseline;border-top:1px dashed var(--line);padding-top:10px}
+.rec b{font:400 1.25rem/1 var(--display);color:var(--green-ink);min-width:2.2ch}
+.hoagie-stage{position:relative;height:110px;margin-top:6px}
+.hoagie{position:absolute;left:0;top:14px;height:78px;width:100%;transition:width .7s cubic-bezier(.3,.8,.2,1)}
+.h-top,.h-bot{position:absolute;left:0;right:0;border-radius:60px}
+.h-top{top:0;height:38px;background:radial-gradient(circle at 20% 40%,#f3e2b8 0 2px,transparent 3px) 0 0/26px 14px,linear-gradient(#e3a24c,#c47a2a 70%,#a9631f);box-shadow:inset 0 -3px 0 rgba(0,0,0,.15)}
+.h-bot{bottom:0;height:22px;background:linear-gradient(#c88232,#a9631f);border-radius:0 0 60px 60px/0 0 30px 30px}
+.h-fill{position:absolute;left:3%;right:3%;top:30px;height:30px;display:grid;grid-template-rows:repeat(4,1fr)}
+.h-fill i{display:block;border-radius:10px;margin:-1px -1%}
+.hoagie-len{position:absolute;left:0;right:0;bottom:-8px;display:flex;justify-content:space-between;font:600 .74rem/1 var(--label);letter-spacing:.12em;color:var(--muted)}
+.hoagie-txt{margin:0;font-weight:600}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.trays{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:14px}
+.tray-card{border:1.5px solid var(--line);border-radius:16px;padding:16px 18px;background:var(--bg);display:grid;gap:8px;align-content:start}
+.tray-card h4{margin:0;font:700 1.08rem/1.25 var(--body)}
+.tray-card .nos{font:600 .76rem/1 var(--label);letter-spacing:.12em;text-transform:uppercase;color:var(--red-ink)}
+.tray-card p{margin:0;color:var(--muted);font-size:.93rem;line-height:1.5}
+.tray-card .tag24{justify-self:start;font:600 .7rem/1 var(--label);letter-spacing:.12em;text-transform:uppercase;background:var(--tile);color:var(--green-ink);padding:5px 8px;border-radius:999px}
+
+/* reviews */
+.reviews{overflow:hidden}
+.slips{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:14px 2px 26px}
+.slip{flex:0 0 min(330px,80vw);scroll-snap-align:start;background:var(--paper);color:var(--paper-ink);border-radius:4px;padding:22px 20px 18px;box-shadow:0 14px 30px -18px rgba(0,0,0,.45);position:relative;display:grid;gap:14px;align-content:space-between}
+.slip:nth-child(odd){transform:rotate(-1.3deg)}.slip:nth-child(even){transform:rotate(1.1deg)}
+.slip::before{content:"";position:absolute;top:-8px;left:50%;width:70px;height:18px;transform:translateX(-50%) rotate(-2deg);background:rgba(195,34,40,.18);border-left:1px dashed rgba(0,0,0,.1);border-right:1px dashed rgba(0,0,0,.1)}
+.slip q{font-size:1rem;line-height:1.55;quotes:"\201C" "\201D"}
+.slip cite{font:400 1.35rem/1 var(--script);color:#C32228;font-style:normal}
+
+/* visit */
+.locs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.loc{border:1.5px solid var(--line);border-radius:20px;padding:22px;background:var(--surface);display:grid;gap:14px;align-content:start}
+.loc h3{font:400 1.7rem/1.05 var(--display)}
+.loc address{font-style:normal;color:var(--muted)}
+.status{display:inline-flex;align-items:center;gap:8px;font:600 .82rem/1 var(--label);letter-spacing:.1em;text-transform:uppercase;padding:7px 11px;border-radius:999px;justify-self:start}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.status.on{background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green-ink)}
+.status.on::before{animation:blink 1.6s ease-in-out infinite}
+.status.off{background:color-mix(in srgb,var(--red) 12%,transparent);color:var(--red-ink)}
+@keyframes blink{50%{opacity:.25}}
+.hours{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0;font-size:.95rem}
+.hours dt{color:var(--muted)}
+.hours dd{margin:0}
+.hours .now{font-weight:700;color:var(--ink)}
+.loc .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.loc .btn{padding:.7em 1.1em;font-size:.92rem}
+
+footer{background:var(--band-2);color:var(--on-band)}
+footer .wrap{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:28px;padding-block:56px 28px}
+footer .lg{background:#fff;border-radius:12px;padding:10px 14px;display:inline-block}
+footer .lg img{height:52px;width:auto}
+footer h4{margin:0 0 10px;font:600 .8rem/1 var(--label);letter-spacing:.14em;text-transform:uppercase;color:var(--on-band-muted)}
+footer p{margin:0 0 6px;color:var(--on-band)}
+footer a{color:var(--on-band)}
+.legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.15);padding-top:18px;display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;font-size:.85rem;color:var(--on-band-muted)}
+
+@media (max-width:980px){
+  .hero .wrap,.specials .wrap,.cake-grid,.whole .wrap,.planner{grid-template-columns:1fr}
+  .stage{margin-top:8px}
+  .case-grid{grid-template-columns:1fr}
+  .case-tabs{position:static;display:flex;overflow-x:auto;padding-bottom:6px}
+  .case-tabs button{flex:0 0 auto}
+  .ticket-col{position:static}
+  .locs{grid-template-columns:1fr}
+  footer .wrap{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .fields{grid-template-columns:1fr}
+  .shelf-top{grid-template-columns:1fr}
+  .shelf-photo{aspect-ratio:16/9}
+  .board-wrap{grid-template-columns:1fr}
+  .board-photo{display:none}
+  .board li{grid-template-columns:6.4em 1fr}
+  .brand img{height:38px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
+  html{scroll-behavior:auto}
+}
+</style>
+
+<div class="demo" id="demo"><div class="wrap"><span>Concept redesign by <b>LTGPEAK</b> for Italian Peoples Bakery. This is a preview, not the bakery's official site.</span><button type="button" id="demoX" aria-label="Hide this note">×</button></div></div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Italian Peoples Bakery home"><img src="img/logo.webp" alt="Italian Peoples Bakery" width="700" height="272"></a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#specials">Specials</a><a href="#case">The Case</a><a href="#cakes">Cakes</a><a href="#story">Since 1936</a><a href="#wholesale">Wholesale</a><a href="#catering">Catering</a><a href="#visit">Visit</a>
+    </nav>
+    <a class="take" href="#visit"><span>Open<br>today</span><b id="takeHrs">6–8</b></a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="nav"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Chambersburg · Trenton, N.J. · Since 1936</p>
+      <h1>Stop and smell the <em>cannoli.</em><span class="script">fresh out of the oven, every morning</span></h1>
+      <p class="lede">Artisan bread and rolls, custom cakes and Italian pastry from the Gervasio family bakery. Three shops in Trenton, Mercerville and Levittown, open 365 days a year.</p>
+      <div class="cta">
+        <a class="btn btn-red" href="#cakes">Start a cake order <span aria-hidden="true">→</span></a>
+        <a class="btn btn-line" href="#visit">Find your bakery</a>
+      </div>
+      <ul class="facts">
+        <li><b class="num">1936</b><span>Family owned</span></li>
+        <li><b class="num">3</b><span>Bakeries</span></li>
+        <li><b class="num">450+</b><span>Wholesale accounts</span></li>
+        <li><b class="num">365</b><span>Days a year</span></li>
+      </ul>
+    </div>
+
+    <div class="stage" id="stage">
+      <canvas class="flour" id="flour" aria-hidden="true"></canvas>
+      <div class="tilt" id="tilt">
+        <div class="box" id="box" role="button" tabindex="0" aria-label="Open the pastry box" aria-pressed="false">
+          <div class="tray"><div class="tray-in">
+            <figure><img src="img/cannoli.webp" alt="Cannoli dusted with chocolate and pistachio" width="1400" height="788"></figure>
+            <figure><img src="img/hero.webp" alt="Butter croissants" width="1800" height="1013"></figure>
+            <figure><img src="img/pastrymix.webp" alt="Cream-filled pastries with crumb topping" width="1060" height="1060"></figure>
+            <figure><img src="img/sfogliatelle.webp" alt="Sfogliatelle and lobster tails" width="294" height="197"></figure>
+          </div></div>
+          <div class="lid" id="lid">
+            <div class="lid-face">
+              <div class="lid-print">
+                <svg viewBox="0 0 200 200" aria-hidden="true"><defs><path id="ring" d="M100,100 m-84,0 a84,84 0 1,1 168,0 a84,84 0 1,1 -168,0"/></defs>
+                  <text font-family="Oswald, Arial Narrow, sans-serif" font-size="11.5" font-weight="600" letter-spacing="3.1" fill="#C32228"><textPath href="#ring">ITALIAN PEOPLES BAKERY · TRENTON, N.J. · SINCE 1936 · BREAD · CAKES · PASTRY ·</textPath></text></svg>
+                <img src="img/logo.webp" alt="" width="700" height="272">
+              </div>
+              <div class="lid-note">handle with care, cannoli inside</div>
+            </div>
+            <div class="lid-back"></div>
+          </div>
+          <div class="twine h"></div><div class="twine v"></div>
+          <svg class="bow" viewBox="0 0 120 70" aria-hidden="true"><defs><pattern id="tw" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="8" height="8" fill="#fff"/><rect width="4.6" height="8" fill="#C32228"/></pattern></defs>
+            <path d="M60 36 C40 6, 6 10, 14 30 C20 46, 44 42, 60 36Z" fill="none" stroke="url(#tw)" stroke-width="7" stroke-linecap="round"/>
+            <path d="M60 36 C80 6, 114 10, 106 30 C100 46, 76 42, 60 36Z" fill="none" stroke="url(#tw)" stroke-width="7" stroke-linecap="round"/>
+            <path d="M58 38 C50 50, 40 58, 30 66 M62 38 C70 50, 80 58, 92 66" fill="none" stroke="url(#tw)" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="60" cy="36" r="7" fill="#C32228" stroke="#fff" stroke-width="2"/></svg>
+        </div>
+      </div>
+      <div class="stage-ui"><button type="button" id="boxBtn">Tie it back up</button><span>tap the box</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker" aria-hidden="true"><div class="ticker-track" id="ticker"></div></div>
+
+<section class="sec specials" id="specials">
+  <div class="wrap">
+    <div class="today">
+      <p class="eyebrow">Off the board at the counter</p>
+      <h2>Today's special</h2>
+      <p class="today-day" id="tDay">Saturday</p>
+      <p class="today-item" id="tItem">Garlic Bread</p>
+      <span class="today-deal" id="tDeal">½ price</span>
+      <div class="days" id="days" role="group" aria-label="Pick a day"></div>
+      <p class="fine">From the daily specials board posted in the shop. Specials can change, so call your bakery to confirm.</p>
+    </div>
+    <div class="board-wrap">
+      <div class="board">
+        <h3>Daily Specials</h3>
+        <p class="sub">New items more days!!</p>
+        <ol id="board"></ol>
+      </div>
+      <figure class="board-photo"><img src="img/specials.webp" alt="Photo of the Daily Specials board in the bakery" width="300" height="447" loading="lazy"><figcaption>the real board</figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec case" id="case">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">The case</p>
+      <h2>Everything behind the glass</h2>
+      <p class="lede">More than 150 breads, rolls, pastries, pies and cookies. Pick a shelf or search for your favorite.</p>
+    </div>
+    <div class="case-grid">
+      <div class="case-tabs" id="caseTabs" role="tablist" aria-label="Menu shelves"></div>
+      <div class="glass">
+        <label class="search" for="q"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input id="q" type="search" placeholder="Search the case: cannoli, rye, pignoli…" autocomplete="off"></label>
+        <div class="shelf-top" id="shelfTop">
+          <div><h3 id="shelfName">Pastries</h3><p id="shelfDesc"></p></div>
+          <div class="shelf-photo"><img id="shelfImg" src="img/pastrymix.webp" alt="" width="1060" height="1060" loading="lazy"></div>
+        </div>
+        <ul class="tags" id="tags" aria-live="polite"></ul>
+        <p class="case-note">Selection varies by location and day. Call ahead for large orders.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="cakes">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Custom cakes</p>
+      <h2>No celebration is complete without the cake</h2>
+      <p class="lede">Wedding cakes, birthday cakes and novelty cakes for every occasion. Build your order ticket below, then call the bakery with it in hand.</p>
+    </div>
+    <div class="cake-grid">
+      <form class="builder" id="builder" novalidate>
+        <fieldset class="step"><legend>1 · Pick a cake</legend><div class="flavors" id="flavors"></div></fieldset>
+        <fieldset class="step"><legend>2 · What's the occasion?</legend><div class="occasions" id="occasions"></div></fieldset>
+        <fieldset class="step"><legend>3 · The details</legend>
+          <div class="fields">
+            <label class="field full" for="msg"><span>Writing on the cake</span><input id="msg" maxlength="40" placeholder="Happy Birthday Nonna!"></label>
+            <label class="field" for="who"><span>Name for the order</span><input id="who" maxlength="40" placeholder="Your name"></label>
+            <label class="field" for="when"><span>Pickup date</span><input id="when" type="date"></label>
+            <label class="field full" for="where"><span>Pick up at</span><select id="where"></select></label>
+          </div>
+        </fieldset>
+      </form>
+      <div class="ticket-col">
+        <div class="ticket" id="ticket" aria-live="polite">
+          <div class="ticket-head"><div><small>Cake order ticket</small><div class="ticket-no">No. <span id="tNo" class="num">1936</span></div></div><small style="text-align:right">Italian<br>Peoples<br>Bakery</small></div>
+          <dl>
+            <dt>Cake</dt><dd id="oCake">Italian Rum</dd>
+            <dt>Inside</dt><dd id="oDesc">Sponge cake, vanilla custard, cooked cherries, icing of choice</dd>
+            <dt>For</dt><dd id="oOcc">Birthday</dd>
+            <dt>Reads</dt><dd class="msg" id="oMsg">Happy Birthday Nonna!</dd>
+            <dt>Name</dt><dd id="oWho">—</dd>
+            <dt>Pickup</dt><dd id="oWhen">—</dd>
+            <dt>At</dt><dd id="oWhere">Trenton</dd>
+          </dl>
+          <div class="ticket-foot">
+            <p>Call to place it: <b class="phone num" id="oPhone">(609) 394-7161</b></p>
+            <div class="row"><a class="btn btn-red" id="oCall" href="tel:+16093947161">Call the bakery</a><button type="button" class="copy" id="oCopy">Copy ticket</button></div>
+            <p class="done" id="oDone"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gal-head"><h3>Out of the cake room</h3><div class="seg" id="galF" role="group" aria-label="Filter cakes"></div></div>
+    <div class="gallery" id="gallery"></div>
+  </div>
+  <dialog class="lb" id="lb"><img id="lbImg" src="" alt=""><button type="button" id="lbX" aria-label="Close">×</button></dialog>
+</section>
+
+<section class="story" id="story">
+  <div class="story-pin" id="storyPin">
+    <div class="track" id="track">
+      <div class="era intro"><p class="eyebrow">The family</p><h2>Since 1936, from Hamilton Avenue</h2><p class="lede">Four generations of bread, told in seven stops. Scroll to walk through it.</p></div>
+      <article class="era"><span class="yr">1936</span><figure><img src="img/bakers1936.webp" alt="Three bakers in front of the old Peoples pastry shop sign" width="312" height="438" loading="lazy"></figure><h3>Pasquale Gervasio opens on Hamilton Avenue</h3><p>His bread earns a reputation fast. He runs the shop with his wife, Margaret, and their five children: Theresa, Phyllis, Frank, Johnny and Victor.</p></article>
+      <article class="era"><span class="yr">1956</span><h3>The family incorporates on April 1</h3><p>The kids clean, mix, mold and deliver, building a wholesale and retail bakery in Chambersburg, Trenton's Italian neighborhood. Deliveries reach delis, supermarkets, restaurants, hospitals and homes.</p></article>
+      <article class="era"><span class="yr">’60s</span><h3>Pastry joins the bread, then a deli</h3><p>When a neighborhood competitor closes, the store moves and adds a pastry case. Customers ask for a deli, so the family adds one.</p></article>
+      <article class="era"><span class="yr">1976</span><figure><img src="img/storefront.webp" alt="Black and white photo of the bakery storefront" width="548" height="367" loading="lazy"></figure><h3>Following the neighbors to the suburbs</h3><p>Between July 1976 and May 1990 the company opens eight satellite stores. Every loaf is still made at the main bakery to keep the quality the same.</p></article>
+      <article class="era"><span class="yr">1986</span><h3>A real sourdough rye</h3><p>The bakery buys Frey's Baking Company to make a true sourdough rye. It's still on the shelf, and still buy one, get one free on Wednesdays.</p></article>
+      <article class="era"><span class="yr">1990</span><h3>New Colonial Bakery joins next door</h3><p>The two buildings are linked with a conveyor so fresh bread rolls straight to a much bigger packing and delivery floor.</p></article>
+      <article class="era"><span class="yr">Today</span><figure><img src="img/shelves.webp" alt="Shelves of fresh rolls" width="300" height="447" loading="lazy"></figure><h3>Three bakeries, open every day</h3><p>Trenton, Mercerville and Levittown, plus more than 450 supermarkets, restaurants and organizations served daily.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="sec whole" id="wholesale">
+  <div class="wrap">
+    <div>
+      <p class="eyebrow">Wholesale</p>
+      <div class="big num" id="count">450+</div>
+      <h2 style="margin-top:14px">supermarkets, restaurants and organizations, every day</h2>
+      <p class="lede" style="margin-top:16px">Artisan breads, rolls, cakes and Italian pastries delivered across the Trenton, Mercerville and Levittown area, from country clubs to the ballpark.</p>
+      <div class="whole-cta"><a class="btn btn-red" href="tel:+16093969869">Call wholesale</a><span class="phone num">(609) 396-9869</span><button type="button" class="copy" data-copy="(609) 396-9869">Copy</button></div>
+    </div>
+    <div class="marq" aria-label="Some of our wholesale customers"><div class="marq-row" id="m1"></div><div class="marq-row rev" id="m2"></div><div class="marq-row" id="m3"></div></div>
+  </div>
+</section>
+
+<section class="sec cater" id="catering">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="eyebrow">Catering</p>
+      <h2>Party trays and hoagies by the foot</h2>
+      <p class="lede">Deli trays served with coleslaw, potato salad and our own dinner rolls. Tell us the headcount and we'll point you to the right spread.</p>
+    </div>
+    <div class="planner">
+      <div class="panel">
+        <h3>How many are coming?</h3>
+        <div class="guests"><output id="gOut" for="guests" class="num">40</output><span>guests</span></div>
+        <input id="guests" type="range" min="10" max="150" step="1" value="40" aria-label="Number of guests">
+        <ul class="rec" id="rec"></ul>
+        <p class="fine" style="margin:0">Large trays serve up to 28, small trays up to 15. Veggie and fruit trays need 24 hours' notice.</p>
+      </div>
+      <div class="panel">
+        <h3>Build the hoagie</h3>
+        <div class="seg" id="hLen" role="group" aria-label="Hoagie length"></div>
+        <div class="hoagie-stage"><div class="hoagie" id="hoagie"><div class="h-bot"></div><div class="h-fill" id="hFill"></div><div class="h-top"></div></div><div class="hoagie-len"><span>0 ft</span><span>3</span><span>6 ft</span></div></div>
+        <div class="seg" id="hType" role="group" aria-label="Hoagie type"></div>
+        <p class="hoagie-txt" id="hTxt"></p>
+        <p class="fine" style="margin:0">On our fresh-baked bread with lettuce, tomato and onions. Oil, vinegar and mayo on the side.</p>
+      </div>
+    </div>
+    <div class="trays" id="trays"></div>
+  </div>
+</section>
+
+<section class="sec reviews" id="reviews">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">From the counter</p><h2>What the regulars say</h2></div>
+    <div class="slips" id="slips"></div>
+  </div>
+</section>
+
+<section class="sec" id="visit" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">Visit</p><h2>Three ovens, warm every morning</h2><p class="lede">Open 365 days a year. Hours and status below are live in Eastern time.</p></div>
+    <div class="locs" id="locs"></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div><span class="lg"><img src="img/logo.webp" alt="Italian Peoples Bakery" width="700" height="272" loading="lazy"></span><p style="margin-top:16px">63 Butler Street, Trenton, NJ 08611</p><p>Main store <span class="num">(609) 394-7161</span> · Wholesale <span class="num">(609) 396-9869</span></p></div>
+    <div><h4>Shop</h4><p><a href="#specials">Daily specials</a></p><p><a href="#case">The case</a></p><p><a href="#cakes">Custom cakes</a></p><p><a href="#catering">Catering</a></p></div>
+    <div><h4>Follow</h4><p><a href="https://www.facebook.com/italianpeoplesbakery/" target="_blank" rel="noopener">Facebook</a></p><p><a href="https://www.facebook.com/italianpeoplesbakery/" target="_blank" rel="noopener">Review us on Facebook</a></p></div>
+    <div class="legal"><span>© Italian Peoples Bakery. Photos and menu from the bakery.</span><span>Concept redesign by LTGPEAK · Time is Quality</span></div>
+  </div>
+</footer>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s), el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e};
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* demo strip + nav */
+$('#demoX').onclick=()=>{$('#demo').hidden=true};
+const nav=$('#nav'),burger=$('#burger');
+burger.onclick=()=>{const o=nav.classList.toggle('open');burger.setAttribute('aria-expanded',o)};
+nav.addEventListener('click',e=>{if(e.target.tagName==='A'){nav.classList.remove('open');burger.setAttribute('aria-expanded',false)}});
+
+/* clock in Eastern time */
+function nyNow(){const p=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',weekday:'short',hour:'numeric',minute:'numeric',hourCycle:'h23'}).formatToParts(new Date());const g=t=>p.find(x=>x.type===t).value;return{day:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].indexOf(g('weekday')),min:(+g('hour'))*60+(+g('minute'))}}
+const NOW=nyNow();
+const DAYS=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+/* pastry box */
+const box=$('#box'),btn=$('#boxBtn'),cv=$('#flour'),cx=cv.getContext('2d');let parts=[],raf=0;
+function sizeCv(){const r=cv.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,2);cv.width=r.width*d;cv.height=r.height*d;cx.setTransform(d,0,0,d,0,0)}
+function puff(){if(reduce)return;sizeCv();const r=cv.getBoundingClientRect(),b=box.getBoundingClientRect();const ox=b.left-r.left,oy=b.top-r.top,s=b.width;
+  const col=getComputedStyle(document.documentElement).getPropertyValue('--flour').trim()||'rgba(200,190,170,.5)';
+  for(let i=0;i<90;i++){const side=Math.random()*4|0,t=Math.random();let x=ox+(side%2?t*s:(side?s:0)),y=oy+(side%2?(side>2?s:0):t*s);if(side===1){x=ox+t*s;y=oy}if(side===3){x=ox+t*s;y=oy+s}
+    parts.push({x,y,vx:(x-(ox+s/2))/s*2.2+(Math.random()-.5),vy:(y-(oy+s/2))/s*2.2-Math.random()*1.4,r:1+Math.random()*3.2,a:.9,c:col})}
+  cancelAnimationFrame(raf);(function f(){cx.clearRect(0,0,cv.width,cv.height);parts=parts.filter(p=>p.a>.02);for(const p of parts){p.x+=p.vx;p.y+=p.vy;p.vx*=.97;p.vy=p.vy*.97-.02;p.a*=.965;cx.globalAlpha=p.a;cx.fillStyle=p.c;cx.beginPath();cx.arc(p.x,p.y,p.r,0,7);cx.fill()}cx.globalAlpha=1;if(parts.length)raf=requestAnimationFrame(f)})()}
+let timers=[];const later=(f,ms)=>timers.push(setTimeout(f,reduce?0:ms));
+function openBox(){timers.forEach(clearTimeout);timers=[];box.classList.add('untied');later(()=>{box.classList.add('open');later(puff,380)},reduce?0:650);box.setAttribute('aria-pressed','true');box.setAttribute('aria-label','Close the pastry box');btn.textContent='Tie it back up'}
+function closeBox(){timers.forEach(clearTimeout);timers=[];box.classList.remove('open');later(()=>box.classList.remove('untied'),900);box.setAttribute('aria-pressed','false');box.setAttribute('aria-label','Open the pastry box');btn.textContent='Untie the box'}
+const toggle=()=>box.classList.contains('open')?closeBox():openBox();
+box.addEventListener('click',toggle);box.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle()}});btn.onclick=toggle;
+btn.textContent='Untie the box';
+setTimeout(openBox,reduce?0:1100);
+const tilt=$('#tilt'),hero=document.querySelector('.hero');
+if(!reduce&&matchMedia('(pointer:fine)').matches){hero.addEventListener('pointermove',e=>{const r=$('#stage').getBoundingClientRect();const x=(e.clientX-(r.left+r.width/2))/r.width,y=(e.clientY-(r.top+r.height/2))/r.height;tilt.style.transform=`rotateY(${x*9}deg) rotateX(${-y*7}deg)`});hero.addEventListener('pointerleave',()=>tilt.style.transform='')}
+
+/* ticker */
+const tick=['Cannoli','Sfogliatelle','Lobster Tails','Italian Pignoli','Tiramisu','Semolina','Corn Rye','Brown Derby','Rugulach','Napoleons','Tres Leche','Seeded Twist Rings','Bear Claws','Zuppa Inglese'];
+$('#ticker').innerHTML=[...tick,...tick].map(t=>`<span>${t}</span>`).join('');
+
+/* specials */
+const SP=[['Pizza Dough','Buy one, get one free'],['½ Torps or Mini Kaisers','Buy 12, get 6 free'],['Torps or Kaisers','Buy 12, get 6 free'],['Rye Bread','Buy one, get one free'],['Stick or Spolet','Buy one, get one free'],['Mini Sticks','Buy one, get one free'],['Garlic Bread','½ price']];
+const board=$('#board'),daysEl=$('#days');
+SP.forEach(([i,d],k)=>{const li=el('li',k===NOW.day?'is-today':'',`<span class="d">${DAYS[k]}</span><span class="t">${i} · ${d}</span>`);li.onclick=()=>pickDay(k);board.append(li);
+  const b=el('button','chip',DAYS[k].slice(0,3));b.type='button';b.onclick=()=>pickDay(k);daysEl.append(b)});
+function pickDay(k){$('#tDay').textContent=(k===NOW.day?'Today · ':'')+DAYS[k];$('#tItem').textContent=SP[k][0];$('#tDeal').textContent=SP[k][1];
+  [...daysEl.children].forEach((b,i)=>b.setAttribute('aria-pressed',i===k));[...board.children].forEach((l,i)=>l.classList.toggle('is-pick',i===k&&k!==NOW.day))}
+pickDay(NOW.day);
+
+/* the case */
+const CASE={
+ Pastries:{img:'pastrymix',d:'Cannoli filled to order, sfogliatelle, lobster tails, turnovers, strudel and the morning donuts.',items:['Traditional Cannoli','Chocolate Cannoli','Assorted Mousse Cannoli','Mini Cannoli','Large Sfogliatelle','Lobster Tails','Tiramisu','Napoleons','Crème Horns','Eclairs','Cream Puffs','Mini Cream Puffs','Zuppa Inglese Cups','Tres Leche','Rugulach','Strawberry Tarts','Cheese Tarts','Cheese Squares','NY Style Cheesecakes','Cheesecakes w/ Fruit Topping','Assorted Flavored Cheesecakes','French Apple Turnover','Apple Turnover','Cherry Turnover','Cheese Turnover','Elephant Ears','Cheese Logs','Raspberry Twist','Bear Claws','Almond Claws','Chocolate Pretzels','Cherry Cheese Cobbler','Apple Cheese Cobbler','Blueberry Cheese Cobbler','Apple Crumb Slice','Apple-Cheese Crumb Slice','Cherry Cheese Crumb Slice','Apple Strudel','Cherry Strudel','Cheese Strudel','Yeast Raised Donuts','Cake Donuts','Bagels','Meltaways','Danish','Mini Danish','Tea Biscuits','Trolly Buns','Sticky Buns','Individual Sticky Buns','Muffins','Croissants','Cheese, Cherry & Cinnamon Bread','Mini Pastry','Whoopie Pies','Assorted Fruit Clouds','Chocolate Mousse Cups','Strawberry Shortcake Cups','Mousse Squares','Strawberry Squares','Banana Fudge Square','Pound Cake Rum Square','Single Carrot Square','Vanilla B/C Cake Slice','Chocolate B/C Cake Slice','½ & ½ B/C Cake Slice','Cake Cut Outs']},
+ 'Cupcakes & Brownies':{img:'cake12',d:'Frosted by hand, from plain vanilla to character cupcakes for the party table.',items:['Vanilla Cupcakes','Chocolate Cupcakes','Carrot Cupcakes','Filled Cupcakes','Character Cupcakes','Traditional Brownies','Gourmet Brownies']},
+ 'Pies & Cakes':{img:'strudel',d:'Ten-inch fruit pies, cream pies, mousse cakes and the house Brown Derby.',items:['10" Gourmet Fruit Pies: Dutch Apple, Farmstand Apple, Cherry, Peach','10" Coconut Custard Pies','10" Pumpkin Pies','7" Single Layer Cake','7" Double Layer Cake','Assorted Mousse Cakes','Assorted Mousse Pies','Strawberry Shortcakes','Banana Cream Pies','Brown Derby Pies & Cakes','Chocolate Cream Pie','Rum Pies & Cakes','Fruit Filled Sponge Rolls','Fruit Filled Sponge Squares','Angel Food Cake','Assorted Pound Cakes','Banana Nut Loaf','Butter Cakes','Coffee Cakes','Marble Pound Cake','Peanut Butter Ring','Roman Apple Cake','Sour Cream Crunch Cake']},
+ Cookies:{img:'case',d:'Italian cookie trays by the pound, pignoli, and the Jordan almonds for every wedding.',items:['Italian Cookies','Italian Pignoli','American Cookies','Linzer Tart Cookies','Cut-Out Character Cookies','Jordan Almonds']},
+ Bread:{img:'breadcase',d:'Recipes handed down through generations. Semolina, Vienna, Sicilian twist and a true sourdough rye.',items:['Spolets & Sticks','Snakes','Italian Twists','Round Slice','Pullman (Italian White)','Neapolitan','Vienna Bread','Whole Wheat Bread','Semolina (pure durum wheat)','Salt & Sugar Free Pan Bread','Old Fashion Long, Mini Stick, Baguette','Old Fashion Round','Raisin Bread','Cinnamon Bread','Cinnamon Raisin Bread','Ham & Cheese (Catania Bread)','Pizza Bread, Cheese & Sauce','Pizza Bread, Cheese Only','Rye & Pumpernickel','Corn, Russian, Onion, Caraway & Garlic Rye','Double Rye & Double Half & Half Rye','Sicilian Twist Bread','Seeded Twist Rings']},
+ Rolls:{img:'shelves',d:'The torps the regulars drive in for, plus Kaisers, horns and hoagie rolls.',items:['Torps','½ Torps','Kaisers','Seeded Kaisers','Mini Kaisers','Garlic Fingers','Horns','Snowflake','Mini Snowflake','Hamburger','Mini Hamburger','Hot Dog','Dinner','Sweet','Wheat','Onion','Mini Onion','Hoagie']},
+ 'Frozen Case':{img:'rolls',d:'Take the bakery home: dough, garlic bread and crumbs from the freezer.',items:['Garlic Bread (small)','Pizza Dough, White or Wheat','Bread Crumbs (unseasoned)','Bread Stuffing (unseasoned)']}
+};
+const tabs=$('#caseTabs'),tags=$('#tags'),q=$('#q');let shelf='Pastries';
+Object.entries(CASE).forEach(([k,v])=>{const b=el('button','',`${k}<small class="num">${v.items.length}</small>`);b.type='button';b.setAttribute('role','tab');b.onclick=()=>{q.value='';showShelf(k)};tabs.append(b)});
+function showShelf(k){shelf=k;const v=CASE[k];[...tabs.children].forEach(b=>b.setAttribute('aria-selected',b.firstChild.textContent===k));
+  $('#shelfTop').hidden=false;$('#shelfName').textContent=k;$('#shelfDesc').textContent=v.d;$('#shelfImg').src=`img/${v.img}.webp`;$('#shelfImg').alt=k;
+  tags.innerHTML=v.items.map((t,i)=>`<li style="animation-delay:${Math.min(i*12,400)}ms">${esc(t)}</li>`).join('')}
+q.addEventListener('input',()=>{const s=q.value.trim().toLowerCase();if(!s){showShelf(shelf);return}
+  $('#shelfTop').hidden=true;[...tabs.children].forEach(b=>b.setAttribute('aria-selected',false));let html='',n=0;
+  const rx=new RegExp('('+s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
+  for(const [k,v] of Object.entries(CASE)){const hit=v.items.filter(t=>t.toLowerCase().includes(s));if(hit.length){html+=`<li class="cat">${k}</li>`+hit.map(t=>`<li>${esc(t).replace(rx,'<mark>$1</mark>')}</li>`).join('');n+=hit.length}}
+  tags.innerHTML=n?html:`<li class="cat">Nothing on the shelf by that name. Call (609) 394-7161 and ask, we may have it in the back.</li>`});
+showShelf('Pastries');
+
+/* cake builder */
+const FL=[['Italian Rum','Sponge cake, vanilla custard, cooked cherries, icing of choice'],['Brown Derby','Chocolate cake, strawberry and banana filling, whipped cream icing'],['Strawberry Shortcake','Vanilla cake, strawberry juice and filling, whipped cream icing, berries outside'],['German Chocolate','Chocolate cake, German chocolate filling in the middle and on top'],['Carrot Cake','Carrot cake, cream cheese icing'],['Vanilla','Classic vanilla cake, icing of choice'],['Chocolate','Classic chocolate cake, icing of choice'],['Pound Cake','Dense, buttery pound cake']];
+const OC=['Birthday','Wedding','Anniversary','Graduation','Baby shower','Bridal shower','Reunion','Housewarming','Corporate','Promotion',"Mother's / Father's Day",'Going-away','Holiday'];
+const LOC=[{n:'Trenton',a:'63 Butler Street',c:'Trenton, NJ 08611',p:'(609) 394-7161',t:'+16093947161',h:[[360,1200],[360,1200],[360,1200],[360,1200],[360,1200],[360,1200],[360,1200]],m:'https://maps.google.com/maps?daddr=63%20Butler%20Street,%20Trenton,%20NJ%2008611',x:'Main store and wholesale'},
+ {n:'Mercerville',a:'332 Route 33',c:'Mercerville, NJ 08619',p:'(609) 586-1868',t:'+16095861868',h:[[360,1020],[360,1140],[360,1140],[360,1140],[360,1140],[360,1140],[360,1140]],m:'https://maps.google.com/maps?daddr=332%20Route%2033,%20Mercerville,%20NJ%2008619'},
+ {n:'Levittown',a:'1142 Woodbourne Road',c:'Levittown, PA 19056',p:'(215) 946-3560',t:'+12159463560',h:[[420,1020],[420,1140],[420,1140],[420,1140],[420,1140],[420,1140],[420,1140]],m:'https://maps.google.com/maps?daddr=1142%20Woodbourne%20Road,%20Levittown,%20PA%2019056'}];
+const fl=$('#flavors');FL.forEach(([n,d],i)=>{const w=el('div','flavor',`<input type="radio" name="flavor" id="f${i}" value="${i}" ${i===0?'checked':''}><label for="f${i}"><b>${n}</b><small>${d}</small></label>`);fl.append(w)});
+const oc=$('#occasions');let occ='Birthday';OC.forEach(o=>{const b=el('button','chip',esc(o));b.type='button';b.setAttribute('aria-pressed',o===occ);b.onclick=()=>{occ=o;[...oc.children].forEach(c=>c.setAttribute('aria-pressed',c===b));upd()};oc.append(b)});
+const where=$('#where');LOC.forEach((l,i)=>where.append(new Option(`${l.n} · ${l.a}`,i)));
+const when=$('#when');{const d=new Date(Date.now()+3*864e5);when.min=new Date().toISOString().slice(0,10);when.value=d.toISOString().slice(0,10)}
+let edits=0;
+function upd(){const f=FL[+document.querySelector('[name=flavor]:checked').value],l=LOC[+where.value];
+  $('#oCake').textContent=f[0];$('#oDesc').textContent=f[1];$('#oOcc').textContent=occ;
+  $('#oMsg').textContent=$('#msg').value.trim()||'Happy Birthday Nonna!';$('#oWho').textContent=$('#who').value.trim()||'—';
+  $('#oWhen').textContent=when.value?new Date(when.value+'T12:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}):'—';
+  $('#oWhere').textContent=`${l.n}, ${l.a}`;$('#oPhone').textContent=l.p;$('#oCall').href='tel:'+l.t;$('#tNo').textContent=1936+(edits++%64);$('#oDone').textContent=''}
+$('#builder').addEventListener('input',upd);$('#builder').addEventListener('submit',e=>e.preventDefault());upd();
+function copyText(t,done){const ok=()=>done('Copied. Paste it in a text or read it to the bakery when you call.');
+  try{navigator.clipboard.writeText(t).then(ok,()=>done('Copy is blocked here. Select the ticket text instead.'))}catch(e){done('Copy is blocked here. Select the ticket text instead.')}}
+$('#oCopy').onclick=()=>{const t=`Cake order for Italian Peoples Bakery\nCake: ${$('#oCake').textContent} (${$('#oDesc').textContent})\nOccasion: ${occ}\nWriting: ${$('#oMsg').textContent}\nName: ${$('#oWho').textContent}\nPickup: ${$('#oWhen').textContent} at ${$('#oWhere').textContent}`;copyText(t,m=>$('#oDone').textContent=m)};
+document.querySelectorAll('[data-copy]').forEach(b=>b.onclick=()=>copyText(b.dataset.copy,()=>{b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1600)}));
+
+/* gallery */
+const GAL=[['wedding','Wedding'],['cake01','Wedding'],['cake02','Wedding'],['cake03','Wedding'],['cake08','Celebration'],['cake04','Wedding'],['cake10','Holiday'],['cake15','Birthday'],['cake05','Wedding'],['cake11','Birthday'],['cake06','Wedding'],['cake13','Birthday'],['cake07','Anniversary'],['cake14','Birthday'],['cake09','Wedding'],['cake16','Birthday'],['cake17','Birthday'],['cake18','Birthday'],['cake12','Cupcakes']];
+const gal=$('#gallery'),lb=$('#lb');
+function drawGal(f){gal.innerHTML='';GAL.filter(g=>f==='All'||(f==='Wedding'?g[1]==='Wedding':g[1]!=='Wedding')).forEach(([k,c])=>{const b=el('button','',`<img src="img/${k}.webp" alt="${c} cake by Italian Peoples Bakery" loading="lazy"><span>${c}</span>`);b.type='button';b.onclick=()=>{$('#lbImg').src=`img/${k}.webp`;$('#lbImg').alt=`${c} cake`;lb.showModal()};gal.append(b)});gal.scrollLeft=0}
+const gf=$('#galF');['All','Wedding','Birthdays & more'].forEach((f,i)=>{const b=el('button','chip',f);b.type='button';b.setAttribute('aria-pressed',i===0);b.onclick=()=>{[...gf.children].forEach(c=>c.setAttribute('aria-pressed',c===b));drawGal(f)};gf.append(b)});
+drawGal('All');$('#lbX').onclick=()=>lb.close();lb.addEventListener('click',e=>{if(e.target===lb)lb.close()});
+
+/* story: horizontal while scrolling down */
+const story=$('#story'),pin=$('#storyPin'),track=$('#track');
+function layoutStory(){const wide=innerWidth>=900&&!reduce;story.classList.toggle('static',!wide);if(!wide){story.style.height='';track.style.transform='';return}
+  const dist=Math.max(0,track.scrollWidth-innerWidth+40);story.style.height=(pin.offsetHeight+dist)+'px';story.dataset.dist=dist;onScroll()}
+function onScroll(){if(story.classList.contains('static'))return;const r=story.getBoundingClientRect(),dist=+story.dataset.dist||0,range=story.offsetHeight-pin.offsetHeight;const p=Math.min(1,Math.max(0,(-r.top+64)/(range||1)));track.style.transform=`translateX(${-p*dist}px)`}
+addEventListener('scroll',onScroll,{passive:true});addEventListener('resize',layoutStory);addEventListener('load',layoutStory);layoutStory();
+
+/* wholesale */
+const W=['Carlucci’s','CURE Insurance Center','Deerwood Country Club','Florentino’s','Foley’s Family Market','Francisco’s','German American Club','Hamilton Grille','Hibernian Club','Hilton Garden Inn','Jericho Golf Club','Lambertville Station','Marrazzo’s Thriftway','Marsha Brown’s on Main','Mercer County Community College','Nassau Inn','New Egypt Elks','New Egypt Market','Old York Country Club','Our Lady of the Angels','Pennington Market','Pete’s Steakhouse','PJ’s Pancake House','Princeton University','Prospectors Grille','Rice’s Market','Rossi’s Bar & Grill','St. George’s Greek Orthodox Church','Saker ShopRites','Salvation Army','Seton Hall','Sheraton Bucks','Springdale Country Club','State of New Jersey','Stone Terrace','Trenton Thunder','Villa Rosa Yardley'];
+const third=Math.ceil(W.length/3);[['#m1',0],['#m2',1],['#m3',2]].forEach(([s,i])=>{const r=W.slice(i*third,(i+1)*third);$(s).innerHTML=[...r,...r].map(n=>`<span>${n}</span>`).join('')});
+const cnt=$('#count');if(!reduce&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>{if(es[0].isIntersecting){io.disconnect();const t0=performance.now();(function f(t){const p=Math.min(1,(t-t0)/1400),v=Math.round(450*(1-Math.pow(1-p,3)));cnt.textContent=v+(p===1?'+':'');if(p<1)requestAnimationFrame(f)})(t0)}},{threshold:.5});io.observe(cnt)}
+
+/* catering */
+const g=$('#guests'),gOut=$('#gOut'),rec=$('#rec');
+function plan(n){let best=null;for(let L=0;L<=Math.ceil(n/28);L++){const S=Math.max(0,Math.ceil((n-28*L)/15)),tot=L+S,cap=28*L+15*S;if(!best||tot<best.t||(tot===best.t&&cap<best.c))best={L,S,t:tot,c:cap}}return best}
+function drawPlan(){const n=+g.value;gOut.textContent=n;const p=plan(n),h=Math.ceil(n/25);
+  rec.innerHTML=`<li><b class="num">${p.L}</b><span>Large party tray${p.L===1?'':'s'} (serve up to 28 each)</span></li><li><b class="num">${p.S}</b><span>Small party tray${p.S===1?'':'s'} (serve up to 15 each)</span></li><li><b class="num">${h}</b><span>or ${h===1?'one':h} six-foot hoagie${h===1?'':'s'} (serves 20 to 25)</span></li>`}
+g.addEventListener('input',drawPlan);drawPlan();
+const HT={Italian:{m:'Cappicola, Genoa salami, pepperoni and provolone',c:['#b8323a','#d9827f','#a8452c','#f2d48a']},American:{m:'Ham, cooked salami, spiced ham, bologna and American cheese',c:['#e7a3a0','#c9605c','#e9b7a7','#f5c84b']},'Deluxe Italian':{m:'Pepper ham, mortadella, Genoa DiLusso, Leoni pepperoni and provolone',c:['#c45a55','#f0b8b0','#9e2f2c','#f2d48a']},Custom:{m:'Any meat and cheese from the deli case. Your masterpiece.',c:['#b8323a','#f0b8b0','#e7a3a0','#f5c84b']}};
+const HL={3:'3 ft · ask the counter for portions',4:'4 ft · serves 15 to 20',6:'6 ft · serves 20 to 25'};let hl=6,ht='Italian';
+function drawHoagie(){$('#hoagie').style.width=(hl/6*100)+'%';$('#hFill').innerHTML=['#6fae4c',...HT[ht].c].slice(0,4).map((c,i)=>`<i style="background:${c};${i===0?'border-radius:30px 30px 6px 6px;transform:scaleY(.8)':''}"></i>`).join('');$('#hTxt').textContent=`${ht}: ${HT[ht].m}. ${HL[hl]}.`}
+const hLen=$('#hLen'),hType=$('#hType');[3,4,6].forEach(n=>{const b=el('button','chip',`${n} foot`);b.type='button';b.setAttribute('aria-pressed',n===hl);b.onclick=()=>{hl=n;[...hLen.children].forEach(c=>c.setAttribute('aria-pressed',c===b));drawHoagie()};hLen.append(b)});
+Object.keys(HT).forEach(k=>{const b=el('button','chip',k);b.type='button';b.setAttribute('aria-pressed',k===ht);b.onclick=()=>{ht=k;[...hType.children].forEach(c=>c.setAttribute('aria-pressed',c===b));drawHoagie()};hType.append(b)});drawHoagie();
+const TR=[['#1 · #2','Deluxe Party Tray','Imported ham, roast beef, Genoa salami, roasted turkey, Swiss and American. Coleslaw, potato salad and dinner rolls.'],['#3 · #4','American Party Tray','Domestic ham, turkey, hard salami, bologna, roast beef and American cheese, with salads and rolls.'],['#13 · #14','Domestic Italian Tray','Capicola, Genoa salami, pepperoni, roast beef, pepper ham and provolone, with salads and rolls.'],['#17 · #18','Imported Italian Tray','Wet mozzarella, prosciutto, Genoa salami, hot and sweet capicola, soppressata and imported provolone with roasted peppers, sun-dried tomatoes and olives.'],['#5 · #6','Mixed Cheese Tray','Bite-size provolone, American, Swiss, cheddar, sharp, hot pepper and Muenster with brown mustard dip.'],['#7 · #8','Pepperoni & Cheese Tray','Pepperoni cubes with imported and domestic cheeses, garnished with imported Italian olives.'],['#9 · #10','Vegetable Tray','Celery, broccoli, cauliflower, carrots, peppers, mushrooms, cherry tomatoes and cucumbers with tangy onion dip.',1],['#11 · #12','Fresh Fruit Tray','Watermelon, cantaloupe, honeydew, red and white grapes, pineapple and strawberries with yogurt dip. Seasonal.',1],['#15','Sandwich Tray','Your choice of meats and salads on fresh torpedo and Kaiser rolls, rye, wheat and white bread.']];
+$('#trays').innerHTML=TR.map(([n,t,d,h])=>`<article class="tray-card"><span class="nos">${n}${n.includes('·')?' · Large 28 / Small 15':''}</span><h4>${t}</h4><p>${d}</p>${h?'<span class="tag24">24 hours notice</span>':''}</article>`).join('');
+
+/* reviews (from the bakery's testimonials page) */
+const RV=[['This place is a cute, vibrant local bakery. We went to pick some fresh dinner rolls and got these amazing 1/2 torpedo rolls. This was the nearest to a Goan Pav. This place gave us the taste of home.','Neeti P.'],['Absolutely love Italian People’s Bakery. The best stick bread and rolls!! Worth the trip from anywhere.','Florence B.'],['My old man’s from Jersey and he made a point of stopping in every time we came up to visit family. We would load up on breads, doughs, and those small pizzas. They never made it out of the parking lot.','A regular'],['Amazing bakery. Their rolls and breads are amazing. Even though it’s a little drive for me it’s well worth the distance.','PG'],['Excellent baked goods, rolls, cookies, cannoli, you name it! A staple for all holiday get togethers.','Ryan L.'],['Great breads and pastries, the owner is there to greet you every time!','Benjamin B.'],['Some of the best bread around the area. The morning weekend girls are awesome.','Leon S.'],['BOGO rye bread on a Wednesday… why not, great!','Ariel G.'],['Fresh baked breads and other goodies, great service, friendly.','Maria A.']];
+$('#slips').innerHTML=RV.map(([t,n])=>`<figure class="slip"><q>${t}</q><cite>${n}</cite></figure>`).join('');
+
+/* locations with live status */
+const fmt=m=>{const h=Math.floor(m/60),mm=m%60,ap=h>=12?'PM':'AM',h12=(h%12)||12;return h12+(mm?':'+String(mm).padStart(2,'0'):'')+' '+ap};
+function status(l){const [o,c]=l.h[NOW.day];if(NOW.min>=o&&NOW.min<c)return{on:1,t:`Open now · until ${fmt(c)}`};if(NOW.min<o)return{on:0,t:`Closed · opens ${fmt(o)}`};const n=l.h[(NOW.day+1)%7][0];return{on:0,t:`Closed · opens ${fmt(n)} tomorrow`}}
+$('#locs').innerHTML=LOC.map(l=>{const s=status(l);const rows=[1,2,3,4,5,6,0].map(d=>`<dt class="${d===NOW.day?'now':''}">${DAYS[d].slice(0,3)}</dt><dd class="${d===NOW.day?'now':''}">${fmt(l.h[d][0])} – ${fmt(l.h[d][1])}</dd>`).join('');
+  return `<article class="loc"><span class="status ${s.on?'on':'off'}">${s.t}</span><h3>${l.n}</h3><address>${l.a}<br>${l.c}${l.x?`<br><small>${l.x}</small>`:''}</address><dl class="hours">${rows}</dl><div class="row"><span class="phone num">${l.p}</span><a class="btn btn-red" href="tel:${l.t}">Call</a><a class="btn btn-line" href="${l.m}" target="_blank" rel="noopener">Directions</a></div></article>`}).join('');
+const tr=LOC[0].h[NOW.day];$('#takeHrs').textContent=`${Math.floor(tr[0]/60)}–${(Math.floor(tr[1]/60)%12)||12}`;
+})();
+</script>
+
+</body></html>

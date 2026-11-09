@@ -22,6 +22,10 @@ Coursework: Sociology (Ch.1, Ch.6 quiz, deviance theory), Tommy John Surgery spe
 | 2026-09-21 | Chapter 1 Sociology Assignment | [open](https://claude.ai/artifact/LQHvVMkckUXWLnmamioaeX) | Docs artifact — open link |
 | 2026-09-20 | Autobiography Presentation Outline | [open](https://claude.ai/artifact/88XF28MJbhK9HB6W1zBPMz) | Docs artifact — open link |
 
+## Latest (added 2026-11-09)
+- [[Math Test Study Guide - Ch 1 & 7]] — MATH 103 Test #2 prep (Ch 1 & 7), 2026-11-08 · [live](https://claude.ai/artifact/LFR5AVc1YVWVEChVFPMFMT)
+- HMK CH 12 Language Activity 1 answers — [docx](../outputs/HMK%20CH%2012%20Language%20Activity%201%20-%20Answers.docx)
+
 ## Related
 
 - [[Home]]

@@ -1,6 +1,6 @@
 ---
 tags: [index]
-updated: 2026-11-07
+updated: 2026-11-09
 ---
 # Home
 
@@ -21,7 +21,7 @@ Everything built with Claude (Cowork, Claude Code, claude.ai) gathered in one va
 ## Business — LTGPEAK
 - [[LTGPEAK]] — the studio: site, pricing, ops dashboards, sales tools.
 - Clients: [[J&B Automotive]] · [[Sean's Landscaping]] · [[Chris Mormando]] · [[Mikonos]] · [[Timbí]] · [[Brothers Barbershop]] · [[JMC Repair]] · [[Time Out On Pine]] · [[Sinsatty]] · [[JMB Lash]]
-- Pitches: [[Concept Demos]]
+- Pitches: [[Concept Demos]] · [[Italian Peoples Bakery]] · [[Pura Vida]]
 
 ## Systems
 - [[Akamaru System]] — the 8-branch Naruto agent council (also built as Jarvis).

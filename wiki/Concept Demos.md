@@ -27,6 +27,7 @@ Spec/pitch sites LTGPEAK built for prospects (unsolicited redesigns and demos) �
 | 2026-08-27 | Mile Zero Sweatsuit Concepts | [open](https://claude.ai/artifact/NdKgFzW9LfiAsGrxXoUKPE) | [snapshot](../revamps/artifacts/mile-zero-sweatsuits/index.html) |
 
 ## Related
+- [[Italian Peoples Bakery]] (4 versions) · [[Pura Vida]] (5 versions) — added 2026-11-09
 
 - [[Client Website Build Workflow]]
 - [[LTGPEAK]]
