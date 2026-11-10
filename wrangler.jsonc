@@ -1,6 +1,6 @@
 // Cloudflare Worker (static assets) serving the J&B concept preview:
-//   /            the redesigned website
-//   /proposal/   the proposal for J&B
+//   /            the proposal for J&B
+//   /website/    the redesigned website
 // Used when CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID secrets are set on the repo.
 {
   "name": "jandbauto-preview",

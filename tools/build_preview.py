@@ -1,4 +1,6 @@
-# Builds the J&B concept preview (site at /, proposal at /proposal/) into the folder given as argv[1].
+# Builds the J&B concept preview into the folder given as argv[1]:
+#   /          the proposal for J&B (first thing Sean sees)
+#   /website/  the redesigned website
 # The concept strip marks it as a redesign preview; robots noindex keeps it out of search.
 import os
 import shutil
@@ -7,10 +9,12 @@ import sys
 import pathlib
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 src = str(ROOT / 'jandbauto') + '/'
-out = sys.argv[1]
-if os.path.isdir(out):
-    shutil.rmtree(out)
-shutil.copytree(src, out, ignore=shutil.ignore_patterns('tests', '*.md'))
+dist = sys.argv[1]
+if os.path.isdir(dist):
+    shutil.rmtree(dist)
+out = os.path.join(dist, 'website')
+shutil.copytree(src, out, ignore=shutil.ignore_patterns('tests', '*.md', '_headers'))
+shutil.copy(src + '_headers', os.path.join(dist, '_headers'))
 
 
 def rep(s, a, b):
@@ -20,7 +24,7 @@ def rep(s, a, b):
 
 html = open(out + '/index.html').read()
 html = rep(html, '<div class="progress" aria-hidden="true"><span></span></div>',
-           '<div class="concept" role="note"><b>Design concept</b><span>Website redesign preview for J&amp;B Automotive · not the official site</span></div>\n  <div class="progress" aria-hidden="true"><span></span></div>')
+           '<div class="concept" role="note"><b>Design concept</b><span>Website redesign preview for J&amp;B Automotive · not the official site</span><a href="../">← Proposal</a></div>\n  <div class="progress" aria-hidden="true"><span></span></div>')
 open(out + '/index.html', 'w').write(html)
 
 css = open(out + '/styles.css').read()
@@ -35,9 +39,13 @@ css += '''
 .concept { position: fixed; top: 0; left: 0; right: 0; z-index: 130; height: calc(var(--strip) + env(safe-area-inset-top, 0px)); padding: env(safe-area-inset-top, 0px) 16px 0; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--cream); color: var(--bg); font: 500 12px/1.2 var(--f-body); white-space: nowrap; overflow: hidden; }
 .concept b { padding: 3px 8px; border-radius: 6px; background: var(--bg); color: var(--cream); font: 700 10px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; flex: none; }
 .concept span { overflow: hidden; text-overflow: ellipsis; }
+.concept a { flex: none; color: var(--bg); font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+@media (max-width: 520px) { .concept span { display: none; } }
 '''
 open(out + '/styles.css', 'w').write(css)
-open(out + '/.nojekyll', 'w').write('')
-os.makedirs(out + '/proposal', exist_ok=True)
-shutil.copy(str(ROOT / 'preview' / 'proposal.html'), out + '/proposal/index.html')
-print('built', sorted(os.listdir(out)))
+open(os.path.join(dist, '.nojekyll'), 'w').write('')
+shutil.copy(str(ROOT / 'preview' / 'proposal.html'), os.path.join(dist, 'index.html'))
+# old link from the first preview: /proposal/ now forwards to the front page
+os.makedirs(os.path.join(dist, 'proposal'), exist_ok=True)
+open(os.path.join(dist, 'proposal', 'index.html'), 'w').write('<!doctype html><meta charset="utf-8"><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0; url=../"><title>J&amp;B Website Proposal</title><a href="../">Open the proposal</a>')
+print('built', sorted(os.listdir(dist)), sorted(os.listdir(out)))

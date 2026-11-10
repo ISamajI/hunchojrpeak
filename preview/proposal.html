@@ -47,7 +47,8 @@ h2 { font-size: clamp(26px, 4vw, 36px); font-weight: 800; font-stretch: 110%; fo
 h3 { font-size: 18px; font-weight: 700; }
 p { margin: 0 0 14px; }
 .label { font: 500 12px/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.label i { width: 8px; height: 8px; border-radius: 50%; background: var(--red); }
+.label i { width: 8px; height: 8px; border-radius: 50%; background: var(--red); flex: none; margin-top: 2px; }
+.label { flex-wrap: nowrap; align-items: flex-start; line-height: 1.4; }
 .lede { font-size: clamp(18px, 2.2vw, 21px); color: var(--muted); margin-top: 22px; }
 .lede b { color: var(--ink); font-weight: 600; }
 .quote { margin: 26px 0 0; padding: 18px 22px; border-left: 3px solid var(--red); background: var(--paper); border-radius: 0 12px 12px 0; }
@@ -118,7 +119,7 @@ p { margin: 0 0 14px; }
       <span>John K., from your reviews page. It's now the headline of your new site.</span>
     </blockquote>
     <div class="cta-row">
-      <a class="btn btn--red" href="../" >Open the live demo →</a>
+      <a class="btn btn--red" href="website/">See the new website →</a>
       <a class="btn btn--ghost" href="#price">See pricing</a>
     </div>
   </header>

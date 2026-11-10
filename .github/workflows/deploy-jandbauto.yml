@@ -26,6 +26,7 @@ jobs:
       - name: Deploy to jandbauto.hunchopeak.dev
         if: env.CLOUDFLARE_API_TOKEN != ''
         run: npx --yes wrangler@4.157.0 deploy
-      - name: Deploy temporary preview (no Cloudflare token configured yet)
-        if: env.CLOUDFLARE_API_TOKEN == ''
+      # Temporary previews expire after 60 minutes unless claimed, so only make one on a manual run.
+      - name: Deploy temporary preview (manual run, no Cloudflare token configured yet)
+        if: env.CLOUDFLARE_API_TOKEN == '' && github.event_name == 'workflow_dispatch'
         run: npx --yes wrangler@4.157.0 deploy --temporary --config wrangler.temporary.jsonc
