@@ -2,6 +2,10 @@
 
 Part of [[LTGPeak 7-Day Launch Week]]. Thu Nov 12. Reel, 12-15 seconds.
 
+## Status
+
+Not produced. It needs your real PageSpeed score, which has to be recorded on your own phone or laptop.
+
 ## The idea
 
 Run Google's own free speed test on a client site, live, and screen-record the score coming in. The grade comes from Google, so nobody has to take your word for it.

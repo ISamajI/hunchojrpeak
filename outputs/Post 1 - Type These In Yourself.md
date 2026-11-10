@@ -2,6 +2,10 @@
 
 Part of [[LTGPeak 7-Day Launch Week]]. Wed Nov 11. Reel, about 15 seconds.
 
+## Finished file
+
+`media/reels/post1-type-these-in.mp4` (1080x1920, silent). Add music in Instagram when you post. The site footage is a screenshot capture, so text inside the phone is slightly soft; swap in a real phone screen recording if you want it sharper.
+
 ## The idea
 
 Most web designers show mockups. You show three live sites on the owners' own domains and dare the viewer to check. It's the fastest way to prove the work exists.

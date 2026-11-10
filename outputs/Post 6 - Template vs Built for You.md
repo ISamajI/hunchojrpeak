@@ -2,6 +2,10 @@
 
 Part of [[LTGPeak 7-Day Launch Week]]. Mon Nov 16. Reel, about 15 seconds, split screen.
 
+## Finished file
+
+`media/reels/post6-template-vs-built.mp4` (1080x1920, silent). Add music in Instagram when you post. The site footage is a screenshot capture, so text inside the phone is slightly soft; swap in a real phone screen recording if you want it sharper.
+
 ## The idea
 
 Side by side: a generic template on the left, a site you built on the right, same type of business. The viewer sees the quality gap without being told.

@@ -2,6 +2,12 @@
 
 Part of [[LTGPeak 7-Day Launch Week]]. Sun Nov 15. Reel, 15-20 seconds. Pin it.
 
+## Finished file
+
+`media/reels/post5-24-hours.mp4` (1080x1920, silent). Add music in Instagram when you post. The site footage is a screenshot capture, so text inside the phone is slightly soft; swap in a real phone screen recording if you want it sharper.
+
+This video is an animated recreation of the SariNails homepage coming together, labelled on screen as sarinails.us. It is not a recording of a real 24-hour build. For a stronger version, screen-record your next real demo and use the same text and clock.
+
 ## The idea
 
 Your site promises a real homepage in 24 hours. Show one being built with a clock running. Screen and hands only.

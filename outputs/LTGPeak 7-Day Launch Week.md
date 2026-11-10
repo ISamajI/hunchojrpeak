@@ -12,13 +12,22 @@ Nobody appears on camera. Every post shows evidence a customer can check for the
 |---|---|---|---|
 | Wed 11/11 | [[Post 1 - Type These In Yourself]] | Reel, 15s | The work is real and live |
 | Thu 11/12 | [[Post 2 - The Speed Test]] | Reel, 12-15s | The sites are fast |
-| Fri 11/13 | [[Post 3 - The Launch Checklist]] | Carousel, 8 slides | Every site meets the same standard |
+| Fri 11/13 | [[Post 3 - The Launch Checklist]] | Carousel, 9 slides | Every site meets the same standard |
 | Sat 11/14 | [[Post 4 - Details You Only Notice When They're Missing]] | Reel, 20s | The thinking behind each build |
 | Sun 11/15 | [[Post 5 - 24 Hours, Blank to Homepage]] | Reel, 15-20s | You deliver what you promise, on time |
 | Mon 11/16 | [[Post 6 - Template vs Built for You]] | Reel, 15s | Custom work, not a logo dropped on a theme |
-| Tue 11/17 | [[Post 7 - What If I Don't Like It]] | Carousel, 7 slides | The customer carries no risk |
+| Tue 11/17 | [[Post 7 - What If I Don't Like It]] | Carousel, 8 slides | The customer carries no risk |
 
 Post between 11:30am and 1pm or 7pm and 9pm Eastern. Check Insights after day 3 and move to when your audience is active.
+
+## What's already made
+
+Finished media is in `media/`:
+
+- `media/post3-checklist/` and `media/post7-questions/`: both carousels, ready to upload
+- `media/reels/`: Posts 1, 4, 5 and 6 as silent 1080x1920 videos
+
+Post 2 is the only one not produced, because it needs your real speed-test score.
 
 ## How to shoot faceless
 

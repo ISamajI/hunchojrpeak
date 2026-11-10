@@ -1,6 +1,6 @@
 # Post 7 - What If I Don't Like It
 
-Part of [[LTGPeak 7-Day Launch Week]]. Tue Nov 17. Carousel, 7 slides.
+Part of [[LTGPeak 7-Day Launch Week]]. Tue Nov 17. Carousel, 8 slides.
 
 ## The idea
 
@@ -8,17 +8,20 @@ Answer the questions a careful customer asks before hiring, in plain words, stra
 
 ## Before posting
 
-Fix the change-rounds mismatch on ltgpeak.app (the top says 5, the fine print says 2) and use whichever number is true on slide 4.
+Fix the change-rounds mismatch on ltgpeak.app (the top says 5, the fine print says 2). The slide leaves the number out for that reason; add it back once the site is consistent.
 
 ## Slides
 
-1. **Cover:** "6 questions to ask any web designer before you pay. Here are our answers."
-2. **"What if I don't like it?"** "You owe nothing. The demo is free and stays free, whether you go ahead or not."
-3. **"When do I pay?"** "Half to start, half when it goes live. Never the full amount up front."
-4. **"What if I want changes?"** "[2] rounds of changes are included in every build."
-5. **"Who owns the website?"** "You do. The domain and your content are yours. Leave whenever you want and take them with you."
-6. **"What does it cost after launch?"** "$60 a month covers hosting, backups and 2 small edits. The domain is about $15 a year, paid to the registrar, not to us."
-7. **CTA:** "Ask us anything else. Or just see your site first: DM DEMO + your business name."
+Finished files: `media/post7-questions/slide-01.png` to `slide-08.png`. Upload in order.
+
+1. **Cover:** "6 questions to ask a web designer before you pay."
+2. **"What if I don't like it?"** You owe nothing. The demo is free and stays free.
+3. **"When do I pay?"** Half to start. Half when it goes live.
+4. **"What if I want changes?"** Rounds of changes are included. Nothing launches until you approve.
+5. **"Who owns the website?"** You do. Domain and content are yours.
+6. **"What does it cost after launch?"** $60 a month. Domain about $15 a year, paid to the registrar.
+7. **"How do I know the work is real?"** Type these in yourself: the three live domains.
+8. **CTA:** "Or skip the questions and see your site first. DM us DEMO."
 
 ## Design
 

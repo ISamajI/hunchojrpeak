@@ -2,6 +2,10 @@
 
 Part of [[LTGPeak 7-Day Launch Week]]. Sat Nov 14. Reel, about 20 seconds. English and Spanish versions.
 
+## Finished file
+
+`media/reels/post4-details.mp4` (1080x1920, silent). Add music in Instagram when you post. The site footage is a screenshot capture, so text inside the phone is slightly soft; swap in a real phone screen recording if you want it sharper.
+
 ## The idea
 
 Three close-ups of small things you built that a cheap site wouldn't have. Customers judge quality by details, so show each one being used.
