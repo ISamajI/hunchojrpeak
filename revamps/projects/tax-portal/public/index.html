@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{biz} — Client Tax Portal</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="hero">
+    <section class="hero-left">
+      <div class="brand brand-hero"><span class="logo">$</span><span data-biz></span></div>
+      <h1>Get your <span data-year></span> taxes started in about 15 minutes.</h1>
+      <p class="hero-sub">Create your secure account, answer a few questions, upload your documents, and sign. We’ll take it from there.</p>
+      <ul>
+        <li>Step-by-step tax questionnaire</li>
+        <li>Upload W-2s, 1099s & IDs from your phone</li>
+        <li>Sign electronically — no printing</li>
+        <li>Save & come back anytime — we remember you</li>
+      </ul>
+    </section>
+
+    <section class="hero-right">
+      <div class="auth card">
+        <div class="tabs" role="tablist">
+          <button id="tab-register" class="active" type="button">Create account</button>
+          <button id="tab-login" type="button">Sign in</button>
+        </div>
+
+        <div id="msg" class="alert alert-err hidden" role="alert"></div>
+
+        <form id="form-register" novalidate>
+          <div><label class="lbl" for="r-name">Full name</label><input id="r-name" type="text" autocomplete="name" required></div>
+          <div><label class="lbl" for="r-email">Email</label><input id="r-email" type="email" autocomplete="email" required></div>
+          <div><label class="lbl" for="r-pass">Create a password</label><input id="r-pass" type="password" autocomplete="new-password" minlength="8" required>
+            <div class="help">At least 8 characters.</div></div>
+          <button class="btn btn-primary btn-block" type="submit">Create account & start</button>
+        </form>
+
+        <form id="form-login" class="hidden" novalidate>
+          <div><label class="lbl" for="l-email">Email</label><input id="l-email" type="email" autocomplete="email" required></div>
+          <div><label class="lbl" for="l-pass">Password</label><input id="l-pass" type="password" autocomplete="current-password" required></div>
+          <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+          <p class="small muted">Forgot your password? Contact us and we’ll send you a temporary one.</p>
+        </form>
+
+        <div class="lock">🔒 Your information is encrypted and only visible to you and your tax preparer. You’ll stay signed in on this device for 30 days.</div>
+      </div>
+    </section>
+  </div>
+  <script src="/js/common.js"></script>
+  <script src="/js/auth.js"></script>
+</body>
+</html>

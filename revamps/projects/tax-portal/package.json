@@ -1,0 +1,16 @@
+{
+  "name": "tax-client-portal",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Secure client tax questionnaire, e-signature, and preparer dashboard.",
+  "main": "server.js",
+  "engines": { "node": ">=22.5" },
+  "scripts": {
+    "start": "node server.js",
+    "create-owner": "node scripts/create-owner.js"
+  },
+  "dependencies": {
+    "express": "^4.22.3",
+    "multer": "^2.5.0"
+  }
+}
