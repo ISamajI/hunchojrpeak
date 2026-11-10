@@ -24,7 +24,7 @@ Snapshot of @ltgpeak taken Nov 10, 2026. Feeds [[LTGPeak 7-Day Launch Week]].
 - **Reach isn't the problem.** Reels pull 2,000 to 4,000 plays with 31 followers, so Instagram is already showing them to strangers.
 - **Nothing makes a stranger act.** Like rates sit around 1%, and no post asks for a DM.
 - **Client posts get talked about.** The SariNails reel, with the client tagged, has the most comments. The generic promo got zero.
-- **No faces, no story, no place.** Nothing says who you are or where you work.
+- **No proof, no place.** Nothing shows the work being used, or says where you work.
 
 ## What the website says that Instagram doesn't
 
