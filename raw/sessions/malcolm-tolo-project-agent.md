@@ -27,4 +27,4 @@ The first named agent. Claude found the Malcomtolo project in `~/Downloads/malco
 - Fill in business name, niche, offer, target audience and website URL; then revisit the USER section.
 
 ## Related
-[[Akamaru System]] · [[Agent Roster]] · [[Tsunade]] · [[Website Design]] · [[HunchoBrain]]
+[[Akamaru System]] · [[Akamaru System|Agent Roster]] · [[Akamaru System|Tsunade]] · [[Client Website Build Workflow|Website Design]] · [[create-mainbrain-documents-directory|HunchoBrain]]

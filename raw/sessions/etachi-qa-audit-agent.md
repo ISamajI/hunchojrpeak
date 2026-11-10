@@ -31,4 +31,4 @@ Henry asked to turn his "Etachi" project into the QA/audit/security agent that c
 - None noted; parallel sessions were creating sibling agents at the same time.
 
 ## Related
-[[Akamaru System]] · [[Agent Roster]] · [[Tsunade]] · [[Shikamaru]] · [[Kakashi]] · [[HunchoBrain]]
+[[Akamaru System]] · [[Akamaru System|Agent Roster]] · [[Akamaru System|Tsunade]] · [[Akamaru System|Shikamaru]] · [[Akamaru System|Kakashi]] · [[create-mainbrain-documents-directory|HunchoBrain]]

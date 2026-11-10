@@ -24,4 +24,4 @@ Started with `mkdir -p ~/Documents/MainBrain`, then "make me a main brain that's
 - None noted. This vault became the home for all agent notes (`Agents/`, `Commands/`).
 
 ## Related
-[[HunchoBrain]] · [[Akamaru System]] · [[Ruflo installation]] · [[Malcolm Tolo]]
+[[create-mainbrain-documents-directory|HunchoBrain]] · [[Akamaru System]] · [[ruflo-installation|Ruflo installation]] · [[malcolm-tolo-project-agent|Malcolm Tolo]]

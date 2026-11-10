@@ -1,6 +1,6 @@
 ---
 tags: [index, revamps]
-updated: 2026-11-07
+updated: 2026-11-10
 ---
 # Revamps — the build library
 
@@ -25,6 +25,7 @@ Every website revamp, concept demo and Cowork build lives here, so each new reva
 |---|---|---|---|
 | Sean's Landscaping ([[Sean's Landscaping]]) | [`projects/seans-landscaping`](projects/seans-landscaping/README.md) | Static multi-page site generated from `src/data.mjs` by `src/build.mjs`; 24 project pages; Cloudflare Worker deploy | Bigger businesses with many services or projects. Content-as-data generator, project portfolio, filters, lightbox, scroll-spy, bid form, AI-upscaled photos (Real-ESRGAN), 30-page Playwright suite |
 | J&B Automotive ([[J&B Automotive]]) | [`projects/jandbauto`](projects/jandbauto/JANDBAUTO.md) | Single page, plain HTML/CSS/JS, no build; proposal page bundled; Cloudflare Worker + GitHub Pages | Local shops. Opening animation, live open/closed badge, interactive hotspots, explorer tabs, review carousel, booking form → email, quick-action bar, JSON-LD, 96-check test suite |
+| Client Tax Portal ([[Client Tax Portal]]) | [`projects/tax-portal`](projects/tax-portal/README.md) | Node.js 22.5+ server, encrypted SQLite storage, plain HTML/JS front end; needs a host with a persistent disk | Anything with logins, private uploads or e-signature. Multi-step autosaving form, encrypted file uploads, drawn signature, owner dashboard with status updates, CSRF + rate limiting |
 
 ## Single-file revamps and concepts (`artifacts/`)
 

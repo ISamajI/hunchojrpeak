@@ -28,4 +28,4 @@ tags: [session, game, 3d, artifact, akamaru-system, naruto, character-design]
 - Claude asked where "chucheto" came from and what it means (open question to Henry).
 
 ## Related
-[[Akamaru System]] · [[Agent Roster]] · [[Kakashi]] · [[Orochimaru]] · [[Itachi]]
+[[Akamaru System]] · [[Akamaru System|Agent Roster]] · [[Akamaru System|Kakashi]] · [[Akamaru System|Orochimaru]] · [[Akamaru System|Itachi]]

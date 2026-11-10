@@ -20,10 +20,10 @@ Henry asked to turn his Jiraiya project into an agent that finds information, op
 - Jarvis's session later noted Jiraiya had gained its own subagents.
 
 ## Workflow / process used
-- Agent-creation pattern (see [[Etachi QA audit agent]]).
+- Agent-creation pattern (see [[etachi-qa-audit-agent|Etachi QA audit agent]]).
 
 ## Open items / next steps
 - None noted.
 
 ## Related
-[[Akamaru System]] · [[Agent Roster]] · [[Viral editing research project]] · [[Kakashi]]
+[[Akamaru System]] · [[Akamaru System|Agent Roster]] · [[viral-editing-research-project|Viral editing research project]] · [[Akamaru System|Kakashi]]

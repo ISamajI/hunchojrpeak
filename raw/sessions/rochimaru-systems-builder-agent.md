@@ -26,4 +26,4 @@ Henry asked for "Rochimaru" (Orochimaru) to be the builder agent that creates to
 - Orochimaru is the agent to ask for new automations/agents going forward.
 
 ## Related
-[[Akamaru System]] · [[Agent Roster]] · [[Tsunade]] · [[Jarvis]] · [[HunchoBrain]]
+[[Akamaru System]] · [[Akamaru System|Agent Roster]] · [[Akamaru System|Tsunade]] · [[Akamaru System|Jarvis]] · [[create-mainbrain-documents-directory|HunchoBrain]]

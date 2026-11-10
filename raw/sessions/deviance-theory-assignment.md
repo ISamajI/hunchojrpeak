@@ -25,4 +25,4 @@ A four-question multiple-choice quiz on Chapter 6 (Deviance and Crime) due Sunda
 - Optional: verify answers against Kortext wording.
 
 ## Related
-[[School]] · [[Deviance theories and crime analysis]] · [[Jarvis]]
+[[School]] · [[deviance-theories-and-crime-analysis|Deviance theories and crime analysis]] · [[Akamaru System|Jarvis]]

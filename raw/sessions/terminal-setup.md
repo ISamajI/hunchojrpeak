@@ -30,4 +30,4 @@ The very first setup session on Henry's Mac. Claude installed Claude Code with t
 - "Change the voice to British girl" was left unresolved (app not identified).
 
 ## Related
-[[Claude Code Setup]] · [[Ruflo installation]] · [[HunchoBrain]] · [[Higgsfield integration]]
+[[terminal-setup|Claude Code Setup]] · [[ruflo-installation|Ruflo installation]] · [[create-mainbrain-documents-directory|HunchoBrain]] · [[higgsfield-integration|Higgsfield integration]]

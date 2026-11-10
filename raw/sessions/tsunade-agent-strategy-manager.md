@@ -26,4 +26,4 @@ Tsunade was built as the leader of the agents: a strategist and portfolio manage
 - None noted.
 
 ## Related
-[[Akamaru System]] · [[Agent Roster]] · [[Shikamaru]] · [[Kakashi]] · [[Malcolm Tolo]]
+[[Akamaru System]] · [[Akamaru System|Agent Roster]] · [[Akamaru System|Shikamaru]] · [[Akamaru System|Kakashi]] · [[malcolm-tolo-project-agent|Malcolm Tolo]]

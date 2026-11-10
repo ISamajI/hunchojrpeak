@@ -40,4 +40,4 @@ Claude ran a multi-agent research project on what editing styles and tools are d
 - A few minor unresolved wiki links were left and reported.
 
 ## Related
-[[Mikonos]] · [[Content & Social Workflow]] · [[Video Captions and Mikonos Ad]] · [[HunchoBrain]] · [[Jiraiya]]
+[[Mikonos]] · [[Content & Social Workflow]] · [[video-captions-advertisement-edit-mikonos-website|Video Captions and Mikonos Ad]] · [[create-mainbrain-documents-directory|HunchoBrain]] · [[Akamaru System|Jiraiya]]

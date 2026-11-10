@@ -28,4 +28,4 @@ A long Claude Code setup session on Henry's Mac. After Ruflo was set up, it cove
 - Generate the Obsidian Local REST API key in the Obsidian UI to finish the Obsidian MCP connection.
 
 ## Related
-[[Claude Code Setup]] · [[Terminal setup]] · [[HunchoBrain]] · [[Higgsfield integration]]
+[[terminal-setup|Claude Code Setup]] · [[terminal-setup|Terminal setup]] · [[create-mainbrain-documents-directory|HunchoBrain]] · [[higgsfield-integration|Higgsfield integration]]

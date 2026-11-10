@@ -21,12 +21,12 @@ Henry asked to make Kakashi the sales, lead generation, outreach and client acqu
 - Note: claude.ai Projects (web) and `~/.claude/agents` (Claude Code) are separate systems; Claude cannot edit the web Project.
 
 ## Workflow / process used
-- Agent-creation pattern (see [[Etachi QA audit agent]]); for leads, grounding in the claude.ai Project brief Henry screenshotted.
-- Kakashi's real-world pipeline later showed up in [[Business call list with bad/no websites]] -> demo site -> proposal ([[J&B Automotive]], [[Sean's Landscaping]]).
+- Agent-creation pattern (see [[etachi-qa-audit-agent|Etachi QA audit agent]]); for leads, grounding in the claude.ai Project brief Henry screenshotted.
+- Kakashi's real-world pipeline later showed up in [[business-call-list-with-bad-no-websites|Business call list with bad/no websites]] -> demo site -> proposal ([[J&B Automotive]], [[Sean's Landscaping]]).
 
 ## Open items / next steps
 - Add specialist sales subagents under Kakashi.
 - Fill in business fundamentals (brand, niche, services, target client) still placeholder in the vault.
 
 ## Related
-[[Akamaru System]] · [[Agent Roster]] · [[Lead Generation]] · [[Cold Call Outreach Workflow]] · [[Tsunade]]
+[[Akamaru System]] · [[Akamaru System|Agent Roster]] · [[Cold Call Outreach Workflow|Lead Generation]] · [[Cold Call Outreach Workflow]] · [[Akamaru System|Tsunade]]

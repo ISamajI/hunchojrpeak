@@ -29,4 +29,4 @@ Claude produced a captioned vertical ad for Mikonos restaurant from a raw phone 
 - Record a real scroll of the Mikonos website (needs network access to mikonosrestaurant.us or a screen recording from Henry) and drop it into the website slot, then rebuild.
 
 ## Related
-[[Mikonos]] · [[Content & Social Workflow]] · [[Viral editing research project]] · [[Mikonos Content Studio]]
+[[Mikonos]] · [[Content & Social Workflow]] · [[viral-editing-research-project|Viral editing research project]] · [[Mikonos|Mikonos Content Studio]]

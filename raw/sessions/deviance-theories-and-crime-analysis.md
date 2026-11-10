@@ -25,4 +25,4 @@ Henry needed a class discussion post: define four deviance theories, apply one t
 - Add a specific detail from each video before posting.
 
 ## Related
-[[School]] · [[Deviance theory assignment]]
+[[School]] · [[deviance-theory-assignment|Deviance theory assignment]]

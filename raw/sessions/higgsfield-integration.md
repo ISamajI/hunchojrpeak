@@ -30,4 +30,4 @@ Henry asked to "add Higgsfield into my Claude". Claude researched Higgsfield's o
 - Clarify what "FrameRate" is (company, repo or MCP server).
 
 ## Related
-[[Claude Code Setup]] · [[Content & Social Workflow]] · [[Mikonos]] · [[Terminal setup]] · [[Ruflo installation]]
+[[terminal-setup|Claude Code Setup]] · [[Content & Social Workflow]] · [[Mikonos]] · [[terminal-setup|Terminal setup]] · [[ruflo-installation|Ruflo installation]]

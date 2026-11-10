@@ -1,8 +1,8 @@
 # Hamilton NJ Call List — Weak or No Website (3★+)
 
-Pulled 2026-11-04 with [[Firecrawl]] Maps search. 10 categories, 200 listings around Hamilton Township NJ. Chains removed. Only businesses rated 3.0★ or higher.
+Pulled 2026-11-04 with Firecrawl Maps search. 10 categories, 200 listings around Hamilton Township NJ. Chains removed. Only businesses rated 3.0★ or higher.
 
-**90 leads.** Call them in tier order. The CSV version has blank called/outcome columns for tracking: `outputs/hamilton-nj-call-list.csv`.
+**90 leads.** Call them in tier order. The CSV version has blank called/outcome columns for tracking: `revamps/leads/hamilton-nj-call-list.csv`.
 
 ## Tier 1 — Broken or hijacked site (call first, easiest close)
 
@@ -125,4 +125,4 @@ Pulled 2026-11-04 with [[Firecrawl]] Maps search. 10 categories, 200 listings ar
 
 - About 115 other independents have their own domain and weren't graded (grading costs 5 Firecrawl credits per site). Ask if you want the rest checked.
 - Ratings and phone numbers come from Google Maps data as of today. Confirm before you dial.
-- Related: [[LTGPEAK]] · [[Cold calling script]]
+- Related: [[LTGPEAK]] · [[Cold Call Outreach Workflow|Cold calling script]]

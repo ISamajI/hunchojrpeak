@@ -33,4 +33,4 @@ Claude rebuilt the J&B Automotive website as a concept demo in `jandbauto/`, ran
 - Share demo/proposal with Sean.
 
 ## Related
-[[J&B Automotive]] · [[Sean's Landscaping]] · [[Client Website Build Workflow]] · [[Kakashi]] · [[Cold Call Outreach Workflow]]
+[[J&B Automotive]] · [[Sean's Landscaping]] · [[Client Website Build Workflow]] · [[Akamaru System|Kakashi]] · [[Cold Call Outreach Workflow]]

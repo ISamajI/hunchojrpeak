@@ -31,4 +31,4 @@ Henry wanted Jarvis as a personal assistant that can see and control everything 
 - Kakashi and Itachi lacked skill wrappers at that moment (they use `~/.claude/commands/` instead).
 
 ## Related
-[[Akamaru System]] · [[Agent Roster]] · [[Tsunade]] · [[Orochimaru]] · [[HunchoBrain]]
+[[Akamaru System]] · [[Akamaru System|Agent Roster]] · [[Akamaru System|Tsunade]] · [[Akamaru System|Orochimaru]] · [[create-mainbrain-documents-directory|HunchoBrain]]

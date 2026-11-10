@@ -1,6 +1,6 @@
 ---
 tags: [index]
-updated: 2026-11-09
+updated: 2026-11-10
 ---
 # Home
 
@@ -10,6 +10,8 @@ Everything built with Claude (Cowork, Claude Code, claude.ai) gathered in one va
 - `/wiki` — reference notes: one project or workflow per note (this folder).
 - `/revamps` — every revamp + Cowork build, the starter kit, and [the full artifact index](../revamps/ARTIFACT-INDEX.md). See [[Revamp Library]].
 - `/raw` — daily notes and per-session logs (`/raw/sessions`).
+- `/outputs` — finished one-off files (school answers, study guides).
+- `/editing-research` — the viral editing trends research project.
 
 ## Workflows (how the work gets done)
 - [[Lean Grind Playbook]] — intake → route to a tier → run → quality gate → ship.
@@ -21,6 +23,7 @@ Everything built with Claude (Cowork, Claude Code, claude.ai) gathered in one va
 ## Business — LTGPEAK
 - [[LTGPEAK]] — the studio: site, pricing, ops dashboards, sales tools.
 - Clients: [[J&B Automotive]] · [[Sean's Landscaping]] · [[Chris Mormando]] · [[Mikonos]] · [[Timbí]] · [[Brothers Barbershop]] · [[JMC Repair]] · [[Time Out On Pine]] · [[Sinsatty]] · [[JMB Lash]]
+- Builds: [[Client Tax Portal]] — secure client intake, uploads and e-signature for a tax preparer.
 - Pitches: [[Concept Demos]] · [[Italian Peoples Bakery]] · [[Pura Vida]]
 
 ## Systems

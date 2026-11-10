@@ -20,10 +20,10 @@ Henry wanted Shikamaru as the deep-reasoning problem solver and strategist that 
 - Memory: `project_shikamaru_agent.md` + `MEMORY.md` line.
 
 ## Workflow / process used
-- Same agent-creation pattern as [[Etachi QA audit agent]]; slash command implemented as a skill with `context: fork` so the full agent context loads (pattern first used for `/malcomtolo`).
+- Same agent-creation pattern as [[etachi-qa-audit-agent|Etachi QA audit agent]]; slash command implemented as a skill with `context: fork` so the full agent context loads (pattern first used for `/malcomtolo`).
 
 ## Open items / next steps
 - Business context in the vault was still placeholder at the time, so decisions depend on Henry filling in niche/offer/brand.
 
 ## Related
-[[Akamaru System]] · [[Agent Roster]] · [[Tsunade]] · [[Itachi]] · [[HunchoBrain]]
+[[Akamaru System]] · [[Akamaru System|Agent Roster]] · [[Akamaru System|Tsunade]] · [[Akamaru System|Itachi]] · [[create-mainbrain-documents-directory|HunchoBrain]]
