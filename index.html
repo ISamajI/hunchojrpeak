@@ -1,583 +1,213 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>J&amp;B Automotive | Auto Repair, Maintenance &amp; Diagnostics in Mercerville, NJ</title>
-  <meta name="description" content="Family-owned auto repair in Mercerville, NJ since 1978. ASE-certified mechanics, all makes and models, NJ State Certified Emissions Repair Facility, free pick-up and delivery. Call 609-890-1441.">
-  <meta name="keywords" content="auto repair Mercerville NJ, car repair Hamilton NJ, car maintenance, check engine light, auto diagnostics, brakes, J&B Automotive, Mercer County mechanic">
-  <meta name="theme-color" content="#0b0d0c">
-  <link rel="canonical" href="https://jandbauto.com/">
-  <!-- Preview build: remove this line when the site moves to jandbauto.com -->
-  <meta name="robots" content="noindex">
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-
-  <meta property="og:type" content="website">
-  <meta property="og:title" content="J&amp;B Automotive — Done right the first time.">
-  <meta property="og:description" content="Family-owned, ASE-certified auto repair in Mercerville, NJ since 1978. Free pick-up &amp; delivery.">
-  <meta property="og:url" content="https://jandbauto.com/">
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
-
-  <script>document.documentElement.classList.add('js');</script>
-  <link rel="stylesheet" href="styles.css">
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "AutoRepair",
-    "name": "J & B Automotive",
-    "url": "https://jandbauto.com/",
-    "telephone": "+1-609-890-1441",
-    "email": "jandbautonj@gmail.com",
-    "foundingDate": "1978",
-    "priceRange": "$$",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "301 Edinburg Rd",
-      "addressLocality": "Mercerville",
-      "addressRegion": "NJ",
-      "postalCode": "08619",
-      "addressCountry": "US"
-    },
-    "areaServed": ["Mercerville", "Hamilton", "Lawrenceville", "Mercer County"],
-    "openingHoursSpecification": [{
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "08:00",
-      "closes": "18:00"
-    }]
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>J&amp;B Website Proposal</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..900&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* Layout: one reading column (proposal letter), with a before/after table and a price card that break out slightly wider. */
+:root {
+  --bg: #f6f5f0;
+  --paper: #ffffff;
+  --ink: #16191a;
+  --muted: #5b625d;
+  --line: #e2e0d6;
+  --red: #c42a15;
+  --red-soft: #fbe9e5;
+  --good: #1d7a46;
+  --good-soft: #e5f3ea;
+  --f-display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --f-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0d0f0e; --paper: #151918; --ink: #ecebe3; --muted: #a2a89f; --line: #2a302c;
+    --red: #ef4a30; --red-soft: #2b1512; --good: #4cd38a; --good-soft: #13261b; color-scheme: dark;
   }
-  </script>
+}
+:root[data-theme="dark"] {
+  --bg: #0d0f0e; --paper: #151918; --ink: #ecebe3; --muted: #a2a89f; --line: #2a302c;
+  --red: #ef4a30; --red-soft: #2b1512; --good: #4cd38a; --good-soft: #13261b; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.65 var(--f-body); -webkit-font-smoothing: antialiased; }
+.page { max-width: 860px; margin: 0 auto; padding-block: clamp(32px, 6vw, 72px) 80px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: clamp(40px, 6vw, 64px); }
+.col { max-width: 660px; }
+.page > * { min-width: 0; }
+h1, h2, h3 { font-family: var(--f-display); margin: 0; line-height: 1.05; text-wrap: balance; }
+h1 { font-size: clamp(38px, 7vw, 64px); font-weight: 900; font-stretch: 115%; font-variation-settings: "wdth" 115; letter-spacing: -.02em; }
+h1 em, h2 em { font-style: normal; color: var(--red); }
+h2 { font-size: clamp(26px, 4vw, 36px); font-weight: 800; font-stretch: 110%; font-variation-settings: "wdth" 110; margin-bottom: 18px; }
+h3 { font-size: 18px; font-weight: 700; }
+p { margin: 0 0 14px; }
+.label { font: 500 12px/1 var(--f-mono); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.label i { width: 8px; height: 8px; border-radius: 50%; background: var(--red); flex: none; margin-top: 2px; }
+.label { flex-wrap: nowrap; align-items: flex-start; line-height: 1.4; }
+.lede { font-size: clamp(18px, 2.2vw, 21px); color: var(--muted); margin-top: 22px; }
+.lede b { color: var(--ink); font-weight: 600; }
+.quote { margin: 26px 0 0; padding: 18px 22px; border-left: 3px solid var(--red); background: var(--paper); border-radius: 0 12px 12px 0; }
+.quote p { margin: 0; font-size: 18px; }
+.quote span { display: block; margin-top: 6px; color: var(--muted); font-size: 14px; }
+
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 22px; border-radius: 999px; font-weight: 600; text-decoration: none; border: 1px solid transparent; transition: transform .2s, background .2s; }
+.btn--red { background: var(--red); color: #fff; }
+.btn--red:hover { transform: translateY(-1px); }
+.btn--ghost { border-color: var(--line); color: var(--ink); background: var(--paper); }
+.btn:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+/* before / after */
+.compare-wrap { overflow-x: auto; }
+.compare { width: 100%; min-width: 560px; border-collapse: separate; border-spacing: 0; background: var(--paper); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; font-size: 15px; }
+.compare th, .compare td { text-align: left; vertical-align: top; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.compare tr:last-child td { border-bottom: 0; }
+.compare thead th { font: 500 11px var(--f-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--muted); background: var(--bg); }
+.compare td:first-child { font-weight: 600; width: 22%; }
+.compare .now { color: var(--muted); width: 36%; }
+.compare .now::before { content: "✕"; color: var(--red); font-weight: 700; margin-right: 8px; }
+.compare .new::before { content: "✓"; color: var(--good); font-weight: 700; margin-right: 8px; }
+
+/* outcomes */
+.outcomes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.outcome { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; }
+.outcome h3 { margin-bottom: 8px; }
+.outcome p { margin: 0; color: var(--muted); font-size: 15px; }
+
+/* pricing */
+.price { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; background: var(--paper); }
+.price > div { padding: clamp(22px, 3.5vw, 32px); display: grid; gap: 14px; align-content: start; }
+.price > div + div { border-left: 1px solid var(--line); }
+.amount { font: 900 clamp(44px, 7vw, 60px)/1 var(--f-display); font-stretch: 115%; font-variation-settings: "wdth" 115; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.amount small { font: 500 15px var(--f-body); color: var(--muted); letter-spacing: 0; margin-left: 4px; }
+.price ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; font-size: 15px; }
+.price li { display: flex; gap: 10px; }
+.price li::before { content: "✓"; color: var(--good); font-weight: 700; flex: none; }
+.total { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; margin-top: 14px; padding: 14px 18px; border-radius: 12px; background: var(--good-soft); font-size: 15px; }
+.total b { font-variant-numeric: tabular-nums; }
+.note { color: var(--muted); font-size: 15px; margin-top: 14px; }
+
+/* steps */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; counter-reset: s; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px; align-items: start; }
+.steps li::before { content: counter(s); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--red-soft); color: var(--red); font: 700 15px var(--f-mono); }
+.steps b { display: block; }
+.steps span { color: var(--muted); font-size: 15px; }
+.foot { border-top: 1px solid var(--line); padding-top: 22px; color: var(--muted); font-size: 15px; }
+
+@media (max-width: 640px) {
+  .outcomes, .price { grid-template-columns: minmax(0, 1fr); }
+  .price > div + div { border-left: 0; border-top: 1px solid var(--line); }
+}
+@media (prefers-reduced-motion: reduce) { .btn { transition: none; } }
+</style>
 </head>
 <body>
 
-  <!-- ============ OPENING ANIMATION: garage door + tach sweep ============ -->
-  <div class="intro" id="intro" aria-hidden="true">
-    <div class="intro__door">
-      <div class="intro__slats"></div>
-      <div class="intro__handle"></div>
-    </div>
-    <div class="intro__stage">
-      <svg class="tach" viewBox="0 0 220 220" aria-hidden="true">
-        <defs>
-          <linearGradient id="tachArc" x1="0" x2="1">
-            <stop offset="0" stop-color="#ecebe3" stop-opacity=".25"/>
-            <stop offset=".7" stop-color="#ecebe3" stop-opacity=".6"/>
-            <stop offset=".78" stop-color="#e0321c"/>
-            <stop offset="1" stop-color="#e0321c"/>
-          </linearGradient>
-        </defs>
-        <circle cx="110" cy="110" r="100" class="tach__ring"/>
-        <path class="tach__arc" d="M 39.3 180.7 A 100 100 0 1 1 180.7 180.7" stroke="url(#tachArc)"/>
-        <g class="tach__ticks"></g>
-        <text x="110" y="150" class="tach__label">RPM × 1000</text>
-        <g class="tach__needle">
-          <line x1="110" y1="110" x2="110" y2="30"/>
-          <circle cx="110" cy="110" r="9"/>
-        </g>
-      </svg>
-      <div class="intro__brand">
-        <span class="intro__mark">J<em>&amp;</em>B</span>
-        <span class="intro__sub">Automotive · Est. 1978</span>
-      </div>
-    </div>
-    <button class="intro__skip" type="button" data-skip-intro>Skip intro</button>
-  </div>
-
-  <div class="concept" role="note"><b>Design concept</b><span>Website redesign preview for J&amp;B Automotive · not the official site</span></div>
-  <div class="progress" aria-hidden="true"><span></span></div>
-
-  <a class="skip-link" href="#main">Skip to content</a>
-
-  <!-- ============ HEADER ============ -->
-  <header class="header" id="top">
-    <div class="wrap header__inner">
-      <a class="logo" href="#top" aria-label="J&amp;B Automotive home">
-        <span class="logo__badge">J<em>&amp;</em>B</span>
-        <span class="logo__text">Automotive<small>Mercerville, NJ</small></span>
-      </a>
-
-      <nav class="nav" id="nav" aria-label="Primary">
-        <a href="#services">Repair</a>
-        <a href="#diagnostics">Diagnostics</a>
-        <a href="#maintenance">Maintenance</a>
-        <a href="#about">About</a>
-        <a href="#reviews">Reviews</a>
-        <a href="#contact">Contact</a>
-      </nav>
-
-      <div class="header__actions">
-        <span class="status" data-status><i></i><span data-status-text>Checking hours…</span></span>
-        <a class="btn btn--red btn--sm" href="tel:+16098901441"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg><span>609-890-1441</span></a>
-        <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav"><span></span><span></span></button>
-      </div>
+<main class="page">
+  <header class="col">
+    <p class="label"><i></i> Website proposal · Prepared for Sean, J&amp;B Automotive</p>
+    <h1>A website that's <em>done right the first time.</em></h1>
+    <p class="lede">J&amp;B has earned its reputation in Mercerville since 1978. The new site is built to <b>turn that reputation into phone calls and booked jobs</b>, especially from people searching on their phones.</p>
+    <blockquote class="quote">
+      <p>"The price is always fair and the service is prompt, professional and done right the first time."</p>
+      <span>John K., from your reviews page. It's now the headline of your new site.</span>
+    </blockquote>
+    <div class="cta-row">
+      <a class="btn btn--red" href="website/">See the new website →</a>
+      <a class="btn btn--ghost" href="#price">See pricing</a>
     </div>
   </header>
 
-  <main id="main">
+  <section>
+    <div class="col">
+      <p class="label"><i></i> Today vs. the new site</p>
+      <h2>What's holding the current site back</h2>
+      <p>I went through jandbauto.com page by page. These are things a customer runs into today.</p>
+    </div>
+    <div class="compare-wrap">
+      <table class="compare">
+        <thead><tr><th scope="col">Area</th><th scope="col">Today</th><th scope="col">New site</th></tr></thead>
+        <tbody>
+          <tr><td>Calling</td><td class="now">The phone number is plain text. On a phone it can't be tapped, right under "Call today to schedule."</td><td class="new">One-tap calling everywhere, plus a Call / Directions / Book bar always on screen.</td></tr>
+          <tr><td>Booking</td><td class="now">No way to ask for an appointment online. Calling during business hours is the only option.</td><td class="new">A short request form: name, phone, vehicle, service, notes, and a free pick-up switch.</td></tr>
+          <tr><td>Hours</td><td class="now">A static list of hours.</td><td class="new">A live badge: "Open now", "Closing soon" or "Opens Monday 8 AM", in New Jersey time.</td></tr>
+          <tr><td>Reviews</td><td class="now">All six reviews sit on a separate page. The homepage shows none.</td><td class="new">Reviews rotate on the main page where every visitor sees them.</td></tr>
+          <tr><td>Accuracy</td><td class="now">"For Over 35 Years" on every page, and in your Google listing text. "Infiiniti" and "Porche" misspelled.</td><td class="new">"Since 1978", 48 years and counting. Clean, proofread copy.</td></tr>
+          <tr><td>Visitor stats</td><td class="now">Uses Google's old visitor tracking, which stopped recording data in July 2023.</td><td class="new">Ready for current Google Analytics, so you can see how people find you.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-    <!-- ============ HERO ============ -->
-    <section class="hero">
-      <div class="hero__grid-bg" aria-hidden="true"></div>
-      <div class="wrap hero__inner">
-        <div class="hero__head">
-          <p class="eyebrow" data-hero="1"><span class="dot"></span> Family-owned in Mercerville since&nbsp;1978</p>
-          <h1 class="hero__title" data-hero="2">
-            <span class="line"><span>Done right</span></span>
-            <span class="line"><span>the first <em>time.</em></span></span>
-          </h1>
-        </div>
-        <div class="hero__copy">
-          <p class="hero__lede" data-hero="3">ASE-certified mechanics with 130+ years of combined experience. Foreign or domestic, check-engine light or factory maintenance — fair prices, straight answers, and we'll even pick your car up.</p>
-          <div class="hero__ctas" data-hero="4">
-            <a class="btn btn--red btn--lg magnetic" href="tel:+16098901441">
-              <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>
-              Call 609-890-1441
-            </a>
-            <a class="btn btn--ghost btn--lg magnetic" href="#contact">Request an appointment <span aria-hidden="true">→</span></a>
-          </div>
-          <ul class="chips" data-hero="5">
-            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5z"/><path d="m8.5 12 2.5 2.5 4.5-5" class="ic--stroke"/></svg>ASE Certified</li>
-            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 13h14l-1.5-5h-11zM4 13v5h2v-2h12v2h2v-5"/></svg>NJ State Certified Emissions Repair</li>
-            <li><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7zM7 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM17 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/></svg>Free pick-up &amp; delivery</li>
-          </ul>
-        </div>
+  <section>
+    <div class="col">
+      <p class="label"><i></i> What it does for the shop</p>
+      <h2>Built to bring in work</h2>
+    </div>
+    <div class="outcomes">
+      <article class="outcome"><h3>More calls from phones</h3><p>A lot of people find a mechanic on their phone, often when something just went wrong. Every number is one tap, and Call / Directions / Book stay at the bottom of the screen.</p></article>
+      <article class="outcome"><h3>Requests after hours</h3><p>Someone with a problem at 9 PM can send their car, phone and issue right away. You call them back in the morning.</p></article>
+      <article class="outcome"><h3>The check-engine moment becomes a booking</h3><p>A dashboard-light guide explains 8 common warning lights, how urgent each is, and what to do. One button books a diagnostic with the form filled in.</p></article>
+      <article class="outcome"><h3>A reason to skip the dealer</h3><p>A mileage planner shows what service is usually due, and makes clear drivers keep their factory warranty without going back to the dealership.</p></article>
+      <article class="outcome"><h3>Fewer "are you open?" calls</h3><p>The live open/closed badge and today's highlighted hours answer the question before the phone rings.</p></article>
+      <article class="outcome"><h3>Trust at first glance</h3><p>Jim and Bill, ASE certification, 130+ years of combined experience, NJ emissions certification and real reviews, all up front.</p></article>
+    </div>
+    <p class="note col">It also loads fast, works on every phone size, can be used with a keyboard, and gives Google your hours, address and phone in a format it reads cleanly. No one can honestly promise a top spot on Google, but the site is built the way Google expects.</p>
+  </section>
 
-        <!-- Interactive diagnostic HUD -->
-        <div class="hud" data-hero="6">
-          <div class="hud__top">
-            <span class="mono">J&amp;B · VEHICLE SCAN</span>
-            <span class="mono hud__readout" data-hud-readout>SYSTEMS NOMINAL</span>
-          </div>
-          <div class="hud__car">
-            <svg viewBox="0 0 600 240" class="car" role="img" aria-label="Car outline with clickable service hotspots">
-              <defs>
-                <linearGradient id="scanGrad" x1="0" x2="1">
-                  <stop offset="0" stop-color="#e0321c" stop-opacity="0"/>
-                  <stop offset=".5" stop-color="#e0321c" stop-opacity=".55"/>
-                  <stop offset="1" stop-color="#e0321c" stop-opacity="0"/>
-                </linearGradient>
-              </defs>
-              <line x1="10" y1="206" x2="590" y2="206" class="car__ground"/>
-              <path class="car__draw car__body" d="M30 168 L30 142 Q32 128 52 124 L150 110 Q192 68 252 62 L372 60 Q424 62 462 102 L540 114 Q568 120 570 144 L570 168 L518 168 A48 48 0 0 0 422 168 L198 168 A48 48 0 0 0 102 168 Z"/>
-              <path class="car__draw car__glass" d="M178 108 Q210 78 256 74 L298 74 L298 108 Z"/>
-              <path class="car__draw car__glass" d="M314 74 L366 74 Q404 78 436 106 L314 108 Z"/>
-              <path class="car__draw car__line" d="M60 140 L560 140"/>
-              <path class="car__draw car__line" d="M306 70 L306 166"/>
-              <g class="car__wheel">
-                <circle class="car__draw" cx="150" cy="168" r="36"/>
-                <circle class="car__draw car__hub" cx="150" cy="168" r="14"/>
-              </g>
-              <g class="car__wheel">
-                <circle class="car__draw" cx="470" cy="168" r="36"/>
-                <circle class="car__draw car__hub" cx="470" cy="168" r="14"/>
-              </g>
-              <rect class="car__scan" x="-120" y="40" width="120" height="170" fill="url(#scanGrad)"/>
-            </svg>
-
-            <button class="hotspot" style="--x:84%;--y:52%" data-goto="engines" type="button"><span class="sr-only">Engine repair</span></button>
-            <button class="hotspot" style="--x:25%;--y:70%" data-goto="brakes" type="button"><span class="sr-only">Brake repair</span></button>
-            <button class="hotspot" style="--x:7%;--y:66%" data-goto="exhaust" type="button"><span class="sr-only">Exhaust systems</span></button>
-            <button class="hotspot" style="--x:78%;--y:70%" data-goto="steering" type="button"><span class="sr-only">Steering and suspension</span></button>
-            <button class="hotspot" style="--x:55%;--y:37%" data-goto="climate" type="button"><span class="sr-only">Climate control</span></button>
-            <button class="hotspot" style="--x:93%;--y:59%" data-goto="electric" type="button"><span class="sr-only">Auto electric</span></button>
-            <button class="hotspot" style="--x:52%;--y:62%" data-goto="drivetrain" type="button"><span class="sr-only">Drive train</span></button>
-          </div>
-          <div class="hud__bottom">
-            <span class="mono">Tap a hotspot to explore repairs</span>
-            <span class="hud__bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-          </div>
-        </div>
-      </div>
-
-      <a href="#stats" class="scroll-cue" aria-label="Scroll down"><span></span></a>
-    </section>
-
-    <!-- ============ STATS ============ -->
-    <section class="stats" id="stats" aria-label="J&amp;B at a glance">
-      <div class="wrap stats__grid">
-        <div class="stat" data-reveal><b data-count="1978" data-nocomma>1978</b><span>Serving Mercer County since</span></div>
-        <div class="stat" data-reveal><b><span data-count="130">130</span>+</b><span>Years of combined experience</span></div>
-        <div class="stat" data-reveal><b data-count="8">8</b><span>Service bays under one roof</span></div>
-        <div class="stat" data-reveal><b>$0</b><span>Pick-up &amp; delivery fee</span></div>
-      </div>
-      <div class="marquee" role="region" aria-label="Makes we service">
-        <div class="marquee__track">
-          <ul>
-            <li>Acura</li><li>Audi</li><li>BMW</li><li>Buick</li><li>Cadillac</li><li>Chevrolet</li><li>Chrysler</li><li>Dodge</li><li>Ford</li><li>GMC</li><li>Honda</li><li>Hyundai</li><li>Infiniti</li><li>Isuzu</li><li>Jaguar</li><li>Jeep</li><li>Kia</li><li>Lexus</li><li>Lincoln</li><li>Mazda</li><li>Mercedes</li><li>MINI</li><li>Mitsubishi</li><li>Nissan</li><li>Porsche</li><li>Ram</li><li>Saab</li><li>Saturn</li><li>Scion</li><li>Smart</li><li>Subaru</li><li>Suzuki</li><li>Toyota</li><li>Volkswagen</li><li>Volvo</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ REPAIR EXPLORER ============ -->
-    <section class="section" id="services">
-      <div class="wrap">
-        <header class="section__head" data-reveal>
-          <p class="eyebrow"><span class="dot"></span> Auto repair</p>
-          <h2>One shop. <em>Every system.</em></h2>
-          <p>Our 8-bay garage is equipped to solve just about any problem your car or truck can throw at it — at fair, reasonable rates.</p>
-        </header>
-
-        <div class="explorer" data-reveal>
-          <div class="explorer__tabs" role="tablist" aria-label="Repair categories">
-            <button role="tab" id="tab-engines" aria-controls="panel-engines" aria-selected="true" data-cat="engines"><span class="num mono">01</span>Engines</button>
-            <button role="tab" id="tab-drivetrain" aria-controls="panel-drivetrain" aria-selected="false" tabindex="-1" data-cat="drivetrain"><span class="num mono">02</span>Drive Train</button>
-            <button role="tab" id="tab-climate" aria-controls="panel-climate" aria-selected="false" tabindex="-1" data-cat="climate"><span class="num mono">03</span>Climate Control</button>
-            <button role="tab" id="tab-brakes" aria-controls="panel-brakes" aria-selected="false" tabindex="-1" data-cat="brakes"><span class="num mono">04</span>Brakes</button>
-            <button role="tab" id="tab-electric" aria-controls="panel-electric" aria-selected="false" tabindex="-1" data-cat="electric"><span class="num mono">05</span>Auto Electric</button>
-            <button role="tab" id="tab-exhaust" aria-controls="panel-exhaust" aria-selected="false" tabindex="-1" data-cat="exhaust"><span class="num mono">06</span>Exhaust Systems</button>
-            <button role="tab" id="tab-steering" aria-controls="panel-steering" aria-selected="false" tabindex="-1" data-cat="steering"><span class="num mono">07</span>Steering &amp; Suspension</button>
-          </div>
-
-          <div class="explorer__panels">
-            <article class="panel" role="tabpanel" id="panel-engines" aria-labelledby="tab-engines" data-panel="engines">
-              <h3>Engines</h3>
-              <p>From a rough idle to a full rebuild. We track down the cause — not just the symptom — and explain exactly what we found.</p>
-              <ul class="tags"><li>Spark plugs</li><li>Ignition coils</li><li>Overheating</li><li>Starters</li><li>Oil pressure</li><li>Oil leaks</li><li>Compression</li><li>Engine rebuild</li><li>Knocking sounds</li><li><a href="#diagnostics">Check engine light</a></li></ul>
-            </article>
-            <article class="panel" role="tabpanel" id="panel-drivetrain" aria-labelledby="tab-drivetrain" data-panel="drivetrain" hidden>
-              <h3>Drive Train</h3>
-              <p>Slipping gears, clunks, or vibration under load? We service everything between your engine and your wheels.</p>
-              <ul class="tags"><li>Transmissions</li><li>Clutches</li><li>Gearbox</li><li>Rear axles</li><li>Transaxles</li><li>Differentials</li><li>Drive shafts</li><li>Propeller shafts</li></ul>
-            </article>
-            <article class="panel" role="tabpanel" id="panel-climate" aria-labelledby="tab-climate" data-panel="climate" hidden>
-              <h3>Climate Control</h3>
-              <p>Cold air in July, real heat in January. Complete heating and A/C diagnosis and repair.</p>
-              <ul class="tags"><li>Heating</li><li>Air conditioning</li><li>Radiators</li><li>Heater cores &amp; hoses</li><li>Thermostats</li><li>Fans</li><li>Compressors</li><li>Evaporators</li><li>Condensers</li><li>Expansion valves</li><li>Cabin air filters</li></ul>
-            </article>
-            <article class="panel" role="tabpanel" id="panel-brakes" aria-labelledby="tab-brakes" data-panel="brakes" hidden>
-              <h3>Brakes</h3>
-              <p>Squeals, grinding, or a soft pedal are never worth waiting on. Pads to hydraulics, done right.</p>
-              <ul class="tags"><li>Brake pads</li><li>Brake rotors</li><li>Brake lines</li><li>Automatic braking</li><li>Disc brakes</li><li>Drum brakes</li><li>Hydraulics</li></ul>
-            </article>
-            <article class="panel" role="tabpanel" id="panel-electric" aria-labelledby="tab-electric" data-panel="electric" hidden>
-              <h3>Auto Electric</h3>
-              <p>Modern cars run on wiring. We chase down shorts, drains, and dead accessories methodically.</p>
-              <ul class="tags"><li>Batteries</li><li>Ignition systems</li><li>Fuses</li><li>Power windows</li><li>Wiring &amp; rewiring</li></ul>
-            </article>
-            <article class="panel" role="tabpanel" id="panel-exhaust" aria-labelledby="tab-exhaust" data-panel="exhaust" hidden>
-              <h3>Exhaust Systems</h3>
-              <p>Quieter, cleaner, inspection-ready. We're a <strong>New Jersey State Certified Emissions Repair Facility.</strong></p>
-              <ul class="tags"><li>Mufflers</li><li>Catalytic converters</li><li>Exhaust pipes</li><li>Tailpipes</li><li>Resonators</li><li>Piping integrity</li><li>Clamps</li></ul>
-            </article>
-            <article class="panel" role="tabpanel" id="panel-steering" aria-labelledby="tab-steering" data-panel="steering" hidden>
-              <h3>Steering &amp; Suspension</h3>
-              <p>Pulling, wandering, or a bumpy ride? Tight steering and a planted suspension keep you safe.</p>
-              <ul class="tags"><li>Steering racks</li><li>Alignments</li><li>Ball joints</li><li>Tie rods</li><li>Power steering</li><li>Pumps</li><li>Power steering hoses</li><li>Hose flushing</li><li>Steering box</li><li>Idler arms</li><li>Control arms</li><li>Torsion bars &amp; springs</li></ul>
-            </article>
-            <div class="panel__foot">
-              <span>Don't see your issue? If it has wheels, ask us.</span>
-              <a class="btn btn--ghost btn--sm" href="#contact" data-prefill-from-tab>Get this looked at →</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ DIAGNOSTICS: WARNING LIGHT DECODER ============ -->
-    <section class="section section--alt" id="diagnostics">
-      <div class="wrap">
-        <header class="section__head" data-reveal>
-          <p class="eyebrow"><span class="dot"></span> Diagnostics</p>
-          <h2>What's that light <em>trying to tell you?</em></h2>
-          <p>Tap a dashboard light to see what it usually means and how urgent it is. Then let us run a full diagnostic — it's probably a simpler fix than you think.</p>
-        </header>
-
-        <div class="decoder" data-reveal>
-          <div class="dash" role="radiogroup" aria-label="Dashboard warning lights">
-            <!-- buttons injected by app.js from data -->
-          </div>
-          <div class="decoder__out" aria-live="polite">
-            <div class="decoder__head">
-              <div class="decoder__icon" data-dec-icon></div>
-              <div>
-                <p class="mono decoder__kicker">Warning light</p>
-                <h3 data-dec-title>Check Engine</h3>
-              </div>
-            </div>
-            <div class="urgency" data-dec-urgency>
-              <div class="urgency__bar"><span></span></div>
-              <p class="mono"><b data-dec-level>Moderate</b> — <span data-dec-action>Schedule a diagnostic soon</span></p>
-            </div>
-            <p data-dec-means></p>
-            <p class="decoder__do"><strong>What to do:</strong> <span data-dec-do></span></p>
-            <p class="decoder__tip" data-dec-tip hidden></p>
-            <a class="btn btn--red btn--sm" href="#contact" data-dec-cta>Book a diagnostic →</a>
-          </div>
-        </div>
-        <p class="fine" data-reveal>General guidance only — every vehicle is different. If a light is flashing or you notice smoke, steam, or a burning smell, pull over safely and call us.</p>
-      </div>
-    </section>
-
-    <!-- ============ MAINTENANCE PLANNER ============ -->
-    <section class="section" id="maintenance">
-      <div class="wrap maint">
-        <div class="maint__copy" data-reveal>
-          <p class="eyebrow"><span class="dot"></span> Factory scheduled maintenance</p>
-          <h2>Keep your warranty. <em>Skip the dealer.</em></h2>
-          <p>You don't need to service your car at the dealership to keep the factory warranty. We carry out your manufacturer's maintenance schedule with the personal service of a small family shop — and usually for less.</p>
-          <ul class="checklist">
-            <li>Oil &amp; filter changes</li><li>Tire rotations &amp; tire sales</li><li>Brake pads &amp; rotors</li><li>Engine tune-ups</li><li>Hoses &amp; belts</li><li>Timing belt replacement</li><li>Transmission &amp; radiator fluid</li><li>Wipers, filters &amp; fluid top-offs</li>
-          </ul>
-        </div>
-
-        <div class="planner" data-reveal>
-          <div class="planner__head">
-            <p class="mono">Mileage planner</p>
-            <output class="odo" id="odo" for="miles" aria-live="polite"><span data-odo>030,000</span><small>mi</small></output>
-          </div>
-          <label class="sr-only" for="miles">Current mileage</label>
-          <input type="range" id="miles" min="5000" max="150000" step="5000" value="30000" class="range">
-          <div class="range__labels mono" aria-hidden="true"><span>5k</span><span>50k</span><span>100k</span><span>150k</span></div>
-
-          <div class="planner__due">
-            <p class="mono planner__kicker">Typically due around <b data-due-at>30,000</b> mi</p>
-            <ul class="due" data-due-list></ul>
-          </div>
-          <div class="planner__next">
-            <p class="mono planner__kicker">Coming up at <b data-next-at>35,000</b> mi</p>
-            <p data-next-list></p>
-          </div>
-          <a class="btn btn--red btn--sm" href="#contact" data-planner-cta>Schedule this service →</a>
-          <p class="fine">Typical intervals for illustration. We follow your manufacturer's schedule for your exact vehicle.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ HOW IT WORKS ============ -->
-    <section class="section section--alt" id="process">
-      <div class="wrap">
-        <header class="section__head" data-reveal>
-          <p class="eyebrow"><span class="dot"></span> How it works</p>
-          <h2>No runaround. <em>Four simple steps.</em></h2>
-        </header>
-        <ol class="steps">
-          <li class="step" data-reveal><span class="step__n mono">01</span><h3>Call or drop off</h3><p>Ring 609-890-1441 or pull into 301 Edinburg Rd. Can't get here? We'll pick it up — free.</p></li>
-          <li class="step" data-reveal><span class="step__n mono">02</span><h3>We diagnose</h3><p>ASE-certified techs find the real cause with the right equipment, not guesswork.</p></li>
-          <li class="step" data-reveal><span class="step__n mono">03</span><h3>You decide</h3><p>We explain what we found clearly and give you the best solution for the best price.</p></li>
-          <li class="step" data-reveal><span class="step__n mono">04</span><h3>Back on the road</h3><p>Fixed right the first time. Pick it up, or we'll deliver it back to you.</p></li>
-        </ol>
-      </div>
-    </section>
-
-    <!-- ============ ABOUT ============ -->
-    <section class="section" id="about">
-      <div class="wrap about">
-        <div class="about__copy" data-reveal>
-          <p class="eyebrow"><span class="dot"></span> About J&amp;B</p>
-          <h2>Small enough to know you. <em>Big enough to fix anything.</em></h2>
-          <p>J&amp;B Automotive is a family-owned shop that has served Mercerville, Hamilton, and all of Mercer County since 1978. Co-owners <strong>Jim</strong> and <strong>Bill</strong> still put their hands on the work — from modern engines to classic cars.</p>
-          <p>We pride ourselves on giving you the most value for your dollar and completing every job right. Our services range from simple lube services and factory scheduled maintenance to engine, chassis, and emissions repair.</p>
-          <div class="about__perks">
-            <div class="perk"><b>Free pick-up &amp; delivery</b><span>We come to you so your day doesn't stop.</span></div>
-            <div class="perk"><b>Financing available</b><span>Flexible payments through our <a href="https://www.cfna.com/web/personalservices/autopasstireservicecenters?locationId=806116" target="_blank" rel="noopener">credit partner</a>.</span></div>
-          </div>
-        </div>
-
-        <div class="owners" data-reveal>
-          <figure class="owner tilt">
-            <div class="owner__art" aria-hidden="true">
-              <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="64" class="o-ring"/><g class="o-gear"><path d="M100 54l8 2 3 11 9 4 10-6 6 6-6 10 4 9 11 3 2 8-2 8-11 3-4 9 6 10-6 6-10-6-9 4-3 11-8 2-8-2-3-11-9-4-10 6-6-6 6-10-4-9-11-3-2-8 2-8 11-3 4-9-6-10 6-6 10 6 9-4 3-11z"/><circle cx="100" cy="100" r="16"/></g></svg>
-              <span class="owner__initial">J</span>
-            </div>
-            <figcaption><b>Jim</b><span>Co-owner · Engines &amp; diagnostics</span></figcaption>
-          </figure>
-          <figure class="owner tilt">
-            <div class="owner__art owner__art--alt" aria-hidden="true">
-              <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="64" class="o-ring"/><g class="o-wrench"><path d="M128 52a26 26 0 0 0-30 34l-44 44a8 8 0 0 0 12 12l44-44a26 26 0 0 0 34-30l-14 14-12-4-4-12z"/></g></svg>
-              <span class="owner__initial">B</span>
-            </div>
-            <figcaption><b>Bill</b><span>Co-owner · Classic &amp; modern repair</span></figcaption>
-          </figure>
-          <div class="ase-badge">
-            <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M12 2 4 5v6c0 5 3.4 9.7 8 11 4.6-1.3 8-6 8-11V5z"/><path d="m8.5 12 2.5 2.5 4.5-5" class="ic--stroke"/></svg>
-            <div><b>ASE Certified</b><span>National Institute for Automotive Service Excellence</span></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ REVIEWS ============ -->
-    <section class="section section--alt" id="reviews">
-      <div class="wrap">
-        <header class="section__head section__head--row" data-reveal>
-          <div>
-            <p class="eyebrow"><span class="dot"></span> Reviews</p>
-            <h2>Customers for <em>decades.</em></h2>
-          </div>
-          <div class="carousel__ctrl">
-            <button class="round" type="button" data-prev aria-label="Previous review">←</button>
-            <button class="round" type="button" data-next aria-label="Next review">→</button>
-          </div>
-        </header>
-
-        <div class="carousel" data-reveal role="region" aria-roledescription="carousel" aria-label="Customer reviews">
-          <div class="carousel__track">
-            <blockquote class="review"><div class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</div><p>My entire family has our vehicles serviced by J &amp; B Automotive. The price is always fair and the service is prompt, professional and done right the first time. We have been very pleased with repairs on both our domestic and imported vehicles. I highly recommend them.</p><footer>John K.</footer></blockquote>
-            <blockquote class="review"><div class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</div><p>I have been using J&amp;B Automotive for the past 20 years for repair and service to my autos. The mechanics at J&amp;B are outstanding and knowledgeable. They will explain to the customer what was done in an efficient and clear manner.</p><footer>George A. · <span>20-year customer</span></footer></blockquote>
-            <blockquote class="review"><div class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</div><p>J&amp;B is the best car repair service I've ever used. I have 100% confidence in their integrity, and that they will diagnose a problem correctly and quickly. They have become trusted advisors to my family. They are the best. Use them!</p><footer>Robert B.</footer></blockquote>
-            <blockquote class="review"><div class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</div><p>I would highly recommend these guys. They are very knowledgeable, and their prices are fair. Been doing business with them for 8 years and have been satisfied with everything they've done for me.</p><footer>Daniel S. · <span>8-year customer</span></footer></blockquote>
-            <blockquote class="review"><div class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</div><p>J &amp; B Automotive have been servicing all of our domestic and foreign cars for years. They are professional, efficient, and above all, extremely reputable.</p><footer>David W.</footer></blockquote>
-            <blockquote class="review"><div class="stars" role="img" aria-label="5 out of 5 stars">★★★★★</div><p>Outstanding auto service!!!</p><footer>Anthony P.</footer></blockquote>
-          </div>
-          <div class="carousel__dots" aria-label="Choose review"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ CONTACT ============ -->
-    <section class="section" id="contact">
-      <div class="wrap contact">
-        <div class="contact__info" data-reveal>
-          <p class="eyebrow"><span class="dot"></span> Contact</p>
-          <h2>Let's get you <em>back on the road.</em></h2>
-
-          <a class="info-row info-row--big" href="tel:+16098901441">
-            <span class="info-row__ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg></span>
-            <span><small>Call the shop</small>609-890-1441</span>
-          </a>
-          <div class="info-row">
-            <span class="info-row__ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg></span>
-            <span><small>Visit</small>301 Edinburg Rd, Mercerville, NJ 08619</span>
-            <span class="info-row__btns">
-              <button class="mini" type="button" data-copy="301 Edinburg Rd, Mercerville, NJ 08619">Copy</button>
-              <a class="mini" href="https://www.google.com/maps/dir/?api=1&amp;destination=301+Edinburg+Rd+Mercerville+NJ+08619" target="_blank" rel="noopener">Directions</a>
-            </span>
-          </div>
-          <a class="info-row" href="mailto:jandbautonj@gmail.com">
-            <span class="info-row__ic"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3z"/><path d="m3 6 9 7 9-7" class="ic--stroke"/></svg></span>
-            <span><small>Email</small>jandbautonj@gmail.com</span>
-          </a>
-
-          <div class="hours">
-            <div class="hours__head"><b>Hours</b><span class="status" data-status><i></i><span data-status-text>Checking hours…</span></span></div>
-            <ul data-hours>
-              <li data-day="1"><span>Monday</span><span>8:00 AM – 6:00 PM</span></li>
-              <li data-day="2"><span>Tuesday</span><span>8:00 AM – 6:00 PM</span></li>
-              <li data-day="3"><span>Wednesday</span><span>8:00 AM – 6:00 PM</span></li>
-              <li data-day="4"><span>Thursday</span><span>8:00 AM – 6:00 PM</span></li>
-              <li data-day="5"><span>Friday</span><span>8:00 AM – 6:00 PM</span></li>
-              <li data-day="6"><span>Saturday</span><span>Closed</span></li>
-              <li data-day="0"><span>Sunday</span><span>Closed</span></li>
-            </ul>
-          </div>
-        </div>
-
-        <form class="form" id="form" novalidate data-reveal>
-          <h3>Request an appointment</h3>
-          <p class="form__lede">Send us the details and we'll call you back to confirm a time. Prefer to talk? <a href="tel:+16098901441">Just call.</a></p>
-
-          <div class="field-row">
-            <div class="field">
-              <label for="f-name">Name</label>
-              <input id="f-name" name="name" autocomplete="name" required>
-              <small class="err" data-err-for="f-name">Please enter your name.</small>
-            </div>
-            <div class="field">
-              <label for="f-phone">Phone</label>
-              <input id="f-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(609) 555-0123" required>
-              <small class="err" data-err-for="f-phone">Enter a 10-digit phone number.</small>
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="f-vehicle">Vehicle <span class="opt">year, make &amp; model</span></label>
-            <input id="f-vehicle" name="vehicle" placeholder="e.g. 2017 Honda Accord">
-          </div>
-
-          <fieldset class="field">
-            <legend>What do you need?</legend>
-            <div class="pills" data-service-pills>
-              <label><input type="checkbox" name="service" value="Diagnostics / check engine"><span>Diagnostics</span></label>
-              <label><input type="checkbox" name="service" value="Scheduled maintenance"><span>Maintenance</span></label>
-              <label><input type="checkbox" name="service" value="Brakes"><span>Brakes</span></label>
-              <label><input type="checkbox" name="service" value="Engine"><span>Engine</span></label>
-              <label><input type="checkbox" name="service" value="Climate control / A/C"><span>A/C &amp; Heat</span></label>
-              <label><input type="checkbox" name="service" value="Steering & suspension"><span>Steering</span></label>
-              <label><input type="checkbox" name="service" value="Exhaust / emissions"><span>Exhaust</span></label>
-              <label><input type="checkbox" name="service" value="Drive train / transmission"><span>Drive train</span></label>
-              <label><input type="checkbox" name="service" value="Electrical"><span>Electrical</span></label>
-              <label><input type="checkbox" name="service" value="Other"><span>Other</span></label>
-            </div>
-          </fieldset>
-
-          <div class="field">
-            <label for="f-msg">What's going on?</label>
-            <textarea id="f-msg" name="message" rows="4" maxlength="1200" placeholder="Noises, warning lights, when it started…"></textarea>
-            <small class="counter mono" data-counter>0 / 1200</small>
-          </div>
-
-          <label class="toggle">
-            <input type="checkbox" name="pickup" id="f-pickup">
-            <span class="toggle__ui" aria-hidden="true"></span>
-            <span>I'd like <b>free pick-up &amp; delivery</b></span>
-          </label>
-
-          <button class="btn btn--red btn--lg btn--block" type="submit">Send request <span aria-hidden="true">→</span></button>
-          <p class="form__note fine">Opens your email app with everything filled in. Nothing is stored on this site.</p>
-
-          <div class="form__success" hidden tabindex="-1">
-            <div class="check" aria-hidden="true"><svg viewBox="0 0 52 52"><circle cx="26" cy="26" r="24"/><path d="m15 27 7 7 15-16"/></svg></div>
-            <h3>Almost there!</h3>
-            <p>Your email app should open with the request ready — just hit send. If it didn't open, email <a href="mailto:jandbautonj@gmail.com">jandbautonj@gmail.com</a> or call <a href="tel:+16098901441">609-890-1441</a>.</p>
-            <button class="btn btn--ghost btn--sm" type="button" data-form-reset>Start a new request</button>
-          </div>
-        </form>
-      </div>
-
-      <div class="wrap">
-        <div class="map" data-reveal>
-          <div class="map__placeholder" data-map>
-            <svg viewBox="0 0 24 24" class="ic" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
-            <p><b>301 Edinburg Rd</b> · Mercerville, NJ 08619</p>
-            <button class="btn btn--ghost btn--sm" type="button" data-load-map>Show interactive map</button>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- ============ FOOTER ============ -->
-  <footer class="footer">
-    <div class="wrap footer__grid">
+  <section id="price">
+    <div class="col">
+      <p class="label"><i></i> Pricing</p>
+      <h2>Simple, flat pricing</h2>
+    </div>
+    <div class="price">
       <div>
-        <a class="logo" href="#top" aria-label="J&amp;B Automotive, back to top"><span class="logo__badge">J<em>&amp;</em>B</span><span class="logo__text">Automotive<small>Since 1978</small></span></a>
-        <p class="footer__tag">Quality automotive repairs &amp; maintenance for Mercerville, Hamilton, Lawrenceville and all of Mercer County.</p>
+        <h3>The website</h3>
+        <div class="amount">$650<small>one time</small></div>
+        <ul>
+          <li>The full site shown in the demo</li>
+          <li>One round of changes after you review it</li>
+          <li>Set up and launched on jandbauto.com</li>
+          <li>Appointment requests delivered to your inbox</li>
+          <li>Google business details and current visitor stats set up</li>
+        </ul>
       </div>
       <div>
-        <h4>Services</h4>
-        <a href="#services">Auto repair</a><a href="#maintenance">Car maintenance</a><a href="#diagnostics">Diagnostics</a><a href="#services" data-goto="exhaust">Emissions repair</a>
-      </div>
-      <div>
-        <h4>Shop</h4>
-        <a href="#about">About us</a><a href="#reviews">Reviews</a><a href="#contact">Contact</a><a href="https://www.cfna.com/web/personalservices/autopasstireservicecenters?locationId=806116" target="_blank" rel="noopener">Financing</a>
-      </div>
-      <div>
-        <h4>Visit</h4>
-        <p>301 Edinburg Rd<br>Mercerville, NJ 08619</p>
-        <p><a href="tel:+16098901441">609-890-1441</a><br><a href="mailto:jandbautonj@gmail.com">jandbautonj@gmail.com</a></p>
-        <p>Mon–Fri 8am–6pm</p>
+        <h3>Care plan</h3>
+        <div class="amount">$60<small>per month</small></div>
+        <ul>
+          <li>Hosting and the security certificate (the browser padlock)</li>
+          <li>Keeping the site online and fast</li>
+          <li>Monthly content updates: hours, holiday closures, prices, new reviews</li>
+          <li>Making sure appointment requests keep reaching you</li>
+          <li>Backups and security updates</li>
+          <li>A quick monthly check-in</li>
+        </ul>
       </div>
     </div>
-    <div class="wrap footer__bottom">
-      <span>© <span data-year>2026</span> J &amp; B Automotive. All rights reserved.</span>
-      <a href="#top" class="to-top">Back to top ↑</a>
-    </div>
-  </footer>
+    <div class="total"><span>First year, everything included</span><b>$650 + 12 × $60 = $1,370</b></div>
+    <p class="note col">J&amp;B keeps full ownership of the jandbauto.com domain.</p>
+  </section>
 
-  <!-- Mobile action bar -->
-  <nav class="actionbar" aria-label="Quick actions">
-    <a href="tel:+16098901441"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.2 15.2 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>Call</a>
-    <a href="https://www.google.com/maps/dir/?api=1&amp;destination=301+Edinburg+Rd+Mercerville+NJ+08619" target="_blank" rel="noopener"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5.2 7 13 7 13s7-7.8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>Directions</a>
-    <a href="#contact" class="actionbar__primary">Book</a>
-  </nav>
+  <section class="col">
+    <p class="label"><i></i> Next steps</p>
+    <h2>Live in about a week</h2>
+    <ol class="steps">
+      <li><div><b>Look over the demo</b><span>Click around on your phone and computer. Try the warning lights and the mileage slider.</span></div></li>
+      <li><div><b>Tell me you're in</b><span>We'll go over any changes you want, like photos of the shop, Jim and Bill.</span></div></li>
+      <li><div><b>Share domain access</b><span>I handle the switch-over. Your current site stays up until the new one is ready.</span></div></li>
+      <li><div><b>Go live</b><span>About a week after approval and domain access.</span></div></li>
+    </ol>
+  </section>
 
-  <div class="toast" role="status" aria-live="polite"></div>
+  <footer class="foot col">Questions? Just call or reply. Happy to stop by the shop too.</footer>
+</main>
 
-  <script src="app.js" defer></script>
 </body>
 </html>

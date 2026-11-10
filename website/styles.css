@@ -713,3 +713,5 @@ a.info-row:hover .info-row__ic { background: var(--red); color: #fff; }
 .concept { position: fixed; top: 0; left: 0; right: 0; z-index: 130; height: calc(var(--strip) + env(safe-area-inset-top, 0px)); padding: env(safe-area-inset-top, 0px) 16px 0; display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--cream); color: var(--bg); font: 500 12px/1.2 var(--f-body); white-space: nowrap; overflow: hidden; }
 .concept b { padding: 3px 8px; border-radius: 6px; background: var(--bg); color: var(--cream); font: 700 10px var(--f-mono); letter-spacing: .1em; text-transform: uppercase; flex: none; }
 .concept span { overflow: hidden; text-overflow: ellipsis; }
+.concept a { flex: none; color: var(--bg); font-weight: 700; text-decoration: underline; text-underline-offset: 2px; }
+@media (max-width: 520px) { .concept span { display: none; } }
