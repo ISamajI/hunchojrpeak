@@ -4,7 +4,7 @@ process.removeAllListeners('warning');
 const db = require('../lib/db');
 const { hashPassword } = require('../lib/crypto');
 
-const [email, password, name = 'Owner'] = process.argv.slice(2);
+const [email, password, name = 'Veronica'] = process.argv.slice(2);
 if (!email || !password || password.length < 10) {
   console.error('Usage: npm run create-owner -- owner@email.com "StrongPassword(10+ chars)" "Owner Name"');
   process.exit(1);

@@ -8,7 +8,8 @@ const db = require('./lib/db');
 const C = require('./lib/crypto');
 
 const PORT = Number(process.env.PORT) || 3000;
-const BUSINESS_NAME = process.env.BUSINESS_NAME || 'Peak Tax Services';
+const PREPARER_NAME = process.env.PREPARER_NAME || 'Veronica';
+const BUSINESS_NAME = process.env.BUSINESS_NAME || `${PREPARER_NAME}'s Tax Services`;
 const TAX_YEAR = Number(process.env.TAX_YEAR) || new Date().getFullYear() - 1;
 const SESSION_DAYS = 30;
 const IS_PROD = process.env.NODE_ENV === 'production';
@@ -20,7 +21,7 @@ if (process.env.OWNER_EMAIL && process.env.OWNER_PASSWORD) {
   const exists = db.prepare('SELECT id FROM users WHERE email = ?').get(process.env.OWNER_EMAIL);
   if (!exists) {
     db.prepare("INSERT INTO users (email, name, pw_hash, role) VALUES (?, ?, ?, 'owner')")
-      .run(process.env.OWNER_EMAIL, process.env.OWNER_NAME || 'Owner', C.hashPassword(process.env.OWNER_PASSWORD));
+      .run(process.env.OWNER_EMAIL, process.env.OWNER_NAME || PREPARER_NAME, C.hashPassword(process.env.OWNER_PASSWORD));
     console.log('[setup] Owner account created for', process.env.OWNER_EMAIL);
   }
 }
@@ -117,7 +118,7 @@ const cleanEmail = (e) => String(e || '').trim().toLowerCase();
 const validEmail = (e) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e) && e.length <= 200;
 
 // ---------- Auth API ----------
-app.get('/api/config', (req, res) => res.json({ businessName: BUSINESS_NAME, taxYear: TAX_YEAR }));
+app.get('/api/config', (req, res) => res.json({ businessName: BUSINESS_NAME, preparerName: PREPARER_NAME, taxYear: TAX_YEAR }));
 
 app.get('/api/me', (req, res) => res.json({ user: req.user || null }));
 

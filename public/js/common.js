@@ -39,6 +39,7 @@ window.fmtSize = (b) => (b > 1048576 ? (b / 1048576).toFixed(1) + ' MB' : Math.c
 window.loadConfig = async function () {
   const cfg = await api('/api/config');
   document.querySelectorAll('[data-biz]').forEach((n) => (n.textContent = cfg.businessName));
+  document.querySelectorAll('[data-preparer]').forEach((n) => (n.textContent = cfg.preparerName));
   document.querySelectorAll('[data-year]').forEach((n) => (n.textContent = cfg.taxYear));
   document.title = document.title.replace('{biz}', cfg.businessName);
   return cfg;

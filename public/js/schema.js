@@ -51,7 +51,7 @@ window.TAX_SCHEMA = [
       { name: 'spouse_phone', label: 'Spouse phone', type: 'tel', half: true, showIf: { field: 'marital_status', is: 'Married' } },
       { name: 'spouse_ip_pin', label: 'Spouse IP PIN (if any)', type: 'text', half: true, sensitive: true, showIf: { field: 'marital_status', is: 'Married' } },
       { name: 'filed_last_year', label: 'Did you file a tax return last year?', type: 'yesno', required: true },
-      { name: 'prior_preparer', label: 'Who prepared it?', type: 'select', options: ['Us (returning client)', 'Another preparer', 'Myself (TurboTax, etc.)'], showIf: { field: 'filed_last_year', is: 'yes' }, half: true },
+      { name: 'prior_preparer', label: 'Who prepared it?', type: 'select', options: ['Veronica (returning client)', 'Another preparer', 'Myself (TurboTax, etc.)'], showIf: { field: 'filed_last_year', is: 'yes' }, half: true },
       { name: 'prior_agi', label: "Last year's AGI (if known)", type: 'money', showIf: { field: 'filed_last_year', is: 'yes' }, half: true,
         help: 'Found on line 11 of last year’s Form 1040. Needed to e-file.' },
       { name: 'irs_letters', label: 'Did you receive any letters from the IRS or state this year?', type: 'yesno' },

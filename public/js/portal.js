@@ -22,14 +22,14 @@
   // ---------- Wizard ----------
   const STEPS = [...TAX_SCHEMA.map((s) => ({ ...s, kind: 'form' })),
     { id: 'docs', title: 'Documents', kind: 'docs', intro: 'Snap a photo or upload PDFs. Everything is encrypted.' },
-    { id: 'sign', title: 'Review & Sign', kind: 'sign', intro: 'Check your answers, then sign to send everything to your preparer.' }];
+    { id: 'sign', title: 'Review & Sign', kind: 'sign', intro: `Check your answers, then sign to send everything to ${cfg.preparerName}.` }];
   let idx = Math.min(Number(sessionStorage.getItem('step') || 0), STEPS.length - 1);
   let mounted = null;
 
   if (ret.status === 'needs_info' && ret.ownerNote) {
     const n = $('needsInfo');
     n.classList.remove('hidden');
-    n.append(el('strong', { text: 'Your preparer needs more information: ' }), ret.ownerNote,
+    n.append(el('strong', { text: `${cfg.preparerName} needs a little more information: ` }), ret.ownerNote,
       el('div', { class: 'small', text: 'Update your answers or upload documents, then sign and re-submit on the last step.' }));
   }
   $('wizard').classList.remove('hidden');
@@ -166,7 +166,7 @@
     const nameIn = el('input', { type: 'text', autocomplete: 'off', placeholder: legal || 'Full legal name' });
     const agree = el('input', { type: 'checkbox' });
     const err = el('div', { class: 'alert alert-err hidden' });
-    const btn = el('button', { class: 'btn btn-success btn-block', type: 'button', text: ret.status === 'needs_info' ? 'Sign & re-submit' : 'Sign & submit to my preparer' });
+    const btn = el('button', { class: 'btn btn-success btn-block', type: 'button', text: ret.status === 'needs_info' ? 'Sign & re-submit' : `Sign & send to ${cfg.preparerName}` });
 
     box.append(el('div', { class: 'grid' },
       el('div', { class: 'f' }, el('div', { class: 'lbl' }, 'Draw your signature', el('span', { class: 'req', text: '*' })), pad,
@@ -229,12 +229,12 @@
     $('status').classList.remove('hidden');
     const st = ret.status;
     const copy = {
-      submitted: ['📨', 'Thank you! Your information was received.', 'Your preparer has been notified and will start on your return soon. You’ll be contacted if anything else is needed.'],
-      in_progress: ['🧾', 'Your return is being prepared.', 'Your preparer is working on your taxes now. You’ll be contacted to review and sign the final return.'],
-      completed: ['✅', 'Your return is complete!', 'Your preparer has finished your return. Thank you for your business!'],
+      submitted: ['📨', 'Thank you! Your information was received.', `${cfg.preparerName} has been notified and will start on your return soon. She’ll reach out if anything else is needed.`],
+      in_progress: ['🧾', 'Your return is being prepared.', `${cfg.preparerName} is working on your taxes now. She’ll contact you to review and sign the final return.`],
+      completed: ['✅', 'Your return is complete!', `${cfg.preparerName} has finished your return. Thank you for your business!`],
     }[st] || ['📨', 'Submitted', ''];
     $('statusIcon').textContent = copy[0]; $('statusTitle').textContent = copy[1]; $('statusText').textContent = copy[2];
-    if (ret.ownerNote && st !== 'needs_info') $('statusText').append(el('div', { class: 'alert alert-ok', text: 'Note from your preparer: ' + ret.ownerNote }));
+    if (ret.ownerNote && st !== 'needs_info') $('statusText').append(el('div', { class: 'alert alert-ok', text: `Note from ${cfg.preparerName}: ` + ret.ownerNote }));
     const order = ['submitted', 'in_progress', 'completed'];
     const at = order.indexOf(st);
     $('timeline').innerHTML = '';
