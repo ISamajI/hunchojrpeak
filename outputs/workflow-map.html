@@ -2,143 +2,195 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
-/* Layout: a left-to-right command chain on top, an interactive branch board in the middle, the knowledge loop at the bottom */
+/* Layout: "needs you" action rail first, then live/autopilot strip, then every project grouped by area with filters */
 :root{
   --bg:#f3f4f7; --surface:#ffffff; --ink:#171a2b; --muted:#5d6380; --line:#d5d8e4;
-  --accent:#3b3fd8; --accent-soft:#e6e7fd; --gate:#b4321f; --gate-soft:#fbe7e3; --ok:#1d7a52; --ok-soft:#dff3ea;
+  --accent:#3b3fd8; --accent-soft:#e6e7fd;
+  --live:#1d7a52; --live-soft:#dff3ea; --wait:#b4321f; --wait-soft:#fbe7e3;
+  --review:#8a5a00; --review-soft:#fbf0d6; --done:#5d6380; --done-soft:#eceef4;
   --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
   --body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
   --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#10121c; --surface:#181b29; --ink:#e7e9f5; --muted:#9aa0bd; --line:#2d3146;
-  --accent:#8e91ff; --accent-soft:#25285a; --gate:#ff8a73; --gate-soft:#3d1f1a; --ok:#5fd3a0; --ok-soft:#163327; color-scheme:dark}}
+  --bg:#10121c; --surface:#181b29; --ink:#e7e9f5; --muted:#9aa0bd; --line:#2d3146; --accent:#8e91ff; --accent-soft:#25285a;
+  --live:#5fd3a0; --live-soft:#163327; --wait:#ff8a73; --wait-soft:#3d1f1a; --review:#f2c46d; --review-soft:#3a2f15; --done:#9aa0bd; --done-soft:#222536; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#10121c; --surface:#181b29; --ink:#e7e9f5; --muted:#9aa0bd; --line:#2d3146;
-  --accent:#8e91ff; --accent-soft:#25285a; --gate:#ff8a73; --gate-soft:#3d1f1a; --ok:#5fd3a0; --ok-soft:#163327; color-scheme:dark}
+  --bg:#10121c; --surface:#181b29; --ink:#e7e9f5; --muted:#9aa0bd; --line:#2d3146; --accent:#8e91ff; --accent-soft:#25285a;
+  --live:#5fd3a0; --live-soft:#163327; --wait:#ff8a73; --wait-soft:#3d1f1a; --review:#f2c46d; --review-soft:#3a2f15; --done:#9aa0bd; --done-soft:#222536; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);
-  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 56px}
-.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
-h1,h2{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.01em}
-h1{font-size:clamp(28px,5vw,44px);line-height:1.05}
-h2{font-size:22px}
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:28px 56px}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:36px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.05}
+h2{font-size:21px}
 .eyebrow{font:600 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-.lede{color:var(--muted);max-width:62ch;margin:10px 0 0}
-section{display:flex;flex-direction:column;gap:16px}
+.lede{color:var(--muted);max-width:66ch;margin:10px 0 0}
+section{display:flex;flex-direction:column;gap:14px}
+.sechead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.count{font:600 12px var(--mono);color:var(--muted)}
 
-/* chain */
-.chain{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:4px}
-.step{flex:1 1 0;min-width:150px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px}
-.step b{font-family:var(--display);font-size:17px;font-weight:700}
-.step p{margin:0;color:var(--muted);font-size:13px}
-.step .tag{font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
-.step.gate{border-color:var(--gate);background:var(--gate-soft)} .step.gate .tag{color:var(--gate)}
-.step.ship{border-color:var(--ok);background:var(--ok-soft)} .step.ship .tag{color:var(--ok)}
-.arrow{flex:0 0 28px;display:grid;place-items:center;color:var(--muted);font:600 16px var(--mono)}
+/* summary tiles */
+.tally{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}
+@media (max-width:720px){.tally{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.tile{all:unset;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:2px}
+.tile:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tile b{font:700 28px/1 var(--display);font-variant-numeric:tabular-nums}
+.tile span{font-size:12.5px;color:var(--muted)}
+.tile[data-s="live"] b{color:var(--live)} .tile[data-s="wait"] b{color:var(--wait)}
+.tile[data-s="review"] b{color:var(--review)} .tile[data-s="auto"] b{color:var(--accent)}
+.tile[aria-pressed="true"]{border-color:var(--ink)}
 
-/* board */
-.board{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:20px}
-@media (max-width:760px){.board{grid-template-columns:minmax(0,1fr)}}
-.branches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.branch{all:unset;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;transition:border-color .15s,transform .15s}
-.branch:hover{border-color:var(--accent)}
-.branch:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.branch[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
-.branch .n{font-family:var(--display);font-weight:700;font-size:16px}
-.branch .r{font-size:12.5px;color:var(--muted)}
-.detail{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
-.detail h3{font-family:var(--display);font-size:24px;margin:0}
-.detail .remit{margin:0;color:var(--muted)}
-.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;position:relative}
-@media (max-width:440px){.trio{grid-template-columns:minmax(0,1fr)}}
-.stage{border:1px dashed var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:4px}
-.stage .k{font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
-.stage .who{font-family:var(--display);font-weight:700;font-size:16px}
-.stage .what{font-size:12.5px;color:var(--muted)}
-.handoff{font:12px/1.5 var(--mono);color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
-.handoff strong{color:var(--gate)}
+/* needs-you rail */
+.todo{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
+.ask{background:var(--wait-soft);border:1px solid color-mix(in srgb,var(--wait) 35%,transparent);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.ask .p{font:700 15px var(--display)}
+.ask .a{font-size:13.5px}
+.ask .meta{font:11px var(--mono);color:var(--muted)}
 
-/* knowledge loop */
-.vault{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-@media (max-width:640px){.vault{grid-template-columns:minmax(0,1fr)}}
-.folder{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:6px}
-.folder code{font:600 15px var(--mono);color:var(--accent)}
-.folder p{margin:0;font-size:13.5px;color:var(--muted)}
-.folder .link{font:12px var(--mono);color:var(--ink);opacity:.8}
-.note{font-size:13px;color:var(--muted)}
+/* filters */
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.chip{all:unset;cursor:pointer;font:600 12px var(--mono);padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* project groups */
+.area{display:flex;flex-direction:column;gap:10px}
+.area h3{font-size:17px;display:flex;gap:8px;align-items:baseline}
+.area h3 small{font:500 12px var(--mono);color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.card .top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.card .name{font:700 16px/1.2 var(--display)}
+.pill{flex:none;font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding:5px 7px;border-radius:5px}
+.pill.live{background:var(--live-soft);color:var(--live)} .pill.wait{background:var(--wait-soft);color:var(--wait)}
+.pill.review{background:var(--review-soft);color:var(--review)} .pill.auto{background:var(--accent-soft);color:var(--accent)}
+.pill.done{background:var(--done-soft);color:var(--done)} .pill.paused{background:var(--done-soft);color:var(--wait)}
+.card .now{font-size:13.5px;margin:0}
+.card .next{font-size:13px;margin:0;color:var(--wait)}
+.card .next::before{content:"Next: ";font-weight:600}
+.links{display:flex;flex-wrap:wrap;gap:4px 10px;font:12px var(--mono);color:var(--muted)}
+.links a{color:var(--accent);text-decoration:none} .links a:hover{text-decoration:underline}
+.foot{display:flex;justify-content:space-between;gap:8px;font:11px var(--mono);color:var(--muted);border-top:1px solid var(--line);padding-top:8px;flex-wrap:wrap}
+.empty{color:var(--muted);font-size:14px}
+.note{font-size:13px;color:var(--muted);max-width:75ch}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
 <div class="wrap">
   <header>
-    <div class="eyebrow">Workflow map · personal agent system</div>
-    <h1>How a request moves through Jarvis</h1>
-    <p class="lede">Every task enters through Jarvis, gets prioritized, lands with one of eight branches, runs a plan → execute → review loop, and passes a quality gate before it ships. Pick a branch below to see who handles each stage.</p>
+    <div class="eyebrow">Snapshot · Wed Nov 11, 2026 · 6:44 PM ET</div>
+    <h1>Every project in motion</h1>
+    <p class="lede">All your work across Claude sessions, GitHub repos, routines and published pages, grouped by area. Red items are waiting on you. Tap a number or an area to filter.</p>
   </header>
 
-  <section aria-labelledby="chain-h">
-    <h2 id="chain-h">The command chain</h2>
-    <div class="chain">
-      <div class="step"><span class="tag">Intake</span><b>Request</b><p>A task, idea, or client ask comes in.</p></div>
-      <div class="arrow" aria-hidden="true">→</div>
-      <div class="step"><span class="tag">Triage</span><b>Jarvis</b><p>Handles quick tasks directly, or routes to a specialist branch.</p></div>
-      <div class="arrow" aria-hidden="true">→</div>
-      <div class="step"><span class="tag">Prioritize</span><b>Tsunade</b><p>Decides what goes first, what to drop, which branch owns it.</p></div>
-      <div class="arrow" aria-hidden="true">→</div>
-      <div class="step"><span class="tag">Do the work</span><b>Branch trio</b><p>Planner → Executor → Reviewer inside the owning branch.</p></div>
-      <div class="arrow" aria-hidden="true">→</div>
-      <div class="step gate"><span class="tag">QC gate</span><b>Itachi</b><p>Bugs, security, sloppy edges. Required for builds going live.</p></div>
-      <div class="arrow" aria-hidden="true">→</div>
-      <div class="step ship"><span class="tag">Ship</span><b>/outputs</b><p>Finished work is published and filed.</p></div>
-    </div>
+  <div class="tally" id="tally"></div>
+
+  <section aria-labelledby="todo-h">
+    <div class="sechead"><h2 id="todo-h">Waiting on you</h2><span class="count" id="todo-count"></span></div>
+    <div class="todo" id="todo"></div>
   </section>
 
-  <section aria-labelledby="board-h">
-    <h2 id="board-h">The eight branches</h2>
-    <div class="board">
-      <div class="branches" id="branches" role="group" aria-label="Branches"></div>
-      <div class="detail" id="detail" aria-live="polite"></div>
-    </div>
-    <p class="note">The Akamaru system mirrors these same branches under a different top-level name.</p>
+  <section aria-labelledby="all-h">
+    <div class="sechead"><h2 id="all-h">All projects</h2><span class="count" id="all-count"></span></div>
+    <div class="filters" id="filters" role="group" aria-label="Filter by area"></div>
+    <div id="areas" style="display:flex;flex-direction:column;gap:26px"></div>
   </section>
 
-  <section aria-labelledby="vault-h">
-    <h2 id="vault-h">Where the knowledge lands</h2>
-    <div class="vault">
-      <div class="folder"><code>/raw</code><p>Daily notes. Unfiltered capture of what happened, what came up, what's in flight.</p><span class="link">[[2026-11-11]]</span></div>
-      <div class="folder"><code>/wiki</code><p>Codified reference. One idea per note, linked with wiki links so branches can reuse it.</p><span class="link">[[Branch Routing]] · [[QC Checklist]]</span></div>
-      <div class="folder"><code>/outputs</code><p>Published, finished artifacts. This map lives here.</p><span class="link">[[Jarvis Command Map]]</span></div>
-    </div>
-  </section>
+  <p class="note">Sources: your Claude Code sessions, routines, GitHub repos and claude.ai artifacts as of this snapshot. Ask Claude to "refresh the project board" to update it. Branch tags show which part of your Jarvis system owns each area.</p>
 </div>
 
 <script>
-const B=[
- {n:"Jarvis",r:"Personal assistant / catch-all",remit:"General requests, quick tasks, day-to-day admin, drafting, scheduling.",t:["Hashirama","Tobirama","Hiruzen"]},
- {n:"Tsunade",r:"Strategy & management",remit:"Prioritization: what to work on first, what to drop, what to delegate where.",t:["Shikaku Nara","Shizune","Sakura"]},
- {n:"Orochimaru",r:"Systems builder",remit:"Websites, dashboards, client-facing sites, including LTGPEAK projects and the shop site.",t:["Kabuto","Anko","Kimimaro"],gate:true},
- {n:"Itachi",r:"Security & quality control",remit:"Reviews other branches' work, especially builds, for bugs and security issues before go-live.",t:["Shisui","Kisame","Danzo"]},
- {n:"Jiraiya",r:"Research & knowledge",remit:"Market, competitor, tool, and topic research.",t:["Fukasaku","Gamabunta","Shima"]},
- {n:"Kakashi",r:"Business & sales",remit:"Client communication: proposals, pitches, outreach, quotes, follow-ups.",t:["Sai","Naruto","Yamato"]},
- {n:"Shikamaru",r:"Problem solving & synthesis",remit:"Untangles ambiguous or stuck situations where the next step isn't obvious.",t:["Ino","Choji","Mirari Sarutobi"]},
- {n:"Clavo Dulce",r:"Analytics & data",remit:"Tracks metrics and builds reports or lightweight dashboards.",t:["Kaito Aburame","Haru Inuzuka","Toya Hyuga"]}
+const A="https://claude.ai/artifact/", S="https://claude.ai/code/";
+const AREAS=[
+ {id:"clients",n:"Client sites",br:"Orochimaru"},
+ {id:"mikonos",n:"Mikonos marketing",br:"Kakashi"},
+ {id:"ltgpeak",n:"LTGPEAK business",br:"Kakashi · Tsunade"},
+ {id:"systems",n:"Systems & vault",br:"Orochimaru · Jarvis"},
+ {id:"school",n:"School",br:"Jarvis · Jiraiya"},
+ {id:"personal",n:"Personal & family",br:"Jarvis"}
 ];
-const S=[["Plan","Investigates and scopes before work starts"],["Execute","Carries out the approved plan"],["Review","Checks finished work before it's called done"]];
-const list=document.getElementById('branches'),detail=document.getElementById('detail');
-function show(i){
-  const b=B[i];
-  [...list.children].forEach((el,j)=>el.setAttribute('aria-pressed',j===i));
-  detail.innerHTML=`<div><div class="eyebrow">${b.r}</div><h3>${b.n}</h3></div>
-   <p class="remit">${b.remit}</p>
-   <div class="trio">${b.t.map((w,k)=>`<div class="stage"><span class="k">${k+1} · ${S[k][0]}</span><span class="who">${w}</span><span class="what">${S[k][1]}</span></div>`).join('')}</div>
-   <div class="handoff">${b.n==="Itachi"?"Itachi <strong>is</strong> the gate: approves or sends work back to its branch."
-     :b.gate?"Handoff → <strong>Itachi QC gate</strong> before anything goes live, then → /outputs."
-     :"Handoff → reviewed work files to /outputs; Itachi checks anything client-facing."}</div>`;
-  try{localStorage.setItem('branch',i)}catch(e){}
+// s: live | wait | review | auto | paused | done
+const P=[
+ // Client sites
+ {a:"clients",n:"Sean's Landscaping",s:"wait",now:"Revamp built and pushed. Deploy to seanslandscaping.hunchopeak.dev is stuck.",next:"Give Cloudflare access: add a Cloudflare API key for api.cloudflare.com, or paste the Cowork prompt.",d:"Nov 10",L:[["Revamp",A+"Nm7i9H67c1B7jo2ENUWGuW"],["Session",S+"session_01TTo3ynaJdLGYVfy79P6hoR"]]},
+ {a:"clients",n:"J&B Automotive",s:"wait",now:"Website redesign is ready to deploy through GitHub Actions.",next:"Save CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID as repo Actions secrets, then tell the session.",d:"Nov 10",L:[["Proposal",A+"TdSaef4QkQ8ZufpaJUVpwD"],["Concept",A+"43ZmAbT9TaYmefXHirYLC1"],["Session",S+"session_01TTo3ynRWHp2hEthgW6M6mH"]]},
+ {a:"clients",n:"Jayleez Fitness",s:"wait",now:"Session started but has nothing to work from.",next:"Send a link, the code, or the files for the app.",d:"Nov 9",L:[["Session",S+"session_01TTo3yomU7hxWPsibRp6KSw"]]},
+ {a:"clients",n:"Newtown Performance Institute",s:"live",now:"LTGPEAK revamp page updated today.",d:"Nov 11",L:[["Revamp",A+"Xa5gjxmNKzRd6PtCF3rD13"]]},
+ {a:"clients",n:"Brothers Barbershop",s:"live",now:"College Rewards program page updated today, plus the research write-up.",d:"Nov 11",L:[["Rewards",A+"6A4XEDX6s3cbxru54ZtSoD"],["Research",A+"NJhbS2ogL7rFZFKHnuG311"]]},
+ {a:"clients",n:"TNL Performance",s:"review",now:"\"Bring the Thunder\" site and Elite Athlete Program page published.",d:"Nov 10",L:[["Site",A+"MgtUkuosfZVCb8B2Jvt34H"],["Program",A+"B1eeChFKqxDm7i7vZXTZ62"]]},
+ {a:"clients",n:"FRIAS",s:"review",now:"New site by LTGPEAK published.",d:"Nov 10",L:[["Site",A+"RosUmphpS9usJ19o2TPuBN"]]},
+ {a:"clients",n:"Italian Peoples Bakery",s:"review",now:"Main site plus three concepts: Take a Number, Bread Line, Pastry Neon.",d:"Nov 10",L:[["Site",A+"DU3ckKsZxq8amHcSYqqJEw"],["Take a Number",A+"VM6tXPSjebaKeaAH45L6PS"],["Bread Line",A+"16fzfJWvCcqWwj6RAm3dY6"],["Pastry Neon",A+"QkmpxWVPKGSje2ih7thAX7"]]},
+ {a:"clients",n:"Veronica's Tax Services",s:"done",now:"Rebranded with the V logo and client pages. Pushed, full test passing.",d:"Nov 10",L:[["Session",S+"session_01TTo3ykbyXdaASCDDiR3LyV"]]},
+ {a:"clients",n:"Bucks Centurion & Bucks Legion",s:"wait",now:"Centurion page published; both have repos.",next:"Send the Cowork link for Bucks Legion so it can join the revamp folder.",d:"Nov 7",L:[["Centurion",A+"3piScbQ9t66jBGUmmunfnt"]],r:"bucks-centurion · bucks-legion"},
+ {a:"clients",n:"Casa 3D & Casa La Brisa",s:"wait",now:"Both pages published; Casa 3D has a repo.",next:"Send the Cowork links for Casa 3D and Casa La Brisa.",d:"Nov 7",L:[["Casa 3D",A+"HcExid7y3FNJsfp6x3nGQF"],["La Brisa",A+"LCxV4SvxeVhVutzFu8Pnam"]],r:"casa-3d"},
+ {a:"clients",n:"Pura Vida",s:"review",now:"Revamp published.",d:"Nov 7",L:[["Revamp",A+"FpYBGLa8ZMSxTwB7Uvp5Ni"]]},
+ {a:"clients",n:"JMB Lash Extensions",s:"review",now:"Booking site published.",d:"Nov 4",L:[["Booking",A+"XKVXXTttMsgdCpddVft7ej"]],r:"jmb-lash"},
+ {a:"clients",n:"Chris Mormando",s:"review",now:"Actor site, deploy kit, YouTube channel kit and hit list.",d:"Oct 31",L:[["Site",A+"JNnZMrcr49bdpdsPWjyFur"],["Deploy kit",A+"MTXGnJJeS5jej25EfnXQAu"],["YouTube kit",A+"7V122KxP9e7fH3i5cLM7R1"],["Hit list",A+"LSUGgj5nLmAc5MAPSETLko"]],r:"client-chris-mormando"},
+ {a:"clients",n:"Time Out On Pine",s:"review",now:"Site and revamp demo published.",d:"Oct 30",L:[["Site",A+"4Jgh6DGd5rZJkgYspCzXfn"],["Demo",A+"G2x8Q9azD4y2LVTqRMopGB"]]},
+ {a:"clients",n:"2 The Edge Tint & Vinyl",s:"done",now:"Site published; repo set up.",d:"Sep 23",L:[["Site",A+"VY8f7yAUHfQ9285fc28Ga2"]],r:"2theedge-site"},
+
+ // Mikonos
+ {a:"mikonos",n:"Mikonos daily drop",s:"auto",now:"Routine makes one ready-to-post graphic Mon/Wed/Fri at 7:56 AM ET. Last run Nov 11 succeeded.",d:"Next: Fri Nov 13",L:[["Content Studio",A+"8aR9hjCFeWs1TWbptRUx2P"]]},
+ {a:"mikonos",n:"Mikonos ad + website scroll",s:"wait",now:"4K ad master is done and pushed.",next:"Send a screen recording of mikonosrestaurant.us for the website scroll.",d:"Oct 30",L:[["Session",S+"session_01TTo3ynRUopcRZ6zcmxhw4T"],["Strategy",A+"21J6NR9MFozebrBNnJpfpv"]]},
+
+ // LTGPEAK business
+ {a:"ltgpeak",n:"Sales Machine: 50 sites a month",s:"live",now:"Sales system, Sales Engine and MEO Launch Kit updated this week.",d:"Nov 11",L:[["Sales Machine",A+"Vkk7zpEr7NddhxKa1CnUQG"],["Sales Engine",A+"PNeQMxXFtquvgmxY6KEpyy"],["MEO Kit",A+"DQucePiHiFLZfT6T1CN3EG"]],r:"ltgpeak-workspace"},
+ {a:"ltgpeak",n:"Lead call lists",s:"done",now:"25 NJ home-service leads compiled Nov 10. Only the top four were checked for websites, and no file was saved.",d:"Nov 10",L:[["Call Sheet",A+"SPFDrcs9jE8Xczee4iLd5v"],["Session",S+"session_01TTo3ynH6nDgVvWGBMCjBvQ"]]},
+ {a:"ltgpeak",n:"Ace daily call list",s:"paused",now:"Routine is turned off. Its last run on Oct 16 failed because the usage limit was hit.",next:"Turn it back on if you want 8 fresh leads a day in Ace HQ.",d:"Oct 16",L:[["Ace HQ",A+"2jGcxCsqD3caxFQv4QJsDT"]]},
+ {a:"ltgpeak",n:"LTGPEAK social content",s:"review",now:"Six posts (four reels, two carousels) pushed with captions.",next:"Watch each video once before posting.",d:"Nov 10",L:[["Session",S+"session_01TTo3ypbKCdX88mHQ6jv4DH"]]},
+ {a:"ltgpeak",n:"Viral editing research",s:"review",now:"Research finished and ready for you to read.",d:"Nov 7",L:[["Session",S+"session_01TTo3ymcbmT4RWgW2QXMsTN"]]},
+
+ // Systems
+ {a:"systems",n:"Akamaru intelligence upgrade",s:"live",now:"Running now: building the Workflows and Scheduled Tasks views. 60 tests pass.",d:"Nov 11",L:[["Session",S+"session_01TTo3ynhbRJv8dwuWyBwYkd"]]},
+ {a:"systems",n:"Project board (this page)",s:"live",now:"Running now: mapping every project into one view.",d:"Nov 11",L:[["Session",S+"session_01TTo3ynQxo7F4Va6M3VnmV3"]],r:"hunchojrpeak"},
+ {a:"systems",n:"Work documentation in GitHub",s:"wait",now:"Obsidian-style repo with CLAUDE.md and a save-session workflow, on a branch.",next:"Say yes to a pull request so you can merge it.",d:"Nov 11",L:[["Session",S+"session_01TTo3yo3RHjgs2xqSyumy7v"]],r:"claude-brain"},
+ {a:"systems",n:"Revamp work folder",s:"wait",now:"revamps/ folder with 92 artifacts and a reusable kit, on a branch.",next:"Approve a PR to get it onto main.",d:"Nov 7",L:[["Session",S+"session_01TTo3ynyNSjrBpCr4MSBnTr"]]},
+ {a:"systems",n:"The Vault",s:"wait",now:"Vault organized: tax portal imported, about 25 broken links fixed, daily note written.",next:"Merge the vault branch into main.",d:"Nov 11",L:[["Vault",A+"HBgKazfSH1jksb2d7374fc"],["Session",S+"session_01TTo3ymWjYcDhcXkf2NwbsR"]]},
+ {a:"systems",n:"Design system & Crew Lineup",s:"done",now:"Repos for your shared design system and the Crew Lineup worker.",d:"Nov 11",L:[["Crew Lineup",A+"8f4KpiDw8AA2VyNQ7vJBf6"],["Cinematic Kit",A+"U2pLHcH8YV3Vd2JsxMjGsH"]],r:"design-system · crew-lineup-worker"},
+ {a:"systems",n:"Trap House Council",s:"done",now:"Live council graphics with agents styled as characters. Pinned.",d:"Oct 31",L:[["Council",A+"1AEhZm9Mwuae3Eha9t8hBC"]]},
+
+ // School
+ {a:"school",n:"Deviance theories (Sociology)",s:"wait",now:"Answers drafted for questions 1-4; assignment session is ready to review.",next:"Send a screenshot or paste the Kortext text to check answers.",d:"Nov 4",L:[["Session",S+"session_01TTo3ykvENh5ViCLaZHicMP"],["Assignment",S+"session_01TTo3ykU4XqU2VD6fMx7htH"]]},
+ {a:"school",n:"Math test study guide",s:"done",now:"Ch. 1 & 7 study guide published.",d:"Nov 9",L:[["Guide",A+"LFR5AVc1YVWVEChVFPMFMT"]]},
+ {a:"school",n:"HMK Ch 12 Language Activity",s:"done",now:"Answers saved as a .docx on a branch.",d:"Nov 8",L:[["Session",S+"session_01TTo3yp7SADxqYgSpFW8hfK"]]},
+
+ // Personal
+ {a:"personal",n:"Claudia's Birthday Credits",s:"done",now:"Published.",d:"Nov 3",L:[["Page",A+"4NFz6b1m6o6JH6rEi4GhZr"]]},
+ {a:"personal",n:"Nov 17 plan",s:"live",now:"Plan and invite are set for Tue Nov 17.",d:"Oct 17",L:[["Plan",A+"MBhePvsKbm7kY2YwBSvJbq"],["Invite",A+"XFEj4b12grJ7fx5EScjujY"]]}
+];
+const ST={live:"In progress",wait:"Needs you",review:"Ready to review",auto:"On autopilot",paused:"Paused",done:"Shipped"};
+const TALLY=[["wait","Need you"],["live","In progress"],["review","Ready to review"],["auto","On autopilot"],["all","All projects"]];
+let fArea="all", fStat="all";
+const $=id=>document.getElementById(id), esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const links=L=>L.map(([t,u])=>`<a href="${u}" target="_blank" rel="noopener">${esc(t)} ↗</a>`).join("");
+
+function render(){
+  $("tally").innerHTML=TALLY.map(([k,l])=>{const n=k==="all"?P.length:P.filter(p=>p.s===k||(k==="auto"&&p.s==="paused")).length;
+    return `<button class="tile" type="button" data-s="${k}" aria-pressed="${fStat===k}"><b>${n}</b><span>${l}</span></button>`}).join("");
+  const W=P.filter(p=>p.s==="wait"||p.s==="paused");
+  $("todo-count").textContent=W.length+" items";
+  $("todo").innerHTML=W.map(p=>`<div class="ask"><span class="p">${esc(p.n)}</span><span class="a">${esc(p.next)}</span><span class="meta">${esc(AREAS.find(a=>a.id===p.a).n)} · ${esc(p.d)}</span><div class="links">${links(p.L)}</div></div>`).join("");
+  $("filters").innerHTML=[["all","All areas"],...AREAS.map(a=>[a.id,a.n])].map(([id,n])=>`<button class="chip" type="button" data-a="${id}" aria-pressed="${fArea===id}">${esc(n)}</button>`).join("");
+  const order={wait:0,paused:1,live:2,auto:3,review:4,done:5};
+  let shown=0;
+  $("areas").innerHTML=AREAS.filter(a=>fArea==="all"||fArea===a.id).map(a=>{
+    const items=P.filter(p=>p.a===a.id&&(fStat==="all"||p.s===fStat||(fStat==="auto"&&p.s==="paused"))).sort((x,y)=>order[x.s]-order[y.s]);
+    if(!items.length) return ""; shown+=items.length;
+    return `<div class="area"><h3>${esc(a.n)} <small>${items.length} · ${esc(a.br)}</small></h3><div class="grid">${items.map(p=>`
+      <article class="card"><div class="top"><span class="name">${esc(p.n)}</span><span class="pill ${p.s}">${ST[p.s]}</span></div>
+      <p class="now">${esc(p.now)}</p>${p.next&&p.s!=="wait"&&p.s!=="paused"?`<p class="next">${esc(p.next)}</p>`:""}
+      ${p.next&&(p.s==="wait"||p.s==="paused")?`<p class="next">${esc(p.next)}</p>`:""}
+      <div class="links">${links(p.L)}</div>
+      <div class="foot"><span>${esc(p.d)}</span>${p.r?`<span>repo: ${esc(p.r)}</span>`:""}</div></article>`).join("")}</div></div>`}).join("")||`<p class="empty">No projects match this filter.</p>`;
+  $("all-count").textContent=shown+" shown";
 }
-B.forEach((b,i)=>{const el=document.createElement('button');el.className='branch';el.type='button';el.id='branch-'+i;
-  el.innerHTML=`<span class="n">${b.n}</span><span class="r">${b.r}</span>`;el.onclick=()=>show(i);list.appendChild(el)});
-let start=2;try{const v=+localStorage.getItem('branch');if(v>=0&&v<B.length&&localStorage.getItem('branch')!==null)start=v}catch(e){}
-show(start);
+document.addEventListener("click",e=>{
+  const t=e.target.closest(".tile"); if(t){fStat=fStat===t.dataset.s?"all":t.dataset.s; render(); return}
+  const c=e.target.closest(".chip"); if(c){fArea=c.dataset.a; try{localStorage.setItem("area",fArea)}catch(_){}; render()}
+});
+try{const v=localStorage.getItem("area"); if(v&&(v==="all"||AREAS.some(a=>a.id===v))) fArea=v}catch(_){}
+render();
 </script>
