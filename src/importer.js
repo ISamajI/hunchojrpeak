@@ -43,9 +43,11 @@ export function importLeadsCsv(text) {
   const header = rows[0].map((h) => h.trim().toLowerCase());
   const idx = Object.fromEntries(Object.entries(ALIASES).map(([k, names]) => [k, header.findIndex((h) => names.includes(h))]));
   if (idx.name < 0) throw new Error(`No "name" column found. Columns seen: ${header.join(', ')}`);
+  const MAX_ROWS = 2000;
+  if (rows.length - 1 > MAX_ROWS) throw new Error(`CSV has ${rows.length - 1} rows; the limit is ${MAX_ROWS} per import. Split the file and import in parts.`);
   const out = { created: 0, updated: 0, skipped: 0, errors: [] };
-  for (const [n, r] of rows.slice(1, 2001).entries()) {
-    const get = (k) => (idx[k] >= 0 ? (r[idx[k]] || '').trim() : '');
+  for (const [n, r] of rows.slice(1).entries()) {
+    const get = (k) => (idx[k] >= 0 ? (r[idx[k]] || '').trim().slice(0, 300) : '');
     const name = get('name');
     if (!name) { out.skipped++; continue; }
     try {

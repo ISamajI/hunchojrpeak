@@ -84,3 +84,20 @@ An independent review agent found **no way to bypass owner approval**. It did fi
 - A sandboxed queued job crashed the runner when its row was gone.
 
 **Verification:** 68 tests, all passing: 15 command-center API tests and 8 real-browser UI tests (every page, palette → command, approval confirmation, Kanban moves, sandboxed preview, invoice recording, keyboard navigation). A manual Chromium sweep of all 20 routes showed no console errors. Mobile was checked at iPhone 13 size.
+
+### Independent review of the command center (Itachi)
+
+No XSS, auth/CSRF bypass, SQL injection, approval bypass or Twilio abuse was found. These issues were fixed, with regression tests:
+
+| Severity | Finding | Fix |
+|---|---|---|
+| HIGH | Draft recurring invoices counted as MRR | MRR counts only **paid** recurring invoices (latest per client, paid within 45 days) |
+| HIGH | 30-day projection double/triple counted: an unpaid recurring invoice landed in MRR **and** outstanding, and won deals were counted again via pipeline probability (a $300 case showed $3,800) | Projection = outstanding + renewals not yet billed + weighted value of deals **never invoiced**. Each dollar is counted once |
+| HIGH | Conversion rate and its label used different populations | Returns `wonContacted` and uses it in every label |
+| MED | CSV import silently dropped rows past 2,000; fields uncapped | Oversized files are rejected with a clear message; fields capped at 300 characters |
+| MED | Live stream had no connection cap or slow-client protection | Capped at 20 streams (503 above that); clients with a backlog over 1 MB are dropped and reconnect |
+| MED | Job/schedule args passed to the pipeline unfiltered (unbounded categories, `threshold`, `provider`) | `cleanPipelineArgs` whitelist (≤10 categories, limit ≤50) on every entry point |
+| LOW | "Today" and "this month" used UTC | Use the server's local time; "this week" is now exactly 7 days |
+| LOW (defense in depth) | `h()` set href/src without a scheme check | Only http(s)/mailto/tel/relative URLs are allowed |
+
+71 tests, all passing.

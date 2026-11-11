@@ -82,7 +82,11 @@ function serveAsset(res, rest) {
 
 const APP_CSP = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'";
 
+const MAX_STREAMS = 20;
+const MAX_BACKLOG = 1_000_000;
+
 function streamEvents(req, res) {
+  if (sse.count() >= MAX_STREAMS) return send(res, 503, { error: 'Too many live connections' });
   res.writeHead(200, {
     'content-type': 'text/event-stream; charset=utf-8',
     'cache-control': 'no-cache, no-transform',
@@ -91,7 +95,10 @@ function streamEvents(req, res) {
   });
   res.write(`event: hello\ndata: ${JSON.stringify({ ts: new Date().toISOString() })}\n\n`);
   sse.inc();
-  const onEvent = (e) => res.write(`event: ${e.type}\ndata: ${JSON.stringify(e.data)}\n\n`);
+  const onEvent = (e) => {
+    if (res.writableLength > MAX_BACKLOG) { res.destroy(); return; } // slow client: drop, it will reconnect
+    res.write(`event: ${e.type}\ndata: ${JSON.stringify(e.data)}\n\n`);
+  };
   bus.on('event', onEvent);
   const ping = setInterval(() => res.write(`: ping\n\n`), 20000);
   req.on('close', () => { clearInterval(ping); bus.off('event', onEvent); sse.dec(); });

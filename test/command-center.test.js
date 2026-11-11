@@ -278,3 +278,48 @@ test('overview, system and app shell endpoints', async () => {
   const bad = await api('/api/jobs', { kind: 'rm_rf', args: {} });
   assert.equal(bad.status, 400);
 });
+
+test('review fix: drafts never count as MRR; projection counts each dollar once', () => {
+  const a = crm.upsertBusiness({ name: 'Retainer Co' });
+  finance.createInvoice({ businessId: a.id, description: 'draft retainer', amount: 500, status: 'draft', recurring: true });
+  assert.equal(metrics.revenue('30d').mrr, 0, 'draft recurring invoice is not revenue');
+  const b = crm.upsertBusiness({ name: 'Won Co' });
+  crm.setStage(b.id, 'won');
+  getDb().prepare('UPDATE leads SET value_cents = 300000 WHERE business_id = ?').run(b.id);
+  finance.createInvoice({ businessId: b.id, description: 'care plan', amount: 300, status: 'sent', recurring: true });
+  const r = metrics.revenue('30d');
+  assert.equal(r.mrr, 0, 'unpaid recurring invoice is not MRR');
+  assert.equal(r.projected.cents, 30000, 'only the $300 outstanding — no MRR double count, no invoiced won deal');
+  // Paid plan + next cycle already billed → renewal not counted twice
+  const c = crm.upsertBusiness({ name: 'Plan Co' });
+  const today = new Date().toISOString().slice(0, 10);
+  finance.createInvoice({ businessId: c.id, description: 'plan m1', amount: 100, status: 'paid', recurring: true, paidAt: today });
+  assert.equal(metrics.revenue('30d').projected.components.renewals, 10000);
+  finance.createInvoice({ businessId: c.id, description: 'plan m2', amount: 100, status: 'sent', recurring: true });
+  const r2 = metrics.revenue('30d');
+  assert.equal(r2.mrr, 10000);
+  assert.equal(r2.projected.components.renewals, 0, 'next renewal already in outstanding');
+  assert.equal(r2.projected.cents, 30000 + 10000);
+});
+
+test('review fix: conversion label uses the same population as the rate', () => {
+  const { id } = crm.upsertBusiness({ name: 'Walk-in Win' });
+  crm.setStage(id, 'won');
+  const p = metrics.pipeline('30d');
+  assert.equal(p.totals.clients, 1);
+  assert.equal(p.totals.wonContacted, 0);
+  assert.equal(p.totals.conversionRate, null);
+});
+
+test('review fix: oversized CSV rejected, long fields capped, job args whitelisted', async () => {
+  const big = 'name\n' + Array.from({ length: 2001 }, (_, i) => `Biz ${i}`).join('\n');
+  assert.throws(() => importLeadsCsv(big), /limit is 2000/);
+  importLeadsCsv(`name,city\n${'x'.repeat(5000)},Hamilton`);
+  assert.equal(getDb().prepare('SELECT MAX(LENGTH(name)) n FROM businesses').get().n, 300);
+  const res = await api('/api/jobs', { kind: 'pipeline', args: { near: 'Hamilton', categories: Array(50).fill('cafe'), threshold: 0, provider: 'evil', limit: 999 } });
+  assert.equal(res.status, 200);
+  assert.deepEqual(Object.keys(res.data.args).sort(), ['categories', 'limit', 'near']);
+  assert.equal(res.data.args.categories.length, 10);
+  assert.equal(res.data.args.limit, 50);
+  await waitForJob(res.data.id).catch(() => {});
+});

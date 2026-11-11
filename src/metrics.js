@@ -57,6 +57,19 @@ function series(range, rows, dateField, valueFn = () => 1) {
   return keys.map((k) => ({ x: k, value: map.get(k) }));
 }
 
+/** Calendar day in the server's local timezone (the owner's machine), offset by n days, as YYYY-MM-DD. */
+export function localDay(n = 0) {
+  const d = new Date();
+  d.setDate(d.getDate() + n);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+/** Local midnight as a UTC 'YYYY-MM-DD HH:MM:SS' string, comparable with SQLite timestamps. */
+function localMidnightUtc() {
+  const d = new Date();
+  d.setHours(0, 0, 0, 0);
+  return d.toISOString().replace('T', ' ').slice(0, 19);
+}
+
 const sum = (rows, f) => rows.reduce((a, r) => a + f(r), 0);
 const pct = (cur, prev) => (prev ? (cur - prev) / prev : null);
 
@@ -75,22 +88,32 @@ export function revenue(rangeKey) {
   const paid = invoices.filter((i) => i.status === 'paid' && i.paid_at);
   const inRange = paid.filter((i) => i.paid_at >= range.from && i.paid_at < range.to);
   const inPrev = paid.filter((i) => i.paid_at >= range.prevFrom && i.paid_at < range.from);
-  const today = ymd(new Date());
+  const today = localDay(0);
   const outstanding = invoices.filter((i) => i.status === 'sent');
   const overdue = outstanding.filter((i) => i.due_at && i.due_at < today);
-  // MRR: latest recurring invoice per client, if issued within the last 45 days (i.e. still active).
+  // MRR: latest PAID recurring invoice per client, paid within the last 45 days (plan still active).
+  // Drafts and unpaid invoices are never counted as recurring revenue.
   const cutoff = ymd(new Date(Date.now() - 45 * DAY));
   const latestRecurring = new Map();
-  for (const i of invoices.filter((x) => x.recurring && x.issued_at >= cutoff)) {
+  for (const i of paid.filter((x) => x.recurring && x.paid_at >= cutoff)) {
     const k = i.business_id ?? `inv${i.id}`;
-    if (!latestRecurring.has(k) || latestRecurring.get(k).issued_at < i.issued_at) latestRecurring.set(k, i);
+    if (!latestRecurring.has(k) || latestRecurring.get(k).paid_at < i.paid_at) latestRecurring.set(k, i);
   }
   const mrr = sum([...latestRecurring.values()], (i) => i.amount_cents);
-  const weekAgo = ymd(new Date(Date.now() - 7 * DAY));
-  const monthStart = today.slice(0, 7) + '-01';
-  const open = db.prepare("SELECT l.stage, l.value_cents FROM leads l WHERE l.stage NOT IN ('lost','do_not_contact','onboarding','active')").all();
+  const weekAgo = localDay(-6);
+  const monthStart = localDay(0).slice(0, 7) + '-01';
+  // Projection model — each dollar counted once:
+  //  • outstanding invoices (already billed)
+  //  • + next renewal for recurring clients who don't already have an outstanding recurring invoice
+  //  • + Σ(deal value × stage probability) for open deals that have NOT been invoiced yet
+  const outstandingRecurringClients = new Set(outstanding.filter((i) => i.recurring).map((i) => i.business_id ?? `inv${i.id}`));
+  const renewals = sum([...latestRecurring.entries()].filter(([k]) => !outstandingRecurringClients.has(k)), ([, i]) => i.amount_cents);
+  const invoiced = new Set(invoices.map((i) => i.business_id).filter((x) => x != null));
+  const open = db.prepare("SELECT l.business_id, l.stage, l.value_cents FROM leads l WHERE l.stage NOT IN ('lost','do_not_contact','onboarding','active')").all()
+    .filter((l) => !invoiced.has(l.business_id));
   const valued = open.filter((l) => l.value_cents > 0);
   const pipelineWeighted = sum(valued, (l) => l.value_cents * (STAGE_PROBABILITY[l.stage] ?? 0));
+  const outstandingCents = sum(outstanding, (i) => i.amount_cents);
   return {
     range,
     hasData: invoices.length > 0,
@@ -104,9 +127,9 @@ export function revenue(rangeKey) {
     recurringClients: latestRecurring.size,
     outstanding: { cents: sum(outstanding, (i) => i.amount_cents), count: outstanding.length, overdueCount: overdue.length, overdueCents: sum(overdue, (i) => i.amount_cents) },
     projected: {
-      cents: mrr + sum(outstanding, (i) => i.amount_cents) + Math.round(pipelineWeighted),
-      model: 'Next 30 days = MRR + outstanding invoices + Σ(open deal value × stage probability)',
-      components: { mrr, outstanding: sum(outstanding, (i) => i.amount_cents), pipelineWeighted: Math.round(pipelineWeighted) },
+      cents: outstandingCents + renewals + Math.round(pipelineWeighted),
+      model: 'Next 30 days = outstanding invoices + upcoming recurring renewals not yet billed + Σ(un-invoiced open deal value × stage probability)',
+      components: { outstanding: outstandingCents, renewals, pipelineWeighted: Math.round(pipelineWeighted) },
       openDeals: open.length,
       dealsWithoutValue: open.length - valued.length,
       probabilities: STAGE_PROBABILITY,
@@ -180,6 +203,7 @@ export function pipeline(rangeKey) {
       contacted: contacted.size,
       replied: new Set(inbound.map((m) => m.business_id)).size,
       clients: won.size,
+      wonContacted,
       activeClients: counts.active + counts.onboarding,
       conversionRate: contacted.size ? wonContacted / contacted.size : null,
       pendingProposals: proposals,
@@ -256,11 +280,11 @@ export function businessHealth() {
 
 export function today() {
   const db = getDb();
-  const start = new Date().toISOString().slice(0, 10);
+  const start = localMidnightUtc();
   const rows = db.prepare('SELECT actor, action, COUNT(*) n FROM activity WHERE ts >= ? GROUP BY actor, action ORDER BY n DESC').all(start);
   const count = (a) => sum(rows.filter((r) => r.action === a), (r) => r.n);
   return {
-    date: start,
+    date: localDay(0),
     discovered: sum(db.prepare("SELECT 1 FROM activity WHERE ts >= ? AND action = 'lead_created'").all(start), () => 1),
     researched: count('business_researched'),
     demos: count('demo_built'),

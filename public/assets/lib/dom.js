@@ -12,11 +12,18 @@ export function h(tag, props = {}, ...kids) {
     else if (k === 'style' && typeof v === 'object') Object.assign(el.style, v);
     else if (k.startsWith('on') && typeof v === 'function') el.addEventListener(k.slice(2).toLowerCase(), v);
     else if (k === 'dataset') Object.assign(el.dataset, v);
+    else if ((k === 'href' || k === 'src') && !safeUrl(v)) continue; // defense in depth: no javascript:/data: URLs
     else if (k in el && !svgTags.has(tag) && k !== 'list' && k !== 'form') el[k] = v;
     else el.setAttribute(k, v === true ? '' : v);
   }
   append(el, kids);
   return el;
+}
+
+function safeUrl(v) {
+  const s = String(v).trim();
+  if (/^(#|\/(?!\/)|\.\/)/.test(s)) return true;
+  try { return ['http:', 'https:', 'mailto:', 'tel:'].includes(new URL(s, location.href).protocol); } catch { return false; }
 }
 
 export function append(el, kids) {

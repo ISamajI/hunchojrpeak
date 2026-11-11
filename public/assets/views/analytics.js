@@ -23,7 +23,7 @@ export default async function analytics(root, ctx) {
         kpi({ label: 'New leads · period', value: fmt.num(t.newLeads), deltaValue: t.newLeadsGrowth, spark: p.series.discovered.map((s) => s.value) }),
         kpi({ label: 'Contacted', value: fmt.num(t.contacted), sub: 'emailed (approved sends)' }),
         kpi({ label: 'Replied', value: fmt.num(t.replied), sub: t.contacted ? `${fmt.pct(t.replied / t.contacted)} reply rate` : '' }),
-        kpi({ label: 'Conversion', value: t.conversionRate == null ? null : fmt.pct(t.conversionRate, 1), na: 'No one contacted yet', sub: `${t.clients} won` }),
+        kpi({ label: 'Conversion', value: t.conversionRate == null ? null : fmt.pct(t.conversionRate, 1), na: 'No one contacted yet', sub: `${t.wonContacted} of ${t.contacted} contacted won` }),
         kpi({ label: 'Pending proposals', value: fmt.num(t.pendingProposals), sub: `${t.followUps} follow-ups due`, href: '#/approvals' }));
       const series = [
         { name: 'Discovered', color: SERIES.blue, points: p.series.discovered },

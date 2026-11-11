@@ -22,6 +22,7 @@ import * as monitor from './monitor.js';
 import { systemHealth } from './system.js';
 import { importLeadsCsv } from './importer.js';
 import { search } from './search.js';
+import { cleanPipelineArgs } from './operations.js';
 
 const bad = (msg, status = 400) => Object.assign(new Error(msg), { status });
 const id = (m) => Number(m[1]);
@@ -87,10 +88,17 @@ export const routes = [
   ['POST', /^\/api\/jobs$/, (q, m, b) => {
     if (!JOB_KINDS_FROM_UI.includes(b.kind)) throw bad(`kind must be one of ${JOB_KINDS_FROM_UI.join(', ')}`);
     const args = b.args && typeof b.args === 'object' ? b.args : {};
-    if (b.kind === 'pipeline' && (!args.near || (!args.category && !args.categories?.length))) throw bad('Pipeline needs a category and a location');
-    if (['process_lead', 'build_demo'].includes(b.kind) && !crm.getBusiness(Number(args.businessId))) throw bad('Unknown businessId');
-    if (b.kind === 'content' && !CONTENT_KINDS[args.kind]) throw bad('Unknown content kind');
-    return startJob(b.kind, args, { source: 'dashboard' });
+    let clean;
+    if (b.kind === 'pipeline') clean = cleanPipelineArgs(args);
+    else if (['process_lead', 'build_demo'].includes(b.kind)) {
+      if (!crm.getBusiness(Number(args.businessId))) throw bad('Unknown businessId');
+      clean = { businessId: Number(args.businessId), ...(b.kind === 'process_lead' && args.force ? { force: true } : {}) };
+    } else if (b.kind === 'content') {
+      if (!CONTENT_KINDS[args.kind]) throw bad('Unknown content kind');
+      clean = { kind: args.kind, brief: String(args.brief || '').slice(0, 2000) };
+    } else if (b.kind === 'analysis') clean = { range: ['7d', '30d', '90d', '12m', 'all'].includes(args.range) ? args.range : '30d' };
+    else clean = {};
+    return startJob(b.kind, clean, { source: 'dashboard' });
   }],
 
   // ---- analytics ----

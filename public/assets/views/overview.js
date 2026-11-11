@@ -124,7 +124,7 @@ export default async function overview(root, ctx) {
       kpi({ label: 'Recurring (MRR)', value: noRev ? null : fmt.money(r.mrr), sub: noRev ? '' : `${r.recurringClients} recurring client${r.recurringClients === 1 ? '' : 's'}`, na: 'No recurring plans', href: '#/revenue' }),
       kpi({ label: 'Outstanding', value: noRev ? null : fmt.money(r.outstanding.cents, { compact: true }), sub: noRev ? '' : `${r.outstanding.count} open${r.outstanding.overdueCount ? ` · ${r.outstanding.overdueCount} overdue` : ''}`, na: 'No open invoices', href: '#/revenue' }),
       kpi({ label: 'New leads', value: fmt.num(p.totals.newLeads), deltaValue: p.totals.newLeadsGrowth, spark: p.series.discovered.map((s) => s.value), sub: `${fmt.num(p.totals.leads)} total`, href: '#/leads' }),
-      kpi({ label: 'Conversion', value: p.totals.conversionRate == null ? null : fmt.pct(p.totals.conversionRate), na: 'No one contacted yet', sub: `${p.totals.clients} won of ${p.totals.contacted} contacted`, title: 'Won ÷ prospects who were emailed', href: '#/analytics' }),
+      kpi({ label: 'Conversion', value: p.totals.conversionRate == null ? null : fmt.pct(p.totals.conversionRate), na: 'No one contacted yet', sub: `${p.totals.wonContacted} won of ${p.totals.contacted} contacted`, title: 'Won ÷ prospects who were emailed', href: '#/analytics' }),
       kpi({ label: 'Active demos', value: fmt.num(o.activeDemos), sub: `${o.demosBuilt} built · ${o.qaFailures30d} QA blocks (30d)`, href: '#/demos' }));
   }
 

@@ -13,12 +13,23 @@ import { revenue, pipeline, unresponsive } from './metrics.js';
 
 export const DEFAULT_SWEEP = ['restaurant', 'barber', 'beauty', 'auto repair', 'cafe', 'dentist'];
 
+/** Only these pipeline arguments are accepted from the dashboard, commands and schedules. */
+export function cleanPipelineArgs(a = {}) {
+  const str = (v, n) => (typeof v === 'string' && v.trim() ? v.trim().slice(0, n) : undefined);
+  const near = str(a.near, 120);
+  const category = str(a.category, 60);
+  const categories = Array.isArray(a.categories) ? a.categories.map((c) => str(c, 60)).filter(Boolean).slice(0, 10) : undefined;
+  if (!near) throw new Error('Pipeline needs a location ("near")');
+  if (!category && !categories?.length) throw new Error('Pipeline needs a category');
+  return { near, limit: Math.max(1, Math.min(50, Number(a.limit) || 10)), ...(category ? { category } : { categories }) };
+}
+
 const money = (c) => `$${(c / 100).toLocaleString('en-US', { maximumFractionDigits: 0 })}`;
 
 defineJob('pipeline', {
   agent: 'orchestrator',
   label: (a) => `Find ${a.limit || 10} ${a.categories?.length ? 'local businesses' : a.category} near ${a.near}`,
-  run: (a, ctx) => runPipeline({ ...a, limit: Math.min(50, Number(a.limit) || 10), onStep: ctx.step }),
+  run: (a, ctx) => runPipeline({ ...cleanPipelineArgs(a), onStep: ctx.step }),
 });
 
 defineJob('process_lead', {
@@ -82,9 +93,9 @@ defineJob('analysis', {
     if (!r.hasData) findings.push('No invoices recorded yet, so revenue cannot be analyzed. Record invoices under Revenue to enable this.');
     else {
       findings.push(`Revenue this period: ${money(r.period)}${r.growth == null ? '' : ` (${r.growth >= 0 ? '+' : ''}${Math.round(r.growth * 100)}% vs previous period)`}.`);
-      findings.push(`MRR ${money(r.mrr)} from ${r.recurringClients} recurring client(s). Outstanding ${money(r.outstanding.cents)} across ${r.outstanding.count} invoice(s)${r.outstanding.overdueCount ? `, ${r.outstanding.overdueCount} overdue` : ''}.`);
+      findings.push(`MRR ${money(r.mrr)} from ${r.recurringClients} paying recurring client(s). Outstanding ${money(r.outstanding.cents)} across ${r.outstanding.count} invoice(s)${r.outstanding.overdueCount ? `, ${r.outstanding.overdueCount} overdue` : ''}.`);
     }
-    findings.push(`${p.totals.newLeads} new leads this period; ${p.totals.contacted} contacted to date; ${p.totals.clients} won.`);
+    findings.push(`${p.totals.newLeads} new leads this period; ${p.totals.contacted} contacted to date; ${p.totals.clients} won in total (${p.totals.wonContacted} of them from outreach).`);
     if (p.totals.conversionRate != null) findings.push(`Contacted → won conversion: ${Math.round(p.totals.conversionRate * 100)}%.`);
     if (p.totals.followUps) findings.push(`${p.totals.followUps} prospect(s) haven't replied in 3+ days — follow-ups recommended.`);
     if (r.projected.dealsWithoutValue) findings.push(`${r.projected.dealsWithoutValue} open deal(s) have no value set, so the revenue projection undercounts them.`);

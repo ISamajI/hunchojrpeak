@@ -3,6 +3,7 @@
 import { getDb, json, parse } from './db.js';
 import { log } from './activity.js';
 import { startJob } from './jobs.js';
+import { cleanPipelineArgs } from './operations.js';
 
 export const SCHEDULE_KINDS = {
   pipeline: { job: 'pipeline', describe: (a) => `Find ${a.limit || 10} ${a.category || 'businesses'} near ${a.near}` },
@@ -14,11 +15,15 @@ const sqlTime = (d) => d.toISOString().replace('T', ' ').slice(0, 19);
 
 function validate(kind, args) {
   if (!SCHEDULE_KINDS[kind]) throw new Error(`Schedule kind must be one of ${Object.keys(SCHEDULE_KINDS).join(', ')}`);
-  if (kind === 'pipeline' && (!args?.near || (!args.category && !args.categories?.length))) throw new Error('Pipeline schedules need "near" and a category');
+  if (kind === 'pipeline') {
+    if (!args?.near) throw new Error('Pipeline schedules need "near" and a category');
+    return cleanPipelineArgs(args);
+  }
+  return {};
 }
 
 export function createSchedule({ name, kind, args = {}, everyHours, startAt }) {
-  validate(kind, args);
+  args = validate(kind, args);
   const hours = Number(everyHours);
   if (!(hours >= 1 && hours <= 24 * 30)) throw new Error('everyHours must be between 1 and 720');
   const first = startAt ? new Date(startAt) : new Date(Date.now() + 60000);
