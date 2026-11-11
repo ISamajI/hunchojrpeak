@@ -1,0 +1,144 @@
+<title>Jarvis Command Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a left-to-right command chain on top, an interactive branch board in the middle, the knowledge loop at the bottom */
+:root{
+  --bg:#f3f4f7; --surface:#ffffff; --ink:#171a2b; --muted:#5d6380; --line:#d5d8e4;
+  --accent:#3b3fd8; --accent-soft:#e6e7fd; --gate:#b4321f; --gate-soft:#fbe7e3; --ok:#1d7a52; --ok-soft:#dff3ea;
+  --display:"Bricolage Grotesque",ui-sans-serif,system-ui,sans-serif;
+  --body:"IBM Plex Sans",ui-sans-serif,system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#10121c; --surface:#181b29; --ink:#e7e9f5; --muted:#9aa0bd; --line:#2d3146;
+  --accent:#8e91ff; --accent-soft:#25285a; --gate:#ff8a73; --gate-soft:#3d1f1a; --ok:#5fd3a0; --ok-soft:#163327; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10121c; --surface:#181b29; --ink:#e7e9f5; --muted:#9aa0bd; --line:#2d3146;
+  --accent:#8e91ff; --accent-soft:#25285a; --gate:#ff8a73; --gate-soft:#3d1f1a; --ok:#5fd3a0; --ok-soft:#163327; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:32px 56px}
+.wrap{max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:40px}
+h1,h2{font-family:var(--display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:clamp(28px,5vw,44px);line-height:1.05}
+h2{font-size:22px}
+.eyebrow{font:600 11px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.lede{color:var(--muted);max-width:62ch;margin:10px 0 0}
+section{display:flex;flex-direction:column;gap:16px}
+
+/* chain */
+.chain{display:flex;align-items:stretch;gap:0;overflow-x:auto;padding-bottom:4px}
+.step{flex:1 1 0;min-width:150px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:6px}
+.step b{font-family:var(--display);font-size:17px;font-weight:700}
+.step p{margin:0;color:var(--muted);font-size:13px}
+.step .tag{font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.step.gate{border-color:var(--gate);background:var(--gate-soft)} .step.gate .tag{color:var(--gate)}
+.step.ship{border-color:var(--ok);background:var(--ok-soft)} .step.ship .tag{color:var(--ok)}
+.arrow{flex:0 0 28px;display:grid;place-items:center;color:var(--muted);font:600 16px var(--mono)}
+
+/* board */
+.board{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:20px}
+@media (max-width:760px){.board{grid-template-columns:minmax(0,1fr)}}
+.branches{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.branch{all:unset;cursor:pointer;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;transition:border-color .15s,transform .15s}
+.branch:hover{border-color:var(--accent)}
+.branch:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.branch[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.branch .n{font-family:var(--display);font-weight:700;font-size:16px}
+.branch .r{font-size:12.5px;color:var(--muted)}
+.detail{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:16px;min-width:0}
+.detail h3{font-family:var(--display);font-size:24px;margin:0}
+.detail .remit{margin:0;color:var(--muted)}
+.trio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;position:relative}
+@media (max-width:440px){.trio{grid-template-columns:minmax(0,1fr)}}
+.stage{border:1px dashed var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:4px}
+.stage .k{font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.stage .who{font-family:var(--display);font-weight:700;font-size:16px}
+.stage .what{font-size:12.5px;color:var(--muted)}
+.handoff{font:12px/1.5 var(--mono);color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+.handoff strong{color:var(--gate)}
+
+/* knowledge loop */
+.vault{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:640px){.vault{grid-template-columns:minmax(0,1fr)}}
+.folder{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:6px}
+.folder code{font:600 15px var(--mono);color:var(--accent)}
+.folder p{margin:0;font-size:13.5px;color:var(--muted)}
+.folder .link{font:12px var(--mono);color:var(--ink);opacity:.8}
+.note{font-size:13px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Workflow map · personal agent system</div>
+    <h1>How a request moves through Jarvis</h1>
+    <p class="lede">Every task enters through Jarvis, gets prioritized, lands with one of eight branches, runs a plan → execute → review loop, and passes a quality gate before it ships. Pick a branch below to see who handles each stage.</p>
+  </header>
+
+  <section aria-labelledby="chain-h">
+    <h2 id="chain-h">The command chain</h2>
+    <div class="chain">
+      <div class="step"><span class="tag">Intake</span><b>Request</b><p>A task, idea, or client ask comes in.</p></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="step"><span class="tag">Triage</span><b>Jarvis</b><p>Handles quick tasks directly, or routes to a specialist branch.</p></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="step"><span class="tag">Prioritize</span><b>Tsunade</b><p>Decides what goes first, what to drop, which branch owns it.</p></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="step"><span class="tag">Do the work</span><b>Branch trio</b><p>Planner → Executor → Reviewer inside the owning branch.</p></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="step gate"><span class="tag">QC gate</span><b>Itachi</b><p>Bugs, security, sloppy edges. Required for builds going live.</p></div>
+      <div class="arrow" aria-hidden="true">→</div>
+      <div class="step ship"><span class="tag">Ship</span><b>/outputs</b><p>Finished work is published and filed.</p></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="board-h">
+    <h2 id="board-h">The eight branches</h2>
+    <div class="board">
+      <div class="branches" id="branches" role="group" aria-label="Branches"></div>
+      <div class="detail" id="detail" aria-live="polite"></div>
+    </div>
+    <p class="note">The Akamaru system mirrors these same branches under a different top-level name.</p>
+  </section>
+
+  <section aria-labelledby="vault-h">
+    <h2 id="vault-h">Where the knowledge lands</h2>
+    <div class="vault">
+      <div class="folder"><code>/raw</code><p>Daily notes. Unfiltered capture of what happened, what came up, what's in flight.</p><span class="link">[[2026-11-11]]</span></div>
+      <div class="folder"><code>/wiki</code><p>Codified reference. One idea per note, linked with wiki links so branches can reuse it.</p><span class="link">[[Branch Routing]] · [[QC Checklist]]</span></div>
+      <div class="folder"><code>/outputs</code><p>Published, finished artifacts. This map lives here.</p><span class="link">[[Jarvis Command Map]]</span></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const B=[
+ {n:"Jarvis",r:"Personal assistant / catch-all",remit:"General requests, quick tasks, day-to-day admin, drafting, scheduling.",t:["Hashirama","Tobirama","Hiruzen"]},
+ {n:"Tsunade",r:"Strategy & management",remit:"Prioritization: what to work on first, what to drop, what to delegate where.",t:["Shikaku Nara","Shizune","Sakura"]},
+ {n:"Orochimaru",r:"Systems builder",remit:"Websites, dashboards, client-facing sites, including LTGPEAK projects and the shop site.",t:["Kabuto","Anko","Kimimaro"],gate:true},
+ {n:"Itachi",r:"Security & quality control",remit:"Reviews other branches' work, especially builds, for bugs and security issues before go-live.",t:["Shisui","Kisame","Danzo"]},
+ {n:"Jiraiya",r:"Research & knowledge",remit:"Market, competitor, tool, and topic research.",t:["Fukasaku","Gamabunta","Shima"]},
+ {n:"Kakashi",r:"Business & sales",remit:"Client communication: proposals, pitches, outreach, quotes, follow-ups.",t:["Sai","Naruto","Yamato"]},
+ {n:"Shikamaru",r:"Problem solving & synthesis",remit:"Untangles ambiguous or stuck situations where the next step isn't obvious.",t:["Ino","Choji","Mirari Sarutobi"]},
+ {n:"Clavo Dulce",r:"Analytics & data",remit:"Tracks metrics and builds reports or lightweight dashboards.",t:["Kaito Aburame","Haru Inuzuka","Toya Hyuga"]}
+];
+const S=[["Plan","Investigates and scopes before work starts"],["Execute","Carries out the approved plan"],["Review","Checks finished work before it's called done"]];
+const list=document.getElementById('branches'),detail=document.getElementById('detail');
+function show(i){
+  const b=B[i];
+  [...list.children].forEach((el,j)=>el.setAttribute('aria-pressed',j===i));
+  detail.innerHTML=`<div><div class="eyebrow">${b.r}</div><h3>${b.n}</h3></div>
+   <p class="remit">${b.remit}</p>
+   <div class="trio">${b.t.map((w,k)=>`<div class="stage"><span class="k">${k+1} · ${S[k][0]}</span><span class="who">${w}</span><span class="what">${S[k][1]}</span></div>`).join('')}</div>
+   <div class="handoff">${b.n==="Itachi"?"Itachi <strong>is</strong> the gate: approves or sends work back to its branch."
+     :b.gate?"Handoff → <strong>Itachi QC gate</strong> before anything goes live, then → /outputs."
+     :"Handoff → reviewed work files to /outputs; Itachi checks anything client-facing."}</div>`;
+  try{localStorage.setItem('branch',i)}catch(e){}
+}
+B.forEach((b,i)=>{const el=document.createElement('button');el.className='branch';el.type='button';el.id='branch-'+i;
+  el.innerHTML=`<span class="n">${b.n}</span><span class="r">${b.r}</span>`;el.onclick=()=>show(i);list.appendChild(el)});
+let start=2;try{const v=+localStorage.getItem('branch');if(v>=0&&v<B.length&&localStorage.getItem('branch')!==null)start=v}catch(e){}
+show(start);
+</script>
