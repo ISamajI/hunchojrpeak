@@ -65,7 +65,7 @@ function servePreview(res, rest) {
   send(res, 200, fs.readFileSync(file), {
     'content-type': MIME[path.extname(file)] || 'application/octet-stream',
     'x-robots-tag': 'noindex, nofollow',
-    'content-security-policy': "default-src 'none'; style-src 'unsafe-inline'; img-src * data:; frame-ancestors 'none'",
+    'content-security-policy': "default-src 'none'; style-src 'unsafe-inline'; img-src * data:; frame-ancestors 'self'",
   });
 }
 

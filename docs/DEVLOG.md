@@ -48,3 +48,39 @@ An independent review agent found **no way to bypass owner approval**. It did fi
 | MED | Scraped text could steer AI copy (prompt injection) | Untrusted data wrapped in `<untrusted_*>` tags; AI output with any unknown URL/phone/email is rejected and falls back to template; AI drafts flagged in the approval card |
 | LOW | Unvalidated / multi-recipient emails | `normalizeEmail` on store and send |
 | LOW | Spoofed inbound `From:` | Webhook accepts `spf`/`dkim`; failures can't change lead state or trigger replies (unsubscribes still honored) |
+
+## 2026-11-11: Milestone 2, AKUMARU Command Center
+
+**Goal:** a premium operating interface where every element shows real data, or says plainly that the data doesn't exist.
+
+**Backend added:**
+- Job runner with step-by-step progress and crash recovery.
+- SSE event bus.
+- Invoice ledger.
+- Metrics engine.
+- Command engine.
+- Notification center with Twilio escalation.
+- Scheduler, uptime monitor, Claude marketing drafts, CSV import, global search, system telemetry, and six agent identities.
+- Schema migration v2.
+- Routes moved to `src/api.js`. Every original endpoint still behaves the same.
+
+**Frontend:** rebuilt as 20 views on a shared component and chart kit. Chart colors were validated with the dataviz palette validator on the dark surface `#10141b`: all checks pass, worst adjacent CVD ΔE 9.4. Every chart has hover tooltips, a legend for two or more series, and a table view.
+
+**Honesty rules enforced in code:**
+- Revenue comes only from the ledger.
+- The projection is labeled as a model, with its inputs shown.
+- Marketing is offline without Claude, with no template fakery.
+- Uptime reads "not monitored" until checks exist.
+- Failures stay in the activity feed and notifications.
+
+**Bugs found by looking at real renders:**
+- The quick-command icon rendered unsized.
+- The mobile menu button showed on desktop.
+- The chart crosshair was visible at rest.
+- The command thread didn't scroll to the newest message.
+- Finished jobs showed their last step instead of "Completed".
+- Preview iframes broke when the dashboard port differed from the configured public URL.
+- Preview CSP `frame-ancestors 'none'` blocked in-app previews (now `'self'`).
+- A sandboxed queued job crashed the runner when its row was gone.
+
+**Verification:** 68 tests, all passing: 15 command-center API tests and 8 real-browser UI tests (every page, palette → command, approval confirmation, Kanban moves, sandboxed preview, invoice recording, keyboard navigation). A manual Chromium sweep of all 20 routes showed no console errors. Mobile was checked at iPhone 13 size.

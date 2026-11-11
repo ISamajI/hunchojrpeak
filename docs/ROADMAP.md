@@ -21,24 +21,33 @@ Status key: ✅ built and tested · 🟡 built, awaiting live credentials · ⬜
 - ✅ Dashboard + JSON API with token auth, CSRF and DNS-rebinding guards
 - 🟡 Claude-written research/copy/outreach (needs `ANTHROPIC_API_KEY`; template fallback works today)
 
-## Milestone 2: Scheduling and follow-ups
-- ⬜ Scheduler: run saved searches nightly; send approved follow-ups on day 3 / day 7 (each still gated)
+## Milestone 2: Command Center (this release)
+- ✅ 20-page AI command center: overview core, live activity, command interface, Kanban, revenue, analytics, agents, workflows, schedules, approvals, studios, integrations, notifications, system health, settings
+- ✅ Background job runner + real-time SSE stream
+- ✅ Invoice ledger; revenue and projection computed from data only
+- ✅ Natural-language commands (rules + optional Claude), CSV import, voice input (browser-supported)
+- ✅ Notification center with Twilio SMS/call escalation 🟡 (needs Twilio)
+- ✅ Scheduler (pipeline, follow-up scan, uptime) and uptime monitor
+- 🟡 Marketing/Content Studio (needs Claude)
+
+## Milestone 3: Follow-ups and batching
+- ⬜ Send approved follow-ups on day 3 / day 7 (each still gated)
 - ⬜ Batch approval ("approve all 8 outreach emails") with per-item preview
 - ⬜ Reply threading by `In-Reply-To` / Resend message id, not just sender email
 - ⬜ Owner notifications (email/SMS digest of pending approvals)
 
-## Milestone 3: Better demos
+## Milestone 4: Better demos
 - ⬜ Screenshot each demo (Playwright) for email thumbnails and dashboard cards
 - ⬜ Pull real photos/logo from the business's existing site or Google Places (with attribution)
 - ⬜ Multiple template layouts per industry; A/B which converts
 - ⬜ Lighthouse score in QA
 
-## Milestone 4: Close and onboard
+## Milestone 5: Close and onboard
 - ⬜ Proposal/quote generator (PDF) → owner approval → send
 - ⬜ E-signature integration (contract send = approval action)
-- ⬜ Stripe payment links (charge = approval action)
+- ⬜ Stripe payment links (charge = approval action), auto-recording paid invoices into the ledger
 - ⬜ Production build pipeline: custom domain, Google Business Profile link, analytics
 
-## Milestone 5: Hosting Akamaru
+## Milestone 6: Hosting Akamaru
 - ⬜ Deploy the dashboard (Fly.io/Render/VPS) with persistent volume + backups
 - ⬜ Multi-user roles (owner vs. assistant)

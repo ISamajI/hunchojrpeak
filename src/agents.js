@@ -1,7 +1,7 @@
 // The six operational agents. Each maps onto the Akamaru branches that do its
 // work; status and performance are computed from the jobs table and activity log.
 import { getDb, parse } from './db.js';
-import { isConfigured } from './config.js';
+import { isConfigured, INTEGRATIONS } from './config.js';
 
 export const AGENTS = [
   { id: 'sales', name: 'Sales Intelligence', codename: 'Jiraiya', actors: ['jiraiya'], mission: 'Finds businesses that need websites, audits their web presence and scores each opportunity.', requires: [] },
@@ -22,6 +22,14 @@ const ACTION_TEXT = {
   approval_failed: 'Approved action failed', invoice_paid: 'Recorded a payment', content_drafted: 'Drafted marketing content',
   site_down: 'Detected a site outage', site_recovered: 'Site recovered', uptime_sweep: 'Checked client site uptime',
   pending_sends_cancelled: 'Cancelled pending sends', analysis_run: 'Ran a business analysis', stage_changed: 'Moved a lead',
+  command_received: 'Received a command', leads_imported: 'Imported leads from CSV', job_failed: 'An operation failed',
+  project_updated: 'Updated project details', invoice_recorded: 'Recorded an invoice', invoice_updated: 'Updated an invoice',
+  schedule_created: 'Scheduled a recurring operation', site_monitored: 'Started monitoring a site', note_added: 'Added a note',
+  followup_scan: 'Scanned for follow-ups', campaign_edited: 'Edited a draft', approval_rejected: 'Approval rejected',
+  email_suppressed: 'Added an address to the suppression list', onboarding_plan_created: 'Created an onboarding plan',
+  onboarding_task_updated: 'Updated an onboarding task', pipeline_run: 'Completed a pipeline run', pipeline_step_failed: 'A pipeline step failed',
+  ai_copy_failed: 'AI demo copy failed', ai_copy_rejected_by_qa: 'Rejected AI copy at QA', outreach_warning: 'Flagged an outreach issue',
+  command_parse_failed: 'Could not interpret a command',
 };
 
 export function describeAction(action) {
@@ -58,6 +66,7 @@ export function agentStatus() {
       ...a,
       status,
       missing,
+      missingLabels: missing.map((k) => INTEGRATIONS[k]?.label || k),
       currentTask: current ? current.step || current.label : pipelineActive ? recent[0].text : null,
       queued: jobs.filter((j) => j.status === 'queued').length,
       recent,
