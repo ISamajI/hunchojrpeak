@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Akamaru Command Center</title>
+<style>
+:root{--bg:#0e1116;--panel:#161b22;--line:#2a313c;--text:#e6edf3;--muted:#8b949e;--accent:#e0a526;--ok:#3fb950;--bad:#f85149;--warn:#d29922}
+*{box-sizing:border-box}body{margin:0;font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text)}
+header{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 1rem;border-bottom:1px solid var(--line);flex-wrap:wrap}
+header h1{font-size:1.1rem;margin:0}header h1 span{color:var(--accent)}
+main{display:grid;gap:1rem;padding:1rem;grid-template-columns:minmax(0,2fr) minmax(0,1fr)}
+@media(max-width:900px){main{grid-template-columns:1fr}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:1rem;min-width:0}
+.panel h2{font-size:.95rem;margin:0 0 .75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.stages{display:flex;gap:.5rem;flex-wrap:wrap}.stage{background:#0d1117;border:1px solid var(--line);border-radius:8px;padding:.4rem .6rem;cursor:pointer}
+.stage b{display:block;font-size:1.2rem}.stage small{color:var(--muted)}.stage.active{border-color:var(--accent)}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:.45rem .4rem;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--muted);font-weight:600;font-size:.8rem}tr.row{cursor:pointer}tr.row:hover{background:#1c2330}
+.pill{display:inline-block;padding:.05rem .5rem;border-radius:99px;font-size:.75rem;background:#21262d}
+.hot{color:var(--bad)}.warm{color:var(--warn)}.cold{color:var(--muted)}
+button,input,select,textarea{font:inherit;color:var(--text);background:#0d1117;border:1px solid var(--line);border-radius:6px;padding:.4rem .6rem}
+button{cursor:pointer;background:#21262d}button.primary{background:var(--accent);color:#111;border-color:var(--accent);font-weight:700}
+button.ok{border-color:var(--ok);color:var(--ok)}button.bad{border-color:var(--bad);color:var(--bad)}
+form{display:flex;gap:.5rem;flex-wrap:wrap}form input{flex:1;min-width:8rem}
+.approval{border:1px solid var(--line);border-radius:8px;padding:.6rem;margin-bottom:.6rem}.approval pre{white-space:pre-wrap;font-size:.8rem;color:var(--muted);max-height:12rem;overflow:auto}
+.muted{color:var(--muted)}.feed{max-height:20rem;overflow:auto;font-size:.8rem}.feed div{border-bottom:1px solid var(--line);padding:.25rem 0}
+.int{display:flex;justify-content:space-between;gap:.5rem;padding:.3rem 0;border-bottom:1px solid var(--line)}.int small{display:block;color:var(--muted)}
+#detail pre{white-space:pre-wrap;font-size:.8rem;background:#0d1117;padding:.6rem;border-radius:6px;max-height:16rem;overflow:auto}
+a{color:var(--accent)}.err{color:var(--bad)}
+</style>
+</head>
+<body>
+<header>
+  <h1><span>AKAMARU</span> · LTGPeak Command Center</h1>
+  <div><input id="token" type="password" placeholder="Admin token (if set)" aria-label="Admin token"> <button id="saveToken">Save</button></div>
+</header>
+<main>
+  <div style="display:grid;gap:1rem;min-width:0">
+    <section class="panel"><h2>Pipeline</h2><div class="stages" id="stages"></div></section>
+    <section class="panel">
+      <h2>Run autonomous pipeline</h2>
+      <form id="runForm">
+        <input name="category" placeholder="Category (e.g. barber)" required>
+        <input name="near" placeholder="Location (e.g. Houston, TX)" required>
+        <input name="limit" type="number" min="1" max="50" value="5" style="max-width:5rem" aria-label="Limit">
+        <button class="primary">Run</button>
+      </form>
+      <p id="runOut" class="muted"></p>
+      <h2 style="margin-top:1rem">Add a lead manually</h2>
+      <form id="addForm">
+        <input name="name" placeholder="Business name" required>
+        <input name="category" placeholder="Category">
+        <input name="city" placeholder="City">
+        <input name="website" placeholder="Website">
+        <input name="email" placeholder="Email">
+        <input name="phone" placeholder="Phone">
+        <button>Add</button>
+      </form>
+    </section>
+    <section class="panel"><h2>Leads</h2><div style="overflow-x:auto"><table><thead><tr><th>Score</th><th>Business</th><th>Stage</th><th>Preview</th></tr></thead><tbody id="leads"></tbody></table></div></section>
+    <section class="panel" id="detail" hidden><h2>Lead detail</h2><div id="detailBody"></div></section>
+  </div>
+  <div style="display:grid;gap:1rem;align-content:start;min-width:0">
+    <section class="panel"><h2>Needs your approval</h2><div id="approvals"></div></section>
+    <section class="panel"><h2>Integrations</h2><div id="doctor"></div></section>
+    <section class="panel"><h2>Activity</h2><div class="feed" id="feed"></div></section>
+  </div>
+</main>
+<script>
+const $ = (s) => document.querySelector(s);
+const el = (tag, props = {}, ...kids) => { const e = document.createElement(tag); Object.assign(e, props); for (const k of kids) e.append(k); return e; };
+let stageFilter = null;
+try { $('#token').value = localStorage.getItem('akamaru_token') || ''; } catch {}
+$('#saveToken').onclick = () => { try { localStorage.setItem('akamaru_token', $('#token').value); } catch {} refresh(); };
+
+async function api(path, body) {
+  const headers = { 'x-akamaru': '1' };
+  const t = $('#token').value; if (t) headers.authorization = 'Bearer ' + t;
+  if (body !== undefined) headers['content-type'] = 'application/json';
+  const r = await fetch(path, { method: body === undefined ? 'GET' : 'POST', headers, body: body === undefined ? undefined : JSON.stringify(body) });
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(data.error || r.statusText);
+  return data;
+}
+const tier = (s) => s == null ? '' : s >= 60 ? 'hot' : s >= 40 ? 'warm' : 'cold';
+
+async function loadStatus() {
+  const s = await api('/api/status');
+  const box = $('#stages'); box.replaceChildren();
+  for (const [stage, n] of Object.entries(s.pipeline)) {
+    const d = el('div', { className: 'stage' + (stageFilter === stage ? ' active' : '') }, el('b', { textContent: n }), el('small', { textContent: stage.replace(/_/g, ' ') }));
+    d.onclick = () => { stageFilter = stageFilter === stage ? null : stage; refresh(); };
+    box.append(d);
+  }
+}
+async function loadLeads() {
+  const rows = await api('/api/leads' + (stageFilter ? '?stage=' + stageFilter : ''));
+  const tb = $('#leads'); tb.replaceChildren();
+  if (!rows.length) tb.append(el('tr', {}, el('td', { colSpan: 4, className: 'muted', textContent: 'No leads yet. Run the pipeline or add one.' })));
+  for (const r of rows) {
+    const tr = el('tr', { className: 'row' },
+      el('td', { className: tier(r.score), textContent: r.score ?? '—' }),
+      el('td', {}, el('div', { textContent: r.name }), el('small', { className: 'muted', textContent: [r.category, r.city].filter(Boolean).join(' · ') })),
+      el('td', {}, el('span', { className: 'pill', textContent: r.stage })),
+      el('td', {}, r.preview_url ? el('a', { href: r.preview_url, target: '_blank', rel: 'noopener', textContent: 'open' }) : ''));
+    tr.onclick = () => showLead(r.id);
+    tb.append(tr);
+  }
+}
+async function showLead(id) {
+  const d = await api('/api/leads/' + id);
+  const b = d.business; const body = $('#detailBody'); body.replaceChildren();
+  body.append(el('h3', { textContent: b.name }), el('p', { className: 'muted', textContent: [b.category, b.address || b.city, b.phone, b.email, b.website].filter(Boolean).join(' · ') }));
+  const actions = el('div', { style: 'display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem' });
+  const btn = (label, fn, cls = '') => { const x = el('button', { textContent: label, className: cls }); x.onclick = async () => { x.disabled = true; try { await fn(); } catch (e) { alert(e.message); } x.disabled = false; refresh(); showLead(id); }; return x; };
+  actions.append(
+    btn('Process next steps', () => api(`/api/leads/${id}/process`, {}), 'primary'),
+    btn('Rebuild all', () => api(`/api/leads/${id}/process`, { force: true })),
+    btn('Mark won → onboarding', () => api(`/api/leads/${id}/stage`, { stage: 'won' }), 'ok'),
+    btn('Mark lost', () => api(`/api/leads/${id}/stage`, { stage: 'lost' }), 'bad'),
+    btn('Request production publish', () => api(`/api/leads/${id}/publish`, {})));
+  body.append(actions);
+  if (d.research) {
+    body.append(el('h4', { textContent: `Research — score ${d.research.score}` }));
+    const ai = d.research.data.ai;
+    body.append(el('pre', { textContent: (ai?.summary ? ai.summary + '\n\n' : '') + (d.research.data.site_error ? 'Site error: ' + d.research.data.site_error + '\n' : '') + (d.research.data.score?.reasons || []).join('\n') + (ai?.pitch_angles?.length ? '\n\nPitch angles:\n- ' + ai.pitch_angles.join('\n- ') : '') }));
+  }
+  for (const demo of d.demos.slice(0, 1)) {
+    body.append(el('h4', { textContent: `Demo v${demo.version} (${demo.copy_source} copy) — QA ${demo.qa_passed ? 'passed' : 'FAILED'}` }));
+    if (demo.preview_url) body.append(el('p', {}, el('a', { href: demo.preview_url, target: '_blank', rel: 'noopener', textContent: demo.preview_url }), ` (${demo.deploy_provider})`));
+  }
+  for (const c of d.campaigns) {
+    body.append(el('h4', { textContent: `${c.kind} · ${c.channel} · ${c.status}` }), el('pre', { textContent: `Subject: ${c.subject || ''}\n\n${c.body}` }));
+    if (c.status === 'draft' && c.channel === 'email') {
+      const ta = el('textarea', { value: c.body, rows: 8, style: 'width:100%' });
+      body.append(ta, btn('Save edit & queue for approval', () => api(`/api/campaigns/${c.id}/queue`, { body: ta.value })));
+    }
+  }
+  if (d.onboarding.length) {
+    body.append(el('h4', { textContent: 'Onboarding' }));
+    for (const t of d.onboarding) {
+      const sel = el('select', {}, ...['todo', 'doing', 'done', 'skipped'].map((s) => el('option', { value: s, textContent: s, selected: s === t.status })));
+      sel.onchange = () => api(`/api/tasks/${t.id}`, { status: sel.value }).catch((e) => alert(e.message));
+      body.append(el('div', { className: 'int' }, el('span', { textContent: `${t.title}${t.requires_approval ? ' (owner)' : ''}` }), sel));
+    }
+  }
+  if (d.messages.length) {
+    body.append(el('h4', { textContent: 'Messages' }));
+    for (const m of d.messages) body.append(el('pre', { textContent: `${m.direction} ${m.intent ? '[' + m.intent + ']' : ''} ${m.created_at}\n${m.subject || ''}\n${m.body || ''}` }));
+  }
+  $('#detail').hidden = false; $('#detail').scrollIntoView({ behavior: 'smooth' });
+}
+async function loadApprovals() {
+  const list = await api('/api/approvals'); const box = $('#approvals'); box.replaceChildren();
+  if (!list.length) box.append(el('p', { className: 'muted', textContent: 'Nothing waiting. Akamaru will queue sends, publishes and payments here.' }));
+  for (const a of list) {
+    const card = el('div', { className: 'approval' }, el('b', { textContent: a.summary || a.action }), el('div', { className: 'muted', textContent: `${a.action} — ${a.reason}` }));
+    if (a.preview) card.append(el('pre', { textContent: a.preview }));
+    const ok = el('button', { className: 'ok', textContent: 'Approve' }); const no = el('button', { className: 'bad', textContent: 'Reject' });
+    ok.onclick = async () => { if (!confirm('Approve and execute: ' + (a.summary || a.action) + '?')) return; try { const r = await api(`/api/approvals/${a.id}/approve`, {}); if (r.status === 'failed') alert('Execution failed: ' + r.result?.error); } catch (e) { alert(e.message); } refresh(); };
+    no.onclick = async () => { await api(`/api/approvals/${a.id}/reject`, { note: prompt('Reason (optional)') || '' }).catch((e) => alert(e.message)); refresh(); };
+    card.append(el('div', { style: 'display:flex;gap:.5rem;margin-top:.4rem' }, ok, no)); box.append(card);
+  }
+}
+async function loadDoctor() {
+  const list = await api('/api/doctor'); const box = $('#doctor'); box.replaceChildren();
+  for (const i of list) box.append(el('div', { className: 'int' }, el('div', {}, el('span', { textContent: i.label }), el('small', { textContent: i.configured ? i.powers : 'Missing ' + i.missing.join(', ') + ' — ' + i.connect })), el('span', { className: i.configured ? 'hot' : 'cold', style: i.configured ? 'color:var(--ok)' : '', textContent: i.configured ? 'connected' : 'not connected' })));
+}
+async function loadFeed() {
+  const list = await api('/api/activity?limit=60'); const box = $('#feed'); box.replaceChildren();
+  for (const a of list) box.append(el('div', { textContent: `${a.ts} · ${a.actor} · ${a.action}${a.entity_id ? ' #' + a.entity_id : ''}` }));
+}
+$('#runForm').onsubmit = async (e) => {
+  e.preventDefault(); const f = Object.fromEntries(new FormData(e.target)); $('#runOut').textContent = 'Running… discovery, research, demos, previews, drafts.';
+  try { const r = await api('/api/pipeline/run', f); $('#runOut').textContent = JSON.stringify(r.summary); } catch (err) { $('#runOut').textContent = 'Error: ' + err.message; $('#runOut').className = 'err'; }
+  refresh();
+};
+$('#addForm').onsubmit = async (e) => {
+  e.preventDefault(); const f = Object.fromEntries([...new FormData(e.target)].filter(([, v]) => v));
+  try { const r = await api('/api/leads', f); e.target.reset(); await refresh(); showLead(r.id); } catch (err) { alert(err.message); }
+};
+async function refresh() {
+  try { await Promise.all([loadStatus(), loadLeads(), loadApprovals(), loadDoctor(), loadFeed()]); }
+  catch (e) { $('#runOut').textContent = 'Dashboard error: ' + e.message; $('#runOut').className = 'err'; }
+}
+refresh(); setInterval(() => { loadStatus(); loadApprovals(); loadFeed(); }, 15000);
+</script>
+</body>
+</html>

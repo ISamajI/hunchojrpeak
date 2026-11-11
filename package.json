@@ -1,0 +1,22 @@
+{
+  "name": "akamaru",
+  "version": "1.0.0",
+  "description": "Akamaru — LTGPeak's autonomous business operating system: discover businesses, research them, build personalized website demos, deploy previews, run approval-gated outreach, and manage onboarding.",
+  "type": "module",
+  "bin": {
+    "akamaru": "./bin/akamaru.js"
+  },
+  "scripts": {
+    "start": "node --no-warnings=ExperimentalWarning bin/akamaru.js serve",
+    "doctor": "node --no-warnings=ExperimentalWarning bin/akamaru.js doctor",
+    "test": "node --no-warnings=ExperimentalWarning --test --test-concurrency=1 test/*.test.js"
+  },
+  "engines": {
+    "node": ">=22.13"
+  },
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.8.0"
+  }
+}
