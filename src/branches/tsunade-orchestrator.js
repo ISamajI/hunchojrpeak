@@ -12,6 +12,13 @@ import { buildDemo } from './orochimaru-demo.js';
 import { deployPreview } from './deploy.js';
 import { draftOutreach } from './kakashi-outreach.js';
 
+const STEP_TEXT = {
+  research: (b) => `Researching ${b.name}${b.website ? ' — auditing ' + new URL(b.website).hostname : ' — no website on record'}`,
+  demo: (b) => `Building website demo for ${b.name}`,
+  deploy: (b) => `Deploying preview for ${b.name}`,
+  outreach: (b) => `Preparing outreach for ${b.name}`,
+};
+
 const STEPS = [
   ['research_business', 'research'],
   ['build_demo', 'demo'],
@@ -20,7 +27,7 @@ const STEPS = [
 ];
 
 /** Process one lead through every autonomous step it hasn't completed yet. */
-export async function processLead(businessId, { threshold = settings.demoScoreThreshold, force = false } = {}) {
+export async function processLead(businessId, { threshold = settings.demoScoreThreshold, force = false, onStep = () => {} } = {}) {
   const business = getBusiness(businessId);
   if (!business) throw new Error(`Business ${businessId} not found`);
   const db = getDb();
@@ -47,6 +54,7 @@ export async function processLead(businessId, { threshold = settings.demoScoreTh
       }
       continue;
     }
+    onStep(STEP_TEXT[key](business), key);
     try {
       let out;
       if (key === 'research') {
@@ -77,11 +85,29 @@ export async function processLead(businessId, { threshold = settings.demoScoreTh
 }
 
 /** Discover → research → demo → QA → preview → outreach draft (send queued for approval). */
-export async function runPipeline({ category, near, limit = 10, threshold, provider } = {}) {
+export async function runPipeline({ category, near, limit = 10, threshold, provider, categories, onStep = () => {} } = {}) {
   const started = Date.now();
-  const discovery = await discoverBusinesses({ category, near, limit, provider });
+  const cats = categories?.length ? categories : [category];
+  const results = [];
+  let usedProvider = null;
+  for (const [i, cat] of cats.entries()) {
+    onStep(`Discovering ${cat} businesses near ${near}`, 0.05 + (0.15 * i) / cats.length);
+    const per = Math.max(1, Math.ceil(limit / cats.length));
+    try {
+      const d = await discoverBusinesses({ category: cat, near, limit: per, provider });
+      usedProvider = d.provider;
+      results.push(...d.results);
+    } catch (e) {
+      if (cats.length === 1) throw e;
+      onStep(`Discovery for ${cat} failed: ${e.message}`);
+    }
+  }
+  const discovery = { provider: usedProvider, results: results.slice(0, limit) };
+  onStep(`Found ${discovery.results.length} businesses — starting research`, 0.2);
   const leads = [];
-  for (const r of discovery.results) leads.push(await processLead(r.id, { threshold }));
+  for (const [i, r] of discovery.results.entries()) {
+    leads.push(await processLead(r.id, { threshold, onStep: (text) => onStep(text, 0.2 + (0.8 * i) / discovery.results.length) }));
+  }
   const summary = {
     provider: discovery.provider,
     discovered: discovery.results.length,
@@ -92,6 +118,6 @@ export async function runPipeline({ category, near, limit = 10, threshold, provi
     errors: leads.filter((l) => l.steps.some((s) => s.status === 'error')).length,
     seconds: Math.round((Date.now() - started) / 100) / 10,
   };
-  log('tsunade', 'pipeline_run', null, null, { category, near, ...summary });
+  log('tsunade', 'pipeline_run', null, null, { category: cats.join(', '), near, ...summary });
   return { summary, leads };
 }

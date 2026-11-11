@@ -64,6 +64,13 @@ export const INTEGRATIONS = {
     fallback: 'Campaigns are drafted and queued; nothing is sent.',
     connect: 'Verify a sending domain at https://resend.com/domains, create an API key, set RESEND_API_KEY, OUTREACH_FROM_EMAIL (e.g. "Henry <henry@ltgpeak.com>") and OUTREACH_BUSINESS_ADDRESS (CAN-SPAM postal address).',
   },
+  twilio: {
+    label: 'Twilio (owner alerts)',
+    vars: ['TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN', 'TWILIO_FROM_NUMBER', 'OWNER_PHONE'],
+    powers: 'SMS and phone-call escalation of critical notifications to your own phone.',
+    fallback: 'Notifications stay in the dashboard notification center.',
+    connect: 'Create a Twilio account, buy a number, then set TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN, TWILIO_FROM_NUMBER and OWNER_PHONE (E.164, e.g. +17135550100).',
+  },
   inbound: {
     label: 'Inbound reply webhook',
     vars: ['AKAMARU_WEBHOOK_SECRET'],
@@ -106,4 +113,5 @@ export const settings = {
     };
   },
   get model() { return env('AKAMARU_MODEL', 'claude-opus-5-5'); },
+  get brand() { return env('AKAMARU_BRAND_NAME', 'AKUMARU'); },
 };

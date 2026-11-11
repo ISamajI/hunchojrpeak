@@ -9,3 +9,10 @@ export { discoverBusinesses } from './branches/discovery.js';
 export { processLead, runPipeline } from './branches/tsunade-orchestrator.js';
 export { runDoctor } from './doctor.js';
 export { startServer, createServer } from './server.js';
+export * as metrics from './metrics.js';
+export { runCommand } from './commands.js';
+export { startJob, getJob, waitForJob } from './jobs.js';
+import './operations.js';
+import { startNotifier } from './notify.js';
+// Notifications are generated in every process (CLI runs included).
+startNotifier();

@@ -6,6 +6,7 @@ import { getBusiness, advanceStage } from '../crm.js';
 import { isConfigured, settings } from '../config.js';
 import { decide, registerExecutor, requestApproval } from '../decision.js';
 import { deployStatic } from '../integrations/vercel.js';
+import { addSite } from '../monitor.js';
 
 function latestPassingDemo(businessId) {
   return getDb().prepare('SELECT * FROM demos WHERE business_id = ? AND qa_passed = 1 ORDER BY version DESC LIMIT 1').get(businessId);
@@ -56,5 +57,6 @@ registerExecutor('publish_production', async ({ demoId }) => {
   const business = getBusiness(demo.business_id);
   const res = await deployStatic({ dir: demo.dir, name: `ltgpeak-${business.slug}`, production: true });
   log('orochimaru', 'production_published', 'business', business.id, res);
+  addSite({ url: res.url, businessId: business.id, label: business.name });
   return res;
 });

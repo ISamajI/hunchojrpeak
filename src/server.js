@@ -4,17 +4,15 @@ import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
 import { ROOT, dataDir, env } from './config.js';
-import { getDb } from './db.js';
-import * as crm from './crm.js';
-import * as activity from './activity.js';
-import { listApprovals, approve, reject } from './decision.js';
-import { runDoctor } from './doctor.js';
-import { runPipeline, processLead } from './branches/tsunade-orchestrator.js';
-import { handleInbound, markWon, queueCampaign } from './branches/kakashi-outreach.js';
-import { requestProductionPublish } from './branches/deploy.js';
-import { setTaskStatus } from './branches/onboarding.js';
+import { routes, rawRoutes, handleInbound } from './api.js';
+import { bus } from './events.js';
+import { sse } from './system.js';
+import { recoverInterruptedJobs } from './jobs.js';
+import { startNotifier } from './notify.js';
+import { startScheduler } from './scheduler.js';
+import './operations.js';
 
-const MIME = { '.html': 'text/html; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.webp': 'image/webp' };
+const MIME = { '.woff2': 'font/woff2', '.json': 'application/json', '.html': 'text/html; charset=utf-8', '.txt': 'text/plain; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.webp': 'image/webp' };
 
 function send(res, status, body, headers = {}) {
   const isObj = typeof body === 'object' && !Buffer.isBuffer(body);
@@ -25,6 +23,17 @@ function send(res, status, body, headers = {}) {
     ...headers,
   });
   res.end(isObj ? JSON.stringify(body) : body);
+}
+
+async function readText(req, limit = 1_100_000) {
+  let size = 0;
+  const chunks = [];
+  for await (const c of req) {
+    size += c.length;
+    if (size > limit) throw Object.assign(new Error('Body too large'), { status: 413 });
+    chunks.push(c);
+  }
+  return Buffer.concat(chunks).toString('utf8');
 }
 
 async function readBody(req, limit = 1_000_000) {
@@ -60,42 +69,49 @@ function servePreview(res, rest) {
   });
 }
 
+function serveAsset(res, rest) {
+  const base = path.resolve(ROOT, 'public', 'assets');
+  const file = path.resolve(base, decodeURIComponent(rest));
+  if (!file.startsWith(base + path.sep)) return send(res, 400, 'Bad path');
+  if (!fs.existsSync(file) || !fs.statSync(file).isFile()) return send(res, 404, 'Not found');
+  send(res, 200, fs.readFileSync(file), {
+    'content-type': MIME[path.extname(file)] || 'application/octet-stream',
+    'cache-control': 'no-cache',
+  });
+}
+
+const APP_CSP = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; frame-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'none'; form-action 'none'";
+
+function streamEvents(req, res) {
+  res.writeHead(200, {
+    'content-type': 'text/event-stream; charset=utf-8',
+    'cache-control': 'no-cache, no-transform',
+    connection: 'keep-alive',
+    'x-accel-buffering': 'no',
+  });
+  res.write(`event: hello\ndata: ${JSON.stringify({ ts: new Date().toISOString() })}\n\n`);
+  sse.inc();
+  const onEvent = (e) => res.write(`event: ${e.type}\ndata: ${JSON.stringify(e.data)}\n\n`);
+  bus.on('event', onEvent);
+  const ping = setInterval(() => res.write(`: ping\n\n`), 20000);
+  req.on('close', () => { clearInterval(ping); bus.off('event', onEvent); sse.dec(); });
+}
+
 export function createServer({ host = '127.0.0.1' } = {}) {
   const adminToken = env('AKAMARU_ADMIN_TOKEN');
   const localOnly = !adminToken;
-
-  const routes = [
-    ['GET', /^\/api\/status$/, () => ({
-      pipeline: crm.pipelineCounts(),
-      pendingApprovals: listApprovals('pending').length,
-      leads: getDb().prepare('SELECT COUNT(*) AS n FROM leads').get().n,
-    })],
-    ['GET', /^\/api\/doctor$/, (q) => runDoctor({ live: q.get('live') === '1' })],
-    ['GET', /^\/api\/leads$/, (q) => crm.listLeads({ stage: q.get('stage') || undefined, minScore: q.get('min') ? Number(q.get('min')) : undefined })],
-    ['GET', /^\/api\/leads\/(\d+)$/, (q, m) => crm.leadDetail(Number(m[1])) || Promise.reject(Object.assign(new Error('Not found'), { status: 404 }))],
-    ['POST', /^\/api\/leads$/, (q, m, b) => crm.upsertBusiness({ ...b, source: 'manual' })],
-    ['POST', /^\/api\/leads\/(\d+)\/process$/, (q, m, b) => processLead(Number(m[1]), { force: !!b.force })],
-    ['POST', /^\/api\/leads\/(\d+)\/stage$/, (q, m, b) => (b.stage === 'won' ? { tasks: markWon(Number(m[1])) } : (crm.setStage(Number(m[1]), b.stage, 'owner', b.note), { ok: true }))],
-    ['POST', /^\/api\/leads\/(\d+)\/note$/, (q, m, b) => (crm.addNote(Number(m[1]), String(b.note || '')), { ok: true })],
-    ['POST', /^\/api\/leads\/(\d+)\/publish$/, (q, m) => requestProductionPublish(Number(m[1]))],
-    ['POST', /^\/api\/campaigns\/(\d+)\/queue$/, (q, m, b) => queueCampaign(Number(m[1]), { subject: b.subject, body: b.body })],
-    ['POST', /^\/api\/tasks\/(\d+)$/, (q, m, b) => (setTaskStatus(Number(m[1]), b.status), { ok: true })],
-    ['POST', /^\/api\/pipeline\/run$/, (q, m, b) => runPipeline({ category: b.category, near: b.near, limit: Math.min(50, Number(b.limit) || 10) })],
-    ['GET', /^\/api\/approvals$/, (q) => listApprovals(q.get('status') || 'pending')],
-    ['POST', /^\/api\/approvals\/(\d+)\/approve$/, (q, m) => approve(Number(m[1]), 'owner:dashboard')],
-    ['POST', /^\/api\/approvals\/(\d+)\/reject$/, (q, m, b) => reject(Number(m[1]), 'owner:dashboard', b.note || '')],
-    ['GET', /^\/api\/activity$/, (q) => activity.recent(Number(q.get('limit')) || 100)],
-  ];
 
   return http.createServer(async (req, res) => {
     const url = new URL(req.url, 'http://local');
     const p = url.pathname;
     try {
       if (req.method === 'GET' && p.startsWith('/preview/')) return servePreview(res, p.slice('/preview/'.length));
+      if (req.method === 'GET' && p.startsWith('/assets/')) return serveAsset(res, p.slice('/assets/'.length));
       if (req.method === 'GET' && (p === '/' || p === '/index.html')) {
         return send(res, 200, fs.readFileSync(path.join(ROOT, 'public', 'index.html')), {
           'content-type': 'text/html; charset=utf-8',
-          'content-security-policy': "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; frame-ancestors 'none'",
+          'content-security-policy': APP_CSP,
+          'cache-control': 'no-cache',
         });
       }
       if (req.method === 'GET' && p === '/healthz') return send(res, 200, { ok: true });
@@ -118,7 +134,12 @@ export function createServer({ host = '127.0.0.1' } = {}) {
           if (!safeEqual(auth, `Bearer ${adminToken}`)) return send(res, 401, { error: 'Unauthorized' });
         }
         // CSRF guard: custom header forces a CORS preflight that we never approve.
-        if (req.method !== 'GET' && req.headers['x-akamaru'] !== '1') return send(res, 403, { error: 'Missing x-akamaru header' });
+        if (req.headers['x-akamaru'] !== '1' && (req.method !== 'GET' || p === '/api/stream')) return send(res, 403, { error: 'Missing x-akamaru header' });
+        if (req.method === 'GET' && p === '/api/stream') return streamEvents(req, res);
+        for (const [method, re, fn] of rawRoutes) {
+          const m = p.match(re);
+          if (m && method === req.method) return send(res, 200, await fn(url.searchParams, m, await readText(req)));
+        }
         for (const [method, re, fn] of routes) {
           const m = p.match(re);
           if (m && method === req.method) {
@@ -130,7 +151,9 @@ export function createServer({ host = '127.0.0.1' } = {}) {
       }
       send(res, 404, 'Not found');
     } catch (e) {
-      send(res, e.status || 500, { error: e.message });
+      const status = e.status || (/not found/i.test(e.message) ? 404 : /required|must|invalid|unknown|needs/i.test(e.message) ? 400 : 500);
+      if (status >= 500) console.error(`[${req.method} ${p}]`, e);
+      send(res, status, { error: e.message });
     }
   });
 }
@@ -140,6 +163,10 @@ export async function startServer({ port = Number(env('AKAMARU_PORT', 4317)), ho
   if (!loopback && !env('AKAMARU_ADMIN_TOKEN')) {
     throw new Error(`Refusing to bind ${host} without AKAMARU_ADMIN_TOKEN. Set a token or use 127.0.0.1.`);
   }
+  const recovered = recoverInterruptedJobs();
+  if (recovered) console.warn(`Marked ${recovered} interrupted job(s) as failed.`);
+  startNotifier();
+  startScheduler();
   const server = createServer({ host });
   return new Promise((resolve) => server.listen(port, host, () => resolve(server)));
 }
