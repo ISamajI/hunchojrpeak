@@ -1,34 +1,14 @@
 // JIRAIYA — Research & Knowledge.
 // Audits a business's real web presence and records verifiable findings only.
-import dns from 'node:dns/promises';
-import net from 'node:net';
-import { env } from '../config.js';
 import { getDb, json } from '../db.js';
 import { log } from '../activity.js';
 import { getBusiness, advanceStage, setScore, updateBusiness } from '../crm.js';
-import { request } from '../integrations/http.js';
+import { safeGet } from '../integrations/safeFetch.js';
 import { claudeAvailable, generateJson } from '../integrations/claude.js';
 import { scoreOpportunity } from './clavo-score.js';
+import { untrusted, UNTRUSTED_NOTE } from './ai-guard.js';
 
-function isPrivateIp(ip) {
-  if (net.isIPv6(ip)) {
-    const v = ip.toLowerCase();
-    if (v.startsWith('::ffff:')) return isPrivateIp(v.slice(7));
-    return v === '::1' || v === '::' || v.startsWith('fc') || v.startsWith('fd') || v.startsWith('fe80');
-  }
-  const [a, b] = ip.split('.').map(Number);
-  return a === 10 || a === 127 || a === 0 || (a === 169 && b === 254) || (a === 172 && b >= 16 && b <= 31) || (a === 192 && b === 168) || (a === 100 && b >= 64 && b <= 127);
-}
-
-/** SSRF guard: research only fetches public internet hosts. */
-export async function assertPublicUrl(url) {
-  const u = new URL(url);
-  if (!['http:', 'https:'].includes(u.protocol)) throw new Error(`Refusing non-http URL ${url}`);
-  if (env('AKAMARU_ALLOW_PRIVATE_FETCH') === '1') return;
-  const host = u.hostname.replace(/^\[|\]$/g, '');
-  const addrs = net.isIP(host) ? [{ address: host }] : await dns.lookup(host, { all: true });
-  if (addrs.some((a) => isPrivateIp(a.address))) throw new Error(`Refusing to fetch private/internal address for ${u.hostname}`);
-}
+export { assertPublicUrl } from '../integrations/safeFetch.js';
 
 const strip = (s) => s.replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
 
@@ -91,9 +71,7 @@ export function analyzeHtml(html, { url, status, ms, bytes } = {}) {
 }
 
 async function fetchSite(url) {
-  await assertPublicUrl(url);
-  const res = await request(url, { timeoutMs: 15000, headers: { accept: 'text/html,*/*' } });
-  if (res.url && res.url !== url) await assertPublicUrl(res.url);
+  const res = await safeGet(url);
   return analyzeHtml(res.text, { url: res.url || url, status: res.status, ms: res.ms, bytes: res.bytes });
 }
 
@@ -113,8 +91,8 @@ async function synthesize(business, site, score) {
   if (!claudeAvailable()) return null;
   try {
     return await generateJson({
-      system: 'You are Jiraiya, the research analyst for LTGPeak, a web design agency. Use ONLY the facts provided. Never invent reviews, awards, years in business, or services that are not in the data. Keep it concise.',
-      prompt: `Business: ${JSON.stringify({ name: business.name, category: business.category, city: business.city, address: business.address, phone: business.phone, website: business.website, extra: business.raw })}\n\nWebsite audit: ${JSON.stringify(site)}\n\nOpportunity score: ${JSON.stringify(score)}\n\nWrite: a 2-3 sentence summary of their current web presence, 3 specific pitch angles grounded in the audit findings, the website sections a demo should include, and the brand tone to use.`,
+      system: UNTRUSTED_NOTE + '\n\nYou are Jiraiya, the research analyst for LTGPeak, a web design agency. Use ONLY the facts provided. Never invent reviews, awards, years in business, or services that are not in the data. Keep it concise.',
+      prompt: `${untrusted('business', { name: business.name, category: business.category, city: business.city, address: business.address, phone: business.phone, website: business.website, extra: business.raw })}\n\n${untrusted('website_audit', site)}\n\nOpportunity score: ${JSON.stringify(score)}\n\nWrite: a 2-3 sentence summary of their current web presence, 3 specific pitch angles grounded in the audit findings, the website sections a demo should include, and the brand tone to use.`,
       schema: SYNTHESIS_SCHEMA,
       maxTokens: 4000,
       effort: 'low',

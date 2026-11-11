@@ -15,7 +15,8 @@ Status key: ✅ built and tested · 🟡 built, awaiting live credentials · ⬜
 - ✅ Local previews 🟡 Vercel preview deploys (needs token)
 - ✅ Outreach drafts grounded in findings; 2-step follow-up sequence
 - 🟡 Approved email send via Resend with CAN-SPAM footer (needs key + domain)
-- ✅ Reply ingestion (webhook + CLI), intent classification, routing, unsubscribe handling
+- ✅ Reply ingestion (webhook + CLI), intent classification, routing, unsubscribe handling, SPF/DKIM-aware
+- ✅ Security hardening from independent review (SSRF, prompt-injection guard, idempotent sends)
 - ✅ Won → onboarding plan with owner-gated binding tasks
 - ✅ Dashboard + JSON API with token auth, CSRF and DNS-rebinding guards
 - 🟡 Claude-written research/copy/outreach (needs `ANTHROPIC_API_KEY`; template fallback works today)

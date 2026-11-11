@@ -4,7 +4,8 @@
 import { getDb, json, parse } from '../db.js';
 import { log } from '../activity.js';
 import { env, settings, isConfigured } from '../config.js';
-import { getBusiness, advanceStage, setStage, findBusinessByEmail, isSuppressed, suppress } from '../crm.js';
+import { getBusiness, advanceStage, setStage, findBusinessByEmail, isSuppressed, suppress, normalizeEmail, TERMINAL } from '../crm.js';
+import { contactViolations, untrusted, UNTRUSTED_NOTE } from './ai-guard.js';
 import { registerExecutor, requestApproval } from '../decision.js';
 import { claudeAvailable, generateJson } from '../integrations/claude.js';
 import { sendEmail } from '../integrations/resend.js';
@@ -70,8 +71,8 @@ ${agency.name}${agency.phone ? `\n${agency.phone}` : ''}${agency.site ? `\n${age
 async function aiOutreach(business, research, previewUrl) {
   const agency = settings.agency;
   return generateJson({
-    system: `You are Kakashi, the sales lead at ${agency.name}, a small web design agency run by ${agency.owner}. Write a short, human cold email (under 140 words) to a local business owner offering a free concept website you already built. Reference ONLY the specific observations provided — never invent facts, stats, competitors, or prices. No hype words, no fake urgency. Plain text. Include the preview URL exactly once in the first email. Sign as ${agency.owner}, ${agency.name}. Also write 2 shorter follow-ups for day 3 and day 7; the last one must offer to stop following up.`,
-    prompt: `Business: ${JSON.stringify({ name: business.name, category: business.category, city: business.city })}\nObservations: ${JSON.stringify(observations(research))}\nResearch summary: ${research?.ai?.summary || 'n/a'}\nPreview URL: ${previewUrl}`,
+    system: `${UNTRUSTED_NOTE}\n\nYou are Kakashi, the sales lead at ${agency.name}, a small web design agency run by ${agency.owner}. Write a short, human cold email (under 140 words) to a local business owner offering a free concept website you already built. Reference ONLY the specific observations provided — never invent facts, stats, competitors, or prices. No hype words, no fake urgency. Plain text. Include the preview URL exactly once in the first email. Sign as ${agency.owner}, ${agency.name}. Also write 2 shorter follow-ups for day 3 and day 7; the last one must offer to stop following up.`,
+    prompt: `${untrusted('business', { name: business.name, category: business.category, city: business.city })}\nObservations (from our own audit): ${JSON.stringify(observations(research))}\n${untrusted('research_summary', research?.ai?.summary || 'n/a')}\nTrusted preview URL: ${previewUrl}`,
     schema: OUTREACH_SCHEMA,
     maxTokens: 3000,
     effort: 'low',
@@ -101,6 +102,10 @@ export async function draftOutreach(businessId) {
     try {
       copy = await aiOutreach(business, research, demo.preview_url);
       if (!copy.body.includes(demo.preview_url)) throw new Error('AI draft omitted the preview URL');
+      const agency = settings.agency;
+      const all = [copy.subject, copy.body, ...copy.followups.flatMap((f) => [f.subject, f.body])].join('\n');
+      const bad = contactViolations(all, { urls: [demo.preview_url, agency.site, business.website], phones: [agency.phone, business.phone], emails: [business.email] });
+      if (bad.length) throw new Error(`AI draft rejected: ${bad.join('; ')}`);
       source = 'claude';
     } catch (e) {
       log('kakashi', 'ai_outreach_failed', 'business', businessId, { error: e.message });
@@ -108,6 +113,10 @@ export async function draftOutreach(businessId) {
     }
   }
   if (!copy) copy = fallbackOutreach(business, research, demo.preview_url);
+  // A new draft supersedes any earlier unsent outreach, so a recipient can never get duplicates.
+  db.prepare("UPDATE approvals SET status = 'rejected', decided_by = 'akamaru', decided_at = datetime('now'), result = ? WHERE status = 'pending' AND action = 'send_outreach' AND json_extract(payload, '$.campaignId') IN (SELECT id FROM campaigns WHERE business_id = ? AND kind = 'outreach')")
+    .run(json({ note: 'superseded by newer draft' }), businessId);
+  db.prepare("UPDATE campaigns SET status = 'cancelled' WHERE business_id = ? AND kind = 'outreach' AND status IN ('draft','pending_approval')").run(businessId);
   const channel = business.email ? 'email' : business.phone ? 'phone' : 'manual';
   const r = db
     .prepare('INSERT INTO campaigns (business_id, channel, to_addr, subject, body, followups, copy_source, status) VALUES (?,?,?,?,?,?,?,?)')
@@ -119,7 +128,7 @@ export async function draftOutreach(businessId) {
     if (isSuppressed(business.email)) {
       db.prepare("UPDATE campaigns SET status = 'blocked', error = 'recipient is on suppression list' WHERE id = ?").run(campaignId);
     } else {
-      approval = requestApproval('send_outreach', { campaignId }, `Email "${copy.subject}" to ${business.name} <${business.email}>`);
+      approval = requestApproval('send_outreach', { campaignId }, `Email "${copy.subject}" to ${business.name} <${business.email}>${source === 'claude' ? ' [AI-written — read before approving]' : ''}`);
     }
   }
   advanceStage(businessId, 'outreach_ready', 'kakashi');
@@ -130,12 +139,14 @@ async function sendCampaign({ campaignId }) {
   const db = getDb();
   const c = db.prepare('SELECT * FROM campaigns WHERE id = ?').get(campaignId);
   if (!c) throw new Error(`Campaign ${campaignId} not found`);
-  if (c.status === 'sent') throw new Error('Campaign already sent');
-  if (c.channel !== 'email' || !c.to_addr) throw new Error('Campaign has no email recipient');
+  if (c.status !== 'pending_approval') throw new Error(`Campaign is ${c.status}; only pending campaigns can be sent`);
+  if (c.channel !== 'email' || !normalizeEmail(c.to_addr)) throw new Error('Campaign has no valid email recipient');
+  const lead = db.prepare('SELECT stage FROM leads WHERE business_id = ?').get(c.business_id);
+  if (TERMINAL.includes(lead?.stage)) throw new Error(`Lead is ${lead.stage}; not sending`);
   if (isSuppressed(c.to_addr)) throw new Error('Recipient unsubscribed; not sending');
   if (!isConfigured('resend')) throw new Error('Resend is not connected (need RESEND_API_KEY, OUTREACH_FROM_EMAIL, OUTREACH_BUSINESS_ADDRESS)');
   try {
-    const res = await sendEmail({ to: c.to_addr, subject: c.subject, text: c.body + complianceFooter(), replyTo: env('OUTREACH_REPLY_TO') });
+    const res = await sendEmail({ to: c.to_addr, subject: c.subject, text: c.body + complianceFooter(), replyTo: env('OUTREACH_REPLY_TO'), idempotencyKey: `akamaru-campaign-${c.id}` });
     db.prepare("UPDATE campaigns SET status = 'sent', provider_message_id = ?, sent_at = datetime('now') WHERE id = ?").run(res.id, campaignId);
     db.prepare("INSERT INTO messages (business_id, direction, channel, from_addr, subject, body) VALUES (?, 'outbound', 'email', ?, ?, ?)")
       .run(c.business_id, env('OUTREACH_FROM_EMAIL'), c.subject, c.body);
@@ -201,7 +212,7 @@ function draftReply(business, intent, agency = settings.agency) {
 }
 
 /** Ingest an inbound reply (from webhook or CLI). */
-export async function handleInbound({ from, subject = '', text = '' }) {
+export async function handleInbound({ from, subject = '', text = '', spf, dkim }) {
   const email = String(from || '').match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0]?.toLowerCase() || null;
   const business = findBusinessByEmail(email);
   const { intent, source } = await classify(`${subject}\n${text}`);
@@ -212,11 +223,19 @@ export async function handleInbound({ from, subject = '', text = '' }) {
   const messageId = Number(r.lastInsertRowid);
   log('kakashi', 'reply_received', 'message', messageId, { businessId: business?.id ?? null, intent, source });
   const outcome = { messageId, businessId: business?.id ?? null, intent, intentSource: source, approvalId: null };
-  if (intent === 'unsubscribe' && email) {
-    suppress(email, 'replied unsubscribe');
+  if ((intent === 'unsubscribe' || intent === 'not_interested') && email) {
+    suppress(email, `replied ${intent}`);
     db.prepare("UPDATE campaigns SET status = 'cancelled' WHERE to_addr = ? AND status IN ('draft','pending_approval')").run(email);
     db.prepare("UPDATE approvals SET status = 'rejected', decided_by = 'akamaru', decided_at = datetime('now'), result = ? WHERE status = 'pending' AND action IN ('send_outreach','send_reply') AND json_extract(payload, '$.campaignId') IN (SELECT id FROM campaigns WHERE to_addr = ?)")
       .run(json({ note: 'recipient unsubscribed' }), email);
+  }
+  // Sender authentication: if the provider reports SPF/DKIM failure, suppression is still honored (safe direction),
+  // but a forged From must not change lead state or trigger a reply.
+  const authFailed = [spf, dkim].some((v) => v != null && !/^pass$/i.test(String(v)));
+  if (authFailed) {
+    outcome.unauthenticated = true;
+    log('kakashi', 'reply_unauthenticated', 'message', messageId, { spf, dkim });
+    return outcome;
   }
   if (!business) return outcome;
   if (intent === 'unsubscribe') setStage(business.id, 'do_not_contact', 'kakashi', 'unsubscribed');

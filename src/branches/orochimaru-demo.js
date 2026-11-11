@@ -8,6 +8,7 @@ import { log } from '../activity.js';
 import { getBusiness, advanceStage } from '../crm.js';
 import { claudeAvailable, generateJson } from '../integrations/claude.js';
 import { qaDemo } from './itachi-qa.js';
+import { contactViolations, untrusted, UNTRUSTED_NOTE } from './ai-guard.js';
 
 export const PRESETS = [
   { match: /barber|hairdresser|hair/i, key: 'barber', palette: ['#111111', '#c8a14a', '#f5f1e8'], services: ['Classic Cut', 'Skin Fade', 'Beard Trim & Line-Up', 'Hot Towel Shave'], cta: 'Book a Cut', vibe: 'Sharp cuts. Clean fades. No guesswork.' },
@@ -57,8 +58,8 @@ export function fallbackCopy(business, preset) {
 
 async function aiCopy(business, research, preset) {
   return generateJson({
-    system: 'You are Orochimaru, the website copywriter for LTGPeak. Write punchy, specific homepage copy for a small local business concept demo. Use ONLY facts given. Do NOT invent reviews, testimonials, awards, prices, years in business, staff names, or guarantees. Services must be typical for the business category and phrased generically. Keep headline under 8 words, subheadline under 20 words, about under 70 words, 4 services with descriptions under 18 words.',
-    prompt: `Business: ${JSON.stringify({ name: business.name, category: business.category, city: business.city, address: business.address })}\nResearch summary: ${research?.ai?.summary || research?.score?.reasons?.join('; ') || 'n/a'}\nRecommended tone: ${research?.ai?.tone || preset.vibe}\nDefault services for this category: ${preset.services.join(', ')}`,
+    system: UNTRUSTED_NOTE + '\n\nYou are Orochimaru, the website copywriter for LTGPeak. Write punchy, specific homepage copy for a small local business concept demo. Use ONLY facts given. Do NOT invent reviews, testimonials, awards, prices, years in business, staff names, or guarantees. Services must be typical for the business category and phrased generically. Keep headline under 8 words, subheadline under 20 words, about under 70 words, 4 services with descriptions under 18 words.',
+    prompt: `${untrusted('business', { name: business.name, category: business.category, city: business.city, address: business.address })}\n${untrusted('research_summary', research?.ai?.summary || research?.score?.reasons?.join('; ') || 'n/a')}\n${untrusted('tone', research?.ai?.tone || preset.vibe)}\nDefault services for this category: ${preset.services.join(', ')}`,
     schema: COPY_SCHEMA,
     maxTokens: 3000,
     effort: 'low',
@@ -140,6 +141,8 @@ export async function buildDemo(businessId) {
   if (claudeAvailable()) {
     try {
       copy = await aiCopy(business, research, preset);
+      const bad = contactViolations(JSON.stringify(copy), { phones: [business.phone], emails: [business.email], urls: [] });
+      if (bad.length) throw new Error(`AI copy rejected: ${bad.join('; ')}`);
       copySource = 'claude';
     } catch (e) {
       log('orochimaru', 'ai_copy_failed', 'business', businessId, { error: e.message });

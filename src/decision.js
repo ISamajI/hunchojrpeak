@@ -91,7 +91,10 @@ export async function approve(id, by = 'owner') {
   if (!a) throw new Error(`Approval ${id} not found`);
   if (a.status !== 'pending') throw new Error(`Approval ${id} is already ${a.status}`);
   const fn = executors.get(a.action);
-  db.prepare("UPDATE approvals SET status = 'approved', decided_at = datetime('now'), decided_by = ? WHERE id = ?").run(by, id);
+  const claimed = db
+    .prepare("UPDATE approvals SET status = 'approved', decided_at = datetime('now'), decided_by = ? WHERE id = ? AND status = 'pending'")
+    .run(by, id);
+  if (claimed.changes === 0) throw new Error(`Approval ${id} was already decided by another process`);
   log(by, 'approval_granted', 'approval', id, { action: a.action });
   if (!fn) {
     return { ...getApproval(id), note: `No executor registered for ${a.action}; marked approved for manual execution.` };
@@ -105,6 +108,16 @@ export async function approve(id, by = 'owner') {
     log('akamaru', 'approval_failed', 'approval', id, { action: a.action, error: e.message });
   }
   return getApproval(id);
+}
+
+/** Reject every pending send approval tied to a business's campaigns. */
+export function cancelPendingSends(businessId, note) {
+  const r = getDb()
+    .prepare("UPDATE approvals SET status = 'rejected', decided_by = 'akamaru', decided_at = datetime('now'), result = ? WHERE status = 'pending' AND action IN ('send_outreach','send_reply') AND json_extract(payload, '$.campaignId') IN (SELECT id FROM campaigns WHERE business_id = ?)")
+    .run(json({ note }), businessId);
+  getDb().prepare("UPDATE campaigns SET status = 'cancelled' WHERE business_id = ? AND status IN ('draft','pending_approval')").run(businessId);
+  if (r.changes) log('decision-engine', 'pending_sends_cancelled', 'business', businessId, { count: r.changes, note });
+  return r.changes;
 }
 
 export function reject(id, by = 'owner', note = '') {

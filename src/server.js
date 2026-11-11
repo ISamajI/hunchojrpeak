@@ -105,7 +105,7 @@ export function createServer({ host = '127.0.0.1' } = {}) {
         if (!secret) return send(res, 503, { error: 'Inbound webhook disabled: set AKAMARU_WEBHOOK_SECRET' });
         if (!safeEqual(req.headers['x-akamaru-secret'] || '', secret)) return send(res, 401, { error: 'Bad webhook secret' });
         const b = await readBody(req);
-        return send(res, 200, await handleInbound({ from: b.from, subject: b.subject, text: b.text || b.body }));
+        return send(res, 200, await handleInbound({ from: b.from, subject: b.subject, text: b.text || b.body, spf: b.spf, dkim: b.dkim }));
       }
 
       if (p.startsWith('/api/')) {

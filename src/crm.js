@@ -1,6 +1,9 @@
 // Lead CRM: businesses, pipeline stages, notes.
 import { getDb, json, parse } from './db.js';
 import { log } from './activity.js';
+import { cancelPendingSends } from './decision.js';
+
+export const TERMINAL = ['lost', 'do_not_contact'];
 
 export const STAGES = [
   'discovered',
@@ -35,6 +38,15 @@ function uniqueSlug(base) {
   return slug;
 }
 
+const EMAIL_RE = /^[A-Z0-9._%+-]+@[A-Z0-9-]+(?:\.[A-Z0-9-]+)*\.[A-Z]{2,}$/i;
+
+/** One syntactically valid address, lowercased, or null. */
+export function normalizeEmail(v) {
+  if (!v) return null;
+  const e = String(v).trim().replace(/^mailto:/i, '').toLowerCase();
+  return EMAIL_RE.test(e) && e.length <= 254 ? e : null;
+}
+
 export function normalizeWebsite(url) {
   if (!url) return null;
   let u = String(url).trim();
@@ -60,7 +72,7 @@ export function upsertBusiness(b) {
     address: b.address || null,
     city: b.city || null,
     phone: b.phone || null,
-    email: b.email ? String(b.email).toLowerCase() : null,
+    email: normalizeEmail(b.email),
     website: normalizeWebsite(b.website),
     lat: b.lat ?? null,
     lon: b.lon ?? null,
@@ -94,7 +106,7 @@ export function updateBusiness(id, patch) {
   const db = getDb();
   for (const [k, v] of Object.entries(patch)) {
     if (!allowed.includes(k) || v === undefined) continue;
-    const val = k === 'website' ? normalizeWebsite(v) : k === 'email' && v ? String(v).toLowerCase() : v;
+    const val = k === 'website' ? normalizeWebsite(v) : k === 'email' ? normalizeEmail(v) : v;
     db.prepare(`UPDATE businesses SET ${k} = ? WHERE id = ?`).run(val, id);
   }
 }
@@ -117,6 +129,7 @@ export function setStage(businessId, stage, actor = 'akamaru', note = null) {
   if (lead.stage === stage) return;
   db.prepare("UPDATE leads SET stage = ?, updated_at = datetime('now') WHERE business_id = ?").run(stage, businessId);
   log(actor, 'stage_changed', 'business', businessId, { from: lead.stage, to: stage, note });
+  if (TERMINAL.includes(stage)) cancelPendingSends(businessId, `lead moved to ${stage}`);
 }
 
 /** Advance only forward along the sales pipeline (never regress automatically). */

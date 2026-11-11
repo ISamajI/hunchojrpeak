@@ -38,7 +38,15 @@ export async function processLead(businessId, { threshold = settings.demoScoreTh
   }
   for (const [action, key] of STEPS) {
     if (decide(action).mode !== 'autonomous') { report.stoppedAt = `${action} needs approval`; break; }
-    if (!force && has[key]()) { report.steps.push({ step: key, status: 'already_done' }); continue; }
+    if (!force && has[key]()) {
+      report.steps.push({ step: key, status: 'already_done' });
+      if (key === 'research') {
+        const { score } = db.prepare('SELECT score FROM research WHERE business_id = ? ORDER BY id DESC LIMIT 1').get(businessId);
+        report.score = score;
+        if (score < threshold) { report.stoppedAt = `score ${score} below threshold ${threshold}`; break; }
+      }
+      continue;
+    }
     try {
       let out;
       if (key === 'research') {
