@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en" data-brand="tnl" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>13 Weeks | TNL Performance Elite Athlete Development Block</title>
+  <meta name="description" content="TNL Performance Elite Athlete Development Block. 13 weeks for middle school and high school athletes in Hamilton, NJ. Speed. Strength. Confidence. Spots limited, first come, first served.">
+  <meta name="theme-color" content="#0B0B0C">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter+Tight:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="preload" as="image" href="logo.png">
+  <script>
+    (function(r){
+      r.classList.add('js','intro-on');
+      /* failsafe: if app.js never loads, still show the page */
+      setTimeout(function(){ r.classList.remove('intro-on'); r.classList.add('is-ready'); }, 6500);
+    })(document.documentElement);
+  </script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <!-- INTRO: logo spins in, lightning cracks, then the curtain lifts. Tap anywhere to skip. -->
+  <div id="intro" class="intro" aria-hidden="true">
+    <div class="intro__glow"></div>
+    <div class="intro__stage">
+      <svg class="intro__ring" viewBox="0 0 200 200"><circle cx="100" cy="100" r="96"/></svg>
+      <span class="intro__wave"></span>
+      <span class="intro__wave intro__wave--2"></span>
+      <img class="intro__logo" src="logo.png" alt="" width="384" height="384">
+    </div>
+    <p class="intro__word"><span>T</span><span>N</span><span>L</span><span>&nbsp;</span><span>P</span><span>e</span><span>r</span><span>f</span><span>o</span><span>r</span><span>m</span><span>a</span><span>n</span><span>c</span><span>e</span></p>
+    <div class="intro__flash"></div>
+    <button type="button" class="intro__skip" tabindex="-1">Skip</button>
+  </div>
+
+  <div class="progress" aria-hidden="true"><span id="progress-bar"></span></div>
+
+  <a class="skip" href="#main">Skip to content</a>
+
+  <!-- Desktop only (900px+). Under 900px the #dock carries the Reserve button. -->
+  <header class="site-head">
+    <div class="container site-head__in">
+      <a class="site-head__brand" href="#hero">
+        <img class="brand-logo" src="logo.png" alt="" width="40" height="40">
+        <span>TNL Performance</span>
+      </a>
+      <a class="btn btn-primary site-head__cta" href="#reserve">Reserve a spot</a>
+    </div>
+  </header>
+
+  <main id="main">
+
+    <!-- 1. HERO -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="hero__spot" aria-hidden="true"></div>
+      <div class="hero__bolts" aria-hidden="true"></div>
+
+      <p class="eyebrow hero__eyebrow">
+        <img class="hero__badge" src="logo.png" alt="" width="28" height="28">
+        TNL Performance / Elite Athlete Development Block
+      </p>
+
+      <h1 id="hero-title" class="hero__title">
+        <span class="hero__clip"><span class="hero__num" id="hero-num">13</span></span>
+        <span class="hero__sub">Weeks. 60 minutes at a time.</span>
+      </h1>
+
+      <p class="hero__stack">
+        <span>Speed.</span>
+        <span>Strength.</span>
+        <span>Confidence.</span>
+      </p>
+
+      <p class="hero__meta num">Hamilton, NJ / Since 2017</p>
+
+      <!-- Countdown stays hidden until data-start holds a valid ISO date (e.g. 2027-01-05).
+           [FILL IN: season + start date] -->
+      <div id="countdown" class="countdown" data-start="" role="timer" aria-labelledby="countdown-label" hidden>
+        <p id="countdown-label" class="countdown__label num">Next block starts in</p>
+        <p class="countdown__clock num">
+          <span class="countdown__unit"><span data-cd="d">00</span> <span class="countdown__name">days</span></span>
+          <span class="countdown__unit"><span data-cd="h">00</span> <span class="countdown__name">hrs</span></span>
+          <span class="countdown__unit"><span data-cd="m">00</span> <span class="countdown__name">min</span></span>
+          <span class="countdown__unit"><span data-cd="s">00</span> <span class="countdown__name">sec</span></span>
+        </p>
+      </div>
+
+      <a id="hero-cta" class="btn btn-primary hero__cta" href="#reserve">Reserve a spot</a>
+    </section>
+
+    <!-- 2. TICKER. First list is the real content; the rest are visual copies. -->
+    <div class="ticker" role="group" aria-label="Availability" tabindex="0">
+      <div class="ticker__track">
+        <ul class="ticker__list">
+          <li>Sold out three years in a row</li>
+          <li>Spots limited</li>
+          <li>First come, first served</li>
+        </ul>
+        <ul class="ticker__list" aria-hidden="true"><li>Sold out three years in a row</li><li>Spots limited</li><li>First come, first served</li></ul>
+        <ul class="ticker__list" aria-hidden="true"><li>Sold out three years in a row</li><li>Spots limited</li><li>First come, first served</li></ul>
+        <ul class="ticker__list" aria-hidden="true"><li>Sold out three years in a row</li><li>Spots limited</li><li>First come, first served</li></ul>
+        <ul class="ticker__list" aria-hidden="true"><li>Sold out three years in a row</li><li>Spots limited</li><li>First come, first served</li></ul>
+        <ul class="ticker__list" aria-hidden="true"><li>Sold out three years in a row</li><li>Spots limited</li><li>First come, first served</li></ul>
+        <ul class="ticker__list" aria-hidden="true"><li>Sold out three years in a row</li><li>Spots limited</li><li>First come, first served</li></ul>
+        <ul class="ticker__list" aria-hidden="true"><li>Sold out three years in a row</li><li>Spots limited</li><li>First come, first served</li></ul>
+      </div>
+    </div>
+
+    <!-- 3. WHO -->
+    <section id="who" class="band" aria-labelledby="who-title">
+      <div class="container row">
+        <div class="row__head reveal">
+          <h2 id="who-title">Which athlete?</h2>
+        </div>
+        <div class="row__body">
+          <div class="who-item reveal">
+            <h3 class="who-item__h">
+              <button type="button" class="who-row" id="who-row-1" data-grade="hs" aria-expanded="false" aria-controls="who-panel-1">High school, off-season</button>
+            </h3>
+            <div class="who-panel" id="who-panel-1" role="region" aria-labelledby="who-row-1">
+              <p>Run faster. Build muscle. Move better.</p>
+            </div>
+          </div>
+          <div class="who-item reveal">
+            <h3 class="who-item__h">
+              <button type="button" class="who-row" id="who-row-2" data-grade="ms" aria-expanded="false" aria-controls="who-panel-2">Middle school, ages 11-13</button>
+            </h3>
+            <div class="who-panel" id="who-panel-2" role="region" aria-labelledby="who-row-2">
+              <p>The foundation: speed, strength, coordination, confidence.</p>
+            </div>
+          </div>
+          <div class="who-item reveal">
+            <h3 class="who-item__h">
+              <button type="button" class="who-row" id="who-row-3" data-grade="hs" aria-expanded="false" aria-controls="who-panel-3">High school, in-season</button>
+            </h3>
+            <div class="who-panel" id="who-panel-3" role="region" aria-labelledby="who-row-3">
+              <p>Maintain. Avoid getting slower, weaker or injury-prone.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. LANE -->
+    <section id="lane" class="band lane" aria-labelledby="lane-title">
+      <div class="container row">
+        <div class="row__head reveal">
+          <h2 id="lane-title">13 weeks. <span class="lane__for">Middle school + high school athletes.</span></h2>
+        </div>
+        <div class="row__body">
+          <div class="lane__track">
+            <span class="lane__fill" aria-hidden="true"></span>
+            <ol class="lane__ticks" aria-label="The 13-week block, week 1 to week 13">
+              <li class="lane__tick" data-week="1">WK 01</li>
+              <li class="lane__tick" data-week="2">WK 02</li>
+              <li class="lane__tick" data-week="3">WK 03</li>
+              <li class="lane__tick" data-week="4">WK 04</li>
+              <li class="lane__tick" data-week="5">WK 05</li>
+              <li class="lane__tick" data-week="6">WK 06</li>
+              <li class="lane__tick" data-week="7">WK 07</li>
+              <li class="lane__tick" data-week="8">WK 08</li>
+              <li class="lane__tick" data-week="9">WK 09</li>
+              <li class="lane__tick" data-week="10">WK 10</li>
+              <li class="lane__tick" data-week="11">WK 11</li>
+              <li class="lane__tick" data-week="12">WK 12</li>
+              <li class="lane__tick lane__tick--final" data-week="13">
+                <a id="lane-reserve" class="btn btn-primary" href="#reserve">WK 13 / Reserve a spot</a>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. GET -->
+    <section id="get" class="band" aria-labelledby="get-title">
+      <div class="container row">
+        <div class="row__head reveal">
+          <h2 id="get-title">What you get</h2>
+        </div>
+        <div class="row__body">
+          <ol class="get-list">
+            <li class="get-row reveal">
+              <h3 class="get-row__h">Custom Strength &amp; Power Training</h3>
+              <p>Great athletes aren't just born; they're coached. Our expert coaches don't just run workouts. They teach.</p>
+            </li>
+            <li class="get-row reveal">
+              <h3 class="get-row__h">Speed &amp; Agility Development</h3>
+              <p>Your child learns how to sprint faster, move smarter, and compete harder.</p>
+            </li>
+            <li class="get-row reveal">
+              <h3 class="get-row__h">Conditioning &amp; Endurance</h3>
+              <p>Train for the final minutes.</p>
+            </li>
+            <li class="get-row reveal">
+              <h3 class="get-row__h">100% Boosted Confidence</h3>
+              <p>Leadership. Game-day results.</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. WHY -->
+    <section id="why" class="band" aria-labelledby="why-title">
+      <div class="container row">
+        <div class="row__head reveal">
+          <h2 id="why-title">Why TNL</h2>
+        </div>
+        <div class="row__body">
+          <p class="why__line" id="why-line">From varsity debuts to All-State honors. From college scholarships to MLB draft picks.</p>
+          <p class="why__meta num">Since 2017. Athletes across Central NJ.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. LOGISTICS -->
+    <section id="logistics" class="band" aria-labelledby="logistics-title">
+      <div class="container">
+        <h2 id="logistics-title" class="vh">Session details</h2>
+        <ul class="logi">
+          <li class="logi__row reveal">
+            <span class="logi__label num">Sessions</span>
+            <span class="logi__value">60-minute sessions</span>
+          </li>
+          <li class="logi__row reveal">
+            <span class="logi__label num">Location</span>
+            <address class="logi__value">273 Whitehead Road, Hamilton, NJ</address>
+          </li>
+          <li class="logi__row reveal">
+            <span class="logi__label num">Call to build your best schedule</span>
+            <a class="logi__value logi__tel" href="tel:+16093751018">609-375-1018</a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 8. RESERVE -->
+    <section id="reserve" class="band" aria-labelledby="reserve-title">
+      <div class="container row">
+        <div class="row__head reveal">
+          <h2 id="reserve-title">Reserve a spot.</h2>
+          <p class="reserve__note">Spots limited. First come, first served.</p>
+        </div>
+        <div class="row__body">
+
+          <!-- [FILL IN endpoint] data-endpoint is empty on purpose: no form endpoint is known.
+               While empty, app.js opens a prefilled email and shows #form-fallback. -->
+          <form id="reserve-form" class="form" data-endpoint="" action="mailto:connor@tnl-performance.org" method="post" enctype="text/plain" aria-labelledby="reserve-title">
+
+            <ol class="steps" aria-label="Form progress">
+              <li data-step-ind="1" aria-current="step"><span class="steps__n" aria-hidden="true">01</span> Athlete</li>
+              <li data-step-ind="2"><span class="steps__n" aria-hidden="true">02</span> Parent</li>
+              <li data-step-ind="3"><span class="steps__n" aria-hidden="true">03</span> Confirm</li>
+            </ol>
+            <p id="step-status" class="step-status num" aria-live="polite">Step 1 of 3</p>
+
+            <fieldset class="step" data-step="1">
+              <legend>Athlete</legend>
+              <div class="field">
+                <label for="athlete_name">Athlete full name</label>
+                <input class="input" type="text" id="athlete_name" name="athlete_name" required>
+                <p class="field__error" id="athlete_name-error"></p>
+              </div>
+              <div class="field">
+                <label for="athlete_dob">Date of birth</label>
+                <input class="input" type="date" id="athlete_dob" name="athlete_dob" required>
+                <p class="field__error" id="athlete_dob-error"></p>
+              </div>
+              <div class="field">
+                <label for="sports">Sport(s) played</label>
+                <input class="input" type="text" id="sports" name="sports" required>
+                <p class="field__error" id="sports-error"></p>
+              </div>
+              <div class="field">
+                <label for="school">Current school</label>
+                <input class="input" type="text" id="school" name="school" required>
+                <p class="field__error" id="school-error"></p>
+              </div>
+              <div class="field">
+                <p class="field__label" id="grade-label">Grade level</p>
+                <div class="radios" id="grade" role="radiogroup" aria-labelledby="grade-label" aria-required="true" tabindex="-1">
+                  <label class="radio" for="grade_hs">
+                    <input type="radio" id="grade_hs" name="grade" value="hs" required>
+                    <span>High School 9-12</span>
+                  </label>
+                  <label class="radio" for="grade_ms">
+                    <input type="radio" id="grade_ms" name="grade" value="ms" required>
+                    <span>Middle School 5-8</span>
+                  </label>
+                </div>
+                <p class="field__error" id="grade-error"></p>
+              </div>
+              <div class="step__actions">
+                <button type="button" class="btn btn-primary" data-next>Next: Parent</button>
+              </div>
+            </fieldset>
+
+            <fieldset class="step" data-step="2">
+              <legend>Parent</legend>
+              <div class="field">
+                <label for="parent_name">Parent full name</label>
+                <input class="input" type="text" id="parent_name" name="parent_name" autocomplete="name" required>
+                <p class="field__error" id="parent_name-error"></p>
+              </div>
+              <div class="field">
+                <label for="parent_phone">Parent phone</label>
+                <input class="input" type="tel" id="parent_phone" name="parent_phone" autocomplete="tel" inputmode="tel" required>
+                <p class="field__error" id="parent_phone-error"></p>
+              </div>
+              <div class="field">
+                <label for="parent_email">Parent email</label>
+                <input class="input" type="email" id="parent_email" name="parent_email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" required>
+                <p class="field__error" id="parent_email-error"></p>
+              </div>
+              <div class="step__actions">
+                <button type="button" class="btn btn-ghost" data-back>Back</button>
+                <button type="button" class="btn btn-primary" data-next>Next: Confirm</button>
+              </div>
+            </fieldset>
+
+            <fieldset class="step" data-step="3">
+              <legend>Confirm</legend>
+              <dl id="summary" class="summary">
+                <div class="summary__row"><dt>Athlete</dt><dd data-sum="athlete_name"></dd></div>
+                <div class="summary__row"><dt>Date of birth</dt><dd data-sum="athlete_dob"></dd></div>
+                <div class="summary__row"><dt>Sport(s)</dt><dd data-sum="sports"></dd></div>
+                <div class="summary__row"><dt>School</dt><dd data-sum="school"></dd></div>
+                <div class="summary__row"><dt>Grade level</dt><dd data-sum="grade"></dd></div>
+                <div class="summary__row"><dt>Parent</dt><dd data-sum="parent_name"></dd></div>
+                <div class="summary__row"><dt>Phone</dt><dd data-sum="parent_phone"></dd></div>
+                <div class="summary__row"><dt>Email</dt><dd data-sum="parent_email"></dd></div>
+              </dl>
+              <div class="field">
+                <p class="field__label" id="enrolled_fall-label">Enrolled in our 2026 FALL block?</p>
+                <div class="radios" id="enrolled_fall" role="radiogroup" aria-labelledby="enrolled_fall-label" aria-required="true" tabindex="-1">
+                  <label class="radio" for="enrolled_fall_yes">
+                    <input type="radio" id="enrolled_fall_yes" name="enrolled_fall" value="yes" required>
+                    <span>Yes</span>
+                  </label>
+                  <label class="radio" for="enrolled_fall_no">
+                    <input type="radio" id="enrolled_fall_no" name="enrolled_fall" value="no" required>
+                    <span>No</span>
+                  </label>
+                </div>
+                <p class="field__error" id="enrolled_fall-error"></p>
+              </div>
+              <div class="field">
+                <label class="radio radio--check" for="sms_consent">
+                  <input type="checkbox" id="sms_consent" name="sms_consent" value="yes">
+                  <span>I agree to terms &amp; conditions provided by the company. By providing my phone number, I agree to receive text messages from the business. <span class="muted">(optional)</span></span>
+                </label>
+              </div>
+              <div class="step__actions">
+                <button type="button" class="btn btn-ghost" data-back>Back</button>
+                <button type="submit" class="btn btn-primary" id="submit-btn">Reserve a spot</button>
+              </div>
+            </fieldset>
+          </form>
+
+          <div id="form-success" class="form-note" role="status" tabindex="-1" hidden>
+            <h3>Request sent.</h3>
+            <p>Questions? Call <a href="tel:+16093751018">609-375-1018</a>.</p>
+          </div>
+
+          <div id="form-fallback" class="form-note" role="status" tabindex="-1" hidden>
+            <h3>Not sent yet.</h3>
+            <p id="fallback-msg">Your spot is not reserved until the message is sent. Press Send in your email app. If it did not open, email <a href="mailto:connor@tnl-performance.org">connor@tnl-performance.org</a> or call <a href="tel:+16093751018">609-375-1018</a>.</p>
+            <p id="fallback-msg-fail">We could not send your request, so your spot is not reserved. <a href="mailto:connor@tnl-performance.org">Send it by email</a> or call <a href="tel:+16093751018">609-375-1018</a>.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 9. FOOTER -->
+  <footer class="site-foot">
+    <div class="container site-foot__in">
+      <div class="site-foot__brand">
+        <button type="button" class="foot-logo" id="foot-logo" aria-label="Spin the TNL logo">
+          <img src="logo.png" alt="" width="64" height="64">
+        </button>
+        <span>TNL Performance</span>
+      </div>
+      <address class="site-foot__addr">273 Whitehead Road, Hamilton, NJ</address>
+      <ul class="site-foot__links">
+        <li><a href="tel:+16093751018">609-375-1018</a></li>
+        <li><a href="mailto:connor@tnl-performance.org">connor@tnl-performance.org</a></li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- 10. DOCK (under 900px). -->
+  <div id="dock" class="cta-bar" data-state="hidden" role="region" aria-label="Reserve">
+    <a class="btn btn-primary dock__reserve" href="#reserve">Reserve a spot</a>
+    <a class="btn btn-ghost dock__call" href="tel:+16093751018" aria-label="Call TNL Performance, 609-375-1018">Call</a>
+  </div>
+</body>
+</html>
