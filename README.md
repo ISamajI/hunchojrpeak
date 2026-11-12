@@ -25,6 +25,19 @@ The details are in [docs/modules/command-center.md](docs/modules/command-center.
 | ![Command Center](docs/screenshots/command.png) | ![Projects](docs/screenshots/projects.png) |
 | ![Revenue](docs/screenshots/revenue.png) | ![System Health](docs/screenshots/health.png) |
 
+## Demo websites: art-directed, not templated
+
+Every prospect gets a custom concept site. For each business:
+- **Direction:** the creative director weighs **12 design systems** (each with its own type pairing, graded palette, hero composition and service layout), keeps three distinct candidates, and picks the strongest with a written rationale.
+- **Imagery:** the business's real photos are used first, then AI concept imagery from detailed art-direction briefs (when connected), never stock.
+- **Motion:** GSAP, scroll storytelling and a WebGL light field, with fonts and scripts self-hosted.
+- **QA:** Itachi checks every site in a real browser at 375–1920px before it can ship.
+
+![Demo heroes, desktop](docs/screenshots/demos-desktop.png)
+![Demo heroes, mobile](docs/screenshots/demos-mobile.png)
+
+*These six demos were generated without any photography, which is the common case for businesses with no website. With Google Places or a business website, their real photos fill the hero, gallery and service showcases. Details: [docs/modules/design-engine.md](docs/modules/design-engine.md).*
+
 The eight Akamaru branches are real modules:
 
 | Branch | Role | Module |
@@ -78,6 +91,7 @@ Run `node bin/akamaru.js` with no arguments to see every command.
 | `RESEND_API_KEY`, `OUTREACH_FROM_EMAIL`, `OUTREACH_BUSINESS_ADDRESS` | Sending approved email | Drafts are queued; nothing is sent |
 | `AKAMARU_WEBHOOK_SECRET` | Receiving replies at `POST /api/inbound` | Log replies with `akamaru inbound` |
 | `AKAMARU_ADMIN_TOKEN` | Exposing the dashboard beyond localhost | Dashboard binds to 127.0.0.1 only |
+| `IMAGE_PROVIDER` + `OPENAI_API_KEY` or `REPLICATE_API_TOKEN` | AI concept imagery for demos | Real photos (Places / their site) or photo-free composition |
 | `TWILIO_*` + `OWNER_PHONE` | SMS / phone-call alerts for critical notifications | Alerts stay in the dashboard |
 
 `npm run doctor -- --live` also probes whether each API is reachable from your network.

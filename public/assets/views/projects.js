@@ -158,7 +158,23 @@ async function detail(root, ctx, id) {
         const local = localPreview(latest.preview_url);
         body.append(h('section', { class: 'panel' }, h('header', { class: 'panel-head' }, h('h2', { text: `Demo v${latest.version}` }), h('span', { class: 'pill', text: `${latest.copy_source} copy` }), h('span', { class: 'pill', text: latest.qa_passed ? 'QA passed' : 'QA failed' }),
           h('div', { class: 'chart-card-tools' }, latest.preview_url && h('a', { class: 'btn sm', href: latest.preview_url, target: '_blank', rel: 'noopener' }, icon('external'), `Open (${latest.deploy_provider})`))),
-          h('div', { class: 'panel-body' }, local ? h('iframe', { class: 'iframe-full', src: local, title: `Demo preview for ${d.business.name}`, sandbox: '', loading: 'lazy' }) : latest.preview_url ? h('div', { class: 'dim', text: 'Hosted externally — use Open to view it in a new tab.' }) : h('div', { class: 'dim', text: 'Not deployed yet.' }))));
+          h('div', { class: 'panel-body' }, local ? h('iframe', { class: 'iframe-full', src: local, title: `Demo preview for ${d.business.name}`, sandbox: 'allow-scripts', loading: 'lazy' }) : latest.preview_url ? h('div', { class: 'dim', text: 'Hosted externally — use Open to view it in a new tab.' }) : h('div', { class: 'dim', text: 'Not deployed yet.' }))));
+        const dz = latest.design;
+        if (dz) {
+          const qa = latest.qa?.browser;
+          body.append(h('div', { class: 'grid cols-2 mt' },
+            h('section', { class: 'panel' }, h('header', { class: 'panel-head' }, h('h2', { text: 'Art direction' }), h('span', { class: 'pill cyan', text: dz.direction.name })),
+              h('div', { class: 'panel-body' }, h('p', { class: 'dim', style: { marginTop: 0, fontSize: '12.5px' }, text: dz.rationale }),
+                h('table', { class: 'data' }, h('thead', {}, h('tr', {}, ['Direction', 'Score', 'Hero', 'Why'].map((c) => h('th', { text: c })))),
+                  h('tbody', {}, dz.candidates.map((c, i) => h('tr', {}, h('td', {}, i === 0 ? h('b', { text: c.name }) : c.name), h('td', { class: 'num', text: c.score }), h('td', { class: 'dim', text: `${c.hero}${c.light ? ' · light' : ' · dark'}` }), h('td', { class: 'dim', style: { fontSize: '11.5px' }, text: c.reasons.join('; ') }))))))),
+            h('section', { class: 'panel' }, h('header', { class: 'panel-head' }, h('h2', { text: 'Imagery & QA' })),
+              h('div', { class: 'panel-body stack', style: { gap: '10px', fontSize: '12.5px' } },
+                h('div', {}, h('span', { class: 'muted', text: 'Imagery: ' }), dz.imagery.length ? dz.imagery.map((m) => `${m.source} (${m.width}×${m.height})`).join(', ') : 'none available — photo-free cinematic composition'),
+                h('div', {}, h('span', { class: 'muted', text: 'Copy: ' }), dz.copySource === 'claude' ? 'written by Claude' : 'template (connect Claude for bespoke copy)'),
+                h('div', {}, h('span', { class: 'muted', text: 'Browser QA: ' }), qa?.ran ? h('span', { class: 'row tight', style: { display: 'inline-flex' } }, qa.results.map((r) => h('span', { class: 'pill', title: r.fails.join(', '), text: `${r.ok ? '✓' : '✗'} ${r.width}` }))) : (qa?.reason || '—')),
+                h('details', {}, h('summary', { class: 'muted', style: { cursor: 'pointer' }, text: `Photography briefs (${dz.briefs.length}) — for a shoot or an image model` }),
+                  dz.briefs.map((b) => h('div', { style: { marginTop: '8px' } }, h('div', { class: 'eyebrow', text: `${b.id} · ${b.aspect} · ${b.placement}` }), h('pre', { class: 'code', style: { marginTop: '4px' }, text: b.prompt }))))))));
+        }
         if (d.demos.length > 1) body.append(h('section', { class: 'panel mt' }, h('header', { class: 'panel-head' }, h('h2', { text: 'All versions' })), h('table', { class: 'data' }, h('tbody', {}, d.demos.map((v) => h('tr', {}, h('td', { class: 'mono', text: `v${v.version}` }), h('td', { text: v.copy_source }), h('td', { text: v.qa_passed ? 'QA passed' : `QA failed: ${(v.qa?.failures || []).join(', ')}` }), h('td', { class: 'mono muted', text: fmt.ago(v.created_at) }), h('td', {}, v.preview_url ? h('a', { href: v.preview_url, target: '_blank', rel: 'noopener', text: 'open' }) : '—')))))));
       }
       for (const c of d.campaigns) body.append(h('section', { class: 'panel mt' }, h('header', { class: 'panel-head' }, h('h2', { text: `${c.kind === 'reply' ? 'Reply' : 'Outreach'} · ${c.channel}` }), h('span', { class: 'pill', text: c.status.replace(/_/g, ' ') }), h('span', { class: 'eyebrow', text: c.copy_source })),

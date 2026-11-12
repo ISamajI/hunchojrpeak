@@ -64,6 +64,13 @@ export const INTEGRATIONS = {
     fallback: 'Campaigns are drafted and queued; nothing is sent.',
     connect: 'Verify a sending domain at https://resend.com/domains, create an API key, set RESEND_API_KEY, OUTREACH_FROM_EMAIL (e.g. "Henry <henry@ltgpeak.com>") and OUTREACH_BUSINESS_ADDRESS (CAN-SPAM postal address).',
   },
+  imagegen: {
+    label: 'AI image generation',
+    vars: ['IMAGE_PROVIDER'],
+    powers: 'Cinematic concept imagery for demos, generated from per-section art-direction prompts (labeled as concept imagery).',
+    fallback: "Demos use the business's own photos (Google Places / their website) or a photo-free art-directed composition. Prompts are still written for you.",
+    connect: 'Set IMAGE_PROVIDER=openai with OPENAI_API_KEY (gpt-image-1), or IMAGE_PROVIDER=replicate with REPLICATE_API_TOKEN (Flux 1.1 Pro). Cap spend with AKAMARU_IMAGEGEN_MAX (default 4 images per demo).',
+  },
   twilio: {
     label: 'Twilio (owner alerts)',
     vars: ['TWILIO_ACCOUNT_SID', 'TWILIO_AUTH_TOKEN', 'TWILIO_FROM_NUMBER', 'OWNER_PHONE'],

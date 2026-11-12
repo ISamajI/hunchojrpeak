@@ -45,6 +45,14 @@ export function analyzeHtml(html, { url, status, ms, bytes } = {}) {
   const years = (strip(html).match(/(?:©|&copy;|copyright)\s*(?:\d{4}\s*[-–]\s*)?(\d{4})/gi) || [])
     .map((s) => Number(s.match(/(\d{4})(?!.*\d{4})/)?.[1]))
     .filter((y) => y > 1995 && y <= new Date().getFullYear() + 1);
+  const abs = (u) => { try { return url ? new URL(u.replace(/&amp;/g, '&'), url).toString() : null; } catch { return null; } };
+  const hrefs = [...html.matchAll(/href=["']([^"']+)["']/gi)].map((m) => m[1]);
+  const bookingUrl = hrefs.map(abs).find((u) => u && /booksy\.com|vagaro\.com|squareup\.com\/appointments|square\.site|calendly\.com|styleseat\.com|fresha\.com|setmore\.com|acuityscheduling\.com|schedulicity|opentable\.com|resy\.com|tock\.com/i.test(u)) || null;
+  const orderingUrl = hrefs.map(abs).find((u) => u && /doordash\.com|ubereats\.com|grubhub\.com|toasttab\.com|chownow\.com|skipthedishes\.com/i.test(u)) || null;
+  const ogImage = m(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) || m(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+  const imgs = [...html.matchAll(/<img\b[^>]*>/gi)].map((t) => ({ src: (t[0].match(/\s(?:data-src|src)=["']([^"']+)["']/i) || [])[1], alt: (t[0].match(/\salt=["']([^"']*)["']/i) || [])[1] || '' }))
+    .filter((i) => i.src && !/^data:|\.svg(\?|$)|logo|icon|sprite|favicon|pixel|spacer|badge|avatar/i.test(i.src));
+  const images = [...new Map([...(ogImage ? [{ src: ogImage, alt: '' }] : []), ...imgs].map((i) => [abs(i.src), { src: abs(i.src), alt: i.alt.slice(0, 120) }])).values()].filter((i) => i.src && /^https?:/.test(i.src)).slice(0, 12);
   const textLength = strip(html.replace(/<script[\s\S]*?<\/script>|<style[\s\S]*?<\/style>/gi, '')).length;
   return {
     url,
@@ -61,7 +69,10 @@ export function analyzeHtml(html, { url, status, ms, bytes } = {}) {
     platform: platform || (generator ? generator.split(' ')[0] : null),
     mobile_viewport: /<meta[^>]+name=["']viewport["']/i.test(html),
     has_contact_form: /<form[\s\S]*?(email|message|contact)/i.test(html),
-    has_booking: /(book now|book online|schedule|appointment|booksy|vagaro|square\.site|calendly|squareup\.com\/appointments|styleseat|fresha)/i.test(html),
+    booking_url: bookingUrl,
+    ordering_url: orderingUrl,
+    images,
+    has_booking: !!bookingUrl || /(book now|book online|schedule|appointment|booksy|vagaro|square\.site|calendly|squareup\.com\/appointments|styleseat|fresha)/i.test(html),
     has_online_ordering: /(order online|doordash|ubereats|grubhub|toasttab|chownow)/i.test(html),
     has_analytics: /(googletagmanager|google-analytics|gtag\(|fbq\()/i.test(html),
     has_schema_org: /application\/ld\+json/i.test(html),

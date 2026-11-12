@@ -217,6 +217,7 @@ const MIGRATIONS = [
   CREATE INDEX idx_site_checks ON site_checks(site_id, checked_at);
   CREATE INDEX idx_activity_ts ON activity(ts);
   `,
+  `ALTER TABLE demos ADD COLUMN design TEXT;`,
 ];
 
 let instance = null;

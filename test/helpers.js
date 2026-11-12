@@ -10,6 +10,7 @@ const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'akamaru-test-'));
 process.env.AKAMARU_DATA_DIR = dir;
 process.env.AKAMARU_ENV_FILE = path.join(dir, 'none.env');
 process.env.AKAMARU_ALLOW_PRIVATE_FETCH = '1';
+process.env.AKAMARU_BROWSER_QA = process.env.AKAMARU_BROWSER_QA || '0';
 for (const k of ['ANTHROPIC_API_KEY', 'GOOGLE_PLACES_API_KEY', 'VERCEL_TOKEN', 'RESEND_API_KEY', 'OUTREACH_FROM_EMAIL', 'OUTREACH_BUSINESS_ADDRESS', 'AKAMARU_ADMIN_TOKEN', 'AKAMARU_WEBHOOK_SECRET', 'AKAMARU_PUBLIC_URL']) delete process.env[k];
 
 const { openDb, setDb } = await import('../src/db.js');

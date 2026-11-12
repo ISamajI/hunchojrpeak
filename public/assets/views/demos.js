@@ -24,7 +24,7 @@ export default async function demos(root, ctx) {
       for (const p of withDemos) {
         const local = localPreview(p.preview_url);
         grid.append(h('section', { class: 'panel' },
-          h('div', { style: { padding: '12px 12px 0' } }, local ? h('div', { class: 'iframe-thumb' }, h('iframe', { src: local, title: `${p.name} demo thumbnail`, sandbox: '', loading: 'lazy', tabindex: '-1' })) : h('div', { class: 'iframe-thumb', style: { display: 'grid', placeItems: 'center', background: 'var(--surface)' } }, h('span', { class: 'muted', text: 'Hosted on Vercel' }))),
+          h('div', { style: { padding: '12px 12px 0' } }, local ? h('div', { class: 'iframe-thumb' }, h('iframe', { src: local, title: `${p.name} demo thumbnail`, sandbox: 'allow-scripts', loading: 'lazy', tabindex: '-1' })) : h('div', { class: 'iframe-thumb', style: { display: 'grid', placeItems: 'center', background: 'var(--surface)' } }, h('span', { class: 'muted', text: 'Hosted on Vercel' }))),
           h('div', { class: 'panel-body' },
             h('div', { class: 'row tight', style: { justifyContent: 'space-between' } }, h('b', { class: 'truncate', text: p.name }), scoreCell(p.score)),
             h('div', { class: 'muted', style: { fontSize: '11.5px', margin: '2px 0 10px' }, text: [p.category?.replace(/_/g, ' '), p.city, `${p.demo_count} version${p.demo_count > 1 ? 's' : ''}`].filter(Boolean).join(' · ') }),

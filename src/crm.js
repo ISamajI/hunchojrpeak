@@ -182,7 +182,7 @@ export function leadDetail(businessId) {
     business,
     lead,
     research: research ? { ...research, data: parse(research.data) } : null,
-    demos: demos.map((d) => ({ ...d, qa: parse(d.qa) })),
+    demos: demos.map((d) => ({ ...d, qa: parse(d.qa), design: parse(d.design) })),
     campaigns: campaigns.map((c) => ({ ...c, followups: parse(c.followups) })),
     messages,
     onboarding,

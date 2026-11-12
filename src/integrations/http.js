@@ -9,7 +9,7 @@ export class HttpError extends Error {
   }
 }
 
-export async function request(url, { method = 'GET', headers = {}, body, timeoutMs = 15000, maxBytes = 3_000_000 } = {}) {
+export async function request(url, { method = 'GET', headers = {}, body, timeoutMs = 15000, maxBytes = 3_000_000, binary = false } = {}) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   const started = Date.now();
@@ -33,8 +33,8 @@ export async function request(url, { method = 'GET', headers = {}, body, timeout
         chunks.push(value);
       }
     }
-    const text = Buffer.concat(chunks).toString('utf8');
-    return { status: res.status, ok: res.ok, headers: res.headers, url: res.url, text, bytes: size, ms: Date.now() - started };
+    const buf = Buffer.concat(chunks);
+    return { status: res.status, ok: res.ok, headers: res.headers, url: res.url, text: binary ? '' : buf.toString('utf8'), buffer: binary ? buf : undefined, bytes: size, ms: Date.now() - started, truncated: size > maxBytes };
   } catch (e) {
     const reason = e.name === 'AbortError' ? `timed out after ${timeoutMs}ms` : e.cause?.code || e.message;
     throw new HttpError(`Request to ${new URL(url).host} failed: ${reason}`, 0, null);

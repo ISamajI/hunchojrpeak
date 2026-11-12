@@ -101,3 +101,36 @@ No XSS, auth/CSRF bypass, SQL injection, approval bypass or Twilio abuse was fou
 | LOW (defense in depth) | `h()` set href/src without a scheme check | Only http(s)/mailto/tel/relative URLs are allowed |
 
 71 tests, all passing.
+
+## 2026-11-12: Milestone 3, cinematic design engine
+
+**Goal:** demos that look custom art-directed, not like an AI template. This had to happen without fake photos, fake reviews or fake functionality.
+
+**What was built** (see `docs/modules/design-engine.md`):
+- A creative director that chooses among 12 design systems. All palettes are WCAG-audited.
+- An imagery pipeline in strict priority order: Google Places photos, then website photos, then AI concept imagery (OpenAI/Replicate), then a photo-free composition. No stock photography.
+- Five photography briefs per demo.
+- A multi-file renderer with self-hosted fonts and GSAP.
+- A WebGL light-field hero.
+- Verified-only social proof.
+- Booking requests that compose a real SMS or email.
+- Itachi browser QA at 7 breakpoints.
+
+**Environment limit:** image-generation APIs are unreachable from this sandbox. The adapters are built and contract-correct but untested live. The reviewed demos are all photo-free.
+
+**Creative-director review of real renders** (seven businesses, 1440px and 375px). These issues were found and fixed:
+- Editorial info chips were clipped by `overflow:hidden`.
+- Gym and auto sites showed the barber's subline; sublines are now per industry.
+- Photo-free frames read as blurry placeholders; they now carry a typographic monogram composition.
+- Ember sparks rendered as square pixels; they're now soft round embers.
+- Orphaned headline words; headlines now use `text-wrap: balance`.
+- The concept bar wrapped on phones; there's a compact phone version.
+- The intro was slow enough to catch the nav mid-animation; the timeline is tightened.
+- Uppercase brand names truncated on mobile.
+- The footer wordmark cropped long names; it's now sized to the name.
+- Section labels were misaligned with their headings.
+- QA screenshots were taken after the mobile menu opened.
+- A QA false positive: `NaN` matched "Maintenance", which blocked a valid site.
+- Fonts were blocked in sandboxed dashboard previews (null-origin CORS).
+
+**Result:** all 7 demos pass static QA and 49/49 real-browser breakpoint checks. 73 tests pass.

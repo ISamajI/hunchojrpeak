@@ -73,7 +73,7 @@ export async function assertPublicUrl(url) {
   await new Promise((ok, bad) => guardedLookup(host, {}, (e) => (e ? bad(e) : ok())));
 }
 
-function getOnce(url, { timeoutMs, maxBytes }) {
+function getOnce(url, { timeoutMs, maxBytes, binary }) {
   return new Promise((resolve, reject) => {
     const u = new URL(url);
     const lib = u.protocol === 'https:' ? https : http;
@@ -89,7 +89,7 @@ function getOnce(url, { timeoutMs, maxBytes }) {
         if (size > maxBytes) { res.destroy(); return; }
         chunks.push(c);
       });
-      res.on('close', () => resolve({ status: res.statusCode, headers: res.headers, text: Buffer.concat(chunks).toString('utf8'), bytes: size }));
+      res.on('close', () => { const buf = Buffer.concat(chunks); resolve({ status: res.statusCode, headers: res.headers, text: binary ? '' : buf.toString('utf8'), buffer: binary ? buf : undefined, bytes: size, truncated: size > maxBytes }); });
       res.on('error', reject);
     });
     req.on('timeout', () => req.destroy(new Error(`timed out after ${timeoutMs}ms`)));
@@ -97,12 +97,12 @@ function getOnce(url, { timeoutMs, maxBytes }) {
   });
 }
 
-export async function safeGet(url, { timeoutMs = 15000, maxBytes = 3_000_000, maxRedirects = 5 } = {}) {
+export async function safeGet(url, { timeoutMs = 15000, maxBytes = 3_000_000, maxRedirects = 5, binary = false } = {}) {
   const started = Date.now();
   let current = url;
   for (let hop = 0; hop <= maxRedirects; hop++) {
     await assertPublicUrl(current);
-    const res = await getOnce(current, { timeoutMs, maxBytes });
+    const res = await getOnce(current, { timeoutMs, maxBytes, binary });
     if (res.status >= 300 && res.status < 400 && res.headers.location) {
       current = new URL(res.headers.location, current).toString();
       continue;

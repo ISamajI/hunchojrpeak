@@ -50,7 +50,7 @@ defineJob('build_demo', {
       await researchBusiness(id);
     }
     ctx.step(`Generating personalized site for ${b.name}`, 0.4);
-    const demo = await buildDemo(id);
+    const demo = await buildDemo(id, { onStep: (t) => ctx.step(t, 0.5) });
     if (!demo.qa.passed) throw new Error(`Demo failed QA: ${demo.qa.failures.join(', ')}`);
     ctx.step('Itachi QA passed — deploying preview', 0.75);
     const dep = await deployPreview(id);

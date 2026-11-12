@@ -65,7 +65,8 @@ function servePreview(res, rest) {
   send(res, 200, fs.readFileSync(file), {
     'content-type': MIME[path.extname(file)] || 'application/octet-stream',
     'x-robots-tag': 'noindex, nofollow',
-    'content-security-policy': "default-src 'none'; style-src 'unsafe-inline'; img-src * data:; frame-ancestors 'self'",
+    ...(path.extname(file) === '.woff2' ? { 'access-control-allow-origin': '*' } : {}), // fonts load in CORS mode; sandboxed iframes have a null origin
+    'content-security-policy': "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; frame-ancestors 'self'; base-uri 'none'; form-action 'none'",
   });
 }
 

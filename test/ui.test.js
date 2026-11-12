@@ -93,8 +93,8 @@ test('project detail shows deliverables with a sandboxed live preview', { skip }
   await page.waitForSelector('.tabs');
   await page.click('.tabs button:has-text("Deliverables")');
   const frame = page.locator('iframe.iframe-full');
-  assert.equal(await frame.getAttribute('sandbox'), '');
-  assert.match(await page.frameLocator('iframe.iframe-full').locator('h1').textContent(), /UI Barbers/);
+  assert.equal(await frame.getAttribute('sandbox'), 'allow-scripts', 'scripts run, but never with dashboard origin');
+  assert.match(await page.frameLocator('iframe.iframe-full').locator('.brand').textContent(), /UI Barbers/);
 });
 
 test('recording an invoice updates revenue from the ledger', { skip }, async () => {

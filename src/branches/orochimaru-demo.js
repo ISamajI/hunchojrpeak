@@ -1,173 +1,136 @@
 // OROCHIMARU — Systems Builder.
-// Generates a personalized, self-contained static website demo for a business.
+// Art-directed demo pipeline: research → creative director (3 directions → best) →
+// imagery (real photos > AI concept imagery > photo-free composition) → copy → render →
+// Itachi QA (static + real-browser at 7 breakpoints). Failing demos are never deployed.
 import fs from 'node:fs';
 import path from 'node:path';
-import { dataDir, settings } from '../config.js';
-import { getDb } from '../db.js';
+import { dataDir, env, settings } from '../config.js';
+import { getDb, json } from '../db.js';
 import { log } from '../activity.js';
 import { getBusiness, advanceStage } from '../crm.js';
 import { claudeAvailable, generateJson } from '../integrations/claude.js';
-import { qaDemo } from './itachi-qa.js';
+import { imagegenProvider } from '../integrations/imagegen.js';
+import { isConfigured } from '../config.js';
+import { qaDemo, browserQa } from './itachi-qa.js';
 import { contactViolations, untrusted, UNTRUSTED_NOTE } from './ai-guard.js';
+import { directCreative, imageBriefs } from './design/director.js';
+import { INDUSTRIES, voiceOf } from './design/industry.js';
+import { gatherImagery } from './design/assets.js';
+import { renderSite, templateCopy, esc } from './design/render.js';
 
-export const PRESETS = [
-  { match: /barber|hairdresser|hair/i, key: 'barber', palette: ['#111111', '#c8a14a', '#f5f1e8'], services: ['Classic Cut', 'Skin Fade', 'Beard Trim & Line-Up', 'Hot Towel Shave'], cta: 'Book a Cut', vibe: 'Sharp cuts. Clean fades. No guesswork.' },
-  { match: /beauty|nail|salon|spa/i, key: 'beauty', palette: ['#2b1d2a', '#d48ca8', '#fbf4f6'], services: ['Manicure', 'Pedicure', 'Gel & Acrylic Sets', 'Brows & Lashes'], cta: 'Book an Appointment', vibe: 'Look good. Feel better.' },
-  { match: /restaurant|fast_food|food|kitchen|grill|pizza|taco/i, key: 'restaurant', palette: ['#1e1410', '#e0672c', '#fff8f0'], services: ['Dine In', 'Takeout', 'Catering', 'Daily Specials'], cta: 'See the Menu', vibe: 'Made fresh, served with care.' },
-  { match: /cafe|coffee|bakery/i, key: 'cafe', palette: ['#2a1f17', '#b9824d', '#fbf7f2'], services: ['Espresso Drinks', 'Fresh Pastries', 'Breakfast', 'Catering Orders'], cta: 'Visit Us Today', vibe: 'Your neighborhood spot.' },
-  { match: /car_repair|auto|mechanic|tire/i, key: 'auto', palette: ['#0f1720', '#e63946', '#f1f4f8'], services: ['Diagnostics', 'Brakes', 'Oil Changes', 'General Repair'], cta: 'Request Service', vibe: 'Honest work. Back on the road fast.' },
-  { match: /dentist|clinic|doctor|health/i, key: 'health', palette: ['#0b2a3c', '#2a9d8f', '#f2fbfa'], services: ['Checkups', 'Cleanings', 'Consultations', 'New Patients Welcome'], cta: 'Request an Appointment', vibe: 'Care you can count on.' },
-  { match: /fitness|gym/i, key: 'fitness', palette: ['#0d0d0d', '#39d353', '#f4f4f4'], services: ['Open Gym', 'Personal Training', 'Group Classes', 'Memberships'], cta: 'Start Today', vibe: 'Show up. Get stronger.' },
-  { match: /clothes|clothing|shoes|boutique|jewelry/i, key: 'retail', palette: ['#141414', '#7b61ff', '#f7f6fb'], services: ['New Arrivals', 'Best Sellers', 'In-Store Pickup', 'Gift Cards'], cta: 'Shop Now', vibe: 'Style that speaks for itself.' },
-  { match: /plumber|electrician|contractor|craft|roof|hvac/i, key: 'trades', palette: ['#13213c', '#fca311', '#f6f7fb'], services: ['Repairs', 'Installations', 'Inspections', 'Emergency Calls'], cta: 'Get a Free Quote', vibe: 'Done right the first time.' },
-];
-const DEFAULT_PRESET = { key: 'general', palette: ['#14213d', '#2f80ed', '#f6f8fc'], services: ['Our Services', 'Consultations', 'Custom Orders', 'Local Delivery'], cta: 'Contact Us', vibe: 'Proudly serving our community.' };
-
-export function presetFor(category) {
-  return PRESETS.find((p) => p.match.test(category || '')) || DEFAULT_PRESET;
-}
-
-export const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+export { esc };
 
 const COPY_SCHEMA = {
   type: 'object',
   additionalProperties: false,
-  required: ['headline', 'subheadline', 'about', 'services', 'cta_label'],
+  required: ['headline', 'subheadline', 'statement', 'services', 'cta_label', 'steps'],
   properties: {
     headline: { type: 'string' },
     subheadline: { type: 'string' },
-    about: { type: 'string' },
-    services: {
-      type: 'array',
-      items: { type: 'object', additionalProperties: false, required: ['name', 'description'], properties: { name: { type: 'string' }, description: { type: 'string' } } },
-    },
+    statement: { type: 'string' },
+    services: { type: 'array', items: { type: 'object', additionalProperties: false, required: ['name', 'description'], properties: { name: { type: 'string' }, description: { type: 'string' } } } },
     cta_label: { type: 'string' },
+    steps: { type: 'array', items: { type: 'object', additionalProperties: false, required: ['k', 'title', 'text'], properties: { k: { type: 'string' }, title: { type: 'string' }, text: { type: 'string' } } } },
   },
 };
 
-export function fallbackCopy(business, preset) {
-  const where = business.city ? ` in ${business.city}` : '';
-  return {
-    headline: business.name,
-    subheadline: `${preset.vibe}${where ? ` Serving${where.replace(' in', '')}.` : ''}`,
-    about: `${business.name} is a local ${String(business.category || 'business').replace(/_/g, ' ')}${where}. This concept site shows how ${business.name} could look online: fast on phones, easy to find on Google, and one tap away from a call or booking.`,
-    services: preset.services.map((name) => ({ name, description: '' })),
-    cta_label: preset.cta,
-  };
-}
-
-async function aiCopy(business, research, preset) {
+async function aiCopy(business, research, direction, industryKey) {
+  const ind = INDUSTRIES[industryKey];
+  const voice = voiceOf(direction);
   return generateJson({
-    system: UNTRUSTED_NOTE + '\n\nYou are Orochimaru, the website copywriter for LTGPeak. Write punchy, specific homepage copy for a small local business concept demo. Use ONLY facts given. Do NOT invent reviews, testimonials, awards, prices, years in business, staff names, or guarantees. Services must be typical for the business category and phrased generically. Keep headline under 8 words, subheadline under 20 words, about under 70 words, 4 services with descriptions under 18 words.',
-    prompt: `${untrusted('business', { name: business.name, category: business.category, city: business.city, address: business.address })}\n${untrusted('research_summary', research?.ai?.summary || research?.score?.reasons?.join('; ') || 'n/a')}\n${untrusted('tone', research?.ai?.tone || preset.vibe)}\nDefault services for this category: ${preset.services.join(', ')}`,
+    system: `${UNTRUSTED_NOTE}\n\nYou are the creative director and copywriter at LTGPeak, an agency known for art-directed, award-level websites. Write homepage copy for a concept demo in the "${direction.name}" direction (voice: ${voice}; mood: ${direction.mood.join(', ')}). Rules: use ONLY facts provided; never invent reviews, testimonials, awards, prices, years in business, staff names, statistics or guarantees; services must be typical for the category and phrased generically. Headline: 2–5 words, memorable, no business name. Subheadline under 16 words. Statement: an editorial brand introduction, 25–45 words, may include the business name and city. 4–5 services with descriptions under 18 words. 3 steps (one-word label k, short title, one sentence) describing booking → visit → result.`,
+    prompt: `${untrusted('business', { name: business.name, category: business.category, city: business.city, address: business.address })}\n${untrusted('research_summary', research?.ai?.summary || research?.score?.reasons?.join('; ') || 'n/a')}\nTypical services for this category: ${ind.services.map((s) => s[0]).join(', ')}\nDefault call to action: ${ind.cta}`,
     schema: COPY_SCHEMA,
-    maxTokens: 3000,
+    maxTokens: 4000,
     effort: 'low',
   });
 }
 
-export function renderDemo(business, copy, preset, agency = settings.agency) {
-  const [dark, accent, light] = preset.palette;
-  const tel = business.phone ? business.phone.replace(/[^\d+]/g, '') : null;
-  const hours = business.raw?.tags?.opening_hours || business.raw?.opening_hours || null;
-  const mapUrl = business.lat != null && business.lon != null
-    ? `https://www.openstreetmap.org/?mlat=${business.lat}&mlon=${business.lon}#map=18/${business.lat}/${business.lon}`
-    : business.address ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${business.name} ${business.address}`)}` : null;
-  const ctaHref = tel ? `tel:${tel}` : business.email ? `mailto:${business.email}` : '#contact';
-  const services = (copy.services || []).slice(0, 6).map((s) => `
-        <article class="card"><h3>${esc(s.name)}</h3>${s.description ? `<p>${esc(s.description)}</p>` : ''}</article>`).join('');
-  return `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex, nofollow">
-<title>${esc(business.name)}${business.city ? ` | ${esc(business.city)}` : ''}</title>
-<meta name="description" content="${esc(copy.subheadline)}">
-<style>
-:root{--dark:${dark};--accent:${accent};--light:${light}}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--dark);background:var(--light);line-height:1.6}
-.demo-bar{background:var(--accent);color:#fff;text-align:center;font-size:.85rem;padding:.4rem 1rem}
-header{background:var(--dark);color:#fff;padding:1rem 1.25rem;display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap}
-header strong{font-size:1.15rem;letter-spacing:.02em}header a{color:#fff;text-decoration:none;font-weight:600}
-.hero{background:linear-gradient(160deg,var(--dark) 0%,var(--dark) 55%,var(--accent) 140%);color:#fff;padding:5rem 1.25rem 4rem;text-align:center}
-.hero h1{font-size:clamp(2rem,7vw,3.5rem);margin:0 0 .75rem;line-height:1.1}.hero p{font-size:1.15rem;max-width:40rem;margin:0 auto 2rem;opacity:.9}
-.btn{display:inline-block;background:var(--accent);color:#fff;padding:.9rem 1.8rem;border-radius:999px;font-weight:700;text-decoration:none}
-.btn:focus-visible,a:focus-visible{outline:3px solid #fff;outline-offset:3px}
-section{padding:3.5rem 1.25rem;max-width:68rem;margin:0 auto}h2{font-size:1.8rem;margin:0 0 1.5rem}
-.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr))}
-.card{background:#fff;border-radius:14px;padding:1.4rem;box-shadow:0 2px 14px rgba(0,0,0,.06);border-top:4px solid var(--accent)}.card h3{margin:0 0 .4rem}.card p{margin:0;color:#444}
-.contact{background:#fff;border-radius:14px;padding:1.5rem;box-shadow:0 2px 14px rgba(0,0,0,.06)}.contact a{color:var(--dark);font-weight:600}
-footer{background:var(--dark);color:#ccc;text-align:center;padding:2rem 1rem;font-size:.85rem}footer a{color:#fff}
-.sticky-cta{position:fixed;bottom:1rem;right:1rem;box-shadow:0 6px 20px rgba(0,0,0,.25)}@media(min-width:900px){.sticky-cta{display:none}}
-</style>
-</head>
-<body>
-<div class="demo-bar">Concept preview designed by ${esc(agency.name)} for ${esc(business.name)} — not the official site.</div>
-<header><strong>${esc(business.name)}</strong>${tel ? `<a href="tel:${esc(tel)}">${esc(business.phone)}</a>` : ''}</header>
-<main>
-<div class="hero">
-  <h1>${esc(copy.headline)}</h1>
-  <p>${esc(copy.subheadline)}</p>
-  <a class="btn" href="${esc(ctaHref)}">${esc(copy.cta_label)}</a>
-</div>
-<section id="services"><h2>What We Offer</h2><div class="grid">${services}
-</div></section>
-<section id="about"><h2>About ${esc(business.name)}</h2><p>${esc(copy.about)}</p></section>
-<section id="contact"><h2>Visit &amp; Contact</h2><div class="contact">
-  ${business.address ? `<p><strong>Address:</strong> ${esc(business.address)}</p>` : ''}
-  ${tel ? `<p><strong>Phone:</strong> <a href="tel:${esc(tel)}">${esc(business.phone)}</a></p>` : ''}
-  ${business.email ? `<p><strong>Email:</strong> <a href="mailto:${esc(business.email)}">${esc(business.email)}</a></p>` : ''}
-  ${hours ? `<p><strong>Hours:</strong> ${esc(hours)}</p>` : ''}
-  ${mapUrl ? `<p><a href="${esc(mapUrl)}" rel="noopener" target="_blank">Get directions</a></p>` : ''}
-</div></section>
-</main>
-<a class="btn sticky-cta" href="${esc(ctaHref)}">${esc(copy.cta_label)}</a>
-<footer>&copy; ${new Date().getFullYear()} ${esc(business.name)} · Concept by ${agency.site ? `<a href="${esc(agency.site)}">${esc(agency.name)}</a>` : esc(agency.name)}</footer>
-</body>
-</html>
-`;
-}
+const browserQaEnabled = () => env('AKAMARU_BROWSER_QA', 'auto') !== '0';
 
-export async function buildDemo(businessId) {
+export async function buildDemo(businessId, { onStep = () => {} } = {}) {
   const business = getBusiness(businessId);
   if (!business) throw new Error(`Business ${businessId} not found`);
   const db = getDb();
   const row = db.prepare('SELECT data FROM research WHERE business_id = ? ORDER BY id DESC LIMIT 1').get(businessId);
   const research = row ? JSON.parse(row.data) : null;
-  const preset = presetFor(business.category);
-  let copy;
-  let copySource = 'template';
-  if (claudeAvailable()) {
-    try {
-      copy = await aiCopy(business, research, preset);
-      const bad = contactViolations(JSON.stringify(copy), { phones: [business.phone], emails: [business.email], urls: [] });
-      if (bad.length) throw new Error(`AI copy rejected: ${bad.join('; ')}`);
-      copySource = 'claude';
-    } catch (e) {
-      log('orochimaru', 'ai_copy_failed', 'business', businessId, { error: e.message });
-    }
-  }
-  if (!copy) copy = fallbackCopy(business, preset);
-  let html = renderDemo(business, copy, preset);
-  if (copySource === 'claude' && !qaDemo(html, business).passed) {
-    log('orochimaru', 'ai_copy_rejected_by_qa', 'business', businessId, { failures: qaDemo(html, business).failures });
-    copy = fallbackCopy(business, preset);
-    copySource = 'template';
-    html = renderDemo(business, copy, preset);
-  }
   const version = (db.prepare('SELECT MAX(version) AS v FROM demos WHERE business_id = ?').get(businessId).v || 0) + 1;
   const dir = path.join(dataDir(), 'demos', business.slug, `v${version}`);
   fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(path.join(dir, 'index.html'), html);
-  fs.writeFileSync(path.join(dir, 'robots.txt'), 'User-agent: *\nDisallow: /\n');
-  const qa = qaDemo(html, business);
-  const r = db
-    .prepare('INSERT INTO demos (business_id, version, dir, copy_source, qa, qa_passed) VALUES (?, ?, ?, ?, ?, ?)')
-    .run(businessId, version, dir, copySource, JSON.stringify(qa), qa.passed ? 1 : 0);
+
+  // 1. Creative direction (three candidates → strongest), anticipating available imagery.
+  const potentialPhotos = (isConfigured('google_places') ? (business.raw?.photos || []).length : 0) + (research?.site?.images || []).length + (imagegenProvider() ? 3 : 0);
+  onStep(`Developing three visual directions for ${business.name}`);
+  const creative = directCreative(business, research, potentialPhotos);
+  const direction = creative.chosen;
+  const briefs = imageBriefs(business, direction, creative.industry);
+  log('orochimaru', 'direction_selected', 'business', businessId, { direction: direction.id, rationale: creative.rationale });
+
+  // 2. Imagery
+  const { photos, log: imageLog } = await gatherImagery({ business, research, briefs, outDir: dir, onStep });
+
+  // 3. Copy
+  let copy = null;
+  let copySource = 'template';
+  if (claudeAvailable()) {
+    onStep('Writing art-directed copy');
+    try {
+      copy = await aiCopy(business, research, direction, creative.industry);
+      const bad = contactViolations(JSON.stringify(copy), { phones: [business.phone], emails: [business.email], urls: [] });
+      if (bad.length) throw new Error(`AI copy rejected: ${bad.join('; ')}`);
+      if (!copy.services?.length || copy.steps?.length !== 3) throw new Error('AI copy incomplete');
+      copySource = 'claude';
+    } catch (e) {
+      log('orochimaru', 'ai_copy_failed', 'business', businessId, { error: e.message });
+      copy = null;
+    }
+  }
+  if (!copy) copy = templateCopy(business, direction, creative.industry);
+
+  // 4. Render + static QA (AI copy that trips QA falls back to template copy)
+  onStep(`Building the ${direction.name} site`);
+  const render = () => renderSite({ business, direction, industryKey: creative.industry, copy, photos, agency: settings.agency, research, outDir: dir });
+  let html = render();
+  let qa = qaDemo(html, business, { dir, palette: direction.palette });
+  if (!qa.passed && copySource === 'claude') {
+    log('orochimaru', 'ai_copy_rejected_by_qa', 'business', businessId, { failures: qa.failures });
+    copy = templateCopy(business, direction, creative.industry);
+    copySource = 'template';
+    html = render();
+    qa = qaDemo(html, business, { dir, palette: direction.palette });
+  }
+
+  // 5. Real-browser QA at every breakpoint
+  let browser = { ran: false, reason: 'disabled (AKAMARU_BROWSER_QA=0)', results: [] };
+  if (qa.passed && browserQaEnabled()) {
+    onStep('Itachi: testing at 375 → 1920px in a real browser');
+    try {
+      browser = await browserQa(dir);
+    } catch (e) {
+      browser = { ran: false, reason: `browser QA error: ${e.message}`, results: [] };
+    }
+    if (browser.ran && !browser.passed) {
+      qa.passed = false;
+      for (const r of browser.results.filter((x) => !x.ok)) qa.failures.push(`${r.width}px: ${r.fails.join(', ')}`);
+    }
+  }
+  qa.browser = browser;
+
+  const design = {
+    direction: { id: direction.id, name: direction.name },
+    industry: creative.industry,
+    rationale: creative.rationale,
+    candidates: creative.candidates,
+    imagery: photos.map((p) => ({ file: p.file, source: p.source, credit: p.credit, width: p.width, height: p.height })),
+    imageLog,
+    briefs,
+    copySource,
+  };
+  const r = db.prepare('INSERT INTO demos (business_id, version, dir, copy_source, qa, qa_passed, design) VALUES (?, ?, ?, ?, ?, ?, ?)')
+    .run(businessId, version, dir, copySource, json(qa), qa.passed ? 1 : 0, json(design));
   const demoId = Number(r.lastInsertRowid);
-  log('orochimaru', 'demo_built', 'business', businessId, { demoId, version, copySource });
-  log('itachi', qa.passed ? 'demo_qa_passed' : 'demo_qa_failed', 'business', businessId, { demoId, failures: qa.failures });
+  log('orochimaru', 'demo_built', 'business', businessId, { demoId, version, copySource, direction: direction.name, photos: photos.length });
+  log('itachi', qa.passed ? 'demo_qa_passed' : 'demo_qa_failed', 'business', businessId, { demoId, failures: qa.failures, browser: browser.ran ? `${browser.results.filter((x) => x.ok).length}/${browser.results.length} breakpoints` : browser.reason });
   if (qa.passed) advanceStage(businessId, 'demo_built', 'orochimaru');
-  return { demoId, version, dir, copySource, qa };
+  return { demoId, version, dir, copySource, qa, design };
 }
