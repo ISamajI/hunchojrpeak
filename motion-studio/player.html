@@ -1,0 +1,165 @@
+<!doctype html>
+<!--
+  Motion Studio player — no keyframes.
+  Every visual is a pure function of the frame number: seek(frame) fully redraws the stage.
+  That makes renders deterministic and lets an agent change one JSON value and re-render.
+
+  Preview:  node render.cjs --serve           then open http://localhost:4173/player.html?scene=scenes/demo.json
+  Render:   node render.cjs scenes/demo.json  (see README)
+-->
+<html><head><meta charset="utf-8"><title>Motion Studio</title>
+<style>
+  :root{--bg:#0b0202;--glow:#5a0b08;--accent:#e5261f;--text:#fff}
+  html,body{margin:0;background:#000;overflow:hidden}
+  #stage{position:absolute;left:0;top:0;transform-origin:0 0;overflow:hidden;color:var(--text);
+    font-family:"Inter","Helvetica Neue",Arial,sans-serif;background:var(--bg)}
+  .layer{position:absolute;inset:0}
+  #bg{background:radial-gradient(ellipse 70% 45% at 50% 42%,var(--glow),transparent 70%)}
+  #grain{background:repeating-linear-gradient(0deg,rgba(255,255,255,.015) 0 2px,transparent 2px 4px);mix-blend-mode:overlay}
+  .title{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-weight:900;letter-spacing:-.03em}
+  .title .ln{font-size:118px;line-height:1.02;white-space:nowrap}
+  .title.slam .ln:first-child{font-size:380px;color:var(--accent);line-height:.9}
+  .acc{color:var(--accent)}
+  .strike{position:relative}.strike:after{content:"";position:absolute;left:-2%;right:var(--sr,102%);top:52%;height:12px;background:var(--text)}
+  .phone-wrap{display:flex;align-items:center;justify-content:center;perspective:2400px}
+  .phone{position:relative;width:390px;height:844px;border-radius:64px;padding:16px;background:linear-gradient(145deg,#3a3a3e,#0d0d0f);
+    box-shadow:0 0 0 3px #555 inset,0 60px 140px rgba(0,0,0,.7),0 0 120px rgba(229,38,31,.25);transform-style:preserve-3d}
+  .phone iframe{width:390px;height:844px;border:0;border-radius:50px;display:block;pointer-events:none}
+  .phone .sheen{position:absolute;inset:16px;border-radius:50px;pointer-events:none;background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.18) 50%,transparent 65%);background-size:300% 100%}
+  .panel{position:absolute;background:rgba(20,6,6,.82);border:2px solid rgba(255,255,255,.14);border-radius:22px;padding:22px 26px;
+    font:500 30px/1.5 "JetBrains Mono","SFMono-Regular",Menlo,monospace;color:#ddd;backdrop-filter:blur(8px);box-shadow:0 30px 80px rgba(0,0,0,.6)}
+  .panel .hd{font-size:24px;color:#999;margin-bottom:10px}.panel .hd b{color:#fff}
+  .panel .l{white-space:pre;overflow:hidden}.panel .l.hl{color:#fff;background:rgba(229,38,31,.22);border-left:6px solid var(--accent);margin-left:-26px;padding-left:20px}
+  .panel .ln{color:#666;display:inline-block;width:62px}
+  .counter{display:flex;align-items:center;justify-content:center;font-weight:900;font-size:170px;color:var(--accent);letter-spacing:-.04em;
+    text-shadow:0 0 40px rgba(229,38,31,.8),0 0 120px rgba(229,38,31,.5)}
+  #captions{display:flex;align-items:flex-end;justify-content:center;padding-bottom:300px;pointer-events:none}
+  .cap{font-weight:800;font-size:84px;letter-spacing:-.02em;display:flex;gap:22px;align-items:center;text-shadow:0 6px 30px rgba(0,0,0,.6)}
+  .cap .pill{background:var(--accent);padding:2px 26px 8px;border-radius:18px}
+</style></head>
+<body>
+<div id="stage">
+  <div id="bg" class="layer"></div>
+  <div id="shots" class="layer"></div>
+  <div id="captions" class="layer"></div>
+  <div id="grain" class="layer"></div>
+</div>
+<script>
+// ---------- math helpers: everything is f(frame) ----------
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const ease={
+  outCubic:t=>1-Math.pow(1-t,3),
+  inOutCubic:t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2,
+  outBack:t=>{const c=1.70158,c3=c+1;return 1+c3*Math.pow(t-1,3)+c*Math.pow(t-1,2)},
+  outExpo:t=>t===1?1:1-Math.pow(2,-10*t)
+};
+// progress of `f` through [a, a+len], eased
+const prog=(f,a,len,e=ease.outCubic)=>e(clamp((f-a)/len));
+const range=v=>Array.isArray(v)?v:[v,v];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+// {word} = accent colour, ~word~ = strike-through (animated)
+const markup=s=>esc(s).replace(/\{(.+?)\}/g,'<span class="acc">$1</span>').replace(/~(.+?)~/g,'<span class="strike">$1</span>');
+
+let scene, stage, shotEls={};
+const params=new URLSearchParams(location.search);
+
+async function load(){
+  const src=params.get("scene")||"scenes/demo.json";
+  scene=await (await fetch(src,{cache:"no-store"})).json();
+  const m=scene.meta, th=m.theme||{};
+  for(const k of ["bg","glow","accent","text"]) if(th[k]) document.documentElement.style.setProperty("--"+k,th[k]);
+  stage=document.getElementById("stage");
+  stage.style.width=m.width+"px"; stage.style.height=m.height+"px";
+  const fit=()=>{const s=params.has("render")?1:Math.min(innerWidth/m.width,innerHeight/m.height);stage.style.transform=`scale(${s})`};
+  fit(); addEventListener("resize",fit);
+  build();
+  // wait for iframes (screens) and fonts so the first rendered frame is complete
+  await Promise.all([...document.querySelectorAll("iframe")].map(f=>new Promise(r=>{if(f.dataset.loaded)r();else f.addEventListener("load",r,{once:true})})));
+  await document.fonts.ready;
+  seek(0);
+}
+
+function build(){
+  const host=document.getElementById("shots");
+  for(const s of scene.shots){
+    const el=document.createElement("div"); el.className="layer"; el.style.display="none";
+    if(s.type==="title"){
+      el.classList.add("title"); if(s.variant) el.classList.add(s.variant);
+      el.innerHTML=s.lines.map(l=>`<div class="ln">${markup(l)}</div>`).join("");
+    } else if(s.type==="phone"){
+      el.classList.add("phone-wrap");
+      el.innerHTML=`<div class="phone"><iframe src="${esc(s.screen)}"></iframe><div class="sheen"></div></div>`;
+      el.querySelector("iframe").addEventListener("load",e=>e.target.dataset.loaded=1,{once:true});
+      if(s.code) el.appendChild(codePanel(s.code));
+    } else if(s.type==="code"){
+      el.style.display="none"; el.classList.add("phone-wrap"); const p=codePanel(s,true); p.style.position="relative"; p.style.width="860px"; el.appendChild(p);
+    } else if(s.type==="counter"){
+      el.classList.add("counter");
+    }
+    host.appendChild(el); shotEls[s.id]=el;
+  }
+}
+function codePanel(c,inline=false){
+  const p=document.createElement("div"); p.className="panel";
+  if(!inline){p.style.left="60px";p.style.top="1180px";p.style.width="880px";}
+  p.innerHTML=`<div class="hd"><b>${esc(c.file)}</b> · ${esc(c.note||"")}</div>`+
+    c.lines.map((l,i)=>`<div class="l${i===c.highlight?" hl":""}" data-t="${esc(l)}"><span class="ln">${i+1}</span><span class="tx"></span></div>`).join("");
+  return p;
+}
+// typewriter: reveal characters as a function of local frame
+function typeLines(panel,local,cps=2.2){
+  let budget=Math.floor(local*cps);
+  panel.querySelectorAll(".l").forEach(l=>{const t=l.dataset.t;const n=Math.max(0,Math.min(t.length,budget));budget-=t.length;l.querySelector(".tx").textContent=t.slice(0,n)});
+}
+
+// ---------- the only entry point a renderer needs ----------
+function seek(f){
+  const m=scene.meta;
+  // beat pulse from bpm (no audio analysis needed); 0..1 spike on each beat
+  const fpb=m.bpm?m.fps*60/m.bpm:Infinity, beat=Math.pow(1-((f%fpb)/fpb),4);
+  document.getElementById("bg").style.opacity=String(.75+.25*beat);
+
+  for(const s of scene.shots){
+    const el=shotEls[s.id], on=f>=s.start&&f<s.end; el.style.display=on?"":"none"; if(!on) continue;
+    const L=f-s.start, D=s.end-s.start, out=1-prog(f,s.end-8,8,ease.inOutCubic);
+    if(s.type==="title"){
+      el.querySelectorAll(".ln").forEach((ln,i)=>{
+        const t=prog(L,i*6,14,s.variant==="slam"?ease.outBack:ease.outExpo);
+        ln.style.transform=`translateY(${lerp(80,0,t)}px) scale(${s.variant==="slam"&&i===0?lerp(2.4,1,t):1})`;
+        ln.style.opacity=String(t*out); ln.style.filter=`blur(${lerp(14,0,t)}px)`;
+      });
+      el.querySelectorAll(".strike").forEach(st=>st.style.setProperty("--sr",lerp(102,-2,prog(L,18,12))+"%"));
+    } else if(s.type==="phone"){
+      const t=prog(L,0,D,ease.inOutCubic), ph=el.querySelector(".phone");
+      const [ry0,ry1]=range(s.rotY??0),[rx0,rx1]=range(s.rotX??0),[sc0,sc1]=range(s.scale??1), intro=prog(L,0,18,ease.outBack);
+      ph.style.transform=`translateY(${lerp(500,-120,intro)}px) rotateX(${lerp(rx0,rx1,t)}deg) rotateY(${lerp(ry0,ry1,t)}deg) scale(${lerp(sc0,sc1,t)*(1+.015*beat)})`;
+      ph.style.opacity=String(out);
+      el.querySelector(".sheen").style.backgroundPosition=`${lerp(120,-20,t)}% 0`;
+      const p=el.querySelector(".panel"); if(p){const pt=prog(L,D*.35,14);p.style.opacity=String(pt*out);p.style.transform=`translateY(${lerp(60,0,pt)}px)`;typeLines(p,L-D*.35);}
+    } else if(s.type==="code"){
+      const p=el.querySelector(".panel"), t=prog(L,0,12);
+      p.style.opacity=String(t*out); p.style.transform=`scale(${lerp(.92,1,t)})`; typeLines(p,L,1.6);
+    } else if(s.type==="counter"){
+      const t=prog(L,0,D*.6,ease.outCubic), n=Math.round(lerp(s.from??0,s.to,t));
+      el.textContent=n+(s.suffix||""); el.style.opacity=String(prog(L,0,8)*out);
+      el.style.filter=`blur(${lerp(10,0,prog(L,0,10))}px)`;
+    }
+  }
+
+  const cap=scene.captions.find(c=>f>=c.start&&f<c.end), ce=document.getElementById("captions");
+  if(!cap){ce.innerHTML="";return}
+  const words=cap.text.split(" "), local=f-cap.start;
+  ce.innerHTML=`<div class="cap">${words.map((w,i)=>{
+    const t=prog(local,i*3,8,ease.outBack); const cls=w.replace(/[.,!?:;]+$/,"")===cap.hl?"pill":"";
+    return `<span class="${cls}" style="display:inline-block;opacity:${t};transform:translateY(${lerp(40,0,t)}px) scale(${lerp(.8,1,t)})">${esc(w)}</span>`;
+  }).join("")}</div>`;
+}
+
+window.seek=seek;
+window.sceneMeta=()=>scene.meta;
+window.ready=load();
+// live preview: plays in real time unless the renderer drives it
+if(!params.has("render")) window.ready.then(()=>{let f=0;setInterval(()=>{seek(f);f=(f+1)%scene.meta.durationFrames},1000/scene.meta.fps)});
+</script>
+</body></html>
