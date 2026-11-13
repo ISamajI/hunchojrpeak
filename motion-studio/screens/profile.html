@@ -1,0 +1,28 @@
+<!doctype html>
+<!-- "The screen, as code": a phone UI built in HTML so every label/number is editable text.
+     Rendered inside the 3D phone by player.html. Edit freely; keep it 390x844 (iPhone points). -->
+<html><head><meta charset="utf-8"><style>
+  html,body{margin:0;width:390px;height:844px;background:#000;color:#fff;font-family:-apple-system,"Inter",system-ui,sans-serif;overflow:hidden}
+  .status{display:flex;justify-content:space-between;padding:16px 28px 0;font-weight:600;font-size:15px}
+  .handle{padding:18px 20px 10px;font-size:22px;font-weight:700}
+  .row{display:flex;align-items:center;gap:22px;padding:6px 20px}
+  .avatar{width:84px;height:84px;border-radius:50%;background:radial-gradient(circle,#e5261f 0 30%,#1a0000 31% 45%,#e5261f 46% 60%,#111 61%)}
+  .count{text-align:center}.count b{display:block;font-size:19px}.count span{font-size:13px;color:#bbb}
+  .bio{padding:12px 20px;font-size:14px;line-height:1.45}.bio strong{display:block}
+  .btns{display:flex;gap:8px;padding:6px 20px}.btns div{flex:1;background:#262626;border-radius:8px;padding:8px;text-align:center;font-size:13px;font-weight:600}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:18px}
+  .grid div{aspect-ratio:3/4;background:linear-gradient(160deg,#3a0705,#120101)}
+  .grid div:nth-child(3n+1){background:linear-gradient(160deg,#e5261f,#4a0503)}
+</style></head><body>
+  <div class="status"><span>9:41</span><span>●●● 100%</span></div>
+  <div class="handle">yourbrand ▾</div>
+  <div class="row">
+    <div class="avatar"></div>
+    <div class="count"><b>15</b><span>posts</span></div>
+    <div class="count"><b>443</b><span>followers</span></div>
+    <div class="count"><b>0</b><span>following</span></div>
+  </div>
+  <div class="bio"><strong>AI Motion Design</strong>I teach you how to create professional animated ads with code.</div>
+  <div class="btns"><div>Edit profile</div><div>Share profile</div></div>
+  <div class="grid"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+</body></html>

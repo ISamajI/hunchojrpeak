@@ -1,0 +1,8 @@
+{
+  "name": "akamaru",
+  "version": "0.6.0",
+  "description": "Henry's personal multi-agent assistant, organized as an org chart of eight named branches, each with three specialist subagents. Includes /akamaru, a direct-call command for the Akamaru catch-all branch.",
+  "author": {
+    "name": "Henry Jay"
+  }
+}

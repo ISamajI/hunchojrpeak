@@ -1,0 +1,52 @@
+{
+  "meta": {
+    "fps": 30,
+    "width": 1080,
+    "height": 1920,
+    "durationFrames": 360,
+    "bpm": 120,
+    "audio": null,
+    "theme": { "bg": "#0b0202", "glow": "#5a0b08", "accent": "#e5261f", "text": "#ffffff" }
+  },
+
+  "shots": [
+    { "id": "s1", "type": "title", "start": 0, "end": 75,
+      "lines": ["This entire reel", "was made", "with {Claude.}"] },
+
+    { "id": "s2", "type": "title", "start": 75, "end": 120, "variant": "slam",
+      "lines": ["{NO}", "~keyframes.~"] },
+
+    { "id": "s3", "type": "phone", "start": 120, "end": 225,
+      "screen": "screens/profile.html",
+      "rotY": [-35, 18], "rotX": [14, -6], "scale": [0.85, 1.0],
+      "code": { "file": "ProfileScreen.html", "note": "the screen, as code",
+        "lines": [
+          "<div class=\"handle\">yourbrand</div>",
+          "<Count n=\"15\" label=\"posts\" />",
+          "<Count n=\"443\" label=\"followers\" />",
+          "<Count n=\"0\" label=\"following\" />",
+          "<p>AI Motion Design</p>"
+        ], "highlight": 2 } },
+
+    { "id": "s4", "type": "code", "start": 225, "end": 285,
+      "file": "scenes/demo.json", "note": "edited",
+      "lines": [
+        "\"id\": \"s5\",",
+        "\"start\": 285,",
+        "\"to\": 443,"
+      ], "highlight": 2 },
+
+    { "id": "s5", "type": "counter", "start": 285, "end": 360,
+      "from": 0, "to": 443, "suffix": " of you" }
+  ],
+
+  "captions": [
+    { "start": 0,   "end": 40,  "text": "This entire reel", "hl": "reel" },
+    { "start": 40,  "end": 75,  "text": "made with Claude", "hl": "Claude" },
+    { "start": 75,  "end": 120, "text": "no keyframes", "hl": "keyframes" },
+    { "start": 120, "end": 165, "text": "The screen", "hl": "screen" },
+    { "start": 165, "end": 225, "text": "It's real code", "hl": "code" },
+    { "start": 225, "end": 285, "text": "Change one line", "hl": "line" },
+    { "start": 285, "end": 360, "text": "and re-render", "hl": "re-render" }
+  ]
+}
