@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "getlayers": {
+      "type": "http",
+      "url": "https://mcp.getlayers.ai/mcp"
+    }
+  }
+}
