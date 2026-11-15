@@ -1,6 +1,6 @@
 {
   "name": "jarvis",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "description": "Henry's personal multi-agent assistant, organized as an org chart of eight named branches, each with three specialist subagents.",
   "author": {
     "name": "Henry Jay"

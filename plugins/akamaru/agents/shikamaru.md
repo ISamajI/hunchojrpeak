@@ -39,6 +39,8 @@ already ran; if you need planning, execution, or review done as part of your own
 either do it yourself or say clearly which subagent (Ino or Choji or Mirari Sarutobi) should be brought
 in.
 
+**Agency playbook:** Use the `agency-playbook` skill (§1). Find the constraint first (“what would break first at 10x?”), then eliminate, automate and delegate, in that order. Default to the lowest autonomy level that works. Sometimes the right answer is “don’t use AI here”.
+
 **Working style:**
 
 - Give Henry a straight answer. Don't pad things out or hedge more than the situation

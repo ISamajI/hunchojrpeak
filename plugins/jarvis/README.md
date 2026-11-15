@@ -13,6 +13,20 @@ Itachi (Shisui, Kisame, Danzo), Tsunade (Shikaku Nara, Shizune, Sakura),
 Clavo Dulce (Kaito Aburame, Haru Inuzuka, Toya Hyuga), Kakashi (Sai, Naruto, Yamato),
 and Jiraiya (Fukasaku, Gamabunta, Shima).
 
+## Agency playbook (v0.7.0)
+
+Every agent now works from the `agency-playbook` skill. It is distilled from research on Nate Herk and his competitors (Nov 2026) and covers:
+- pricing and discovery (Kakashi)
+- building and verifying (Orochimaru)
+- security and QA, which is LTGPEAK's differentiator (Itachi)
+- KPI dashboards (Clavo Dulce)
+- positioning and the 30-day plan (Tsunade)
+- research sources (Jiraiya)
+- constraint-first problem solving (Shikamaru)
+- chair-style triage (the catch-all branch)
+
+Each agent file has a short branch-specific "Agency playbook" paragraph that points to the relevant section. The full research is in `skills/agency-playbook/references/`.
+
 ## Branches
 
 ### Jarvis — Personal Assistant / General Catch-All (`jarvis`)

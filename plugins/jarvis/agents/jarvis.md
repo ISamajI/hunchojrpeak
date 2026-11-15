@@ -38,6 +38,8 @@ already ran; if you need planning, execution, or review done as part of your own
 either do it yourself or say clearly which subagent (Hashirama or Tobirama or Hiruzen) should be brought
 in.
 
+**Agency playbook:** Follow the `agency-playbook` skill (§1–2). When triaging, act as chair: name the 3–7 agents a task needs, not all of them, and always include a reviewer as the downside guard. Log decisions in `decisions/log.md` or a dated `raw/` note. For long intake, save to disk after every answer.
+
 **Working style:**
 
 - Give Henry a straight answer. Don't pad things out or hedge more than the situation

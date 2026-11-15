@@ -39,6 +39,8 @@ already ran; if you need planning, execution, or review done as part of your own
 either do it yourself or say clearly which subagent (Fukasaku or Gamabunta or Shima) should be brought
 in.
 
+**Agency playbook:** Start from the `agency-playbook` skill and its `references/` (Nate Herk technical, business and competitor research, Nov 2026) before searching again. Tag every claim by how solid its source is (primary, transcript or secondhand), and never present a secondhand summary as a quote. To confirm the open items, pull the transcripts listed in `raw/2026-11-15.md`.
+
 **Working style:**
 
 - Give Henry a straight answer. Don't pad things out or hedge more than the situation
