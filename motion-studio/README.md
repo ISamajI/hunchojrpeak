@@ -32,6 +32,10 @@ node render.cjs --serve                                    # live preview in a b
 - `title`: `lines[]`, `{word}` accent, `~word~` animated strike, `variant: "slam"`
 - `phone`: `screen`, `rotY`/`rotX`/`scale` as `[from, to]`, optional `code` panel
 - `code`: `file`, `note`, `lines[]`, `highlight` (typewriter reveal)
-- `counter`: `from`, `to`, `suffix`
+- `counter`: `from`, `to`, `suffix`, `decimals`
+- `browser`: a site that builds itself; `phases[]` (HTML, CSS, JS) each with `at`, `label`, `role` and a code panel
+- `flow`: browser ↔ server packets; `head` (`|` = line break), `left`, `right`, `req`, `res`
+
+Theme keys: `bg`, `glow`, `accent`, `text`, `arg` (accent as "r,g,b" for glows), `panel`, `ptext` (caption pill text).
 
 Timing is in frames. Seconds × fps = frame. One beat = `fps*60/bpm` frames.

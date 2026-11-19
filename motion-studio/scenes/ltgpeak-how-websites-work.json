@@ -1,0 +1,58 @@
+{
+  "meta": {
+    "fps": 30, "width": 1080, "height": 1920, "durationFrames": 750, "bpm": 120, "audio": null,
+    "theme": { "bg": "#05070d", "glow": "#0b3550", "accent": "#22e3ff", "text": "#ffffff",
+               "arg": "34,227,255", "panel": "rgba(6,14,24,.88)", "ptext": "#000000" }
+  },
+  "shots": [
+    { "id": "hook", "type": "title", "start": 0, "end": 66,
+      "lines": ["You use {websites}", "every day."] },
+    { "id": "q", "type": "title", "start": 66, "end": 114,
+      "lines": ["Ever wonder", "how they {work?}"] },
+
+    { "id": "build", "type": "browser", "start": 114, "end": 354,
+      "url": "novacuts.com", "brand": "NOVA<span>CUTS</span>",
+      "headline": "Cuts that<br><em>turn heads.</em>",
+      "sub": "Fades, braids and beard work. Walk in fresh, walk out a different person.",
+      "cta": "Book now", "toast": "✓ Booked: Sat 2:30pm",
+      "cards": ["Fades", "Braids", "Beard"],
+      "stats": [ { "to": 4.9, "suffix": "★", "label": "rating" }, { "to": 1200, "suffix": "+", "label": "clients" } ],
+      "phases": [
+        { "at": 0, "label": "HTML", "role": "the skeleton", "file": "index.html", "note": "structure",
+          "lines": ["<nav>NOVA CUTS</nav>", "<h1>Cuts that turn heads.</h1>", "<button>Book now</button>"], "highlight": 1 },
+        { "at": 80, "label": "CSS", "role": "the style", "file": "style.css", "note": "looks",
+          "lines": ["body { background: #0a0c12; }", "h1 { font-size: 86px; }", "button { border-radius: 999px; }"], "highlight": 2 },
+        { "at": 160, "label": "JS", "role": "the brain", "file": "app.js", "note": "behavior",
+          "lines": ["button.onclick = () => {", "  book(\"Sat 2:30pm\");", "};"], "highlight": 1 }
+      ] },
+
+    { "id": "flow", "type": "flow", "start": 354, "end": 444,
+      "head": "You tap a link.|A server sends {code}.",
+      "left": "Your phone", "leftSub": "the browser", "right": "Server", "rightSub": "where the site lives",
+      "req": "GET novacuts.com", "res": "HTML · CSS · JS" },
+
+    { "id": "speed", "type": "counter", "start": 444, "end": 504, "from": 9.9, "to": 0.3, "decimals": 1, "suffix": "s" },
+
+    { "id": "ours", "type": "phone", "start": 504, "end": 600,
+      "screen": "screens/ltgpeak.html", "rotY": [-32, 16], "rotX": [12, -4], "scale": [0.86, 1.02],
+      "code": { "file": "ltgpeak.html", "note": "designed + coded by us",
+        "lines": ["<h1>Websites built to", "  <em>peak.</em></h1>", "<a class=\"btn\">Start your site</a>"], "highlight": 1 } },
+
+    { "id": "we", "type": "title", "start": 600, "end": 660,
+      "lines": ["We {design} it.", "We {code} it.", "We {launch} it."] },
+
+    { "id": "cta", "type": "title", "start": 660, "end": 750, "variant": "brand",
+      "lines": ["{LTG}", "{PEAK}", "Let's build yours."] }
+  ],
+  "captions": [
+    { "start": 0,   "end": 66,  "text": "Every site you use", "hl": "site" },
+    { "start": 66,  "end": 114, "text": "is just 3 languages", "hl": "3" },
+    { "start": 114, "end": 194, "text": "HTML builds the structure", "hl": "HTML" },
+    { "start": 194, "end": 274, "text": "CSS makes it beautiful", "hl": "CSS" },
+    { "start": 274, "end": 354, "text": "JavaScript makes it work", "hl": "JavaScript" },
+    { "start": 354, "end": 444, "text": "Sent to you instantly", "hl": "instantly" },
+    { "start": 444, "end": 504, "text": "Built in under a second", "hl": "second" },
+    { "start": 504, "end": 600, "text": "That's what we do", "hl": "we" },
+    { "start": 660, "end": 750, "text": "DM “PEAK” to start", "hl": "“PEAK”" }
+  ]
+}
