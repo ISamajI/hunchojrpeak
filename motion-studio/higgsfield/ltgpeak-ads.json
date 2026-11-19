@@ -1,0 +1,30 @@
+{
+  "defaults": {
+    "niche": "Web design and development agency",
+    "language": "English",
+    "target_audience": "Small business owners, barbershops, landscapers, restaurants, creators and local brands with no website or an outdated one. Ages 22-45, scrolling Instagram and TikTok.",
+    "batch_size": 2
+  },
+  "ads": [
+    {
+      "name": "before-after",
+      "aspect_ratio": "9:16",
+      "prompt": "Split-screen ad for LTG PEAK, a web design agency. Left half: an ugly plain white wireframe website with Times New Roman text and grey dashed boxes, labelled 'BEFORE'. Right half: the same site redesigned as a premium dark website with glowing electric cyan (#22e3ff) accents, bold modern sans-serif headline and a glowing pill button, labelled 'AFTER'. Headline across the top: 'Your website, but it actually gets clients.' Bottom: 'LTG PEAK - DM \"PEAK\"'. Near-black background, cinematic lighting, scroll-stopping."
+    },
+    {
+      "name": "three-languages",
+      "aspect_ratio": "9:16",
+      "prompt": "Bold educational ad for LTG PEAK web design agency. Three stacked glowing glass cards on a near-black background: 'HTML - the skeleton', 'CSS - the style', 'JS - the brain', each with a small code snippet. Electric cyan (#22e3ff) neon glow. Headline: 'Every website is just 3 languages.' Footer: 'We write all three. LTG PEAK'. Premium tech aesthetic, high contrast."
+    },
+    {
+      "name": "phone-hero",
+      "aspect_ratio": "4:5",
+      "prompt": "Product-style hero ad: a sleek phone floating at an angle on a reflective black surface, its screen showing a premium dark website with the headline 'Websites built to peak.' in white with 'peak.' in electric cyan, and a glowing cyan 'Start your site' button. Soft studio softbox reflections, cyan rim light. Ad copy: 'Designed. Coded. Launched.' and logo text 'LTG PEAK'. Luxury tech commercial look."
+    },
+    {
+      "name": "no-website",
+      "aspect_ratio": "9:16",
+      "prompt": "Punchy ad for LTG PEAK web design agency. A local barbershop owner looking at a phone that shows a 404 'site not found' page, moody dark lighting, then large bold text: 'No website = invisible.' Below in electric cyan: 'We build sites that bring customers to you.' Call to action button graphic: 'DM PEAK'. Cinematic, high contrast, near-black and cyan palette."
+    }
+  ]
+}
