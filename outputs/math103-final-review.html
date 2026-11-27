@@ -1,0 +1,1601 @@
+<title>Math 103 Final Review</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: one readable column of worked-problem cards, sticky chapter bar, practice drill at the top. */
+:root{
+  --bg:#eef1f7; --paper:#ffffff; --ink:#172033; --muted:#566178; --line:#d9dfeb;
+  --accent:#2a52c4; --accent-ink:#ffffff; --accent-soft:#e3e9fa;
+  --mark:#ffe27a; --mark-ink:#2e2500; --good:#17805a; --good-soft:#dcf2e8;
+  --grid:#e9edf5; --axis:#7c869b; --curve:#2a52c4; --pt:#d4572a;
+  --f-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f131b; --paper:#171c27; --ink:#e6e9f1; --muted:#9ba5ba; --line:#2a3243;
+  --accent:#8eaaff; --accent-ink:#0f131b; --accent-soft:#1e2945;
+  --mark:#5a4a10; --mark-ink:#ffeaa3; --good:#5ed29b; --good-soft:#163427;
+  --grid:#212938; --axis:#7d889f; --curve:#8eaaff; --pt:#ff8a5c; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0f131b; --paper:#171c27; --ink:#e6e9f1; --muted:#9ba5ba; --line:#2a3243;
+  --accent:#8eaaff; --accent-ink:#0f131b; --accent-soft:#1e2945;
+  --mark:#5a4a10; --mark-ink:#ffeaa3; --good:#5ed29b; --good-soft:#163427;
+  --grid:#212938; --axis:#7d889f; --curve:#8eaaff; --pt:#ff8a5c; color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55;
+  padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));padding-block:0 64px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top, 0px);z-index:10;background:var(--bg)}
+.wrap{max-width:780px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;line-height:1.15}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+header.top{padding-block:36px 18px}
+.eyebrow{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(32px,6vw,48px);font-weight:800;letter-spacing:-.02em;margin-top:6px}
+.lede{color:var(--muted);max-width:62ch;margin:10px 0 0}
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:20px;padding:0;list-style:none;counter-reset:how}
+.how li{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;font-size:15px;counter-increment:how}
+.how li b{display:block;font-family:var(--f-display);font-size:16px}
+.how li b::before{content:counter(how) ". ";color:var(--accent)}
+@media (max-width:620px){.how{grid-template-columns:1fr}}
+
+nav.chapters{position:sticky;top:env(safe-area-inset-top, 0px);z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line);margin-bottom:8px}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:6px 12px;font-size:14px;white-space:nowrap;text-decoration:none;display:inline-flex;gap:6px;align-items:center}
+.chip .ct{font-family:var(--f-mono);font-size:11px;color:var(--muted)}
+.chip.done .ct{color:var(--good)}
+.chip.drill{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+
+section.chapter{padding-top:26px;scroll-margin-top:70px}
+.ch-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;margin-bottom:6px}
+.ch-head h2{font-size:28px;font-weight:700}
+.ch-head .n{font-family:var(--f-mono);font-size:12px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:4px}
+.ch-sub{color:var(--muted);margin:0 0 14px;max-width:62ch}
+.prog{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.group-label{font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:22px 0 10px;display:flex;align-items:center;gap:10px}
+.group-label::after{content:"";flex:1;height:1px;background:var(--line)}
+
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:12px;scroll-margin-top:70px}
+.card.got{border-color:var(--good)}
+.card-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.tag{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.tag b{color:var(--ink);font-weight:500}
+.gotbtn{border:1px solid var(--line);background:transparent;color:var(--muted);border-radius:999px;padding:3px 10px;font-size:13px}
+.gotbtn[aria-pressed="true"]{background:var(--good-soft);color:var(--good);border-color:var(--good)}
+
+.prompt{font-size:18px;min-width:0}
+.prompt .katex-display{margin:8px 0}
+ol.steps{list-style:none;margin:12px 0 0;padding:0;counter-reset:st;display:grid;gap:8px}
+ol.steps li{counter-increment:st;display:grid;grid-template-columns:28px minmax(0,1fr);gap:8px;align-items:start;animation:in .25s ease}
+ol.steps li::before{content:counter(st);font-family:var(--f-mono);font-size:12px;width:24px;height:24px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;margin-top:2px}
+ol.steps li > div{min-width:0}
+@keyframes in{from{opacity:.0;transform:translateY(-3px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){ol.steps li{animation:none}}
+.answer{margin-top:12px;background:var(--mark);color:var(--mark-ink);border-radius:8px;padding:10px 14px;min-width:0}
+.answer .lbl{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;display:block;opacity:.8}
+.tip{margin-top:8px;font-size:15px;color:var(--muted);border-left:3px solid var(--accent);padding-left:10px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:8px;padding:7px 12px;font-size:14px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-weight:700}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.45;cursor:default}
+.practice{margin-top:14px;border-top:1px dashed var(--line);padding-top:12px}
+.practice-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.practice-head .t{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.redo-note{font-size:14px;color:var(--muted);margin-top:10px}
+
+.drill-box{background:var(--paper);border:2px solid var(--accent);border-radius:14px;padding:18px;margin-top:10px}
+.drill-box h2{font-size:24px}
+.drill-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+.drill-row select{font:inherit;font-size:15px;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);max-width:100%;min-width:0;flex:1 1 220px}
+.drill-out{min-height:20px}
+.streak{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+
+table.tb{border-collapse:collapse;margin:4px 0;font-variant-numeric:tabular-nums}
+.tb-wrap{overflow-x:auto;max-width:100%}
+table.tb td,table.tb th{border:1px solid var(--line);padding:4px 10px;text-align:center}
+table.tb th{background:var(--accent-soft);font-weight:700}
+.plot{width:100%;max-width:360px;height:auto;display:block;margin:4px 0;background:var(--paper);border:1px solid var(--line);border-radius:8px}
+.plot .gl{stroke:var(--grid);stroke-width:1}
+.plot .ax{stroke:var(--axis);stroke-width:1.4}
+.plot .cv{stroke:var(--curve);stroke-width:2.6;fill:none}
+.plot .as{stroke:var(--pt);stroke-width:1.4;stroke-dasharray:5 4}
+.plot .pt{fill:var(--pt)}
+.plot text{fill:var(--muted);font-size:10px;font-family:var(--f-mono)}
+.katex-display{overflow-x:auto;overflow-y:hidden;max-width:100%}
+.prompt,ol.steps li > div,.answer,.tip{overflow-x:auto;overflow-y:hidden}
+.card,.drill-box{min-width:0;overflow:hidden}
+math{font-size:1.07em}
+.katex-display math{font-size:1.15em}
+footer{color:var(--muted);font-size:14px;margin-top:40px;text-align:center}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Math 103 · Intermediate Algebra</div>
+    <h1>Final Exam Review</h1>
+    <p class="lede">Every problem from your review packet, worked out one step at a time. The goal is reps: watch it done once, then do it again with new numbers until it's automatic.</p>
+    <ol class="how">
+      <li><b>Try it on paper</b>Cover the steps. Get as far as you can.</li>
+      <li><b>Reveal one step</b>Stuck? Tap "Next step" to see only the next move.</li>
+      <li><b>Do a new one</b>"New one like this" gives fresh numbers. Repeat until you can mark it "Got it".</li>
+    </ol>
+  </header>
+
+  <nav class="chapters" aria-label="Chapters"><div class="chips" id="chips"></div></nav>
+
+  <section class="chapter" id="drill">
+    <div class="drill-box">
+      <span class="eyebrow">Practice mode</span>
+      <h2>Unlimited reps</h2>
+      <p class="ch-sub" style="margin:6px 0 0">Pick a problem type (or mix everything) and get a fresh problem every time, with the full worked solution behind it.</p>
+      <div class="drill-row">
+        <select id="drill-topic" aria-label="Problem type"></select>
+        <button class="btn primary" id="drill-go">New problem</button>
+        <span class="streak" id="drill-count"></span>
+      </div>
+      <div class="drill-out" id="drill-out"></div>
+    </div>
+  </section>
+
+  <main id="chapters"></main>
+  <footer>Your "Got it" marks are saved in this browser only.</footer>
+</div>
+
+<script type="text/plain" id="data">
+@ch 1 | Absolute Value & Inequalities | Get the absolute value alone, then split it. Flip the inequality any time you multiply or divide by a negative.
+
+# c1-r1 | Review 1 | absEq
+Q: Solve: $\left|\frac{1}{2}x+3\right|-4=4$
+S: Get the absolute value alone: add $4$ to both sides. $$\left|\tfrac{1}{2}x+3\right| = 8$$
+S: If the absolute value is $8$, the inside is either $8$ or $-8$. Split into two equations.
+S: $$\tfrac{1}{2}x+3=8 \;\Rightarrow\; \tfrac{1}{2}x=5 \;\Rightarrow\; x=10$$
+S: $$\tfrac{1}{2}x+3=-8 \;\Rightarrow\; \tfrac{1}{2}x=-11 \;\Rightarrow\; x=-22$$
+A: $x=10$ or $x=-22$
+T: Always isolate the bars first. Never split while something is still added outside them.
+
+# c1-r2 | Review 2 | absEq
+Q: Solve: $-5=-8+|2y-3|$
+S: Isolate the absolute value: add $8$ to both sides. $$3=|2y-3|$$
+S: Split: $2y-3=3$ or $2y-3=-3$
+S: $$2y-3=3 \;\Rightarrow\; 2y=6 \;\Rightarrow\; y=3$$
+S: $$2y-3=-3 \;\Rightarrow\; 2y=0 \;\Rightarrow\; y=0$$
+A: $y=3$ or $y=0$
+
+# c1-r3 | Review 3 | absAbs
+Q: Solve: $|8x+11|=|8x+5|$
+S: Two absolute values are equal when the insides are **equal** or **opposites**. Try both.
+S: Equal: $8x+11=8x+5 \Rightarrow 11=5$. That's false, so this case gives nothing.
+S: Opposites: $$8x+11=-(8x+5) = -8x-5$$
+S: $$16x=-16 \;\Rightarrow\; x=-1$$
+S: Check: $|8(-1)+11|=|3|=3$ and $|8(-1)+5|=|-3|=3$ ✓
+A: $x=-1$
+
+# c1-r4 | Review 4 | linIneq
+Q: Solve: $x+8>42$
+S: Subtract $8$ from both sides: $$x>34$$
+S: In interval notation, $34$ is not included, so use a parenthesis.
+A: $x>34$, or $(34,\infty)$
+
+# c1-r5 | Review 5 | compoundIneq
+Q: Solve: $-2<3x-1\le 5$
+S: Whatever you do, do it to all three parts. Add $1$: $$-1<3x\le 6$$
+S: Divide all three parts by $3$: $$-\tfrac{1}{3}<x\le 2$$
+A: $-\frac{1}{3}<x\le 2$, or $\left(-\frac{1}{3},\,2\right]$
+
+# c1-r6 | Review 6 | linIneq
+Q: Solve: $-\frac{3}{5}x-1\le 8$ or $-\frac{2}{3}x\ge 16$
+S: Solve each piece on its own. First piece, add $1$: $$-\tfrac{3}{5}x\le 9$$
+S: Multiply by $-\tfrac{5}{3}$. Multiplying by a negative **flips** the sign: $$x\ge -15$$
+S: Second piece: multiply by $-\tfrac{3}{2}$ and flip: $$x\le -24$$
+S: "Or" means keep everything that works in **either** piece (a union).
+A: $x\le -24$ or $x\ge -15$, or $(-\infty,-24]\cup[-15,\infty)$
+
+# c1-r7 | Review 7 | absGreater
+Q: Solve: $|3x-8|\ge 9$
+S: "Greater than" means the inside is far from zero, so split into two pieces going outward (OR): $$3x-8\ge 9 \quad\text{or}\quad 3x-8\le -9$$
+S: $$3x\ge 17 \;\Rightarrow\; x\ge \tfrac{17}{3}$$
+S: $$3x\le -1 \;\Rightarrow\; x\le -\tfrac{1}{3}$$
+A: $x\le -\frac{1}{3}$ or $x\ge\frac{17}{3}$, or $\left(-\infty,-\frac{1}{3}\right]\cup\left[\frac{17}{3},\infty\right)$
+T: Memory hook: "Less than" → sandwich (AND). "Greater than" → split apart (OR).
+
+# c1-r8 | Review 8 | absLess
+Q: Solve: $6\ge|2x-5|-5$
+S: Isolate the absolute value: add $5$ to both sides. $$11\ge|2x-5| \quad\text{same as}\quad |2x-5|\le 11$$
+S: "Less than" → sandwich: $$-11\le 2x-5\le 11$$
+S: Add $5$ to all three parts: $$-6\le 2x\le 16$$
+S: Divide by $2$: $$-3\le x\le 8$$
+A: $-3\le x\le 8$, or $[-3,\,8]$
+
+# c1-r9 | Review 9 |
+Q: The normal range for the enzyme ADA is between $9$ and $33$ IU. Let $x$ be the ADA level. Write an inequality for the normal range, then a compound inequality for an abnormal range.
+S: Normal means between 9 and 33 (endpoints included): $$9\le x\le 33$$
+S: Abnormal means outside that range, either too low or too high: $$x<9 \quad\text{or}\quad x>33$$
+S: Bonus (absolute value form): the middle is $\frac{9+33}{2}=21$ and the distance to each end is $12$. Normal: $|x-21|\le 12$. Abnormal: $|x-21|>12$.
+A: Normal: $9\le x\le 33$. Abnormal: $x<9$ or $x>33$.
+
+# c1-a1 | After class 1 | absAbs
+Q: Solve: $|3x+4|=|x-12|$
+S: The insides are either **equal** or **opposites**.
+S: Equal: $$3x+4=x-12 \;\Rightarrow\; 2x=-16 \;\Rightarrow\; x=-8$$
+S: Opposites: $$3x+4=-(x-12)=-x+12 \;\Rightarrow\; 4x=8 \;\Rightarrow\; x=2$$
+S: Check $x=-8$: $|-20|=20$ and $|-20|=20$ ✓. Check $x=2$: $|10|=10$ and $|-10|=10$ ✓
+A: $x=-8$ or $x=2$
+
+# c1-a2 | After class 2 | linIneq
+Q: Solve: $-\frac{3}{2}x+6\ge x-3$
+S: Clear the fraction: multiply every term by $2$. $$-3x+12\ge 2x-6$$
+S: Get $x$ terms on one side: subtract $2x$. $$-5x+12\ge -6$$
+S: Subtract $12$: $$-5x\ge -18$$
+S: Divide by $-5$ and **flip** the sign: $$x\le \tfrac{18}{5}$$
+A: $x\le\frac{18}{5}$, or $\left(-\infty,\frac{18}{5}\right]$
+
+# c1-a3 | After class 3 | compoundIneq
+Q: Solve: $-4\le\frac{6-2x}{5}<2$
+S: Multiply all three parts by $5$: $$-20\le 6-2x<10$$
+S: Subtract $6$ from all three parts: $$-26\le -2x<4$$
+S: Divide by $-2$ and **flip both** signs: $$13\ge x>-2$$
+S: Rewrite smallest to largest: $$-2<x\le 13$$
+A: $-2<x\le 13$, or $(-2,\,13]$
+
+# c1-a4 | After class 4 |
+Q: Solve: $2x-3>1$ and $x+4<-1$
+S: First: $2x>4 \Rightarrow x>2$
+S: Second: $x<-5$
+S: "And" means a number must work in **both**. Nothing is bigger than 2 and smaller than −5 at the same time.
+A: No solution ($\varnothing$)
+
+# c1-a5 | After class 5 |
+Q: Solve: $|3-2x|+6<2$
+S: Isolate: subtract $6$. $$|3-2x|<-4$$
+S: An absolute value is never negative, so it can never be less than $-4$.
+A: No solution ($\varnothing$)
+T: Before splitting, glance at the number on the other side. If it's negative, the answer is "no solution" or "all real numbers".
+
+# c1-a6 | After class 6 |
+Q: Solve: $|7-3x|+1>-3$
+S: Isolate: subtract $1$. $$|7-3x|>-4$$
+S: An absolute value is always $0$ or more, so it is **always** bigger than $-4$.
+A: All real numbers, $(-\infty,\infty)$
+
+# c1-a7 | After class 7 |
+Q: A piece of metal measures $15.41$ g with measurement error at most $\pm 0.01$ g. Write an absolute value equation for the possible mass $x$.
+S: Absolute value means distance. The distance from $x$ to $15.41$ is at most $0.01$.
+S: The two extreme masses satisfy $$|x-15.41|=0.01 \;\Rightarrow\; x=15.40 \text{ or } x=15.42$$
+S: All possible masses: $$|x-15.41|\le 0.01 \;\Rightarrow\; 15.40\le x\le 15.42$$
+A: $|x-15.41|=0.01$ (extremes $15.40$ g and $15.42$ g); all possible masses: $|x-15.41|\le 0.01$
+
+@ch 4 | Factoring & Solving by Factoring | Always pull out the GCF first. Then count the terms: 2 terms → special patterns, 3 terms → trinomial, 4 terms → grouping.
+
+# c4-r1 | Review 1 | factorAC
+Q: Factor completely: $17y+3y^2-28$
+S: Put it in standard order (highest power first): $$3y^2+17y-28$$
+S: No common factor. Since $a=3$, use the **ac method**: $a\cdot c=3\cdot(-28)=-84$
+S: Find two numbers that multiply to $-84$ and add to $17$: $21$ and $-4$.
+S: Split the middle term: $$3y^2+21y-4y-28$$
+S: Group and factor each pair: $$3y(y+7)-4(y+7)$$
+S: Pull out the shared $(y+7)$: $$(3y-4)(y+7)$$
+A: $(3y-4)(y+7)$
+
+# c4-r2 | Review 2 | factorTri
+Q: Factor completely: $x^2-5x-4$
+S: Need two numbers that multiply to $-4$ and add to $-5$.
+S: Pairs for $-4$: $1\cdot(-4)$ adds to $-3$; $(-1)\cdot 4$ adds to $3$; $2\cdot(-2)$ adds to $0$.
+S: None add to $-5$, so it does not factor with integers.
+A: Prime (does not factor)
+
+# c4-r3 | Review 3 | factorTri
+Q: Factor completely: $3a^2+27ab+54b^2$
+S: GCF first: every term has a $3$. $$3(a^2+9ab+18b^2)$$
+S: Find two numbers that multiply to $18$ and add to $9$: $3$ and $6$.
+S: Write the factors (the $b$ rides along): $$3(a+3b)(a+6b)$$
+A: $3(a+3b)(a+6b)$
+
+# c4-r4 | Review 4 | diffSquares
+Q: Factor completely: $c^4-1$
+S: It's a difference of squares: $(c^2)^2-1^2$. Use $A^2-B^2=(A-B)(A+B)$. $$(c^2-1)(c^2+1)$$
+S: $c^2-1$ is **another** difference of squares: $(c-1)(c+1)$
+S: $c^2+1$ is a sum of squares and does not factor.
+A: $(c-1)(c+1)(c^2+1)$
+
+# c4-r5 | Review 5 | grouping
+Q: Factor completely: $xy-7x+3y-21$
+S: 4 terms → grouping. Group in pairs: $$(xy-7x)+(3y-21)$$
+S: Factor each pair: $$x(y-7)+3(y-7)$$
+S: Pull out the shared $(y-7)$: $$(x+3)(y-7)$$
+A: $(x+3)(y-7)$
+
+# c4-r6 | Review 6 |
+Q: Factor completely: $49+p^2$
+S: Rewrite: $p^2+49=p^2+7^2$. This is a **sum** of squares.
+S: A difference $A^2-B^2$ factors. A sum $A^2+B^2$ does not (with real numbers).
+A: Prime (does not factor)
+
+# c4-r7 | Review 7 | factorTri
+Q: Factor completely: $-10u^2+30u-20$
+S: GCF is $10$. Since the first term is negative, pull out $-10$ so the inside starts positive: $$-10(u^2-3u+2)$$
+S: Two numbers that multiply to $2$ and add to $-3$: $-1$ and $-2$.
+S: $$-10(u-1)(u-2)$$
+A: $-10(u-1)(u-2)$
+
+# c4-r8 | Review 8 | zeroProduct
+Q: Solve: $(2x-3)(x+5)=0$
+S: Zero product rule: if a product is $0$, one of the factors is $0$.
+S: $$2x-3=0 \;\Rightarrow\; x=\tfrac{3}{2}$$
+S: $$x+5=0 \;\Rightarrow\; x=-5$$
+A: $x=\frac{3}{2}$ or $x=-5$
+
+# c4-r9 | Review 9 | zeroProduct
+Q: Solve: $w^2-7w=0$
+S: Factor out $w$: $$w(w-7)=0$$
+S: Set each factor to $0$: $w=0$ or $w-7=0$
+A: $w=0$ or $w=7$
+T: Don't divide both sides by $w$. You'd lose the answer $w=0$.
+
+# c4-r10 | Review 10 | zeroProduct
+Q: Solve: $y^2-6y=16$
+S: Get $0$ on one side: subtract $16$. $$y^2-6y-16=0$$
+S: Two numbers that multiply to $-16$ and add to $-6$: $-8$ and $2$. $$(y-8)(y+2)=0$$
+S: $y-8=0$ or $y+2=0$
+A: $y=8$ or $y=-2$
+
+# c4-r11 | Review 11 |
+Q: A toy rocket's height is $h(x)=-\frac{x^2}{256}+x$, where $x$ is horizontal distance in feet. How far from the launch pad does it hit the ground?
+S: The rocket is on the ground when height is $0$: $$-\frac{x^2}{256}+x=0$$
+S: Factor out $x$: $$x\left(-\frac{x}{256}+1\right)=0$$
+S: $x=0$ is the launch point. Solve the other factor: $$-\frac{x}{256}+1=0 \;\Rightarrow\; \frac{x}{256}=1 \;\Rightarrow\; x=256$$
+A: $256$ feet from the launch pad
+
+# c4-a1 | After class 1 | diffSquares
+Q: Factor completely: $12t^2-75$
+S: GCF first: $3$. $$3(4t^2-25)$$
+S: $4t^2-25=(2t)^2-5^2$, a difference of squares.
+S: $$3(2t-5)(2t+5)$$
+A: $3(2t-5)(2t+5)$
+
+# c4-a2 | After class 2 | factorTri
+Q: Factor completely: $5y^2-50y+125$
+S: GCF: $5$. $$5(y^2-10y+25)$$
+S: Two numbers that multiply to $25$ and add to $-10$: $-5$ and $-5$.
+S: Same factor twice → perfect square: $$5(y-5)^2$$
+A: $5(y-5)^2$
+
+# c4-a3 | After class 3 |
+Q: Factor completely: $12q^2+14q$
+S: Biggest number that divides $12$ and $14$: $2$. Both terms have a $q$.
+S: GCF is $2q$: $12q^2\div 2q=6q$ and $14q\div 2q=7$.
+A: $2q(6q+7)$
+
+# c4-a4 | After class 4 | grouping
+Q: Factor completely: $2x^3+x^2-8x-4$
+S: 4 terms → grouping: $$(2x^3+x^2)+(-8x-4)$$
+S: Factor each pair: $$x^2(2x+1)-4(2x+1)$$
+S: Pull out $(2x+1)$: $$(x^2-4)(2x+1)$$
+S: $x^2-4$ is a difference of squares: $(x-2)(x+2)$
+A: $(x-2)(x+2)(2x+1)$
+
+# c4-a5 | After class 5 | cubes
+Q: Factor completely: $y^3-125$
+S: Both are cubes: $y^3-5^3$. Difference of cubes: $$A^3-B^3=(A-B)(A^2+AB+B^2)$$
+S: Here $A=y$ and $B=5$.
+S: $$(y-5)(y^2+5y+25)$$
+A: $(y-5)(y^2+5y+25)$
+T: Sign pattern "SOAP": Same sign, Opposite sign, Always Positive.
+
+# c4-a6 | After class 6 |
+Q: Factor completely: $x^2+8x+16-y^2$
+S: Factor the first three terms. They are a perfect square: $$x^2+8x+16=(x+4)^2$$
+S: Now it's $(x+4)^2-y^2$, a difference of squares with $A=x+4$, $B=y$.
+S: $$\big((x+4)-y\big)\big((x+4)+y\big)$$
+A: $(x+4-y)(x+4+y)$
+
+# c4-a7 | After class 7 | diffSquares
+Q: Factor completely: $r^6-256r^2$
+S: GCF: $r^2$. $$r^2(r^4-256)$$
+S: $r^4-256=(r^2)^2-16^2=(r^2-16)(r^2+16)$
+S: $r^2-16$ factors again: $(r-4)(r+4)$. The sum $r^2+16$ doesn't.
+A: $r^2(r-4)(r+4)(r^2+16)$
+
+# c4-a8 | After class 8 |
+Q: Factor completely: $(x^2+1)^2+3(x^2+1)+2$
+S: Substitute $u=x^2+1$ to make it simple: $$u^2+3u+2$$
+S: Two numbers that multiply to $2$ and add to $3$: $1$ and $2$. $$(u+1)(u+2)$$
+S: Put $x^2+1$ back in for $u$: $$(x^2+1+1)(x^2+1+2)$$
+A: $(x^2+2)(x^2+3)$
+
+# c4-a9 | After class 9 | grouping
+Q: Factor completely: $12a-6ac+2b-bc$
+S: Group: $$(12a-6ac)+(2b-bc)$$
+S: Factor each pair: $$6a(2-c)+b(2-c)$$
+S: Pull out $(2-c)$: $$(6a+b)(2-c)$$
+A: $(6a+b)(2-c)$
+
+# c4-a10 | After class 10 |
+Q: Japan's population (millions) is about $P(t)=-0.01t^2-0.062t+127.7$, where $t$ is years since 2015. (a) Find $P(4)$ and interpret. (b) Population in 2021? (c) Predict 2030.
+S: (a) Plug in $t=4$: $$P(4)=-0.01(16)-0.062(4)+127.7=-0.16-0.248+127.7=127.292$$ In 2019 ($2015+4$), Japan had about $127.29$ million people.
+S: (b) 2021 means $t=2021-2015=6$: $$P(6)=-0.01(36)-0.062(6)+127.7=-0.36-0.372+127.7=126.968$$
+S: (c) 2030 means $t=15$: $$P(15)=-0.01(225)-0.062(15)+127.7=-2.25-0.93+127.7=124.52$$
+A: (a) $127.29$ million in 2019 (b) about $126.97$ million (c) about $124.52$ million
+T: $t$ is years since 2015, not the year itself. Subtract 2015 first.
+
+@ch 5 | Rational Expressions & Equations | Factor everything first. Domain = whatever makes a denominator zero is out. In equations, multiply by the LCD and check for extraneous answers.
+
+# c5-r1 | Review 1 | domainRational
+Q: Find the domain in interval notation: $h(x)=\dfrac{2x-14}{x^2-49}$
+S: The denominator can't be $0$. Set it equal to $0$: $$x^2-49=0$$
+S: Factor: $(x-7)(x+7)=0$, so $x=7$ or $x=-7$ are not allowed.
+S: Everything else is fine. Cut the number line at $-7$ and $7$.
+A: $(-\infty,-7)\cup(-7,7)\cup(7,\infty)$
+T: Find the domain from the original function, before canceling anything.
+
+# c5-r2 | Review 2 |
+Q: Find the domain: $k(x)=\dfrac{5x-3}{7}$
+S: The denominator is $7$, which is never $0$.
+S: No $x$ value causes a problem.
+A: All real numbers, $(-\infty,\infty)$
+
+# c5-r3 | Review 3 | rationalSimp
+Q: Simplify to lowest terms: $\dfrac{9x^2-9}{3x^2+2x-5}$
+S: Top: GCF $9$, then difference of squares: $$9(x^2-1)=9(x-1)(x+1)$$
+S: Bottom (ac method): $3\cdot(-5)=-15$; numbers $5$ and $-3$. $$3x^2+5x-3x-5=x(3x+5)-1(3x+5)=(x-1)(3x+5)$$
+S: Cancel the common factor $(x-1)$: $$\frac{9(x-1)(x+1)}{(x-1)(3x+5)}$$
+A: $\dfrac{9(x+1)}{3x+5}$
+
+# c5-r4 | Review 4 |
+Q: Simplify: $\dfrac{2x-5}{25-4x^2}\cdot(2x^2-x-15)$
+S: Factor $25-4x^2=(5-2x)(5+2x)$. Notice $5-2x=-(2x-5)$, so $$25-4x^2=-(2x-5)(2x+5)$$
+S: Factor $2x^2-x-15=(2x+5)(x-3)$
+S: Put it together: $$\frac{(2x-5)(2x+5)(x-3)}{-(2x-5)(2x+5)}$$
+S: Cancel $(2x-5)$ and $(2x+5)$. What's left: $-(x-3)$
+A: $-(x-3)=3-x$
+T: Watch for opposite factors like $(5-2x)$ and $(2x-5)$. They cancel to $-1$.
+
+# c5-r5 | Review 5 |
+Q: Simplify: $\dfrac{x^2}{x-4}-\dfrac{8x-16}{x-4}$
+S: Same denominator, so subtract the tops. Put the second top in parentheses so the minus hits every term: $$\frac{x^2-(8x-16)}{x-4}=\frac{x^2-8x+16}{x-4}$$
+S: Factor the top: $x^2-8x+16=(x-4)^2$
+S: $$\frac{(x-4)^2}{x-4}=x-4$$
+A: $x-4$
+
+# c5-r6 | Review 6 |
+Q: Simplify: $\dfrac{4x}{x+1}+x+\dfrac{2}{x+1}$
+S: Combine the two fractions that already share $x+1$: $$\frac{4x+2}{x+1}$$
+S: Rewrite $x$ with the same denominator: $$x=\frac{x(x+1)}{x+1}=\frac{x^2+x}{x+1}$$
+S: Add the tops: $$\frac{x^2+x+4x+2}{x+1}=\frac{x^2+5x+2}{x+1}$$
+S: $x^2+5x+2$ doesn't factor (no integers multiply to $2$ and add to $5$), so you're done.
+A: $\dfrac{x^2+5x+2}{x+1}$
+
+# c5-r7 | Review 7 |
+Q: Solve: $\dfrac{3}{y^2-9}-\dfrac{4}{y+3}=1$
+S: Factor: $y^2-9=(y-3)(y+3)$. LCD is $(y-3)(y+3)$, and $y\ne\pm 3$.
+S: Multiply every term by the LCD: $$3-4(y-3)=(y-3)(y+3)$$
+S: Simplify: $3-4y+12=y^2-9$, so $$0=y^2+4y-24$$
+S: Doesn't factor, so use the quadratic formula: $$y=\frac{-4\pm\sqrt{16+96}}{2}=\frac{-4\pm\sqrt{112}}{2}$$
+S: $\sqrt{112}=\sqrt{16\cdot 7}=4\sqrt7$, so $$y=\frac{-4\pm 4\sqrt7}{2}=-2\pm 2\sqrt7$$
+S: Neither answer is $3$ or $-3$, so both are good.
+A: $y=-2\pm 2\sqrt7$
+
+# c5-r8 | Review 8 |
+Q: Solve: $\dfrac{4x}{x-4}=3+\dfrac{16}{x-4}$
+S: Note $x\ne 4$. Multiply every term by $(x-4)$: $$4x=3(x-4)+16$$
+S: $$4x=3x-12+16 \;\Rightarrow\; 4x=3x+4 \;\Rightarrow\; x=4$$
+S: But $x=4$ makes the denominator $0$. It's **extraneous**, so throw it out.
+A: No solution
+T: Always check answers against the "not allowed" values.
+
+# c5-r9 | Review 9 | recipNumber
+Q: If the reciprocal of a number is added to three times the number, the result is $\frac{13}{2}$. Find the number.
+S: Translate: number $=x$, reciprocal $=\frac{1}{x}$. $$\frac{1}{x}+3x=\frac{13}{2}$$
+S: Multiply every term by the LCD $2x$: $$2+6x^2=13x$$
+S: Set to $0$: $$6x^2-13x+2=0$$
+S: Factor: $(6x-1)(x-2)=0$
+S: $x=\frac{1}{6}$ or $x=2$
+A: $x=2$ or $x=\frac{1}{6}$
+
+# c5-a1 | After class 1 | domainRational
+Q: Find the domain: $f(x)=\dfrac{2x+6}{x^2-x-12}$
+S: Set the denominator to $0$: $x^2-x-12=0$
+S: Factor: $(x-4)(x+3)=0$, so $x=4$ and $x=-3$ are not allowed.
+A: $(-\infty,-3)\cup(-3,4)\cup(4,\infty)$
+
+# c5-a2 | After class 2 |
+Q: Simplify: $\dfrac{12m^3n^7}{18mn^8}$
+S: Numbers: $\frac{12}{18}=\frac{2}{3}$
+S: $m$'s: $\frac{m^3}{m}=m^{3-1}=m^2$ (stays on top)
+S: $n$'s: $\frac{n^7}{n^8}=\frac{1}{n}$ (more on the bottom, so it stays on the bottom)
+A: $\dfrac{2m^2}{3n}$
+
+# c5-a3 | After class 3 |
+Q: Simplify: $\dfrac{3+\frac{3}{k}}{4+\frac{4}{k}}$
+S: Multiply the top and bottom by $k$ to clear the small fractions: $$\frac{3k+3}{4k+4}$$
+S: Factor: $$\frac{3(k+1)}{4(k+1)}$$
+S: Cancel $(k+1)$.
+A: $\dfrac{3}{4}$
+
+# c5-a4 | After class 4 |
+Q: Simplify: $\dfrac{2u^{-1}+2v^{-1}}{4u^{-3}+4v^{-3}}$
+S: Negative exponent means "flip": $$\frac{\frac{2}{u}+\frac{2}{v}}{\frac{4}{u^3}+\frac{4}{v^3}}$$
+S: Multiply top and bottom by $u^3v^3$: $$\frac{2u^2v^3+2u^3v^2}{4v^3+4u^3}$$
+S: Factor the top: $2u^2v^2(v+u)$. Factor the bottom (sum of cubes): $4(u+v)(u^2-uv+v^2)$
+S: Cancel $(u+v)$ and reduce $\frac{2}{4}=\frac{1}{2}$.
+A: $\dfrac{u^2v^2}{2(u^2-uv+v^2)}$
+
+# c5-a5 | After class 5 |
+Q: Simplify: $\dfrac{ax+bx+2a+2b}{ax-3a+bx-3b}\cdot\dfrac{x-3}{5-x}\div\dfrac{x+2}{ax-5a}$
+S: Factor the first top by grouping: $x(a+b)+2(a+b)=(a+b)(x+2)$
+S: Factor the first bottom: $a(x-3)+b(x-3)=(a+b)(x-3)$. Factor $ax-5a=a(x-5)$.
+S: Dividing = multiply by the flip: $$\frac{(a+b)(x+2)}{(a+b)(x-3)}\cdot\frac{x-3}{5-x}\cdot\frac{a(x-5)}{x+2}$$
+S: Cancel $(a+b)$, $(x+2)$, $(x-3)$. Left: $\dfrac{a(x-5)}{5-x}$
+S: $(x-5)$ and $(5-x)$ are opposites, so they cancel to $-1$.
+A: $-a$
+
+# c5-a6 | After class 6 |
+Q: Simplify: $\dfrac{3}{x^2+8x+15}-\dfrac{1}{x^2+7x+12}-\dfrac{1}{x^2+9x+20}$
+S: Factor each bottom: $(x+3)(x+5)$, $(x+3)(x+4)$, $(x+4)(x+5)$
+S: LCD $=(x+3)(x+4)(x+5)$. Each fraction is missing one factor; multiply it in: $$\frac{3(x+4)-(x+5)-(x+3)}{(x+3)(x+4)(x+5)}$$
+S: Simplify the top: $3x+12-x-5-x-3=x+4$
+S: $$\frac{x+4}{(x+3)(x+4)(x+5)}$$ Cancel $(x+4)$.
+A: $\dfrac{1}{(x+3)(x+5)}$
+
+# c5-a7 | After class 7 |
+Q: Solve: $\dfrac{7}{z+1}-\dfrac{z-5}{z^2-1}=\dfrac{6}{z}$
+S: Factor $z^2-1=(z-1)(z+1)$. LCD $=z(z-1)(z+1)$. Not allowed: $z=0,1,-1$.
+S: Multiply every term by the LCD: $$7z(z-1)-z(z-5)=6(z-1)(z+1)$$
+S: Expand: $7z^2-7z-z^2+5z=6z^2-6$
+S: $$6z^2-2z=6z^2-6 \;\Rightarrow\; -2z=-6 \;\Rightarrow\; z=3$$
+S: $3$ isn't a forbidden value, so it works.
+A: $z=3$
+
+# c5-a8 | After class 8 | mapScale
+Q: On a map, NYC to LA is $8.2$ in, and the real distance is $2820$ miles. How far apart are two cities that are $5.7$ in apart on the same map? Round to the nearest mile.
+S: Set up a proportion (inches over miles on both sides): $$\frac{8.2}{2820}=\frac{5.7}{x}$$
+S: Cross multiply: $$8.2x=2820(5.7)=16074$$
+S: Divide: $x=\frac{16074}{8.2}\approx 1960.2$
+A: About $1960$ miles
+
+# c5-a9 | After class 9 | workRate
+Q: Barbara can type a chapter in $4$ hr. Jack can in $10$ hr. How long working together?
+S: Rates (jobs per hour): Barbara $\frac{1}{4}$, Jack $\frac{1}{10}$. Together: $\frac{1}{t}$. $$\frac{1}{4}+\frac{1}{10}=\frac{1}{t}$$
+S: Common denominator $20$: $$\frac{5}{20}+\frac{2}{20}=\frac{7}{20}=\frac{1}{t}$$
+S: Flip both sides: $t=\frac{20}{7}\approx 2.86$ hours
+S: $0.857\times 60\approx 51$ minutes
+A: $t=\frac{20}{7}\approx 2.86$ hours (about 2 hr 51 min)
+
+@ch 6 | Radicals & Complex Numbers | Split radicals into perfect powers times leftovers. Turn $\sqrt{-n}$ into $i\sqrt{n}$ before doing anything else. $i^2=-1$.
+
+# c6-r2 | Review 2 |
+Q: Simplify: $\sqrt[4]{81}$
+S: Ask: what number to the 4th power is $81$? $3^4=3\cdot3\cdot3\cdot3=81$
+A: $3$
+
+# c6-r3 | Review 3 |
+Q: Simplify: $\sqrt[3]{32}$
+S: Find the biggest perfect **cube** inside $32$: $8=2^3$. $$32=8\cdot 4$$
+S: $$\sqrt[3]{8\cdot 4}=\sqrt[3]{8}\cdot\sqrt[3]{4}=2\sqrt[3]{4}$$
+A: $2\sqrt[3]{4}$
+
+# c6-r4 | Review 4 | simplifySqrt
+Q: Simplify: $\sqrt{18x^5y^3z^4}$
+S: Split each piece into (perfect square) × (leftover): $$18=9\cdot2,\quad x^5=x^4\cdot x,\quad y^3=y^2\cdot y,\quad z^4=z^4$$
+S: Square roots of the perfect squares come out: $\sqrt9=3,\ \sqrt{x^4}=x^2,\ \sqrt{y^2}=y,\ \sqrt{z^4}=z^2$
+S: Leftovers stay inside: $2xy$
+A: $3x^2yz^2\sqrt{2xy}$
+T: For square roots, divide each exponent by 2. The whole-number part comes out, the remainder stays in.
+
+# c6-r5 | Review 5 |
+Q: Simplify: $\sqrt[3]{\dfrac{x^6}{125y^3}}$
+S: Take the cube root of the top and bottom separately.
+S: Top: $\sqrt[3]{x^6}=x^{6/3}=x^2$
+S: Bottom: $\sqrt[3]{125}=5$ and $\sqrt[3]{y^3}=y$
+A: $\dfrac{x^2}{5y}$
+
+# c6-r6 | Review 6 |
+Q: Find the domain of $f(x)=\sqrt{-2x-4}$
+S: You can't take the square root of a negative, so the inside must be $\ge 0$: $$-2x-4\ge 0$$
+S: Add $4$: $-2x\ge 4$
+S: Divide by $-2$ and **flip**: $x\le -2$
+A: $(-\infty,-2]$
+
+# c6-r7 | Review 7 |
+Q: Simplify: $-27^{1/3}$
+S: The exponent only applies to $27$. The minus sign is outside: $-\left(27^{1/3}\right)$
+S: $27^{1/3}=\sqrt[3]{27}=3$
+A: $-3$
+
+# c6-r8 | Review 8 | fracExp
+Q: Simplify: $8^{2/3}\cdot\left(\dfrac{25x^4y^6}{z^2}\right)^{1/2}$
+S: $8^{2/3}$: bottom of the fraction = root, top = power. $$8^{2/3}=\left(\sqrt[3]{8}\right)^2=2^2=4$$
+S: The $\frac{1}{2}$ power is a square root of every piece: $$\sqrt{25}=5,\ \sqrt{x^4}=x^2,\ \sqrt{y^6}=y^3,\ \sqrt{z^2}=z$$
+S: So the second part is $\dfrac{5x^2y^3}{z}$. Multiply by $4$.
+A: $\dfrac{20x^2y^3}{z}$
+
+# c6-r9 | Review 9 |
+Q: Simplify: $3\sqrt2\left(\sqrt2-\sqrt{10}\right)$
+S: Distribute: $$3\sqrt2\cdot\sqrt2-3\sqrt2\cdot\sqrt{10}=3\sqrt4-3\sqrt{20}$$
+S: $\sqrt4=2$ and $\sqrt{20}=\sqrt{4\cdot5}=2\sqrt5$
+S: $$3(2)-3(2\sqrt5)=6-6\sqrt5$$
+A: $6-6\sqrt5$
+
+# c6-r10 | Review 10 |
+Q: Simplify: $\left(2\sqrt5-3\sqrt{x}\right)\left(4\sqrt5+\sqrt{x}\right)$
+S: FOIL. First: $2\sqrt5\cdot4\sqrt5=8\cdot5=40$
+S: Outer: $2\sqrt5\cdot\sqrt x=2\sqrt{5x}$. Inner: $-3\sqrt x\cdot4\sqrt5=-12\sqrt{5x}$
+S: Last: $-3\sqrt x\cdot\sqrt x=-3x$
+S: Combine like radicals: $2\sqrt{5x}-12\sqrt{5x}=-10\sqrt{5x}$
+A: $40-10\sqrt{5x}-3x$
+
+# c6-r11 | Review 11 |
+Q: Simplify: $(3-5i)-(2+6i)$
+S: Distribute the minus to both parts: $$3-5i-2-6i$$
+S: Real parts: $3-2=1$. Imaginary parts: $-5i-6i=-11i$
+A: $1-11i$
+
+# c6-r12 | Review 12 | complexMult
+Q: Simplify: $(4+i)(8+2i)$
+S: FOIL: $$32+8i+8i+2i^2$$
+S: Replace $i^2$ with $-1$: $2i^2=-2$
+S: $$32-2+16i=30+16i$$
+A: $30+16i$
+
+# c6-r13 | Review 13 |
+Q: Simplify: $\sqrt{-16}\cdot\sqrt{-49}$
+S: Pull out the $i$ first: $\sqrt{-16}=4i$ and $\sqrt{-49}=7i$
+S: Multiply: $4i\cdot7i=28i^2$
+S: $i^2=-1$, so $28i^2=-28$
+A: $-28$
+T: Don't multiply under the radical first. $\sqrt{784}=28$ gives the wrong sign.
+
+# c6-r14 | Review 14 | cubeRootEq
+Q: Solve: $\sqrt[3]{2x+5}=-3$
+S: Cube both sides to undo the cube root: $$2x+5=(-3)^3=-27$$
+S: Subtract $5$: $2x=-32$
+S: Divide by $2$: $x=-16$
+S: Check: $\sqrt[3]{2(-16)+5}=\sqrt[3]{-27}=-3$ ✓
+A: $x=-16$
+
+@ch 7 | Quadratic Equations & Parabolas | Square root property for $(\ )^2=k$. Complete the square or use $x=\frac{-b\pm\sqrt{b^2-4ac}}{2a}$ for everything else. Vertex x-value is $-\frac{b}{2a}$.
+
+# c7-r1 | Review 1 | sqrtProp
+Q: Solve using the square root property: $(x+3)^2=25$
+S: Take the square root of both sides. Don't forget $\pm$: $$x+3=\pm 5$$
+S: $x+3=5 \Rightarrow x=2$
+S: $x+3=-5 \Rightarrow x=-8$
+A: $x=2$ or $x=-8$
+
+# c7-r2 | Review 2 | completeSquare
+Q: Solve by completing the square: $2x^2+12x-36=0$
+S: Make the leading coefficient $1$: divide by $2$. $$x^2+6x-18=0$$
+S: Move the constant: $$x^2+6x=18$$
+S: Take half of $6$ (that's $3$), square it ($9$), add to both sides: $$x^2+6x+9=27$$
+S: Left side is a perfect square: $$(x+3)^2=27$$
+S: Square root both sides: $x+3=\pm\sqrt{27}=\pm 3\sqrt3$
+S: Subtract $3$.
+A: $x=-3\pm 3\sqrt3$
+
+# c7-r3 | Review 3 | discriminant
+Q: Use the discriminant to find the number and type of solutions: $x^2-3x=-12$
+S: Standard form first: $$x^2-3x+12=0 \quad (a=1,\ b=-3,\ c=12)$$
+S: Discriminant: $$b^2-4ac=(-3)^2-4(1)(12)=9-48=-39$$
+S: Negative discriminant → no real solutions, two complex ones.
+A: Two complex (non-real) solutions
+T: $b^2-4ac>0$: two real. $=0$: one real. $<0$: two complex.
+
+# c7-r4 | Review 4 | zeroProduct
+Q: Solve: $y(y-2)=-1$
+S: Multiply out and set to $0$: $$y^2-2y+1=0$$
+S: Perfect square: $(y-1)^2=0$
+S: $y-1=0$
+A: $y=1$
+
+# c7-r5 | Review 5 | quadFormula
+Q: Solve using the quadratic formula: $3x^2-4x+1=0$
+S: $a=3,\ b=-4,\ c=1$
+S: Discriminant: $(-4)^2-4(3)(1)=16-12=4$
+S: $$x=\frac{-(-4)\pm\sqrt4}{2(3)}=\frac{4\pm2}{6}$$
+S: $\frac{4+2}{6}=1$ and $\frac{4-2}{6}=\frac{2}{6}=\frac{1}{3}$
+A: $x=1$ or $x=\frac{1}{3}$
+
+# c7-r6 | Review 6 | quadFormula
+Q: Solve: $x(x+6)=-11-x$
+S: Expand and set to $0$: $x^2+6x=-11-x$, so $$x^2+7x+11=0$$
+S: $a=1,\ b=7,\ c=11$. Discriminant: $49-44=5$
+S: $$x=\frac{-7\pm\sqrt5}{2}$$
+A: $x=\dfrac{-7\pm\sqrt5}{2}$
+
+# c7-r7 | Review 7 | sqrtProp
+Q: Solve: $(x+7)^2=-24$
+S: Square root both sides: $x+7=\pm\sqrt{-24}$
+S: $\sqrt{-24}=i\sqrt{24}=i\sqrt{4\cdot6}=2i\sqrt6$
+S: Subtract $7$.
+A: $x=-7\pm 2i\sqrt6$
+
+# c7-r8 | Review 8 | quadFormula
+Q: Solve: $x(x-12)=-13$
+S: Expand and set to $0$: $$x^2-12x+13=0$$
+S: $a=1,\ b=-12,\ c=13$. Discriminant: $144-52=92$
+S: $\sqrt{92}=\sqrt{4\cdot23}=2\sqrt{23}$, so $$x=\frac{12\pm2\sqrt{23}}{2}$$
+S: Divide both terms by $2$.
+A: $x=6\pm\sqrt{23}$
+
+# c7-r9 | Review 9 | vertex
+Q: Find the vertex of $y=x^2-6x-8$ (answer as a point).
+S: $a=1,\ b=-6$. Vertex x-value: $$x=-\frac{b}{2a}=-\frac{-6}{2(1)}=3$$
+S: Plug $x=3$ back in: $$y=3^2-6(3)-8=9-18-8=-17$$
+A: $(3,\,-17)$
+
+# c7-r10 | Review 10 | graphParabola
+Q: Graph $h(x)=x^2-4$
+S: This is $x^2$ shifted down $4$. Vertex: $(0,-4)$. $a=1>0$ so it opens up.
+S: Make a table around the vertex:
+TB: x;h(x) | -2;0 | -1;-3 | 0;-4 | 1;-3 | 2;0
+S: Plot the points and draw a smooth U through them.
+G: x*x-4 | -5,5,-6,6 | -2,0;-1,-3;0,-4;1,-3;2,0
+A: U-shaped parabola, vertex $(0,-4)$, x-intercepts $(\pm2,0)$
+
+# c7-r11 | Review 11 |
+Q: Given $f(x)=x^2+4x-12$: write it as $f(x)=a(x-h)^2+k$, find the vertex, the x- and y-intercepts, and the max or min value.
+S: Complete the square: half of $4$ is $2$, $2^2=4$. Add and subtract $4$: $$x^2+4x+4-4-12=(x+2)^2-16$$
+S: Vertex form $f(x)=(x+2)^2-16$, so $h=-2$, $k=-16$. Vertex: $(-2,-16)$
+S: y-intercept: $f(0)=-12$, so $(0,-12)$
+S: x-intercepts: $x^2+4x-12=(x+6)(x-2)=0$, so $(-6,0)$ and $(2,0)$
+S: $a=1>0$ opens up, so the vertex is a **minimum**: $-16$.
+G: x*x+4*x-12 | -8,4,-18,6 | -6,0;2,0;0,-12;-2,-16
+A: $f(x)=(x+2)^2-16$; vertex $(-2,-16)$; y-int $(0,-12)$; x-ints $(-6,0),(2,0)$; minimum value $-16$
+
+# c7-a1 | After class 1 | sqrtProp
+Q: Solve using the square root property: $(p-2)^2=12$
+S: Square root both sides: $p-2=\pm\sqrt{12}$
+S: $\sqrt{12}=\sqrt{4\cdot3}=2\sqrt3$
+S: Add $2$.
+A: $p=2\pm2\sqrt3$
+
+# c7-a2 | After class 2 | sqrtProp
+Q: Solve: $(m+1)^2=-1$
+S: Square root both sides: $m+1=\pm\sqrt{-1}=\pm i$
+S: Subtract $1$.
+A: $m=-1\pm i$
+
+# c7-a3 | After class 3 | completeSquare
+Q: Solve by completing the square: $2x^2=3x-7$
+S: Get $x$ terms on the left: $$2x^2-3x=-7$$
+S: Divide by $2$: $$x^2-\tfrac{3}{2}x=-\tfrac{7}{2}$$
+S: Half of $-\frac32$ is $-\frac34$. Square it: $\frac{9}{16}$. Add to both sides: $$x^2-\tfrac32x+\tfrac{9}{16}=-\tfrac{56}{16}+\tfrac{9}{16}=-\tfrac{47}{16}$$
+S: $$\left(x-\tfrac34\right)^2=-\tfrac{47}{16}$$
+S: Square root: $x-\frac34=\pm\frac{i\sqrt{47}}{4}$
+A: $x=\dfrac{3\pm i\sqrt{47}}{4}$
+
+# c7-a4 | After class 4 |
+Q: The base of a triangle is $3$ ft less than twice the height. The area is $14\text{ ft}^2$. Find the base and height to the nearest tenth (use the quadratic formula).
+S: Let height $=h$. Base $=2h-3$. Area formula: $$\tfrac12(2h-3)h=14$$
+S: Multiply by $2$: $(2h-3)h=28$, so $$2h^2-3h-28=0$$
+S: $a=2,\ b=-3,\ c=-28$: $$h=\frac{3\pm\sqrt{9+224}}{4}=\frac{3\pm\sqrt{233}}{4}$$
+S: $\sqrt{233}\approx15.264$. A height can't be negative, so $$h=\frac{3+15.264}{4}\approx4.566$$
+S: Base $=2(4.566)-3\approx6.132$
+A: Height $\approx4.6$ ft, base $\approx6.1$ ft
+
+# c7-a5 | After class 5 |
+Q: A circular garden has an area of about $450\text{ ft}^2$. Find the radius to the nearest tenth of a foot.
+S: Area of a circle: $A=\pi r^2$, so $$\pi r^2=450$$
+S: Divide by $\pi$: $r^2=\frac{450}{\pi}\approx143.24$
+S: Square root (radius is positive): $r\approx11.97$
+A: $r\approx12.0$ ft
+
+# c7-a6 | After class 6 | quadFormula
+Q: Solve: $2x^2-9x=5$
+S: Set to $0$: $$2x^2-9x-5=0 \quad(a=2,\ b=-9,\ c=-5)$$
+S: Discriminant: $81-4(2)(-5)=81+40=121$
+S: $$x=\frac{9\pm\sqrt{121}}{4}=\frac{9\pm11}{4}$$
+S: $\frac{20}{4}=5$ and $\frac{-2}{4}=-\frac12$
+A: $x=5$ or $x=-\frac12$
+
+# c7-a7 | After class 7 | quadFormula
+Q: Solve: $x^2-8x+1=0$
+S: $a=1,\ b=-8,\ c=1$. Discriminant: $64-4=60$
+S: $\sqrt{60}=\sqrt{4\cdot15}=2\sqrt{15}$: $$x=\frac{8\pm2\sqrt{15}}{2}$$
+S: Divide both terms by $2$.
+A: $x=4\pm\sqrt{15}$
+
+# c7-a8 | After class 8 | graphParabola
+Q: Graph $f(x)=-(x-4)^2$
+S: Vertex form with $h=4$, $k=0$: vertex $(4,0)$. The minus in front means it opens **down**.
+S: Table around $x=4$:
+TB: x;f(x) | 2;-4 | 3;-1 | 4;0 | 5;-1 | 6;-4
+G: -((x-4)**2) | -1,9,-10,3 | 2,-4;3,-1;4,0;5,-1;6,-4
+A: Upside-down parabola, vertex $(4,0)$
+
+# c7-a9 | After class 9 | graphParabola
+Q: Graph $f(x)=\frac12(x+2)^2-3$
+S: $h=-2$, $k=-3$: vertex $(-2,-3)$. $a=\frac12>0$ opens up and is wider than $x^2$.
+S: Use $x$ values 2 apart so the $\frac12$ gives whole numbers:
+TB: x;f(x) | -6;5 | -4;-1 | -2;-3 | 0;-1 | 2;5
+G: 0.5*(x+2)**2-3 | -8,4,-5,8 | -6,5;-4,-1;-2,-3;0,-1;2,5
+A: Wide parabola opening up, vertex $(-2,-3)$
+
+# c7-a10 | After class 10 | vertex
+Q: What is the axis of symmetry for $f(x)=-(x-4)^2+2$?
+S: Vertex form $a(x-h)^2+k$: here $h=4$, $k=2$, vertex $(4,2)$.
+S: The axis of symmetry is the vertical line through the vertex.
+A: $x=4$
+
+# c7-a11 | After class 11 | maxArea
+Q: A farmer has $400$ ft of fencing for a field next to a river (no fence on the river side). The area is $A(x)=-\frac{x^2}{2}+200x$. Find the $x$ that maximizes area, and the max area.
+S: $a=-\frac12<0$, so the parabola opens down and the vertex is the maximum.
+S: $$x=-\frac{b}{2a}=-\frac{200}{2\left(-\frac12\right)}=-\frac{200}{-1}=200$$
+S: $$A(200)=-\frac{200^2}{2}+200(200)=-20000+40000=20000$$
+A: $x=200$ ft gives the maximum area of $20{,}000\text{ ft}^2$
+
+@ch 8 | Inverses, Exponentials & Logarithms | $\log_b x=y$ means $b^y=x$. To get a variable out of an exponent, take ln of both sides.
+
+# c8-r1 | Review 1 | inverseLinear
+Q: Find the inverse of $f(x)=\frac14x+3$
+S: Write $y$ for $f(x)$: $y=\frac14x+3$
+S: Swap $x$ and $y$: $$x=\tfrac14y+3$$
+S: Solve for $y$. Subtract $3$: $x-3=\frac14y$
+S: Multiply by $4$: $y=4(x-3)=4x-12$
+A: $f^{-1}(x)=4x-12$
+
+# c8-r2 | Review 2 |
+Q: Graph $f(x)=4^{x-1}$
+S: Exponential with base $4$, shifted right $1$. Horizontal asymptote $y=0$.
+S: Table:
+TB: x;f(x) | -1;\frac{1}{16} | 0;\frac14 | 1;1 | 2;4 | 3;16
+G: 4**(x-1) | -3,4,-2,18 | -1,0.0625;0,0.25;1,1;2,4;3,16 | h0
+A: Rising curve through $(1,1)$ and $(2,4)$, hugging $y=0$ on the left
+
+# c8-r3 | Review 3 | expToLog
+Q: Write $16^{3/4}=8$ in logarithm form.
+S: $b^y=x$ becomes $\log_b x=y$. The base stays the base.
+S: Base $16$, exponent $\frac34$, result $8$.
+A: $\log_{16}8=\frac34$
+
+# c8-r4 | Review 4 | logApprox
+Q: Approximate to four decimals: $\log(21)$
+S: $\log$ with no base means base $10$. Use the LOG key.
+S: $\log(21)\approx1.322219$
+A: $\approx1.3222$
+
+# c8-r5 | Review 5 | logApprox
+Q: Approximate to four decimals: $\log_4(13)$
+S: Change of base: $$\log_4 13=\frac{\ln13}{\ln4}$$
+S: $$\frac{2.564949}{1.386294}\approx1.850220$$
+A: $\approx1.8502$
+
+# c8-r6 | Review 6 | logApprox
+Q: Approximate to four decimals: $\log_{1/2}(6)$
+S: Change of base: $$\log_{1/2}6=\frac{\ln6}{\ln\frac12}$$
+S: $$\frac{1.791759}{-0.693147}\approx-2.584963$$
+A: $\approx-2.5850$
+
+# c8-r7 | Review 7 |
+Q: Simplify: $-\log_3\left(\dfrac{3}{9x}\right)$
+S: Simplify inside: $\frac{3}{9x}=\frac{1}{3x}$
+S: Quotient rule: $\log_3\frac{1}{3x}=\log_3 1-\log_3(3x)=0-\log_3(3x)$
+S: So $-\log_3\frac{1}{3x}=\log_3(3x)$
+S: Product rule: $\log_3 3+\log_3 x=1+\log_3x$
+A: $1+\log_3 x$
+
+# c8-r8 | Review 8 | combineLogs
+Q: Write as a single log: $\frac12\log_b(x)+3\log_b(y)$
+S: Power rule (number in front becomes an exponent): $$\log_b x^{1/2}+\log_b y^3$$
+S: $x^{1/2}=\sqrt x$
+S: Product rule (adding logs = multiplying inside): $\log_b\left(y^3\sqrt x\right)$
+A: $\log_b\left(y^3\sqrt{x}\right)$
+
+# c8-r9 | Review 9 | logSumEq
+Q: Solve: $\log(x)+\log(x-21)=2$
+S: Product rule: $$\log\big(x(x-21)\big)=2$$
+S: Exponential form (base 10): $$x(x-21)=10^2=100$$
+S: $$x^2-21x-100=0 \;\Rightarrow\; (x-25)(x+4)=0$$
+S: $x=25$ or $x=-4$. You can't take the log of a negative, so reject $-4$.
+A: $x=25$
+
+# c8-r10 | Review 10 | logBaseEq
+Q: Solve: $\log_{1/2}(x)=-5$
+S: Exponential form: $$x=\left(\tfrac12\right)^{-5}$$
+S: A negative exponent flips the fraction: $(\frac12)^{-5}=2^5$
+A: $x=32$
+
+# c8-r11 | Review 11 | expSolve
+Q: Solve: $68=10+2^{x-3}$
+S: Isolate the exponential: subtract $10$. $$58=2^{x-3}$$
+S: Take ln of both sides and bring the exponent down: $$\ln58=(x-3)\ln2$$
+S: $$x-3=\frac{\ln58}{\ln2}\approx\frac{4.0604}{0.6931}\approx5.858$$
+S: Add $3$.
+A: $x\approx8.858$
+
+# c8-r12 | Review 12 | compound
+Q: Use $A(t)=Pe^{rt}$. $\$2000$ is invested at $7.5\%$ compounded continuously. Find the value after $5$ years. How long until it doubles?
+S: $P=2000$, $r=0.075$, $t=5$: $$A=2000e^{0.075(5)}=2000e^{0.375}$$
+S: $e^{0.375}\approx1.45499$, so $A\approx\$2909.98$
+S: Doubling means $A=4000$: $$4000=2000e^{0.075t} \;\Rightarrow\; 2=e^{0.075t}$$
+S: Take ln: $\ln2=0.075t$, so $$t=\frac{\ln2}{0.075}\approx\frac{0.6931}{0.075}\approx9.24$$
+A: About $\$2909.98$ after 5 years; doubles in about $9.24$ years
+
+# c8-a1 | After class 1 |
+Q: Find the inverse of $g(x)=(x-1)^2,\ x\ge1$
+S: $y=(x-1)^2$. Swap: $x=(y-1)^2$
+S: Square root both sides. Since $y\ge1$, $y-1\ge0$, so take the positive root: $\sqrt x=y-1$
+S: Add $1$: $y=\sqrt x+1$
+A: $g^{-1}(x)=\sqrt{x}+1,\ x\ge0$
+
+# c8-a2 | After class 2 | expToLog
+Q: Write $\log_x(31)=5$ in exponential form.
+S: $\log_b a=c$ means $b^c=a$. The base is $x$.
+A: $x^5=31$
+
+# c8-a3 | After class 3 |
+Q: Graph $f(x)=\log_3(x)$
+S: Log base 3 is the inverse of $3^x$. Vertical asymptote $x=0$. It goes through $(1,0)$ and $(3,1)$.
+S: Table (pick $x$ values that are powers of 3):
+TB: x;f(x) | \frac19;-2 | \frac13;-1 | 1;0 | 3;1 | 9;2
+G: Math.log(x)/Math.log(3) | -1,10,-3,3 | 0.1111,-2;0.3333,-1;1,0;3,1;9,2 | v0
+A: Slow-rising curve through $(1,0)$ and $(3,1)$, hugging $x=0$
+
+# c8-a4 | After class 4 |
+Q: Simplify: $\log\left(\dfrac{1}{10^5}\right)$
+S: $\frac{1}{10^5}=10^{-5}$
+S: $\log(10^{-5})=-5$ (log base 10 undoes $10^{\,}$)
+A: $-5$
+
+# c8-a5 | After class 5 |
+Q: Simplify: $\log(a)-4\log(a)$
+S: Like terms: $1\log a-4\log a=-3\log a$
+S: Power rule: $-3\log a=\log a^{-3}=\log\frac{1}{a^3}$
+A: $-3\log(a)=\log\left(\dfrac{1}{a^3}\right)$
+
+# c8-a6 | After class 6 | composition
+Q: Let $f(x)=x-4$, $g(x)=x^2+2$, $h(x)=\frac1x$. Find (a) $\left(\frac fg\right)(x)$ (b) $(h\cdot g)(x)$ (c) $(g\circ f)(x)$ (d) $(h\circ f)(x)$ (e) $(f-g)(7)$ (f) $(h+f)(2)$ (g) $(h\circ g)(4)$ (h) $(g\circ f)(0)$
+S: (a) Divide: $\dfrac{x-4}{x^2+2}$. (b) Multiply: $\frac1x(x^2+2)=\dfrac{x^2+2}{x}$
+S: (c) Plug $f$ into $g$: $g(x-4)=(x-4)^2+2=x^2-8x+18$
+S: (d) Plug $f$ into $h$: $h(x-4)=\dfrac{1}{x-4}$
+S: (e) $f(7)=3$, $g(7)=51$, so $3-51=-48$
+S: (f) $h(2)=\frac12$, $f(2)=-2$, so $\frac12-2=-\frac32$
+S: (g) Inside first: $g(4)=18$, then $h(18)=\frac1{18}$
+S: (h) Inside first: $f(0)=-4$, then $g(-4)=16+2=18$
+A: (a) $\frac{x-4}{x^2+2}$ (b) $\frac{x^2+2}{x}$ (c) $x^2-8x+18$ (d) $\frac1{x-4}$ (e) $-48$ (f) $-\frac32$ (g) $\frac1{18}$ (h) $18$
+T: For $(g\circ f)$, work from the inside out: do $f$ first, then put that result into $g$.
+
+# c8-a7 | After class 7 | lnEq
+Q: Solve: $\ln(x+7)=2.4$
+S: $\ln$ is log base $e$. Exponential form: $$e^{2.4}=x+7$$
+S: $e^{2.4}\approx11.0232$
+S: Subtract $7$.
+A: $x\approx4.0232$
+
+# c8-a8 | After class 8 | sameBase
+Q: Solve: $3^{x+4}=\frac{1}{27}$
+S: Write both sides with base $3$: $27=3^3$, so $\frac1{27}=3^{-3}$
+S: Same base → set the exponents equal: $$x+4=-3$$
+A: $x=-7$
+
+# c8-a9 | After class 9 | expSolve
+Q: Solve: $4^x=50$
+S: Take ln of both sides: $\ln4^x=\ln50$
+S: Bring the exponent down: $x\ln4=\ln50$
+S: $$x=\frac{\ln50}{\ln4}\approx\frac{3.9120}{1.3863}\approx2.8219$$
+A: $x\approx2.8219$
+
+# c8-a10 | After class 10 |
+Q: Solve: $4^{x+7}=5^x$
+S: Take ln of both sides and bring exponents down: $$(x+7)\ln4=x\ln5$$
+S: Distribute: $x\ln4+7\ln4=x\ln5$
+S: Get the $x$ terms together: $7\ln4=x\ln5-x\ln4=x(\ln5-\ln4)$
+S: $$x=\frac{7\ln4}{\ln5-\ln4}\approx\frac{9.7041}{0.2231}\approx43.49$$
+A: $x\approx43.49$
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script>
+(function(){
+const T = String.raw;
+/* ---------- math rendering ---------- */
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function tex(t, display){
+  if (typeof katex === 'undefined') return '<code>'+esc(t)+'</code>';
+  try { return katex.renderToString(t,{output:'mathml',throwOnError:false,displayMode:!!display}); }
+  catch(e){ return '<code>'+esc(t)+'</code>'; }
+}
+function fmt(s){
+  s = s.replace(/\\\$/g,'\u0001');
+  return s.split(/(\$\$[\s\S]+?\$\$|\$[^$]+?\$)/).map(part=>{
+    if (part.startsWith('$$')) return tex(part.slice(2,-2).replace(/\u0001/g,'\\$'),true);
+    if (part.startsWith('$') && part.length>1) return tex(part.slice(1,-1).replace(/\u0001/g,'\\$'),false);
+    return esc(part.replace(/\u0001/g,'$')).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>');
+  }).join('');
+}
+
+/* ---------- number helpers ---------- */
+const R=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const nz=(a,b)=>{let v;do v=R(a,b);while(v===0);return v};
+const gcd=(a,b)=>{a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b]}return a};
+function fr(n,d){ if(d<0){n=-n;d=-d} const g=gcd(n,d)||1; n/=g; d/=g; if(d===1) return String(n); return (n<0?'-':'')+T`\frac{${Math.abs(n)}}{${d}}`; }
+function term(c,v,first){ if(c===0) return ''; const s=c<0?'-':(first?'':'+'); const a=Math.abs(c); if(v&&a===1) return s+v; return s+a+(v||''); }
+function poly(cs,x){ const n=cs.length-1; let out=''; cs.forEach((c,i)=>{const p=n-i; const v=p===0?'':(p===1?x:`${x}^{${p}}`); out+=term(c,v,out==='');}); return out||'0'; }
+const ax=(a,x='x')=>term(a,x,true);
+const pm=n=>n<0?`- ${-n}`:`+ ${n}`;
+const par=n=>n<0?`(${n})`:`${n}`;
+const vp=(v,p)=>p===0?'':(p===1?v:`${v}^{${p}}`);
+function sqrtSimp(n){ let o=1,q=n; for(let f=2;f*f<=q;f++){ while(q%(f*f)===0){q/=f*f;o*=f;} } return [o,q]; }
+const isSq=n=>n>=0&&Number.isInteger(Math.sqrt(n));
+const d4=x=>x.toFixed(4);
+function cplx(re,im){ if(im===0) return String(re); const imT=(Math.abs(im)===1?'':Math.abs(im))+'i'; if(re===0) return (im<0?'-':'')+imT; return `${re} ${im<0?'-':'+'} ${imT}`; }
+function iv(lo,hi,lc,hc){ return `${lo===null?'(-\\infty':(lc?'[':'(')+lo}, ${hi===null?'\\infty)':hi+(hc?']':')')}`; }
+function radT(k){ // tex for sqrt(k), k may be negative
+  const neg=k<0,[o,q]=sqrtSimp(Math.abs(k));
+  if(q===1) return (o===1&&neg?'':o)+(neg?'i':'');
+  return (o===1?'':o)+(neg?'i':'')+T`\sqrt{${q}}`;
+}
+function qroots(a,b,c,v='x'){
+  const D=b*b-4*a*c;
+  if(D===0) return `${v} = ${fr(-b,2*a)}`;
+  const neg=D<0,[o,q]=sqrtSimp(Math.abs(D));
+  if(q===1&&!neg) return `${v} = ${fr(-b+o,2*a)} \\ \\text{or}\\ ${v} = ${fr(-b-o,2*a)}`;
+  const rad=(q===1?'':T`\sqrt{${q}}`);
+  const g=gcd(gcd(b,o),2*a), B=-b/g, O=o/g, d=2*a/g;
+  const rt=neg? ((O===1?'':O)+'i'+rad) : ((O===1?'':O)+rad);
+  const num=B===0?`\\pm ${rt}`:`${B} \\pm ${rt}`;
+  return d===1?`${v} = ${num}`:`${v} = \\frac{${num}}{${d}}`;
+}
+
+/* ---------- generators ---------- */
+const GEN={};
+function reg(key,label,ch,fn){GEN[key]={label,ch,fn};}
+
+reg('absEq','Absolute value equations',1,()=>{
+  const a=R(1,4),b=nz(-9,9),c=R(2,12),k=pick([0,R(1,6),-R(1,6)]);
+  const inner=poly([a,b],'x');
+  const lhs=k===0?T`\left|${inner}\right|`:T`\left|${inner}\right| ${k>0?'+':'-'} ${Math.abs(k)}`;
+  const s=[];
+  if(k!==0) s.push(T`Get the absolute value alone: ${k>0?'subtract':'add'} $${Math.abs(k)}$ on both sides. $$\left|${inner}\right| = ${c}$$`);
+  s.push(T`The inside is either $${c}$ or $-${c}$. Split into two equations.`);
+  s.push(T`$$${inner} = ${c} \;\Rightarrow\; ${ax(a)} = ${c-b} \;\Rightarrow\; x = ${fr(c-b,a)}$$`);
+  s.push(T`$$${inner} = -${c} \;\Rightarrow\; ${ax(a)} = ${-c-b} \;\Rightarrow\; x = ${fr(-c-b,a)}$$`);
+  return {q:T`Solve: $${lhs} = ${c+k}$`,steps:s,a:T`$x = ${fr(c-b,a)}$ or $x = ${fr(-c-b,a)}$`};
+});
+
+reg('absAbs','|A| = |B| equations',1,()=>{
+  const a=R(1,5); let c; do c=R(1,5); while(c===a);
+  const b=nz(-12,12),d=nz(-12,12); const A=poly([a,b],'x'),B=poly([c,d],'x');
+  const x1=fr(d-b,a-c),x2=fr(-d-b,a+c);
+  return {q:T`Solve: $|${A}| = |${B}|$`,steps:[
+    'Two absolute values are equal when the insides are **equal** or **opposites**.',
+    T`Equal: $${A} = ${B}$ $\Rightarrow$ $${ax(a-c)} = ${d-b}$ $\Rightarrow$ $x = ${x1}$`,
+    T`Opposites: $${A} = -(${B}) = ${poly([-c,-d],'x')}$ $\Rightarrow$ $${ax(a+c)} = ${-d-b}$ $\Rightarrow$ $x = ${x2}$`
+  ],a:T`$x = ${x1}$ or $x = ${x2}$`};
+});
+
+const FLIP={'<':'>','>':'<','\\le':'\\ge','\\ge':'\\le'};
+function ivOp(op,v){ return op==='<'?iv(null,v,0,0):op==='\\le'?iv(null,v,0,1):op==='>'?iv(v,null,0,0):iv(v,null,1,0); }
+reg('linIneq','Linear inequalities (watch the flip)',1,()=>{
+  const a=pick([R(2,7),-R(2,7),-R(2,7),-1]),b=nz(-12,12),c=R(-15,15),op=pick(['<','\\le','>','\\ge']);
+  const v=fr(c-b,a),fop=a<0?FLIP[op]:op; const s=[];
+  s.push(T`${b>0?'Subtract':'Add'} $${Math.abs(b)}$ on both sides: $$${ax(a)} ${op} ${c-b}$$`);
+  if(a<0) s.push(T`Divide by $${a}$. Dividing by a **negative flips** the sign: $$x ${fop} ${v}$$`);
+  else s.push(T`Divide by $${a}$ (positive, so no flip): $$x ${fop} ${v}$$`);
+  return {q:T`Solve and write in interval notation: $${poly([a,b],'x')} ${op} ${c}$`,steps:s,a:T`$x ${fop} ${v}$, or $${ivOp(fop,v)}$`};
+});
+
+reg('compoundIneq','Compound (three-part) inequalities',1,()=>{
+  const a=pick([2,3,4,5,-2,-3]),b=nz(-9,9),L=R(-15,5),U=L+R(3,18);
+  const s=[T`${b>0?'Subtract':'Add'} $${Math.abs(b)}$ ${b>0?'from':'to'} all three parts: $$${L-b} < ${ax(a)} \le ${U-b}$$`];
+  let ans;
+  if(a>0){ s.push(T`Divide all three parts by $${a}$: $$${fr(L-b,a)} < x \le ${fr(U-b,a)}$$`); ans=T`$${fr(L-b,a)} < x \le ${fr(U-b,a)}$, or $${iv(fr(L-b,a),fr(U-b,a),0,1)}$`; }
+  else { s.push(T`Divide by $${a}$ and **flip both** signs: $$${fr(L-b,a)} > x \ge ${fr(U-b,a)}$$`);
+    s.push(T`Rewrite smallest to largest: $$${fr(U-b,a)} \le x < ${fr(L-b,a)}$$`);
+    ans=T`$${fr(U-b,a)} \le x < ${fr(L-b,a)}$, or $${iv(fr(U-b,a),fr(L-b,a),1,0)}$`; }
+  return {q:T`Solve: $${L} < ${poly([a,b],'x')} \le ${U}$`,steps:s,a:ans};
+});
+
+function absIneq(greater){
+  const a=R(1,5),b=nz(-9,9),c=R(1,12),k=pick([0,0,R(1,6),-R(1,6)]);
+  const inner=poly([a,b],'x'),op=greater?pick(['>','\\ge']):pick(['<','\\le']);
+  const lhs=k===0?`|${inner}|`:`|${inner}| ${k>0?'+':'-'} ${Math.abs(k)}`;
+  const s=[]; if(k!==0) s.push(T`Isolate the absolute value: ${k>0?'subtract':'add'} $${Math.abs(k)}$. $$|${inner}| ${op} ${c}$$`);
+  const lo=fr(-c-b,a),hi=fr(c-b,a),strict=(op==='<'||op==='>');
+  if(!greater){
+    s.push(T`"Less than" → sandwich: $$-${c} ${op} ${inner} ${op} ${c}$$`);
+    s.push(T`${b>0?'Subtract':'Add'} $${Math.abs(b)}$ on all three parts: $$${-c-b} ${op} ${ax(a)} ${op} ${c-b}$$`);
+    if(a!==1) s.push(T`Divide by $${a}$: $$${lo} ${op} x ${op} ${hi}$$`);
+    return {q:T`Solve: $${lhs} ${op} ${c+k}$`,steps:s,a:T`$${lo} ${op} x ${op} ${hi}$, or $${iv(lo,hi,!strict,!strict)}$`};
+  }
+  const lop=op==='>'?'<':'\\le';
+  s.push(T`"Greater than" → split apart (OR): $$${inner} ${op} ${c} \quad\text{or}\quad ${inner} ${lop} -${c}$$`);
+  s.push(T`$$${ax(a)} ${op} ${c-b} \Rightarrow x ${op} ${hi}$$`);
+  s.push(T`$$${ax(a)} ${lop} ${-c-b} \Rightarrow x ${lop} ${lo}$$`);
+  return {q:T`Solve: $${lhs} ${op} ${c+k}$`,steps:s,a:T`$x ${lop} ${lo}$ or $x ${op} ${hi}$, or $${iv(null,lo,0,!strict)}\cup${iv(hi,null,!strict,0)}$`};
+}
+reg('absLess','Absolute value inequalities: less than (sandwich)',1,()=>absIneq(false));
+reg('absGreater','Absolute value inequalities: greater than (split)',1,()=>absIneq(true));
+
+/* chapter 4 */
+reg('factorAC','Factor ax² + bx + c (ac method)',4,()=>{
+  let p,q,r,s,b;
+  do{ p=pick([1,2,3,4]); r=pick([1,2,3,5]); q=nz(-7,7); s=nz(-7,7); b=p*s+q*r; }
+  while(p*r===1||gcd(p,q)!==1||gcd(r,s)!==1||b===0);
+  const a=p*r,c=q*s,m=p*s,n=q*r,v=pick(['x','y','t']);
+  const bin=(A,B)=>`(${poly([A,B],v)})`;
+  return {q:T`Factor completely: $${poly([a,b,c],v)}$`,steps:[
+    T`No GCF. Since $a=${a}$, use the **ac method**: $a\cdot c = ${a}\cdot${par(c)} = ${a*c}$`,
+    T`Find two numbers that multiply to $${a*c}$ and add to $${b}$: $${m}$ and $${n}$.`,
+    T`Split the middle term: $$${term(a,v+'^2',true)}${term(m,v)}${term(n,v)}${term(c,'')}$$`,
+    T`Group and factor each pair: $$${ax(p,v)}${bin(r,s)} ${q<0?'-':'+'} ${Math.abs(q)}${bin(r,s)}$$`,
+    T`Pull out the shared $${bin(r,s)}$: $$${bin(p,q)}${bin(r,s)}$$`
+  ],a:T`$${bin(p,q)}${bin(r,s)}$`};
+});
+
+function findPair(b,c){ for(let m=-Math.abs(c)-1;m<=Math.abs(c)+1;m++){ if(m!==0&&c%m===0&&m+c/m===b) return [m,c/m]; } if(c===0) return [0,b]; return null; }
+reg('factorTri','Factor x² + bx + c (with GCF)',4,()=>{
+  const v=pick(['x','y','u','w']);
+  if(Math.random()<0.15){ let b,c; do{b=nz(-9,9);c=nz(-20,20);}while(findPair(b,c));
+    return {q:T`Factor completely: $${poly([1,b,c],v)}$`,steps:[T`Need two numbers that multiply to $${c}$ and add to $${b}$.`,T`Check every factor pair of $${c}$. None of them add to $${b}$.`],a:'Prime (does not factor)'}; }
+  const k=pick([1,1,1,2,3,5,-1,-2]),m=nz(-9,9),n=nz(-9,9),S=m+n,P=m*n;
+  const pre=k===1?'':k===-1?'-':String(k); const s=[];
+  if(k!==1) s.push(T`Factor out the GCF${k<0?' (negative, so the inside starts positive)':''}: $$${pre}(${poly([1,S,P],v)})$$`);
+  s.push(T`Two numbers that multiply to $${P}$ and add to $${S}$: $${m}$ and $${n}$.`);
+  const ans=m===n?`${pre}(${poly([1,m],v)})^2`:`${pre}(${poly([1,m],v)})(${poly([1,n],v)})`;
+  s.push(T`Write the factors: $$${ans}$$`);
+  return {q:T`Factor completely: $${poly([k,k*S,k*P],v)}$`,steps:s,a:T`$${ans}$`};
+});
+
+reg('diffSquares','Difference of squares',4,()=>{
+  const v=pick(['x','t','c','r']);
+  if(Math.random()<0.3){ const n=R(1,3),n2=n*n,n4=n2*n2;
+    return {q:T`Factor completely: $${v}^4 - ${n4}$`,steps:[
+      T`Difference of squares: $(${v}^2)^2-(${n2})^2$ $$(${v}^2-${n2})(${v}^2+${n2})$$`,
+      T`$${v}^2-${n2}$ is another difference of squares: $(${v}-${n})(${v}+${n})$. The sum $${v}^2+${n2}$ doesn't factor.`],
+      a:T`$(${v}-${n})(${v}+${n})(${v}^2+${n2})$`}; }
+  let a,b; do{a=R(1,5);b=R(1,9);}while(gcd(a,b)!==1);
+  const k=pick([1,1,2,3,5]),A=a===1?v:a+v; const s=[];
+  if(k>1) s.push(T`GCF first: $${k}$. $$${k}(${a*a===1?'':a*a}${v}^2-${b*b})$$`);
+  s.push(T`It's $A^2-B^2$ with $A=${A}$ and $B=${b}$. Use $A^2-B^2=(A-B)(A+B)$.`);
+  const pre=k>1?k:''; s.push(T`$$${pre}(${A}-${b})(${A}+${b})$$`);
+  return {q:T`Factor completely: $${k*a*a===1?'':k*a*a}${v}^2-${k*b*b}$`,steps:s,a:T`$${pre}(${A}-${b})(${A}+${b})$`};
+});
+
+reg('grouping','Factor by grouping (4 terms)',4,()=>{
+  if(Math.random()<0.5){
+    const a=nz(-9,9),b=nz(-9,9);
+    const q=T`xy ${term(b,'x')} ${term(a,'y')} ${term(a*b,'')}`;
+    return {q:T`Factor completely: $${q}$`,steps:[
+      T`4 terms → grouping: $$(xy ${term(b,'x')}) + (${term(a,'y',true)} ${term(a*b,'')})$$`,
+      T`Factor each pair: $$x(y ${pm(b)}) ${a<0?'-':'+'} ${Math.abs(a)}(y ${pm(b)})$$`,
+      T`Pull out $(y ${pm(b)})$: $$(x ${pm(a)})(y ${pm(b)})$$`],a:T`$(x ${pm(a)})(y ${pm(b)})$`};
+  }
+  let p,q; do{p=R(1,3);q=nz(-5,5);}while(gcd(p,q)!==1);
+  const n=R(1,4),n2=n*n,B=`(${poly([p,q],'x')})`;
+  return {q:T`Factor completely: $${poly([p,q,-p*n2,-q*n2],'x')}$`,steps:[
+    T`4 terms → grouping: $$(${poly([p,q,0,0],'x')}) + (${poly([-p*n2,-q*n2],'x')})$$`,
+    T`Factor each pair: $$x^2${B} - ${n2}${B}$$`,
+    T`Pull out $${B}$: $$(x^2-${n2})${B}$$`,
+    T`$x^2-${n2}$ is a difference of squares: $(x-${n})(x+${n})$`],a:T`$(x-${n})(x+${n})${B}$`};
+});
+
+reg('cubes','Sum / difference of cubes',4,()=>{
+  const a=pick([1,1,1,2,3]),n=R(1,6),plus=Math.random()<0.45,v=pick(['x','y','m']);
+  const A=a===1?v:a+v,A3=(a**3===1?'':a**3)+v+'^3',n3=n**3;
+  const f=plus?T`A^3+B^3=(A+B)(A^2-AB+B^2)`:T`A^3-B^3=(A-B)(A^2+AB+B^2)`;
+  const ans=`(${A} ${plus?'+':'-'} ${n})(${poly([a*a,plus?-a*n:a*n,n*n],v)})`;
+  return {q:T`Factor completely: $${A3} ${plus?'+':'-'} ${n3}$`,steps:[
+    T`Both are cubes: $(${A})^3 ${plus?'+':'-'} ${n}^3$. Use $$${f}$$`,
+    T`$A=${A}$, $B=${n}$. So $A^2=${poly([a*a,0,0],v)}$, $AB=${ax(a*n,v)}$, $B^2=${n*n}$.`,
+    T`$$${ans}$$`],a:T`$${ans}$`,tip:'SOAP: Same sign, Opposite sign, Always Positive.'};
+});
+
+reg('zeroProduct','Solve quadratics by factoring',4,()=>{
+  const v=pick(['x','y','w']); let r1=pick([0,nz(-9,9),nz(-9,9)]),r2; do r2=nz(-9,9); while(r2===r1);
+  const S=r1+r2,P=r1*r2;
+  if(P===0){ const b=-S; return {q:T`Solve: $${poly([1,b,0],v)} = 0$`,steps:[T`Factor out $${v}$: $$${v}(${poly([1,b],v)}) = 0$$`,T`Set each factor to 0: $${v}=0$ or $${poly([1,b],v)}=0$`],a:T`$${v}=0$ or $${v}=${-b}$`,tip:'Never divide by the variable; you would lose the zero answer.'}; }
+  return {q:T`Solve: $${poly([1,-S,0],v)} = ${-P}$`,steps:[
+    T`Get 0 on one side: $$${poly([1,-S,P],v)} = 0$$`,
+    T`Two numbers that multiply to $${P}$ and add to $${-S}$: $${-r1}$ and $${-r2}$. $$(${poly([1,-r1],v)})(${poly([1,-r2],v)}) = 0$$`,
+    T`Set each factor to 0: $${poly([1,-r1],v)}=0$ or $${poly([1,-r2],v)}=0$`],a:T`$${v}=${r1}$ or $${v}=${r2}$`};
+});
+
+/* chapter 5 */
+reg('domainRational','Domain of a rational function',5,()=>{
+  let r1=nz(-8,8),r2; do r2=nz(-8,8); while(r2===r1);
+  const lo=Math.min(r1,r2),hi=Math.max(r1,r2),num=poly([nz(1,5),nz(-9,9)],'x');
+  return {q:T`Find the domain in interval notation: $f(x)=\dfrac{${num}}{${poly([1,-(r1+r2),r1*r2],'x')}}$`,steps:[
+    T`The denominator can't be 0. Set it equal to 0: $$${poly([1,-(r1+r2),r1*r2],'x')}=0$$`,
+    T`Factor: $(${poly([1,-r1],'x')})(${poly([1,-r2],'x')})=0$, so $x=${r1}$ and $x=${r2}$ are not allowed.`,
+    T`Cut the number line at $${lo}$ and $${hi}$.`],a:T`$(-\infty,${lo})\cup(${lo},${hi})\cup(${hi},\infty)$`};
+});
+
+reg('rationalSimp','Simplify a rational expression',5,()=>{
+  let k,r,u,p,q; do{k=pick([2,3,4,5,9]);r=nz(-6,6);u=nz(-6,6);p=pick([2,3]);q=nz(-7,7);}while(u===r||gcd(p,q)!==1||(-q/p)===u||(q-p*r)===0);
+  const top=poly([k,-k*(r+u),k*r*u],'x'),bot=poly([p,q-p*r,-q*r],'x');
+  const fx=`(${poly([1,-r],'x')})`,fu=`(${poly([1,-u],'x')})`,fp=`(${poly([p,q],'x')})`;
+  return {q:T`Simplify to lowest terms: $\dfrac{${top}}{${bot}}$`,steps:[
+    T`Factor the top: GCF $${k}$, then the trinomial: $$${k}${fx}${fu}$$`,
+    T`Factor the bottom (ac method): $$${fp}${fx}$$`,
+    T`Cancel the common factor $${fx}$: $$\frac{${k}${fx}${fu}}{${fp}${fx}}$$`],a:T`$\dfrac{${k}${fu}}{${poly([p,q],'x')}}$`};
+});
+
+reg('recipNumber','Reciprocal number problems',5,()=>{
+  const k=R(2,5),n=R(2,5),N=k*n*n+1;
+  return {q:T`The reciprocal of a number plus ${k} times the number is $\frac{${N}}{${n}}$. Find the number.`,steps:[
+    T`Translate: $$\frac1x + ${k}x = \frac{${N}}{${n}}$$`,
+    T`Multiply every term by the LCD $${n}x$: $$${n} + ${k*n}x^2 = ${N}x$$`,
+    T`Set to 0: $$${k*n}x^2 - ${N}x + ${n} = 0$$`,
+    T`Factor: $(${k*n}x-1)(x-${n})=0$`],a:T`$x=${n}$ or $x=${fr(1,k*n)}$`};
+});
+
+reg('workRate','Work-together problems',5,()=>{
+  let a=R(2,12),b; do b=R(2,12); while(b===a);
+  const [p1,p2]=[pick(['Maya','Luis','Priya','Ava']),pick(['Jordan','Sam','Omar','Kai'])];
+  const t=a*b/(a+b),h=Math.floor(t),m=Math.round((t-h)*60);
+  return {q:T`${p1} can finish a job in ${a} hr. ${p2} can finish it in ${b} hr. How long working together?`,steps:[
+    T`Rates (jobs per hour): $\frac1{${a}}$ and $\frac1{${b}}$. Together: $\frac1t$. $$\frac1{${a}}+\frac1{${b}}=\frac1t$$`,
+    T`Common denominator $${a*b}$: $$\frac{${b}}{${a*b}}+\frac{${a}}{${a*b}}=\frac{${a+b}}{${a*b}}=\frac1t$$`,
+    T`Flip: $t=${fr(a*b,a+b)}\approx ${t.toFixed(2)}$ hours`],a:T`$t=${fr(a*b,a+b)}\approx${t.toFixed(2)}$ hr (about ${h} hr ${m} min)`};
+});
+
+reg('mapScale','Map / proportion problems',5,()=>{
+  const d1=R(30,100)/10,D=R(800,3000),d2=R(10,90)/10,x=D*d2/d1;
+  return {q:T`On a map, two cities are $${d1}$ in apart and the real distance is $${D}$ miles. How far apart are cities that are $${d2}$ in apart on the same map? Round to the nearest mile.`,steps:[
+    T`Proportion (inches over miles): $$\frac{${d1}}{${D}}=\frac{${d2}}{x}$$`,
+    T`Cross multiply: $$${d1}x=${D}(${d2})=${+(D*d2).toFixed(2)}$$`,
+    T`Divide: $x=\frac{${+(D*d2).toFixed(2)}}{${d1}}\approx${x.toFixed(1)}$`],a:T`About $${Math.round(x)}$ miles`};
+});
+
+/* chapter 6 */
+reg('simplifySqrt','Simplify square roots with variables',6,()=>{
+  const s=R(2,6),q=pick([2,3,5,6,7]),N=s*s*q; let e,f,g; do{e=R(0,7);f=R(0,7);g=R(0,6);}while((e>0)+(f>0)+(g>0)<2);
+  const vars=[['x',e],['y',f],['z',g]].filter(v=>v[1]>0);
+  const inside=vars.map(([v,p])=>vp(v,p)).join('');
+  const outV=vars.map(([v,p])=>vp(v,Math.floor(p/2))).join(''), inV=vars.map(([v,p])=>vp(v,p%2)).join('');
+  const split=vars.map(([v,p])=>p%2?`${vp(v,p)}=${vp(v,p-1)}\\cdot ${v}`:`${vp(v,p)}=${vp(v,p)}`).join(',\\quad ');
+  return {q:T`Simplify: $\sqrt{${N}${inside}}$`,steps:[
+    T`Split each piece into (perfect square) × (leftover): $$${N}=${s*s}\cdot${q},\quad ${split}$$`,
+    T`Square roots of the perfect squares come out: $\sqrt{${s*s}}=${s}$, and halve each even exponent.`,
+    T`Leftovers stay inside: $${q}${inV}$`],a:T`$${s}${outV}\sqrt{${q}${inV}}$`};
+});
+
+reg('complexMult','Multiply complex numbers',6,()=>{
+  const a=nz(-6,6),b=nz(-6,6),c=nz(-6,6),d=nz(-6,6);
+  return {q:T`Simplify: $(${cplx(a,b)})(${cplx(c,d)})$`,steps:[
+    T`FOIL: $$${a*c} ${term(a*d,'i')} ${term(b*c,'i')} ${term(b*d,'i^2')}$$`,
+    T`Replace $i^2$ with $-1$: $${b*d}i^2 = ${-b*d}$`,
+    T`Combine real parts: $${a*c} ${pm(-b*d)} = ${a*c-b*d}$. Imaginary parts: $${a*d} ${pm(b*c)} = ${a*d+b*c}$`],a:T`$${cplx(a*c-b*d,a*d+b*c)}$`};
+});
+
+reg('cubeRootEq','Cube root equations',6,()=>{
+  const a=R(1,3),b=nz(-9,9),c=nz(-5,5),c3=c**3;
+  return {q:T`Solve: $\sqrt[3]{${poly([a,b],'x')}} = ${c}$`,steps:[
+    T`Cube both sides: $$${poly([a,b],'x')} = (${c})^3 = ${c3}$$`,
+    T`${b>0?'Subtract':'Add'} $${Math.abs(b)}$: $${ax(a)} = ${c3-b}$`,
+    a!==1?T`Divide by $${a}$: $x = ${fr(c3-b,a)}$`:T`So $x = ${c3-b}$`],a:T`$x = ${fr(c3-b,a)}$`};
+});
+
+reg('fracExp','Rational exponents',6,()=>{
+  const n=pick([2,3]),r=n===3?R(2,4):R(2,6),m=pick([1,2,3].filter(x=>x!==n)),base=r**n,val=r**m;
+  const c=R(2,7),p=R(1,4),q=R(1,4),w=R(1,3);
+  const root=n===2?T`\sqrt{${base}}`:T`\sqrt[3]{${base}}`;
+  return {q:T`Simplify: $${base}^{${m}/${n}}\cdot\left(\dfrac{${c*c}x^{${2*p}}y^{${2*q}}}{z^{${2*w}}}\right)^{1/2}$`,steps:[
+    T`Bottom of the exponent = root, top = power: $$${base}^{${m}/${n}}=\left(${root}\right)^{${m}}=${r}^{${m}}=${val}$$`,
+    T`The $\frac12$ power is a square root of each piece (halve the exponents): $$\sqrt{${c*c}}=${c},\ x^{${p}},\ y^{${q}},\ z^{${w}}$$`,
+    T`Multiply: $${val}\cdot\dfrac{${c}${vp('x',p)}${vp('y',q)}}{${vp('z',w)}}$`],a:T`$\dfrac{${val*c}${vp('x',p)}${vp('y',q)}}{${vp('z',w)}}$`};
+});
+
+/* chapter 7 */
+function rootAns(h,k,v){ // v + h = ±sqrt(k)  → v = -h ± sqrt(k)
+  if(k===0) return `${v} = ${-h}`;
+  if(k>0&&isSq(k)){ const s=Math.sqrt(k); return `${v} = ${-h+s} \\ \\text{or}\\ ${v} = ${-h-s}`; }
+  return `${v} = ${-h===0?'':-h} \\pm ${radT(k)}`;
+}
+reg('sqrtProp','Square root property',7,()=>{
+  const v=pick(['x','p','m']),h=nz(-9,9),k=pick([R(1,9)**2,pick([2,3,5,6,7,8,12,18,20,24,27,28,32,45,48,50]),-pick([1,4,9,8,12,18,24,25,27,50])]);
+  const s=[T`Square root both sides. Don't forget $\pm$: $$${poly([1,h],v)} = \pm\sqrt{${k}}$$`];
+  if(!(k>0&&isSq(k))) s.push(T`Simplify: $\sqrt{${k}} = ${radT(k)}$${k<0?' (the negative gives an $i$)':''}`);
+  else s.push(T`$\sqrt{${k}}=${Math.sqrt(k)}$, so $${poly([1,h],v)}=\pm${Math.sqrt(k)}$`);
+  s.push(T`${h>0?'Subtract':'Add'} $${Math.abs(h)}$.`);
+  return {q:T`Solve: $(${poly([1,h],v)})^2 = ${k}$`,steps:s,a:T`$${rootAns(h,k,v)}$`};
+});
+
+reg('completeSquare','Completing the square',7,()=>{
+  const a=pick([1,1,2,3]),h=nz(-5,5),b=2*h; let c; do c=nz(-20,20); while(h*h-c===0);
+  const K=h*h-c,s=[];
+  if(a>1) s.push(T`Make the leading coefficient 1: divide by $${a}$. $$${poly([1,b,c],'x')} = 0$$`);
+  s.push(T`Move the constant: $$${poly([1,b,0],'x')} = ${-c}$$`);
+  s.push(T`Half of $${b}$ is $${h}$; squared is $${h*h}$. Add it to both sides: $$${poly([1,b,h*h],'x')} = ${-c} + ${h*h} = ${K}$$`);
+  s.push(T`Left side is a perfect square: $$(${poly([1,h],'x')})^2 = ${K}$$`);
+  s.push(T`Square root both sides: $${poly([1,h],'x')} = \pm${K>0&&isSq(K)?Math.sqrt(K):radT(K)}$`);
+  return {q:T`Solve by completing the square: $${poly([a,a*b,a*c],'x')} = 0$`,steps:s,a:T`$${rootAns(h,K,'x')}$`};
+});
+
+reg('quadFormula','Quadratic formula',7,()=>{
+  const a=R(1,4),b=nz(-9,9),c=nz(-9,9),D=b*b-4*a*c;
+  const s=[T`$a=${a},\ b=${b},\ c=${c}$`,
+    T`Discriminant: $$b^2-4ac = ${par(b)}^2-4(${a})${par(c)} = ${b*b} ${pm(-4*a*c)} = ${D}$$`,
+    T`Plug in: $$x=\frac{${-b}\pm\sqrt{${D}}}{${2*a}}$$`];
+  if(D!==0&&!isSq(D)) s.push(T`Simplify the radical: $\sqrt{${D}}=${radT(D)}$, then reduce.`);
+  return {q:T`Solve using the quadratic formula: $${poly([a,b,c],'x')} = 0$`,steps:s,a:T`$${qroots(a,b,c)}$`};
+});
+
+reg('discriminant','Discriminant: number & type of solutions',7,()=>{
+  const a=R(1,4),b=nz(-9,9),c=nz(-9,9),D=b*b-4*a*c;
+  const type=D>0?(isSq(D)?'Two real (rational) solutions':'Two real (irrational) solutions'):D===0?'One real solution':'Two complex (non-real) solutions';
+  return {q:T`Find the number and type of solutions: $${poly([a,b,c],'x')} = 0$`,steps:[
+    T`$a=${a},\ b=${b},\ c=${c}$`,
+    T`$$b^2-4ac=${par(b)}^2-4(${a})${par(c)}=${D}$$`,
+    T`${D>0?'Positive':D===0?'Zero':'Negative'} discriminant.`],a:type,tip:'> 0: two real. = 0: one real. < 0: two complex.'};
+});
+
+reg('vertex','Vertex & axis of symmetry',7,()=>{
+  if(Math.random()<0.3){ const a=pick([1,-1,2,-3]),h=nz(-6,6),k=nz(-9,9);
+    return {q:T`What is the axis of symmetry for $f(x)=${a===1?'':a===-1?'-':a}(${poly([1,-h],'x')})^2 ${pm(k)}$?`,steps:[T`Vertex form $a(x-h)^2+k$: $h=${h}$, $k=${k}$, vertex $(${h},${k})$.`,'The axis of symmetry is the vertical line through the vertex.'],a:T`$x=${h}$`}; }
+  const a=pick([1,1,-1,2,-2]),h=nz(-5,5),b=-2*a*h,c=nz(-10,10),k=a*h*h+b*h+c;
+  return {q:T`Find the vertex of $y=${poly([a,b,c],'x')}$ (answer as a point).`,steps:[
+    T`$a=${a},\ b=${b}$. Vertex x-value: $$x=-\frac{b}{2a}=-\frac{${b}}{2${par(a)}}=${h}$$`,
+    T`Plug $x=${h}$ back in: $$y=${a===1?'':a===-1?'-':a}${par(h)}^2 ${pm(b)}${par(h)} ${pm(c)} = ${k}$$`,
+    T`$a${a>0?'>':'<'}0$, so this vertex is a **${a>0?'minimum':'maximum'}**.`],a:T`$(${h},\,${k})$`};
+});
+
+reg('graphParabola','Graph a parabola from vertex form',7,()=>{
+  const a=pick([1,-1,2,0.5,-0.5]),h=nz(-4,4),k=R(-5,5),st=Math.abs(a)===0.5?2:1,f=x=>a*(x-h)**2+k;
+  const xs=[-2,-1,0,1,2].map(i=>h+i*st),ys=xs.map(f);
+  const aT=a===1?'':a===-1?'-':a===0.5?'\\tfrac12':a===-0.5?'-\\tfrac12':a;
+  return {q:T`Graph $f(x)=${aT}(${poly([1,-h],'x')})^2 ${pm(k)}$`.replace(/ \+ 0\$$/,'$'),steps:[
+    T`Vertex form: $h=${h}$, $k=${k}$, so the vertex is $(${h},${k})$. $a${a>0?'>':'<'}0$ → opens **${a>0?'up':'down'}**${Math.abs(a)===0.5?' and wider':Math.abs(a)===2?' and narrower':''}.`,
+    T`Table around the vertex${st===2?' (steps of 2 so the ½ gives whole numbers)':''}:`,
+    {tb:[['x','f(x)'],...xs.map((x,i)=>[String(x),String(ys[i])])]},
+    {g:{f,xmin:h-6,xmax:h+6,ymin:Math.min(...ys,k)-2,ymax:Math.max(...ys,k)+2,pts:xs.map((x,i)=>[x,ys[i]])}}],
+    a:T`Parabola opening ${a>0?'up':'down'}, vertex $(${h},${k})$`};
+});
+
+reg('maxArea','Max / min word problems',7,()=>{
+  const L=pick([80,100,120,150,200,240,300]);
+  return {q:T`A farmer has $${2*L}$ ft of fence for a field along a river. The area is $A(x)=-\frac{x^2}{2}+${L}x$. Find the $x$ that maximizes area and the max area.`,steps:[
+    T`$a=-\frac12<0$: opens down, so the vertex is the maximum.`,
+    T`$$x=-\frac{b}{2a}=-\frac{${L}}{2(-\frac12)}=${L}$$`,
+    T`$$A(${L})=-\frac{${L}^2}{2}+${L}(${L})=${-L*L/2}+${L*L}=${L*L/2}$$`],a:T`$x=${L}$ ft, max area $${(L*L/2).toLocaleString('en-US').replace(/,/g,'{,}')}\text{ ft}^2$`};
+});
+
+/* chapter 8 */
+reg('inverseLinear','Inverse of a linear function',8,()=>{
+  const m=R(2,6),c=nz(-9,9);
+  if(Math.random()<0.5) return {q:T`Find the inverse of $f(x)=\frac1{${m}}x ${pm(c)}$`,steps:[
+    T`Write $y=\frac1{${m}}x ${pm(c)}$, then swap $x$ and $y$: $$x=\frac1{${m}}y ${pm(c)}$$`,
+    T`${c>0?'Subtract':'Add'} $${Math.abs(c)}$: $${poly([1,-c],'x')}=\frac1{${m}}y$`,
+    T`Multiply by $${m}$: $y=${m}(${poly([1,-c],'x')})=${poly([m,-m*c],'x')}$`],a:T`$f^{-1}(x)=${poly([m,-m*c],'x')}$`};
+  return {q:T`Find the inverse of $f(x)=${poly([m,c],'x')}$`,steps:[
+    T`Write $y=${poly([m,c],'x')}$, swap: $$x=${poly([m,c],'y')}$$`,
+    T`${c>0?'Subtract':'Add'} $${Math.abs(c)}$: $${poly([1,-c],'x')}=${m}y$`,
+    T`Divide by $${m}$.`],a:T`$f^{-1}(x)=\dfrac{${poly([1,-c],'x')}}{${m}}$`};
+});
+
+const EXPLOG=[['16','\\frac34','8'],['8','\\frac23','4'],['27','\\frac23','9'],['25','\\frac32','125'],['4','\\frac52','32'],['9','-\\frac12','\\frac13'],['2','5','32'],['10','-2','\\frac1{100}'],['64','\\frac13','4'],['81','\\frac34','27'],['x','5','31'],['x','3','20'],['5','-2','\\frac1{25}'],['3','4','81']];
+reg('expToLog','Exponential ↔ log form',8,()=>{
+  const [b,e,N]=pick(EXPLOG);
+  if(Math.random()<0.5) return {q:T`Write $${b}^{${e}}=${N}$ in logarithm form.`,steps:[T`$b^y=x$ becomes $\log_b x=y$. The base stays the base.`,T`Base $${b}$, exponent $${e}$, result $${N}$.`],a:T`$\log_{${b}}${N}=${e}$`};
+  return {q:T`Write $\log_{${b}}(${N})=${e}$ in exponential form.`,steps:[T`$\log_b x=y$ means $b^y=x$. The base stays the base.`,T`Base $${b}$, exponent $${e}$, result $${N}$.`],a:T`$${b}^{${e}}=${N}$`};
+});
+
+reg('logApprox','Approximate logs (change of base)',8,()=>{
+  const [bt,b]=pick([['10',10],['2',2],['3',3],['4',4],['5',5],['7',7],['\\frac12',0.5],['\\frac13',1/3]]),N=R(2,60),v=Math.log(N)/Math.log(b);
+  const lhs=b===10?T`\log(${N})`:T`\log_{${bt}}(${N})`;
+  const s=b===10?[T`No base written means base 10. Use the LOG key: $\log(${N})\approx${v.toFixed(6)}$`]:
+    [T`Change of base: $$${lhs}=\frac{\ln ${N}}{\ln ${bt}}$$`,T`$$\frac{${Math.log(N).toFixed(6)}}{${Math.log(b).toFixed(6)}}\approx${v.toFixed(6)}$$`];
+  return {q:T`Approximate to four decimal places: $${lhs}$`,steps:s,a:T`$\approx${d4(v)}$`};
+});
+
+reg('combineLogs','Combine into a single log',8,()=>{
+  const C=[[1,''],[2,'2'],[3,'3'],[0.5,'\\frac12'],[1/3,'\\frac13']];
+  const pw=(v,c)=>c[0]===1?v:c[0]===0.5?T`\sqrt{${v}}`:c[0]===1/3?T`\sqrt[3]{${v}}`:`${v}^{${c[1]}}`;
+  const pe=(v,c)=>c[0]===1?v:c[0]===0.5?`${v}^{1/2}`:c[0]===1/3?`${v}^{1/3}`:`${v}^{${c[1]}}`;
+  const p=pick(C),q=pick(C.slice(1)),sub=Math.random()<0.4,r=pick(C.slice(0,3));
+  const qs=T`${p[1]}\log_b(x) + ${q[1]}\log_b(y)`+(sub?T` - ${r[1]}\log_b(z)`:'');
+  const inside=sub?T`\dfrac{${pw('x',p)}${pw('y',q)}}{${pw('z',r)}}`:`${pw('x',p)}${pw('y',q)}`;
+  return {q:T`Write as a single logarithm: $${qs}$`,steps:[
+    T`Power rule (the number in front becomes an exponent): $$\log_b ${pe('x',p)} + \log_b ${pe('y',q)}${sub?T` - \log_b ${pe('z',r)}`:''}$$`,
+    T`Adding logs → multiply inside.${sub?' Subtracting → divide.':''}`],a:T`$\log_b\left(${inside}\right)$`};
+});
+
+reg('logSumEq','Log equations (combine, then exponentiate)',8,()=>{
+  const [P,r,s]=pick([[100,25,4],[100,20,5],[100,50,2],[10,5,2],[10,10,1]]),a=r-s,k=P===100?2:1;
+  return {q:T`Solve: $\log(x)+\log(x-${a})=${k}$`,steps:[
+    T`Product rule: $$\log\big(x(x-${a})\big)=${k}$$`,
+    T`Exponential form (base 10): $$x(x-${a})=10^{${k}}=${P}$$`,
+    T`$$x^2-${a}x-${P}=0 \;\Rightarrow\; (x-${r})(x+${s})=0$$`,
+    T`$x=${r}$ or $x=-${s}$. Can't take the log of a negative, so reject $-${s}$.`],a:T`$x=${r}$`};
+});
+
+reg('logBaseEq','Solve log_b(x) = n',8,()=>{
+  const [bt,num,den]=pick([['2',2,1],['3',3,1],['4',4,1],['5',5,1],['\\frac12',1,2],['\\frac13',1,3]]),n=nz(-4,4);
+  const big=Math.max(num,den),lim=big>=4?3:4,N=Math.max(-lim,Math.min(lim,n));
+  let tn=N>=0?num**N:den**(-N),td=N>=0?den**N:num**(-N);
+  return {q:T`Solve: $\log_{${bt}}(x)=${N}$`,steps:[
+    T`Exponential form: $$x=\left(${bt}\right)^{${N}}$$`,
+    N<0?'A negative exponent flips the base.':'Evaluate the power.'],a:T`$x=${fr(tn,td)}$`};
+});
+
+reg('expSolve','Solve exponential equations with ln',8,()=>{
+  const b=pick([2,3,4,5,6,7]);
+  if(Math.random()<0.5){ const N=R(10,200),v=Math.log(N)/Math.log(b);
+    return {q:T`Solve: $${b}^x=${N}$`,steps:[T`Take ln of both sides and bring the exponent down: $$x\ln ${b}=\ln ${N}$$`,T`$$x=\frac{\ln ${N}}{\ln ${b}}\approx\frac{${d4(Math.log(N))}}{${d4(Math.log(b))}}$$`],a:T`$x\approx${d4(v)}$`}; }
+  const k=R(2,20),M=k+R(10,150),h=nz(-6,6),v=Math.log(M-k)/Math.log(b);
+  return {q:T`Solve: $${M}=${k}+${b}^{x ${pm(-h)}}$`,steps:[
+    T`Isolate the exponential: subtract $${k}$. $$${M-k}=${b}^{x ${pm(-h)}}$$`,
+    T`Take ln and bring the exponent down: $$\ln ${M-k}=(x ${pm(-h)})\ln ${b}$$`,
+    T`$$x ${pm(-h)}=\frac{\ln ${M-k}}{\ln ${b}}\approx${d4(v)}$$`,
+    T`${h>0?'Add':'Subtract'} $${Math.abs(h)}$.`],a:T`$x\approx${d4(v+h)}$`};
+});
+
+reg('sameBase','Exponential equations with the same base',8,()=>{
+  const b=pick([2,3,5]),n=R(1,b===5?3:4),k=nz(-6,6);
+  return {q:T`Solve: $${b}^{x ${pm(k)}}=\frac1{${b**n}}$`,steps:[
+    T`Write both sides with base $${b}$: $${b**n}=${b}^{${n}}$, so $\frac1{${b**n}}=${b}^{-${n}}$`,
+    T`Same base → set the exponents equal: $$x ${pm(k)}=-${n}$$`],a:T`$x=${-n-k}$`};
+});
+
+reg('lnEq','Solve ln equations',8,()=>{
+  const a=nz(-9,9),c=R(5,35)/10,e=Math.exp(c);
+  return {q:T`Solve: $\ln(x ${pm(a)})=${c}$`,steps:[
+    T`$\ln$ is log base $e$. Exponential form: $$e^{${c}}=x ${pm(a)}$$`,
+    T`$e^{${c}}\approx${d4(e)}$`,
+    T`${a>0?'Subtract':'Add'} $${Math.abs(a)}$.`],a:T`$x\approx${d4(e-a)}$`};
+});
+
+reg('compound','Continuous compounding',8,()=>{
+  const P=pick([1000,1500,2000,2500,3000,5000]),r=pick([3,4,4.5,5,6,6.5,7,7.5,8]),t=R(3,15),rr=r/100,A=P*Math.exp(rr*t),dbl=Math.log(2)/rr;
+  const money=x=>'\\$'+x.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}).replace(/,/g,'{,}');
+  return {q:T`Use $A=Pe^{rt}$. $\$${P}$ is invested at ${r}% compounded continuously. Find the value after ${t} years. How long until it doubles?`,steps:[
+    T`$P=${P}$, $r=${rr}$, $t=${t}$: $$A=${P}e^{${rr}(${t})}=${P}e^{${+(rr*t).toFixed(4)}}$$`,
+    T`$e^{${+(rr*t).toFixed(4)}}\approx${Math.exp(rr*t).toFixed(5)}$, so $A\approx${money(A)}$`,
+    T`Doubling: $${2*P}=${P}e^{${rr}t}\Rightarrow 2=e^{${rr}t}$`,
+    T`Take ln: $\ln2=${rr}t$, so $$t=\frac{\ln 2}{${rr}}\approx${dbl.toFixed(2)}$$`],a:T`About $${money(A)}$; doubles in about $${dbl.toFixed(2)}$ years`};
+});
+
+reg('composition','Function operations & composition',8,()=>{
+  const a=nz(-6,6),b=R(1,6),f=x=>x+a,g=x=>x*x+b;
+  const F=poly([1,a],'x'),Gx=poly([1,0,b],'x'),s=[],ans=[];
+  const parts=[
+    ()=>{const n=R(-4,6),fn=f(n);s.push(T`$(g\circ f)(${n})$: inside first, $f(${n})=${fn}$, then $g(${fn})=${par(fn)}^2+${b}=${g(fn)}$`);ans.push(T`$(g\circ f)(${n})=${g(fn)}$`);},
+    ()=>{const n=R(-4,6),gn=g(n);s.push(T`$(f\circ g)(${n})$: $g(${n})=${gn}$, then $f(${gn})=${gn} ${pm(a)}=${f(gn)}$`);ans.push(T`$(f\circ g)(${n})=${f(gn)}$`);},
+    ()=>{const n=R(-4,8);s.push(T`$(f-g)(${n})$: $f(${n})=${f(n)}$, $g(${n})=${g(n)}$, so $${f(n)}-${par(g(n))}=${f(n)-g(n)}$`);ans.push(T`$(f-g)(${n})=${f(n)-g(n)}$`);},
+    ()=>{const n=R(-4,6),gn=g(n);s.push(T`$(h\circ g)(${n})$: $g(${n})=${gn}$, then $h(${gn})=\frac1{${gn}}$`);ans.push(T`$(h\circ g)(${n})=\frac1{${gn}}$`);},
+    ()=>{s.push(T`$(g\circ f)(x)$: put $f$ into $g$: $$(${F})^2+${b}=${poly([1,2*a,a*a+b],'x')}$$`);ans.push(T`$(g\circ f)(x)=${poly([1,2*a,a*a+b],'x')}$`);}
+  ];
+  const chosen=parts.sort(()=>Math.random()-.5).slice(0,3);
+  chosen.forEach(p=>p());
+  return {q:T`Let $f(x)=${F}$, $g(x)=${Gx}$, $h(x)=\frac1x$. Find the ${chosen.length} values below.`,steps:s,a:ans.join(' &nbsp; '),tip:'Composition works inside out: evaluate the inner function first.'};
+});
+
+/* ---------- plotting ---------- */
+const NS='http://www.w3.org/2000/svg';
+function plot(spec){
+  const W=340,H=260,P=26,{f,xmin,xmax,ymin,ymax,pts=[],asym}=spec;
+  const sx=x=>P+(x-xmin)/(xmax-xmin)*(W-2*P), sy=y=>H-P-(y-ymin)/(ymax-ymin)*(H-2*P);
+  const stepFor=r=>r<=14?1:r<=28?2:5;
+  const xs=stepFor(xmax-xmin), ys=stepFor(ymax-ymin);
+  let g='';
+  for(let x=Math.ceil(xmin/xs)*xs;x<=xmax;x+=xs) g+=`<line class="gl" x1="${sx(x)}" y1="${P}" x2="${sx(x)}" y2="${H-P}"/>`+(x!==0?`<text x="${sx(x)}" y="${H-P+13}" text-anchor="middle">${x}</text>`:'');
+  for(let y=Math.ceil(ymin/ys)*ys;y<=ymax;y+=ys) g+=`<line class="gl" x1="${P}" y1="${sy(y)}" x2="${W-P}" y2="${sy(y)}"/>`+(y!==0?`<text x="${P-4}" y="${sy(y)+3}" text-anchor="end">${y}</text>`:'');
+  if(xmin<=0&&xmax>=0) g+=`<line class="ax" x1="${sx(0)}" y1="${P}" x2="${sx(0)}" y2="${H-P}"/>`;
+  if(ymin<=0&&ymax>=0) g+=`<line class="ax" x1="${P}" y1="${sy(0)}" x2="${W-P}" y2="${sy(0)}"/>`;
+  if(asym==='h0') g+=`<line class="as" x1="${P}" y1="${sy(0)}" x2="${W-P}" y2="${sy(0)}"/>`;
+  if(asym==='v0') g+=`<line class="as" x1="${sx(0)}" y1="${P}" x2="${sx(0)}" y2="${H-P}"/>`;
+  let d='',pen=false; const N=400;
+  for(let i=0;i<=N;i++){ const x=xmin+(xmax-xmin)*i/N, y=f(x);
+    if(!isFinite(y)||y<ymin-(ymax-ymin)||y>ymax+(ymax-ymin)){pen=false;continue;}
+    d+=(pen?'L':'M')+sx(x).toFixed(1)+' '+sy(y).toFixed(1); pen=true; }
+  g+=`<clipPath id="cp${plot.n=(plot.n||0)+1}"><rect x="${P}" y="${P}" width="${W-2*P}" height="${H-2*P}"/></clipPath><path class="cv" clip-path="url(#cp${plot.n})" d="${d}"/>`;
+  pts.forEach(([x,y])=>{ if(y>=ymin&&y<=ymax) g+=`<circle class="pt" cx="${sx(x)}" cy="${sy(y)}" r="4"/>`; });
+  return `<svg class="plot" viewBox="0 0 ${W} ${H}" role="img" aria-label="Graph">${g}</svg>`;
+}
+function table(rows){
+  const [h,...body]=rows; // rows: [ [hx,hy], [x,y]... ] -> horizontal table
+  let html='<div class="tb-wrap"><table class="tb"><tr><th>'+tex(h[0])+'</th>'+body.map(r=>'<td>'+tex(r[0])+'</td>').join('')+'</tr>';
+  html+='<tr><th>'+tex(h[1])+'</th>'+body.map(r=>'<td>'+tex(r[1])+'</td>').join('')+'</tr></table></div>';
+  return html;
+}
+function renderStep(st){
+  if(typeof st==='string') return fmt(st);
+  if(st.tb) return table(st.tb);
+  if(st.g) return plot(st.g);
+  return '';
+}
+
+/* ---------- parse static data ---------- */
+const chapters=[]; let ch=null,cur=null;
+document.getElementById('data').textContent.split('\n').forEach(line=>{
+  if(line.startsWith('@ch ')){ const [n,title,sub]=line.slice(4).split(' | '); ch={n:n.trim(),title,sub,items:[]}; chapters.push(ch); return; }
+  if(line.startsWith('# ')){ const [id,label,gen]=line.slice(2).split('|').map(s=>s.trim()); cur={id,label,gen:gen||null,steps:[],q:'',a:'',tip:''}; ch.items.push(cur); return; }
+  if(!cur) return;
+  const m=line.match(/^(Q|S|A|T|G|TB): ?(.*)$/); if(!m) return;
+  const [,k,v]=m;
+  if(k==='Q') cur.q=v; else if(k==='S') cur.steps.push(v); else if(k==='A') cur.a=v; else if(k==='T') cur.tip=v;
+  else if(k==='TB'){ cur.steps.push({tb:v.split('|').map(c=>c.trim().split(';'))}); }
+  else if(k==='G'){ const [ex,box,pts,asym]=v.split('|').map(s=>s.trim()); const [xmin,xmax,ymin,ymax]=box.split(',').map(Number);
+    cur.steps.push({g:{f:new Function('x','return '+ex),xmin,xmax,ymin,ymax,pts:(pts||'').split(';').filter(Boolean).map(p=>p.split(',').map(Number)),asym}}); }
+});
+
+/* ---------- progress ---------- */
+const KEY='m103-final-got-v1'; let got={};
+try{ got=JSON.parse(localStorage.getItem(KEY)||'{}')||{}; }catch(e){ got={}; }
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(got)); }catch(e){} }
+
+/* ---------- work panel ---------- */
+function workPanel(item){
+  const el=document.createElement('div');
+  const steps=item.steps||[];
+  el.innerHTML=`<div class="prompt">${fmt(item.q)}</div><ol class="steps"></ol><div class="answer" hidden><span class="lbl">Answer</span>${fmt(item.a)}</div>${item.tip?`<div class="tip" hidden>${fmt(item.tip)}</div>`:''}<div class="controls"><button class="btn primary next"></button><button class="btn all">Show all</button><button class="btn ghost reset" hidden>Hide steps</button></div>`;
+  const ol=el.querySelector('ol'),ans=el.querySelector('.answer'),tip=el.querySelector('.tip'),next=el.querySelector('.next'),all=el.querySelector('.all'),reset=el.querySelector('.reset');
+  let shown=0;
+  function label(){
+    if(shown<steps.length){ next.textContent=shown===0?`Show step 1 of ${steps.length}`:`Next step (${shown+1} of ${steps.length})`; next.disabled=false; }
+    else if(ans.hidden){ next.textContent='Show answer'; next.disabled=false; }
+    else { next.textContent='Done'; next.disabled=true; }
+    all.hidden=!ans.hidden; reset.hidden=shown===0&&ans.hidden;
+  }
+  function step(){
+    if(shown<steps.length){ const li=document.createElement('li'); li.innerHTML='<div>'+renderStep(steps[shown])+'</div>'; ol.appendChild(li); shown++; }
+    else { ans.hidden=false; if(tip) tip.hidden=false; }
+    label();
+  }
+  next.onclick=step;
+  all.onclick=()=>{ while(shown<steps.length) step(); step(); };
+  reset.onclick=()=>{ ol.innerHTML=''; shown=0; ans.hidden=true; if(tip) tip.hidden=true; label(); };
+  label();
+  return el;
+}
+
+/* ---------- build chapters ---------- */
+const main=document.getElementById('chapters'),chips=document.getElementById('chips');
+const chipEls={};
+function updateProgress(c){
+  const done=c.items.filter(i=>got[i.id]).length,total=c.items.length;
+  const pe=document.getElementById('prog-'+c.n); if(pe) pe.textContent=`${done} / ${total} got it`;
+  const chip=chipEls[c.n]; if(chip){ chip.querySelector('.ct').textContent=`${done}/${total}`; chip.classList.toggle('done',done===total); }
+}
+const dchip=document.createElement('a'); dchip.className='chip drill'; dchip.href='#drill'; dchip.textContent='Practice mode'; chips.appendChild(dchip);
+chapters.forEach(c=>{
+  const chip=document.createElement('a'); chip.className='chip'; chip.href='#ch'+c.n; chip.innerHTML=`Ch ${c.n}<span class="ct"></span>`; chips.appendChild(chip); chipEls[c.n]=chip;
+  const sec=document.createElement('section'); sec.className='chapter'; sec.id='ch'+c.n;
+  sec.innerHTML=`<div class="ch-head"><div><span class="n">Chapter ${c.n}</span><h2>${esc(c.title)}</h2></div><span class="prog" id="prog-${c.n}"></span></div><p class="ch-sub">${fmt(c.sub)}</p>`;
+  let lastGroup='';
+  c.items.forEach(it=>{
+    const grp=it.label.startsWith('Review')?'Review sheet':'After class';
+    if(grp!==lastGroup){ const gl=document.createElement('div'); gl.className='group-label'; gl.textContent=grp; sec.appendChild(gl); lastGroup=grp; }
+    const card=document.createElement('article'); card.className='card'+(got[it.id]?' got':''); card.id=it.id;
+    const num=it.label.replace(/\D+/,'');
+    card.innerHTML=`<div class="card-top"><span class="tag"><b>#${num}</b> · ${grp}${it.gen&&GEN[it.gen]?' · '+esc(GEN[it.gen].label):''}</span><button class="gotbtn" aria-pressed="${!!got[it.id]}">${got[it.id]?'Got it ✓':'Got it?'}</button></div>`;
+    card.appendChild(workPanel(it));
+    const more=document.createElement('div');
+    if(it.gen&&GEN[it.gen]){
+      const btn=document.createElement('button'); btn.className='btn'; btn.textContent='New one like this →'; btn.style.marginTop='10px';
+      const pr=document.createElement('div');
+      btn.onclick=()=>{ pr.className='practice'; pr.innerHTML=`<div class="practice-head"><span class="t">Your turn · fresh numbers</span></div>`; const again=document.createElement('button'); again.className='btn'; again.textContent='Another one'; again.onclick=btn.onclick; pr.querySelector('.practice-head').appendChild(again); pr.appendChild(workPanel(GEN[it.gen].fn())); };
+      more.appendChild(btn); more.appendChild(pr);
+    } else {
+      more.innerHTML='<p class="redo-note">One of a kind. To rep it: hit "Hide steps", cover the screen, and redo it on paper.</p>';
+    }
+    card.appendChild(more);
+    const gb=card.querySelector('.gotbtn');
+    gb.onclick=()=>{ got[it.id]=!got[it.id]; if(!got[it.id]) delete got[it.id]; save(); gb.setAttribute('aria-pressed',!!got[it.id]); gb.textContent=got[it.id]?'Got it ✓':'Got it?'; card.classList.toggle('got',!!got[it.id]); updateProgress(c); };
+    sec.appendChild(card);
+  });
+  main.appendChild(sec); updateProgress(c);
+});
+
+/* ---------- drill ---------- */
+const sel=document.getElementById('drill-topic'),out=document.getElementById('drill-out'),cnt=document.getElementById('drill-count');
+sel.innerHTML='<option value="*">Mix everything</option>'+[1,4,5,6,7,8].map(n=>`<optgroup label="Chapter ${n}">`+Object.entries(GEN).filter(([,g])=>g.ch===n).map(([k,g])=>`<option value="${k}">${esc(g.label)}</option>`).join('')+'</optgroup>').join('');
+try{ const s=localStorage.getItem('m103-drill-topic'); if(s&&(s==='*'||GEN[s])) sel.value=s; }catch(e){}
+let reps=0;
+function drill(){
+  const k=sel.value==='*'?pick(Object.keys(GEN)):sel.value; const g=GEN[k];
+  out.innerHTML=`<div class="practice-head"><span class="t">Ch ${g.ch} · ${esc(g.label)}</span></div>`; out.appendChild(workPanel(g.fn()));
+  reps++; cnt.textContent=`${reps} this session`;
+}
+sel.onchange=()=>{ try{ localStorage.setItem('m103-drill-topic',sel.value); }catch(e){} drill(); };
+document.getElementById('drill-go').onclick=drill;
+drill(); reps=0; cnt.textContent='';
+})();
+</script>
